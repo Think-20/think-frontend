@@ -28,7 +28,11 @@ export class CheckInApprovalComponent implements AfterViewInit {
   employeeId: number;
   employeeDepartment: number;
 
-  acceptList = [0, 1, 2];
+  acceptList = [
+    { id: 0, label: 'Aguardando' },
+    { id: 1, label: 'Aceito' },
+    { id: 2, label: 'Recusado' },
+  ];
 
   projects: Task[] = [];
   get project(): Task {

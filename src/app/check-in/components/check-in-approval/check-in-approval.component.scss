@@ -222,28 +222,19 @@
 
         overflow: hidden;
 
-        &::before {
-            content: '';
-        
-            display: block;
-
-            min-width: 8px;
-            min-height: 8px;
-
-            border-radius: 50%;
-        }
+        font-weight: 500;
     }
 
-    &--0::before {
-        background-color: #003cbf;
+    &--0 {
+        color: #bd0000;
     }
-
-    &--1::before {
-        background-color: #00ad00;
+    
+    &--1 {
+        color: #008900;
     }
-
-    &--2::before {
-        background-color: #ff0000;
+    
+    &--2 {
+        color: #e67300;
     }
 }
 

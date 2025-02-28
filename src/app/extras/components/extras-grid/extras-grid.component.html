@@ -50,8 +50,8 @@
                                     [(ngModel)]="extra.approval"
                                     (ngModelChange)="updateAlertDateApproval()">
                                     <mat-option *ngFor="let accept of acceptList"
-                                        [value]="accept">
-                                        {{ getAcceptLabel('approval', accept || 0) }}
+                                        [value]="accept.id">
+                                        {{ accept.label }}
                                     </mat-option>
                                 </mat-select>
                             </div>
@@ -96,9 +96,9 @@
                                     [(ngModel)]="extra.accept_client"
                                     (ngModelChange)="updateAlertDateAcceptClient()">
                                     <mat-option *ngFor="let accept of acceptList"
-                                        [value]="accept"
-                                        [disabled]="accept != 0">
-                                        {{ getAcceptLabel('client', accept || 0) }}
+                                        [value]="accept.id"
+                                        [disabled]="accept.id != 0">
+                                        {{ accept.label }}
                                     </mat-option>
                                 </mat-select>
                             </div>

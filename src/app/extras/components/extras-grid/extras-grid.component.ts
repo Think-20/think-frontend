@@ -30,7 +30,11 @@ export class ExtrasGridComponent implements OnInit {
 
   employeeId: number;
 
-  acceptList = [0, 1, 2];
+  acceptList = [
+    { id: 0, label: 'Aguardando' },
+    { id: 1, label: 'Aceito' },
+    { id: 2, label: 'Recusado' },
+  ];
 
   obs$ = new Subject<boolean>();
   

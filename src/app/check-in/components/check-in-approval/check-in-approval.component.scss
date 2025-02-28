@@ -85,10 +85,7 @@
     border-top: 1px solid #ccc;
 }
 
-.aprovacao .check-in-cell:nth-child(2),
-.organizadora .header .check-in-cell:nth-child(1),
-.promotora .header .check-in-cell:nth-child(1),
-.evento .header .check-in-cell:nth-child(1) {
+.aprovacao .check-in-cell:nth-child(2) {
     border-right: 1px solid #ccc;
 
     justify-content: flex-end;
@@ -130,6 +127,10 @@
 
 .promotora .data .check-in-cell:nth-child(1) input {
     text-align: right;
+}
+
+.promotora .data .check-in-cell {
+    border-bottom: 1px solid #ccc;
 }
 
 .area,

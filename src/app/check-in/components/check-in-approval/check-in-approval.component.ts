@@ -1,7 +1,7 @@
 import { OrganizationService } from 'app/shared/services/organization.service';
 import { Job } from 'app/jobs/job.model';
 import { AfterViewInit, Component, Input } from '@angular/core';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog, MatSelect, MatSnackBar } from '@angular/material';
 import { Task } from 'app/schedule/task.model';
 import { TaskService } from 'app/schedule/task.service';
 import { OrganizationFormComponent } from '../../../organization/components/check-in-organization-form/organization-form.component';
@@ -33,6 +33,14 @@ export class CheckInApprovalComponent implements AfterViewInit {
     { id: 1, label: 'Aceito' },
     { id: 2, label: 'Recusado' },
   ];
+
+  get isAttendant(): boolean {
+    if (!this.job) {
+      return false;
+    }
+
+    return this.job.attendance_id === this.employeeId || this.job.attendance_comission_id === this.employeeId;
+  }
 
   projects: Task[] = [];
   get project(): Task {
@@ -234,6 +242,12 @@ export class CheckInApprovalComponent implements AfterViewInit {
         this.organizations = response;
       }
     });
+  }
+
+  loadEventsSelect(eventMatSelect: MatSelect): void {
+    eventMatSelect.open();
+
+    this.loadEvents();
   }
 
   loadEvents(): void {

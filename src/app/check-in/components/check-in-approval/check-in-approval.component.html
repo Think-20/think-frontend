@@ -14,7 +14,7 @@
                     <div class="center-items">
                         <span class="approval-items position-relative text-ellipsis text-center cursor-pointer" style="width: 100%;"
                             [title]="project ? 'Versão do Projeto: ' + taskService.jobDisplay(project) : 'Versão do Projeto'"
-                            (click)="projectSelect.open()">
+                            (click)="isAttendant ? projectSelect.open() : null">
                             {{ project ? taskService.jobDisplay(project) : 'Versão do Projeto' }}
 
                             <mat-select class="select-hidden col-md-3" #projectSelect
@@ -38,7 +38,7 @@
 
                             <span class="approval-items position-relative text-ellipsis text-center cursor-pointer"
                                 [title]="memorial ? 'Memorial: ' + taskService.jobDisplay(memorial) : 'Memorial'"
-                                (click)="checkInModel && checkInModel.accept_client ? null : memorialSelect.open()">
+                                (click)="(checkInModel && checkInModel.accept_client) || !isAttendant ? null : memorialSelect.open()">
                                 {{ memorial ? taskService.jobDisplay(memorial) : 'Memorial' }}
 
                                 <mat-select class="select-hidden col-md-3" #memorialSelect
@@ -63,7 +63,7 @@
 
                             <span class="approval-items position-relative text-ellipsis text-center cursor-pointer"
                                 [title]="budget ? 'Orçamento: ' + taskService.budgetDisplay(budget) : 'Orçamento'"
-                                (click)="checkInModel && checkInModel.accept_client ? null : budgetSelect.open()">
+                                (click)="(checkInModel && checkInModel.accept_client) || !isAttendant ? null : budgetSelect.open()">
                                 {{ budget ? taskService.budgetDisplay(budget) : 'Orçamento' }}
 
                                 <mat-select class="select-hidden col-md-3" #budgetSelect
@@ -330,7 +330,9 @@
 
                     <div class="check-in-row data">
                         <div class="check-in-cell">
-                            <a class="icon-button" mat-button (click)="openModalOrganizationForm()">
+                            <a class="icon-button" mat-button
+                                [disabled]="!isAttendant"
+                                (click)="isAttendant ? openModalOrganizationForm() : null">
                                 <mat-icon>add</mat-icon>
                             </a>
 
@@ -340,6 +342,7 @@
                                 {{ organization.name || 'Selecionar organizadora' }}
 
                                 <mat-select class="select-hidden col-md-3" #organizationMatSelect
+                                    [disabled]="!isAttendant"
                                     [(ngModel)]="checkInModel.organization_id"
                                     (ngModelChange)="updateOrganization()">
                                     <mat-option *ngFor="let organization of organizations"
@@ -353,6 +356,7 @@
 
                         <div class="check-in-cell">
                             <input type="text"
+                                [disabled]="!isAttendant"
                                 [(ngModel)]="checkInModel.organization_login"
                                 (ngModelChange)="updateOrganization()"
                             />
@@ -360,6 +364,7 @@
 
                         <div class="check-in-cell">
                             <input type="text"
+                                [disabled]="!isAttendant"
                                 [(ngModel)]="checkInModel.organization_password"
                                 (ngModelChange)="updateOrganization()"
                             />
@@ -393,6 +398,7 @@
                     <div class="check-in-row data">
                         <div class="check-in-cell">
                             <input type="text"
+                                [disabled]="!isAttendant"
                                 [(ngModel)]="checkInModel.promoter_name"
                                 (change)="updatePromoter()"
                             />
@@ -400,6 +406,7 @@
 
                         <div class="check-in-cell">
                             <input type="text"
+                                [disabled]="!isAttendant"
                                 [(ngModel)]="checkInModel.promoter_login"
                                 (change)="updatePromoter()"
                             />
@@ -407,6 +414,7 @@
 
                         <div class="check-in-cell">
                             <input type="text"
+                                [disabled]="!isAttendant"
                                 [(ngModel)]="checkInModel.promoter_password"
                                 (change)="updatePromoter()"
                             />
@@ -438,19 +446,31 @@
 
                 <div class="check-in-row data">
                     <div class="check-in-cell">
-                        <input type="text" [(ngModel)]="checkInModel.area" />
+                        <input type="text"
+                            [disabled]="!isAttendant"
+                            [(ngModel)]="checkInModel.area"
+                        />
                     </div>
 
                     <div class="check-in-cell">
-                        <input type="text" [(ngModel)]="checkInModel.config" />
+                        <input type="text"
+                            [disabled]="!isAttendant"
+                            [(ngModel)]="checkInModel.config"
+                        />
                     </div>
 
                     <div class="check-in-cell">
-                        <input type="text" [(ngModel)]="checkInModel.location" />
+                        <input type="text"
+                            [disabled]="!isAttendant"
+                            [(ngModel)]="checkInModel.location"
+                        />
                     </div>
                     
                     <div class="check-in-cell">
-                        <input type="text" [(ngModel)]="checkInModel.pavilion" />
+                        <input type="text"
+                            [disabled]="!isAttendant"
+                            [(ngModel)]="checkInModel.pavilion"
+                        />
                     </div>
                 </div>
 
@@ -487,13 +507,14 @@
                 <div class="check-in-row data">
                     <div class="check-in-cell">
                         <a class="icon-button" mat-button target="_blank"
+                            [disabled]="!isAttendant"
                             [routerLink]="['/events/new']">
                             <mat-icon>add</mat-icon>
                         </a>
 
                         <span class="position-relative text-ellipsis cursor-pointer"
                             [title]="place ? place.name : 'Evento'"
-                            (click)="eventMatSelect.open(); loadEvents()">
+                            (click)="isAttendant ? loadEventsSelect(eventMatSelect) : null">
                             {{ place && place.name ? place.name : 'Selecionar local do evento' }}
 
                             <mat-select class="select-hidden col-md-3" #eventMatSelect

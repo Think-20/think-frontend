@@ -9,7 +9,8 @@
             
                 <div class="check-in-header-right"
                     [class.lock]="checkInModel && checkInModel.accept_client"
-                    [style.fontSize.rem]="1.45">
+                    [style.fontSize.rem]="1.45"
+                    [style.fontWeight]="100">
                     <div class="center-items">
                         <span class="approval-items position-relative text-ellipsis text-center cursor-pointer" style="width: 100%;"
                             [title]="project ? 'Versão do Projeto: ' + taskService.jobDisplay(project) : 'Versão do Projeto'"
@@ -26,13 +27,13 @@
                             </mat-select>
                         </span>
 
-                        <div class="approval-logs text-ellipsis">
-                            {{ (checkInModel.project_change_date ? projectChange : '-') }}
+                        <div *ngIf="checkInModel.project_change_date" class="approval-logs text-ellipsis">
+                            {{ projectChange }}
                         </div>
                     </div>
                     |
                     <div class="center-items">
-                        <div class="d-flex flex-row" style="width: 100%;">
+                        <div class="d-flex flex-row justify-content-center" style="width: 100%;">
                             <mat-icon *ngIf="checkInModel && checkInModel.accept_client" class="icon-lock">lock</mat-icon>
 
                             <span class="approval-items position-relative text-ellipsis text-center cursor-pointer"
@@ -51,13 +52,13 @@
                             </span>
                         </div>
 
-                        <div class="approval-logs text-ellipsis">
-                            {{ (checkInModel.memorial_change_date ? memorialChange : '-') }}
+                        <div *ngIf="checkInModel.memorial_change_date" class="approval-logs text-ellipsis">
+                            {{ memorialChange }}
                         </div>
                     </div>
                     |
                     <div class="center-items">
-                        <div class="d-flex flex-row" style="width: 100%;">
+                        <div class="d-flex flex-row justify-content-center" style="width: 100%;">
                             <mat-icon *ngIf="checkInModel && checkInModel.accept_client" class="icon-lock">lock</mat-icon>
 
                             <span class="approval-items position-relative text-ellipsis text-center cursor-pointer"
@@ -76,8 +77,8 @@
                             </span>
                         </div>
 
-                        <div class="approval-logs text-ellipsis">
-                            {{ (checkInModel.budget_change_date ? budgetChange : '-') }}
+                        <div *ngIf="checkInModel.budget_change_date" class="approval-logs text-ellipsis">
+                            {{ budgetChange }}
                         </div>
                     </div>
                 </div>
@@ -126,7 +127,7 @@
                     </div>
 
                     <div *ngIf="checkInModel.accept_client; else sendEmailTemplate" class="check-in-cell">
-                        {{ (checkInModel.accept_client_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
+                        {{ (checkInModel.accept_client_date | date: 'dd/MM/yyyy HH:mm') }}
                     </div>
 
                     <ng-template #sendEmailTemplate>
@@ -168,7 +169,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (checkInModel.approval_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
+                        {{ (checkInModel.approval_date | date: 'dd/MM/yyyy HH:mm') }}
                     </div>
                 </div>
 
@@ -200,7 +201,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (checkInModel.accept_proposal_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
+                        {{ (checkInModel.accept_proposal_date | date: 'dd/MM/yyyy HH:mm') }}
                     </div>
                 </div>
 
@@ -232,7 +233,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (checkInModel.accept_production_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
+                        {{ (checkInModel.accept_production_date | date: 'dd/MM/yyyy HH:mm') }}
                     </div>
                 </div>
 
@@ -264,7 +265,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (checkInModel.board_approval_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
+                        {{ (checkInModel.board_approval_date | date: 'dd/MM/yyyy HH:mm') }}
                     </div>
                 </div>
 
@@ -296,7 +297,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (checkInModel.financial_acceptance_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
+                        {{ (checkInModel.financial_acceptance_date | date: 'dd/MM/yyyy HH:mm') }}
                     </div>
                 </div>
 

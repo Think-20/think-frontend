@@ -33,6 +33,7 @@ export class SidenavComponent implements OnInit {
   opened: boolean = true
   user: User
 
+  administrativo = false;
   administradores = false
   diretoria = false
   producao = false
@@ -47,6 +48,8 @@ export class SidenavComponent implements OnInit {
   API = API
   FRONTEND_VERSION = FRONTEND_VERSION
   BACKEND_VERSION = BACKEND_VERSION
+
+  admVisible = false;
 
   constructor(
     private auth: AuthService,
@@ -75,7 +78,13 @@ export class SidenavComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.user = this.auth.currentUser()
+    this.user = this.auth.currentUser();
+
+    let isDiretoria = this.user && this.user.employee && this.user.employee.department_id === 1;
+
+    let isFinanceiro = this.user && this.user.employee_id === 53;
+
+    this.admVisible = isDiretoria || isFinanceiro;
   }
 
   toggleMenu() {

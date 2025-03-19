@@ -33,10 +33,16 @@
             </div>
           </div>
         </div>
-        <div class="nav-item">
-          <a mat-raised-button class="department-container">
+        <div *ngIf="admVisible" class="nav-item">
+          <a mat-raised-button class="department-container"
+            (click)="administrativo = !administrativo">
             <span class="department department-7"></span> Administrativo
           </a>
+          <div [@rowAppeared]="state" *ngIf="administrativo">
+            <div class="sub-navbar">
+              <a mat-raised-button [routerLink]="['/financial/list']">Financeiro</a>
+            </div>
+          </div>
         </div>
         <div class="nav-item">
           <a (click)="atendimento = atendimento === true ? false : true" mat-raised-button class="department-container">

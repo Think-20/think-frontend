@@ -14,7 +14,7 @@
 
 
 <div class="my-container">
-  <h3 class="lead">Jobs</h3>
+  <h3 class="lead">{{ title }}</h3>
 </div>
 
 <div class="col-md-12 pr-0" id="searchForm">
@@ -46,46 +46,48 @@
     <mat-card *ngIf="filter" class="filter-grid">
       <div class="row">
         <div class="col-md-12">
-          <mat-form-field class="col-md-2-4">
-            <input matInput formControlName="client" [matAutocomplete]="autocompleteclient" placeholder="Cliente">
-          </mat-form-field>
-          <mat-autocomplete #autocompleteclient="matAutocomplete">
-              <mat-option *ngFor="let client of clients" [value]="client.fantasy_name">
-              {{ client.fantasy_name }}
-            </mat-option>
-          </mat-autocomplete>
-          <mat-form-field *ngIf="isAdmin" class="col-md-2-4">
-            <mat-select placeholder="Atendimento" formControlName="attendance" [compareWith]="compareAttendance">
-              <mat-option></mat-option>
-              <mat-option *ngFor="let attendance of attendances" [value]="attendance">
-                {{ attendance.name }}
+          <div class="row" style="padding: 0 15px;">
+            <mat-form-field class="{{ isFinancial ? 'col-md-2-3' : 'col-md-2-4' }}">
+              <input matInput formControlName="client" [matAutocomplete]="autocompleteclient" placeholder="Cliente">
+            </mat-form-field>
+            <mat-autocomplete #autocompleteclient="matAutocomplete">
+                <mat-option *ngFor="let client of clients" [value]="client.fantasy_name">
+                {{ client.fantasy_name }}
               </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="col-md-2-4">
-            <mat-select placeholder="Projetista" formControlName="creation" [compareWith]="compareAttendance">
-              <mat-option></mat-option>
-              <mat-option *ngFor="let creation of creations" [value]="creation">
-                {{ creation.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="col-md-2-4">
-            <mat-select placeholder="Tipo" formControlName="job_type" [compareWith]="compareJobType">
-              <mat-option></mat-option>
-              <mat-option *ngFor="let job_type of job_types" [value]="job_type">
-                {{ job_type.description }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="col-md-2-4">
-            <mat-select placeholder="Status" formControlName="status" [compareWith]="compareStatus">
-              <mat-option></mat-option>
-              <mat-option *ngFor="let s of status" [value]="s">
-                {{ s.description }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+            </mat-autocomplete>
+            <mat-form-field *ngIf="isAdmin" class="{{ isFinancial ? 'col-md-2-3' : 'col-md-2-4' }}">
+              <mat-select placeholder="Atendimento" formControlName="attendance" [compareWith]="compareAttendance">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let attendance of attendances" [value]="attendance">
+                  {{ attendance.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="{{ isFinancial ? 'col-md-2-3' : 'col-md-2-4' }}">
+              <mat-select placeholder="Projetista" formControlName="creation" [compareWith]="compareAttendance">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let creation of creations" [value]="creation">
+                  {{ creation.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="{{ isFinancial ? 'col-md-2-3' : 'col-md-2-4' }}">
+              <mat-select placeholder="Tipo" formControlName="job_type" [compareWith]="compareJobType">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let job_type of job_types" [value]="job_type">
+                  {{ job_type.description }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field *ngIf="!isFinancial" class="{{ isFinancial ? 'col-md-2-3' : 'col-md-2-4' }}">
+              <mat-select placeholder="Status" formControlName="status" [compareWith]="compareStatus">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let s of status" [value]="s">
+                  {{ s.description }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
           <hr>
           <div class="col-md-12">
             <p><small>Você também pode filtrar por período do cronograma</small></p>

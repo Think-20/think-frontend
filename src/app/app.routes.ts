@@ -295,6 +295,31 @@ export const ROUTES: Routes = [
         ]
       },
       {
+        path: "financial", component: JobsComponent, children: [
+          {
+            path: '', redirectTo: 'list', pathMatch: 'full'
+          },
+          {
+            path: 'new', component: JobTabsComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'new/:available_date', component: JobTabsComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'edit/:id', component: JobTabsComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'show/:id', component: JobTabsComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'list', component: JobListComponent, canActivate: [AuthGuard],
+            data: {
+              path: "financial"
+            }
+          }
+        ],
+      },
+      {
         path: 'organizations',
         component: OrganizationComponent,
       },

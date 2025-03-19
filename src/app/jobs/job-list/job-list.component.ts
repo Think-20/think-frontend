@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
@@ -40,6 +41,7 @@ import { DataInfo } from '../../shared/data-info.model';
 })
 @Injectable()
 export class JobListComponent implements OnInit {
+  title = "";
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
@@ -61,6 +63,8 @@ export class JobListComponent implements OnInit {
   hasFilterActive = false
   isAdmin: boolean = false
 
+  isFinancial = false;
+
   constructor(
     private fb: FormBuilder,
     private employeeService: EmployeeService,
@@ -69,10 +73,15 @@ export class JobListComponent implements OnInit {
     private jobService: JobService,
     private jobTypeService: JobTypeService,
     private jobStatus: JobStatusService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private activatedRoute: ActivatedRoute,
   ) { }
 
   ngOnInit() {
+    this.isFinancial = this.activatedRoute.snapshot.data["path"] === "financial";
+    
+    this.title = this.isFinancial ? "Jobs aprovados" : "Jobs";
+
     this.isAdmin = this.authService.hasAccess('job/save')
 
     this.loadFilterData()
@@ -134,6 +143,10 @@ export class JobListComponent implements OnInit {
     let clientName = searchValue.client != '' ? searchValue.client : searchValue.search
     let attendanceFilter = this.isAdmin ? { attendance: searchValue.attendance } : {}
 
+    if (this.isFinancial) {
+      status = 3;
+    }
+
     return {
       creation: searchValue.creation,
       job_type: searchValue.job_type,
@@ -163,7 +176,7 @@ export class JobListComponent implements OnInit {
 
   loadInitialData() {
     if (JSON.stringify(this.jobService.searchValue) === JSON.stringify(this.formCopy)) {
-      this.loadJobs({}, this.pageIndex + 1)
+      this.loadJobs(this.isFinancial ? { status: 3 } : {}, this.pageIndex + 1);
     } else {
       this.params = this.getParams(this.jobService.searchValue)
       this.loadJobs(this.params, this.pageIndex + 1)

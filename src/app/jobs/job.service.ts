@@ -134,6 +134,7 @@ export class JobService {
       .map(response => response.json())
       .map(response => ({
         info_check: response["info_check"],
+        briefing_check: response["briefing_check"],
         project_check: response["project_check"],
         descriptive_memorial_check: response["descriptive_memorial_check"],
         checkin_check: response["checkin_check"],

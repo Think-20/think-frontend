@@ -139,6 +139,8 @@ export class JobService {
         descriptive_memorial_check: response["descriptive_memorial_check"],
         checkin_check: response["checkin_check"],
         budget_check: response["budget_check"],
+        contract_nf_check: response["contract_nf_check"],
+        project_photos_check: response["project_photos_check"],
       }) as JobTabStatus)
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {

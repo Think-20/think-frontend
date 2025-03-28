@@ -42,11 +42,6 @@ export class FileUploadComponent implements OnInit {
     private uploadFileService: UploadFileService) { }
 
   ngOnInit() {
-    if( [null, undefined].indexOf(this.fileServiceInterface) >= 0) {
-      this.logger.error('Você deve passar um fileServiceInterface válido para o componente file-upload.')
-      return;
-    }
-
     this.fileForm = this.formBuilder.group({
       files: this.formBuilder.array([]),
     })
@@ -196,6 +191,13 @@ export class FileUploadComponent implements OnInit {
   }
 
   getFilesControls() {
+    if (!this.fileForm
+      || !this.fileForm.controls
+      || !this.fileForm.controls.files
+      || !(<FormArray>this.fileForm.controls.files).controls) {
+      return [];
+    }
+
     return (<FormArray>this.fileForm.controls.files).controls
   }
 

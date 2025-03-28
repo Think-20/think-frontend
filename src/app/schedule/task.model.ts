@@ -6,6 +6,7 @@ import { ProjectFile } from "../projects/project-file.model";
 import { Budget } from "../budgets/budget.model";
 import { SpecificationFile } from "app/specification/specification-file.model";
 import { BriefingFile } from 'app/briefing/briefing-file.model';
+import { ContractNfFile } from 'app/contract-nf/contract-nf-file.model';
 
 export class Task {
   id: number
@@ -19,6 +20,7 @@ export class Task {
   reopened?: number
   items?: TaskItem[]
   briefing_files?: BriefingFile[];
+  contract_nf_files?: ContractNfFile[];
   project_files?: ProjectFile[]
   specification_files?: SpecificationFile[]
   budget?: Budget

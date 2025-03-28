@@ -53,6 +53,22 @@ export class TaskService {
     return dsc + ' ' + StringHelper.padChar(task.reopened) + ' do ' + task.job_activity.description.replace('Modificação', '').toLowerCase()
   }
 
+  contractNfDisplay(task: Task, noAbbreviation = false) {
+    if (task.job_activity.description == 'Memorial descritivo') {
+        let jobDescription = 'M. descritivo'
+  
+        if (noAbbreviation) {
+            jobDescription = 'Memorial descritivo'
+        }
+  
+        return jobDescription + ' de ' + task.task.job_activity.description.toLowerCase() + ' ' + StringHelper.padChar(task.task.reopened)
+    }
+  
+    const dsc = 'Contrato e NF';
+
+    return dsc + ' ' + StringHelper.padChar(task.reopened) + ' do ' + task.job_activity.description.replace('Modificação', '').toLowerCase()
+  }
+
   jobDisplay(task: Task, noAbbreviation: boolean = false) {
     if(task.job_activity.description == 'Memorial descritivo') {
       let jobDescription = 'M. descritivo'

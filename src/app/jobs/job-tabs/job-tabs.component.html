@@ -82,6 +82,7 @@
       <ng-template mat-tab-label>
         <cb-job-tab
           [tab]="'Extras'"
+          [status]="tabStatus.checkin_check"
         ></cb-job-tab>
       </ng-template>
 
@@ -117,6 +118,30 @@
         [job]="job"
         [containerWidth]="containerWidth"
       ></cb-proposals>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
+          [tab]="'Contrato e NF'"
+          [status]="tabStatus.contract_nf_check"
+        ></cb-job-tab>
+      </ng-template>
+
+      <cb-contract-nf
+        [job]="job"
+      ></cb-contract-nf>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
+          [tab]="'Fotos do projeto'"
+          [status]="tabStatus.project_photos_check"
+        ></cb-job-tab>
+      </ng-template>
+
+      <cb-developing></cb-developing>
     </mat-tab>
 
     <mat-tab>
@@ -161,29 +186,7 @@
     <mat-tab>
       <ng-template mat-tab-label>
         <cb-job-tab
-          [tab]="'Contrato e NF'"
-          [status]="'DEV'"
-        ></cb-job-tab>
-      </ng-template>
-
-      <cb-developing></cb-developing>
-    </mat-tab>
-
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <cb-job-tab
           [tab]="'Feedback'"
-          [status]="'DEV'"
-        ></cb-job-tab>
-      </ng-template>
-
-      <cb-developing></cb-developing>
-    </mat-tab>
-
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <cb-job-tab
-          [tab]="'Fotos do projeto'"
           [status]="'DEV'"
         ></cb-job-tab>
       </ng-template>

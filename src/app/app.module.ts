@@ -263,6 +263,8 @@ import { BriefingService } from './briefing/briefing.service';
 import { JobTabComponent } from './jobs/job-tab/job-tab.component';
 import { ContractNfComponent } from './contract-nf/contract-nf.component';
 import { ContractNfService } from './contract-nf/contract-nf.service';
+import { ProjectPhotosComponent } from './project-photos/project-photos.component';
+import { ProjectPhotosService } from './project-photos/project-photos.service';
 
 registerLocaleData(localePt);
 
@@ -424,6 +426,7 @@ registerLocaleData(localePt);
     ExternalExtrasRefuseComponent,
     BriefingComponent,
     ContractNfComponent,
+    ProjectPhotosComponent,
     JobTabComponent,
   ],
   imports: [
@@ -511,6 +514,7 @@ registerLocaleData(localePt);
     BriefingsService,
     BriefingService,
     ContractNfService,
+    ProjectPhotosService,
     BudgetService,
     TaskService,
     ClientComissionService,

@@ -66,7 +66,31 @@ export class TaskService {
   
     const dsc = 'Contrato e NF';
 
-    return dsc + ' ' + StringHelper.padChar(task.reopened) + ' do ' + task.job_activity.description.replace('Modificação', '').toLowerCase()
+    const lastText = task.job_activity.description.replace('Modificação', '').toLowerCase();
+    
+    const preposition = lastText.includes('opção de projeto') ? 'da' : 'do';
+
+    return `${dsc} ${StringHelper.padChar(task.reopened)} ${preposition} ${lastText}`;
+  }
+
+  projectPhotosDisplay(task: Task, noAbbreviation = false) {
+    if (task.job_activity.description == 'Memorial descritivo') {
+        let jobDescription = 'M. descritivo'
+  
+        if (noAbbreviation) {
+            jobDescription = 'Memorial descritivo'
+        }
+  
+        return jobDescription + ' de ' + task.task.job_activity.description.toLowerCase() + ' ' + StringHelper.padChar(task.task.reopened)
+    }
+  
+    const dsc = 'Fotos';
+
+    const lastText = task.job_activity.description.replace('Modificação', '').toLowerCase();
+    
+    const preposition = lastText.includes('opção de projeto') ? 'da' : 'do';
+
+    return `${dsc} ${StringHelper.padChar(task.reopened)} ${preposition} ${lastText}`;
   }
 
   jobDisplay(task: Task, noAbbreviation: boolean = false) {

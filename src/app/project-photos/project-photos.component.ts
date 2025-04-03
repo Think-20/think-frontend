@@ -8,14 +8,14 @@ import { Job } from 'app/jobs/job.model';
 import { AuthService } from 'app/login/auth.service';
 import { Task } from 'app/schedule/task.model';
 import { TaskService } from 'app/schedule/task.service';
-import { ContractNfService } from './contract-nf.service';
+import { ProjectPhotosService } from './project-photos.service';
 
 @Component({
-  selector: "cb-contract-nf",
-  templateUrl: "./contract-nf.component.html",
-  styleUrls: ["./contract-nf.component.scss"],
+  selector: "cb-project-photos",
+  templateUrl: "./project-photos.component.html",
+  styleUrls: ["./project-photos.component.scss"],
 })
-export class ContractNfComponent implements OnInit {
+export class ProjectPhotosComponent implements OnInit {
   @Input("typeForm") typeForm: string;
   @Input() job: Job;
   actionText: string;
@@ -33,7 +33,7 @@ export class ContractNfComponent implements OnInit {
     private authService: AuthService,
     readonly taskService: TaskService,
     private employeeService: EmployeeService,
-    readonly contractNfService: ContractNfService,
+    readonly projectPhotosService: ProjectPhotosService,
   ) {}
 
   ngOnInit() {
@@ -56,7 +56,7 @@ export class ContractNfComponent implements OnInit {
   uploadDone(task: Task) {
     let newTask = this.sortedTasks.find((t) => t.id == task.id);
 
-    newTask.contract_nf_files[newTask.contract_nf_files.length - 1].responsible = this.authService.currentUser().employee;
+    newTask.project_photos_files[newTask.project_photos_files.length - 1].responsible = this.authService.currentUser().employee;
 
     this.sortedTasks[this.sortedTasks.findIndex((t) => t.id == newTask.id)] = newTask;
   }
@@ -79,7 +79,7 @@ export class ContractNfComponent implements OnInit {
     }
 
     return this.isAttendance
-      ? `/jobs/edit/${this.job.id}?tab=project-photos`
+      ? `/jobs/edit/${this.job.id}?tab=detailing`
       : "/schedule?date=" +
           this.datePipe.transform(task.items[0].date, "yyyy-MM-dd");
   }
@@ -89,7 +89,7 @@ export class ContractNfComponent implements OnInit {
   }
 
   showButtonSpecification(task: Task) {
-    if (task.contract_nf_files && task.contract_nf_files.length == 0) {
+    if (task.project_photos_files && task.project_photos_files.length == 0) {
       return false;
     }
 
@@ -139,14 +139,14 @@ export class ContractNfComponent implements OnInit {
     this.sortedTasks = this.sortedTasks.concat(adds).reverse();
 
     this.sortedTasks.forEach((task, index) => {
-      if (task.contract_nf_files && task.contract_nf_files.length > 0 && this.expandedIndex == null) {
+      if (task.project_photos_files && task.project_photos_files.length > 0 && this.expandedIndex == null) {
         this.expandedIndex = index;
       }
     });
   }
 
   downloadAll(task: Task) {
-    let url = this.contractNfService.downloadAllUrl(task);
+    let url = this.projectPhotosService.downloadAllUrl(task);
 
     window.open(`${API}/${url}`, "_blank");
   }

@@ -270,6 +270,7 @@ import { FeedbackComponent } from './feedback/feedback.component';
 import { FeedbackFormComponent } from './feedback-form/feedback-form.component';
 import { FeedbackFormCardComponent } from './feedback-form/feedback-form-card/feedback-form-card.component';
 import { FeedbackFormRatingComponent } from './feedback-form/feedback-form-rating/feedback-form-rating.component';
+import { LimitJobComponent } from './limit-job/limit-job.component';
 
 registerLocaleData(localePt);
 
@@ -438,6 +439,7 @@ registerLocaleData(localePt);
     FeedbackFormComponent,
     FeedbackFormCardComponent,
     FeedbackFormRatingComponent,
+    LimitJobComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -577,6 +579,7 @@ registerLocaleData(localePt);
     ChartPreviewComponent,
     ConfirmDialogComponent,
     OrganizationFormComponent,
+    LimitJobComponent,
     CheckInOtherCnpjsComponent,
     CheckInPeopleComponent,
     ExtraFormComponent,

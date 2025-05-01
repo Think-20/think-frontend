@@ -74,6 +74,7 @@ import { ExternalExtrasComponent } from './external/external-extras/external-ext
 import { OrganizationComponent } from './organization/organization.component';
 import { ExternalCheckInComponent } from './external/external-check-in/external-check-in.component';
 import { ExternalExtrasRefuseComponent } from './external/external-extras-refuse/external-extras-refuse.component';
+import { ExternalFeedbackComponent } from './external/external-feedback/external-feedback.component';
 
 export const ROUTES: Routes = [
   {
@@ -94,6 +95,10 @@ export const ROUTES: Routes = [
       {
         path: 'check-in/:id/:hash/:status',
         component: ExternalCheckInComponent,
+      },
+      {
+        path: 'feedback/:id/:hash',
+        component: ExternalFeedbackComponent,
       }
     ],
   },

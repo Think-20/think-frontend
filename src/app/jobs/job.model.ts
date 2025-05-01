@@ -94,4 +94,15 @@ export class Job {
     project_conclusion?: Date;
 
     producer?: string;
+
+    feedback_user_name?: string;
+    feedback_user_email?: string;
+    feedback_user_phone?: string;
+    feedback_status?: number;
+    feedback_hash?: string;
+
+    recommendation_rating?: number;
+    overall_project_rating?: number;
+    sales_support_rating?: number;
+    project_feedback?: string;
 }

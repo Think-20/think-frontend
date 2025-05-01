@@ -265,6 +265,11 @@ import { ContractNfComponent } from './contract-nf/contract-nf.component';
 import { ContractNfService } from './contract-nf/contract-nf.service';
 import { ProjectPhotosComponent } from './project-photos/project-photos.component';
 import { ProjectPhotosService } from './project-photos/project-photos.service';
+import { ExternalFeedbackComponent } from './external/external-feedback/external-feedback.component';
+import { FeedbackComponent } from './feedback/feedback.component';
+import { FeedbackFormComponent } from './feedback-form/feedback-form.component';
+import { FeedbackFormCardComponent } from './feedback-form/feedback-form-card/feedback-form-card.component';
+import { FeedbackFormRatingComponent } from './feedback-form/feedback-form-rating/feedback-form-rating.component';
 
 registerLocaleData(localePt);
 
@@ -428,6 +433,11 @@ registerLocaleData(localePt);
     ContractNfComponent,
     ProjectPhotosComponent,
     JobTabComponent,
+    ExternalFeedbackComponent,
+    FeedbackComponent,
+    FeedbackFormComponent,
+    FeedbackFormCardComponent,
+    FeedbackFormRatingComponent,
   ],
   imports: [
     CurrencyMaskModule,

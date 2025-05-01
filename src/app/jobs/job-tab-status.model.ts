@@ -10,5 +10,6 @@ export class JobTabStatus {
         public budget_check?: EJobTabStatus,
         public contract_nf_check?: EJobTabStatus,
         public project_photos_check?: EJobTabStatus,
+        public feedback_check?: EJobTabStatus,
     ) {}
 }

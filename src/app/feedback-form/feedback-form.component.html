@@ -1,0 +1,44 @@
+<form class="feedback-form" [formGroup]="form">
+    <cb-feedback-form-card>
+        <p>Qual é a probabilidade de você recomendar nosso serviço a um amigo ou familiar?<span title="Obrigatório">*</span></p>
+
+        <cb-feedback-form-rating
+            formControlName="recommendation_rating"
+            [disabled]="readonly"
+        ></cb-feedback-form-rating>
+    </cb-feedback-form-card>
+
+    <cb-feedback-form-card>
+        <p>Qual é a sua avaliação geral sobre o projeto desenvolvido?<span title="Obrigatório">*</span></p>
+        
+        <cb-feedback-form-rating
+            formControlName="overall_project_rating"
+            [disabled]="readonly"
+        ></cb-feedback-form-rating>
+    </cb-feedback-form-card>
+
+    <cb-feedback-form-card>
+        <p>Como você avalia o atendimento prestado durante o projeto contratado?<span title="Obrigatório">*</span></p>
+
+        <cb-feedback-form-rating
+            formControlName="sales_support_rating"
+            [disabled]="readonly"
+        ></cb-feedback-form-rating>
+    </cb-feedback-form-card>
+
+    <cb-feedback-form-card>
+        <p>Gostaria de deixar algum comentário ou observação sobre este projeto?</p>
+
+        <div class="feedback-form__textarea">
+            <textarea name="project_feedback" id="project_feedback" placeholder="..." maxlength="1000"
+                formControlName="project_feedback"
+                [readOnly]="readonly"
+            ></textarea>
+        </div>
+    </cb-feedback-form-card>
+
+    <button type="button" *ngIf="!readonly" class="feedback-form__button"
+        (click)="submitFn()">
+        Enviar respostas
+    </button>
+</form>

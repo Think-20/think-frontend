@@ -39,7 +39,8 @@ export class JobTabsComponent implements OnInit {
     {index: 7, description: 'contract'},
     {index: 8, description: 'contract-nf'},
     {index: 9, description: 'project-photos'},
-    {index: 10, description: 'detailing'}
+    {index: 10, description: 'feedback'},
+    {index: 11, description: 'detailing'},
   ]
 
   get valorTotalExtrasRecebido(): number {
@@ -118,7 +119,7 @@ export class JobTabsComponent implements OnInit {
   }
 
   setJob(job: Job) {
-    this.job = job;
+    this.job = {...job, feedback_user_name: 'Brenno'};
 
     this.loadTabsStatus();
   }

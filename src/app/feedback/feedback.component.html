@@ -1,0 +1,46 @@
+<div class="feedback">
+    <div class="feedback__form">
+        <form [formGroup]="form" novalidate autocomplete="off">
+            <mat-card>
+                <div class="row">
+                    <mat-form-field>
+                        <input matInput formControlName="feedback_user_name" placeholder="Nome*">
+                        <mat-error>
+                            Campo obrigatório
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="feedback_user_email" placeholder="E-mail*">
+                        <mat-error>
+                            E-mail inválido
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput formControlName="feedback_user_phone" mask="(99) 9999-9999?9" placeholder="Número do WhatsApp">
+                        <mat-error>
+                            Número inválido
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input matInput readonly formControlName="feedback_status" placeholder="Status">
+                    </mat-form-field>
+
+                    <mat-card-actions class="col-md-12 text-right">
+                        <button class="cb-button" color="primary" (click)="send()" mat-raised-button>
+                            {{ [1, 2].includes(jobFeedbackStatus) ? 'REENVIAR' : 'ENVIAR' }}
+                        </button>
+                    </mat-card-actions>
+                </div>
+            </mat-card>
+        </form>
+    </div>
+
+    <div class="feedback__preview">
+        <cb-feedback-form #feedbackForm
+            [readonly]="true"
+        ></cb-feedback-form>
+    </div>
+</div>

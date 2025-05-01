@@ -141,6 +141,7 @@ export class JobService {
         budget_check: response["budget_check"],
         contract_nf_check: response["contract_nf_check"],
         project_photos_check: response["project_photos_check"],
+        feedback_check: response["feedback_check"],
       }) as JobTabStatus)
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {

@@ -1,0 +1,21 @@
+<div class="external-feedback">
+    <h3 class="animate__animated animate__fadeIn">Olá! 😊</h3>
+
+    <p  class="animate__animated animate__fadeIn animate__delay-1s">
+        Gostaríamos de expressar nossa gratidão pela confiança e parceria.
+
+        <br>
+        Antes de prosseguir, queremos dizer que sua opinião é muito importante para nós! Ela nos ajuda a melhorar continuamente nossos serviços e oferecer a melhor experiência possível.
+        <br>
+        <br>
+
+        Por favor, responda as questões abaixo e nos ajude:
+    </p>
+
+    <cb-feedback-form class="animate__animated animate__fadeIn animate__delay-2s"
+        [readonly]="readonly || loading"
+        (submit)="submit($event)"
+    ></cb-feedback-form>
+
+    <p *ngIf="success" class="external-feedback__success-message">Feedback enviado com sucesso!</p>
+</div>

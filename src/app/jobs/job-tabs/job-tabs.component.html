@@ -149,6 +149,19 @@
     <mat-tab>
       <ng-template mat-tab-label>
         <cb-job-tab
+          [tab]="'Feedback'"
+          [status]="tabStatus.feedback_check"
+        ></cb-job-tab>
+      </ng-template>
+
+      <cb-feedback
+        [job]="job"
+      ></cb-feedback>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
           [tab]="'Detalhamento'"
           [status]="'DEV'"
         ></cb-job-tab>
@@ -183,17 +196,6 @@
       <cb-developing
         [text]="''"
       ></cb-developing>
-    </mat-tab>
-
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <cb-job-tab
-          [tab]="'Feedback'"
-          [status]="'DEV'"
-        ></cb-job-tab>
-      </ng-template>
-
-      <cb-developing></cb-developing>
     </mat-tab>
   </mat-tab-group>
 </div>

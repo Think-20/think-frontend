@@ -38,6 +38,7 @@ import { ObjectValidator } from '../../shared/custom-validators';
 import { RouterExtService } from 'app/shared/router-ext.service';
 import { Event } from 'app/events/event.model';
 import { EventService } from 'app/events/event.service';
+import { LimitJobComponent } from 'app/limit-job/limit-job.component';
 
 @Component({
   selector: 'cb-job-form',
@@ -88,7 +89,8 @@ export class JobFormComponent implements OnInit {
     private router: Router,
     private datePipe: DatePipe,
     private uploadFileService: UploadFileService,
-    private eventService: EventService
+    private eventService: EventService,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -685,6 +687,10 @@ export class JobFormComponent implements OnInit {
   // }
 
   save() {
+    this.dialog.open(LimitJobComponent, {
+      width: '500px',
+    });
+
     if( ! this.buttonEnable) return
 
     this.jobForm.updateValueAndValidity()

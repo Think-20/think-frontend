@@ -1,0 +1,19 @@
+<div class="feedback-form-rating">
+    <div *ngFor="let rating of ratings" class="feedback-form-rating__rating">
+        <input type="radio"
+            [id]="inputName + '-' + rating"
+            [name]="inputName"
+            [disabled]="disabled"
+            [value]="rating"
+            [checked]="rating === value"
+            (change)="selectRating(rating)"
+        />
+
+        <label class="feedback-form-rating__rating__label feedback-form-rating__rating__label--{{rating}}" tabindex="0"
+            [class.feedback-form-rating__rating__label--disabled]="disabled"
+            [class.feedback-form-rating__rating__label--selected]="rating === value"
+            [for]="inputName + '-' + rating">
+            <span>{{ rating }}</span>
+        </label>
+    </div>
+</div>

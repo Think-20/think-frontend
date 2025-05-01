@@ -79,7 +79,7 @@ export class ProjectPhotosComponent implements OnInit {
     }
 
     return this.isAttendance
-      ? `/jobs/edit/${this.job.id}?tab=detailing`
+      ? `/jobs/edit/${this.job.id}?tab=feedback`
       : "/schedule?date=" +
           this.datePipe.transform(task.items[0].date, "yyyy-MM-dd");
   }

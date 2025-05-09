@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Injectable, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -45,7 +45,7 @@ import { SweetAlertService } from 'app/shared/services/sweetalert.service';
   styleUrls: ['./job-form.component.css']
 })
 @Injectable()
-export class JobFormComponent implements OnInit, AfterViewInit {
+export class JobFormComponent implements OnInit {
   @Input('typeForm') typeForm: string
   @Output('jobEmitter') jobEmitter: EventEmitter<Job> = new EventEmitter()
   @Output('isAdminEmitter') isAdminEmitter: EventEmitter<boolean> = new EventEmitter();
@@ -268,6 +268,15 @@ export class JobFormComponent implements OnInit, AfterViewInit {
       this.levels = data.levels
       this.how_comes = data.how_comes
 
+      let job: Job = this.jobService.data
+
+      if (!job.deadline && this.typeForm === 'new' && this.overbook) {
+        this.sweetAlertService.alertOk(
+          "Atenção!",
+          "Notamos um aumento no número de jobs nos últimos dias. Para continuarmos entregando com qualidade e no prazo, pode ser uma boa ideia considerar o reforço da equipe.",
+        );
+      }
+
       if (this.typeForm === 'edit') {
         this.loadJob()
       } else if (this.typeForm === 'show') {
@@ -299,17 +308,6 @@ export class JobFormComponent implements OnInit, AfterViewInit {
     })
 
    this.checkUserDepartment();
-  }
-
-  ngAfterViewInit(): void {
-    let job: Job = this.jobService.data
-
-    if (job.deadline == null && this.typeForm === 'new' && this.overbook) {
-      this.sweetAlertService.alertOk(
-        "Atenção!",
-        "Notamos um aumento no número de jobs nos últimos dias. Para continuarmos entregando com qualidade e no prazo, pode ser uma boa ideia considerar o reforço da equipe.",
-      );
-    }
   }
 
   checkUserDepartment() {

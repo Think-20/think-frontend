@@ -1,6 +1,5 @@
-import { Component, OnInit, Injectable, ViewChild, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
-import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
+import { Component, OnInit, Injectable, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -25,7 +24,7 @@ import { Patterns } from '../../shared/patterns.model';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
-import { isUndefined, isObject } from 'util';
+import { isObject } from 'util';
 
 import { JobMainExpectation } from 'app/job-main-expectation/job-main-expectation.model';
 import { JobLevel } from 'app/job-level/job-level.model';
@@ -38,7 +37,7 @@ import { ObjectValidator } from '../../shared/custom-validators';
 import { RouterExtService } from 'app/shared/router-ext.service';
 import { Event } from 'app/events/event.model';
 import { EventService } from 'app/events/event.service';
-import { LimitJobComponent } from 'app/limit-job/limit-job.component';
+import { SweetAlertService } from 'app/shared/services/sweetalert.service';
 
 @Component({
   selector: 'cb-job-form',
@@ -46,7 +45,7 @@ import { LimitJobComponent } from 'app/limit-job/limit-job.component';
   styleUrls: ['./job-form.component.css']
 })
 @Injectable()
-export class JobFormComponent implements OnInit {
+export class JobFormComponent implements OnInit, AfterViewInit {
   @Input('typeForm') typeForm: string
   @Output('jobEmitter') jobEmitter: EventEmitter<Job> = new EventEmitter()
   @Output('isAdminEmitter') isAdminEmitter: EventEmitter<boolean> = new EventEmitter();
@@ -73,6 +72,8 @@ export class JobFormComponent implements OnInit {
   isAddAttendance = false;
   currentEventName: string;
   readonly eventIdAux = "eventIdAux";
+
+  overbook = 0;
   
 
   constructor(
@@ -91,6 +92,7 @@ export class JobFormComponent implements OnInit {
     private uploadFileService: UploadFileService,
     private eventService: EventService,
     private dialog: MatDialog,
+    private sweetAlertService: SweetAlertService,
   ) { }
 
   ngOnInit() {
@@ -175,7 +177,7 @@ export class JobFormComponent implements OnInit {
       
             const isDiretoria = this.authService.currentUser().employee.department_id === 1;
 
-            return client.type.description !== 'Agência' && (isDiretoria || client.employee.id == employee.id)
+            return (!client || !client.type || !client.type.description || client.type.description !== 'Agência') && (isDiretoria || client.employee.id == employee.id)
           })
         })
         Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
@@ -226,7 +228,7 @@ export class JobFormComponent implements OnInit {
 
         this.clientService.clients({ search: name, attendance: this.paramAttendance }).subscribe((dataInfo) => {
           this.agencies = dataInfo.pagination.data.filter((client) => {
-            return client.type.description === 'Agência'
+            return client && client.type && client.type.description && client.type.description === 'Agência'
           })
         })
         Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
@@ -257,6 +259,7 @@ export class JobFormComponent implements OnInit {
       this.job_activities = data.job_activities
       this.job_types = data.job_types
       this.status = data.status
+      this.overbook = data.overbook;
 
       this.attendances = data.attendances;
       this.employees = data.employees
@@ -297,6 +300,18 @@ export class JobFormComponent implements OnInit {
 
    this.checkUserDepartment();
   }
+
+  ngAfterViewInit(): void {
+    let job: Job = this.jobService.data
+
+    if (job.deadline == null && this.typeForm === 'new' && this.overbook) {
+      this.sweetAlertService.alertOk(
+        "Atenção!",
+        "Notamos um aumento no número de jobs nos últimos dias. Para continuarmos entregando com qualidade e no prazo, pode ser uma boa ideia considerar o reforço da equipe.",
+      );
+    }
+  }
+
   checkUserDepartment() {
     const currentUser = this.authService.currentUser();
 
@@ -687,10 +702,6 @@ export class JobFormComponent implements OnInit {
   // }
 
   save() {
-    this.dialog.open(LimitJobComponent, {
-      width: '500px',
-    });
-
     if( ! this.buttonEnable) return
 
     this.jobForm.updateValueAndValidity()

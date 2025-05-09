@@ -77,7 +77,7 @@ export class ScheduleFormComponent implements OnInit {
     private datePipe: DatePipe,
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) { }
 
   ngOnInit() {
@@ -518,6 +518,7 @@ export class ScheduleFormComponent implements OnInit {
     }).subscribe((data) => {
       this.items = data.items
       this.responsibles = data.responsibles
+      
 
       snack.dismiss()
       snack = this.snackBar.open('Selecione um responsável para abrir as opções', '', { duration: 3000 })

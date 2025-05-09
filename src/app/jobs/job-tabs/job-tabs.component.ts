@@ -119,7 +119,7 @@ export class JobTabsComponent implements OnInit {
   }
 
   setJob(job: Job) {
-    this.job = {...job, feedback_user_name: 'Brenno'};
+    this.job = job;
 
     this.loadTabsStatus();
   }

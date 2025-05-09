@@ -7,8 +7,8 @@
 
                     <br>
 
-                    <span *ngIf="task?.project_photos?.length > 0" class="lead subtitle ml-2">
-                        {{ task?.project_photos[task.project_photos.length - 1]?.responsible?.name + ' | ' + (task.project_photos[task.project_photos.length - 1].updated_at | date: 'dd/MM/yyyy HH:mm') }}
+                    <span *ngIf="task?.project_photos_files?.length > 0" class="lead subtitle ml-2">
+                        {{ task?.project_photos_files[task.project_photos_files.length - 1]?.responsible?.name + ' | ' + (task.project_photos_files[task.project_photos_files.length - 1].updated_at | date: 'dd/MM/yyyy HH:mm') }}
                     </span>
                 </p>
             </mat-panel-title>
@@ -16,7 +16,7 @@
 
         <cb-file-upload
             [properties]="{ task : task }"
-            [files]="task.project_photos"
+            [files]="task.project_photos_files"
             [fileServiceInterface]="projectPhotosService"
             [typeForm]="typeForm"
             [readOnly]="task.budget != null"

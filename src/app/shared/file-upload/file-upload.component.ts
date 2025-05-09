@@ -178,6 +178,8 @@ export class FileUploadComponent implements OnInit {
           return
         }
 
+        this.files = this.files && this.files.length ? this.files : [];
+
         let files = <FileUploadInterface[]> data.files
         files.forEach((fileInterface) => {
           this.addFile(fileInterface)

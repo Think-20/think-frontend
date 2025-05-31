@@ -15,7 +15,7 @@
         [fileServiceInterface]="specificationFileService" [typeForm]="typeForm" (uploadEmitter)="uploadDone(task)"
         [readOnly]="task.budget != null"
         [readOnlyMessage]="'Após orçamento preenchido, não é possível alterar os arquivos'" [max]="1"
-        (changed)="onChanged()">
+        (changed)="onChanged(task, $event)">
       </cb-file-upload>
       <div *ngIf="task?.specification_files?.length > 0" class="col-md-6 text-right">
         <button mat-button class="cb-button button-navigate" type="button" (click)="navigateToBudget(task)">

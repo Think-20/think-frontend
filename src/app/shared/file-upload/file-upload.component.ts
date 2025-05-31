@@ -31,7 +31,7 @@ export class FileUploadComponent implements OnInit {
   @Input() files: FileUploadInterface[] = []
   @Input() fileServiceInterface: FileUploadServiceInterface
   @Output() uploadEmitter: EventEmitter<boolean> = new EventEmitter()
-  @Output() changed = new EventEmitter<void>();
+  @Output() changed = new EventEmitter<any[]>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -127,9 +127,9 @@ export class FileUploadComponent implements OnInit {
         return
       }
 
-      this.changed.emit();
-
-      files.removeAt(i)
+      files.removeAt(i);
+      
+      this.changed.emit(files.value);
     })
   }
 
@@ -187,7 +187,7 @@ export class FileUploadComponent implements OnInit {
         })
 
         this.uploadEmitter.emit(true);
-        this.changed.emit();
+        this.changed.emit(this.files);
       })
     }).subscribe(() => {})
   }

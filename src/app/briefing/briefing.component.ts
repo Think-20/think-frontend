@@ -9,6 +9,8 @@ import { AuthService } from 'app/login/auth.service';
 import { Task } from 'app/schedule/task.model';
 import { TaskService } from 'app/schedule/task.service';
 import { BriefingService } from './briefing.service';
+import { FileUploadInterface } from 'app/shared/file-upload/file-upload.interface';
+import { BriefingFile } from './briefing-file.model';
 
 @Component({
   selector: "cb-briefing",
@@ -94,7 +96,7 @@ export class BriefingComponent implements OnInit {
     }
 
     let specificationTask = this.job.tasks.filter((t) => {
-      return t.task_id == task.id && t.specification_files.length > 0;
+      return t.task_id == task.id && t.briefing_files.length > 0;
     });
 
     if (specificationTask.length > 0) {
@@ -149,5 +151,9 @@ export class BriefingComponent implements OnInit {
     let url = this.briefingService.downloadAllUrl(task);
 
     window.open(`${API}/${url}`, "_blank");
+  }
+
+  onChanged(task: Task, files: FileUploadInterface[]): void {
+    task.briefing_files = files as BriefingFile[];
   }
 }

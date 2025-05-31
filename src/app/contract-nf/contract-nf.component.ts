@@ -9,6 +9,8 @@ import { AuthService } from 'app/login/auth.service';
 import { Task } from 'app/schedule/task.model';
 import { TaskService } from 'app/schedule/task.service';
 import { ContractNfService } from './contract-nf.service';
+import { ContractNfFile } from './contract-nf-file.model';
+import { FileUploadInterface } from 'app/shared/file-upload/file-upload.interface';
 
 @Component({
   selector: "cb-contract-nf",
@@ -61,6 +63,10 @@ export class ContractNfComponent implements OnInit {
     this.sortedTasks[this.sortedTasks.findIndex((t) => t.id == newTask.id)] = newTask;
   }
 
+  onChanged(task: Task, files: FileUploadInterface[]): void {
+    task.contract_nf_files = files as ContractNfFile[];
+  }
+
   ngOnChanges() {
     this.sortTasks();
     
@@ -94,7 +100,7 @@ export class ContractNfComponent implements OnInit {
     }
 
     let specificationTask = this.job.tasks.filter((t) => {
-      return t.task_id == task.id && t.specification_files.length > 0;
+      return t.task_id == task.id && t.contract_nf_files.length > 0;
     });
 
     if (specificationTask.length > 0) {

@@ -22,6 +22,7 @@
             [readOnly]="task.budget != null"
             [readOnlyMessage]="'Após orçamento preenchido, não é possível alterar os arquivos'"
             (uploadEmitter)="uploadDone(task)"
+            (changed)="onChanged(task, $event)"
         ></cb-file-upload>
 
         <button mat-button matTooltip="Download completo" class="aux-button" type="button" (click)="downloadAll(task)">

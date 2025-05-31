@@ -9,6 +9,8 @@ import { JobService } from 'app/jobs/job.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 import { AuthService } from 'app/login/auth.service';
+import { FileUploadInterface } from 'app/shared/file-upload/file-upload.interface';
+import { SpecificationFile } from './specification-file.model';
 
 @Component({
   selector: 'cb-specification',
@@ -51,7 +53,9 @@ export class SpecificationComponent implements OnInit {
     this.sortedTasks[this.sortedTasks.findIndex(t => t.id == newTask.id)] = newTask
   }
 
-  onChanged(): void {
+  onChanged(task: Task, files: FileUploadInterface[]): void {
+    task.specification_files = files as SpecificationFile[];
+
     this.changed.emit();
   }
 

@@ -9,6 +9,8 @@ import { AuthService } from 'app/login/auth.service';
 import { Task } from 'app/schedule/task.model';
 import { TaskService } from 'app/schedule/task.service';
 import { ProjectPhotosService } from './project-photos.service';
+import { FileUploadInterface } from 'app/shared/file-upload/file-upload.interface';
+import { ProjectPhotosFile } from './project-photos-file.model';
 
 @Component({
   selector: "cb-project-photos",
@@ -61,6 +63,10 @@ export class ProjectPhotosComponent implements OnInit {
     this.sortedTasks[this.sortedTasks.findIndex((t) => t.id == newTask.id)] = newTask;
   }
 
+  onChanged(task: Task, files: FileUploadInterface[]): void {
+    task.project_photos_files = files as ProjectPhotosFile[];
+  }
+
   ngOnChanges() {
     this.sortTasks();
     
@@ -94,7 +100,7 @@ export class ProjectPhotosComponent implements OnInit {
     }
 
     let specificationTask = this.job.tasks.filter((t) => {
-      return t.task_id == task.id && t.specification_files.length > 0;
+      return t.task_id == task.id && t.project_photos_files.length > 0;
     });
 
     if (specificationTask.length > 0) {

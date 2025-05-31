@@ -9,6 +9,8 @@ import { EmployeeService } from 'app/employees/employee.service';
 import { AuthService } from 'app/login/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
+import { FileUploadInterface } from 'app/shared/file-upload/file-upload.interface';
+import { ProjectFile } from './project-file.model';
 
 @Component({
   selector: 'cb-projects',
@@ -57,12 +59,16 @@ export class ProjectsComponent implements OnInit {
   }
 
   uploadDone(task: Task) {
-    let newTask = this.sortedTasks.find(t => t.id == task.id)
+    let newTask = this.sortedTasks.find(t => t.id == task.id);
+
     newTask.project_files[newTask.project_files.length - 1].responsible = this.authService.currentUser().employee
+
     this.sortedTasks[this.sortedTasks.findIndex(t => t.id == newTask.id)] = newTask
   }
 
-  onChanged(): void {
+  onChanged(task: Task, files: FileUploadInterface[]): void {
+    task.project_files = files as ProjectFile[];
+    
     this.changed.emit();
   }
 
@@ -93,11 +99,11 @@ export class ProjectsComponent implements OnInit {
     if(task.project_files.length == 0)
       return false
 
-    let specificationTask = this.job.tasks.filter((t) => {
-      return t.task_id == task.id && t.specification_files.length > 0
+    let projectTask = this.job.tasks.filter((t) => {
+      return t.task_id == task.id && t.project_files.length > 0
     })
 
-    if(specificationTask.length > 0) {
+    if(projectTask.length > 0) {
       return false
     }
 
@@ -118,18 +124,9 @@ export class ProjectsComponent implements OnInit {
   sortTasks() {
     this.sortedTasks = this.job.tasks.filter((task) => {
       return task.job_activity.initial == 1
-    });
-    let adds = [];
-    this.sortedTasks.filter((parentTask => {
-      let temp = this.job.tasks.filter((task) => {
-        return parentTask.job_activity.modification_id == task.job_activity_id
-          || parentTask.job_activity.option_id == task.job_activity_id
-      });
+    }) || [];
 
-      adds = adds.concat(temp)
-      adds = adds.sort((a, b) => a.reopened - b.reopened)
-    }));
-    this.sortedTasks = this.sortedTasks.concat(adds).reverse();
+    this.sortedTasks = this.sortedTasks.sort((a, b) => a.reopened - b.reopened).reverse();
 
     this.sortedTasks.forEach((task, index) => {
       if(task.project_files.length > 0 && this.expandedIndex == null) {

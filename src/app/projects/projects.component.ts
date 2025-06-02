@@ -122,17 +122,32 @@ export class ProjectsComponent implements OnInit {
   }
 
   sortTasks() {
-    this.sortedTasks = this.job.tasks.filter((task) => {
-      return task.job_activity.initial == 1
-    }) || [];
+    this.sortedTasks = this.job && this.job.tasks && this.job.tasks.length ? this.job.tasks.filter((task) => {
+      return task.job_activity.initial == 1;
+    }) : [];
 
-    this.sortedTasks = this.sortedTasks.sort((a, b) => a.reopened - b.reopened).reverse();
+    let adds = [];
+    
+    this.sortedTasks.filter((parentTask) => {
+      let temp = this.job.tasks.filter((task) => {
+        return (
+          parentTask.job_activity.modification_id == task.job_activity_id ||
+          parentTask.job_activity.option_id == task.job_activity_id
+        );
+      });
+
+      adds = adds.concat(temp);
+
+      adds = adds.sort((a, b) => a.reopened - b.reopened);
+    });
+
+    this.sortedTasks = this.sortedTasks.concat(adds).reverse();
 
     this.sortedTasks.forEach((task, index) => {
-      if(task.project_files.length > 0 && this.expandedIndex == null) {
-        this.expandedIndex = index
+      if (task.project_files && task.project_files.length > 0 && this.expandedIndex == null) {
+        this.expandedIndex = index;
       }
-    })
+    });
   }
 
   downloadAll(task: Task) {

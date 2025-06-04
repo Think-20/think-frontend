@@ -271,6 +271,9 @@ import { FeedbackFormComponent } from './feedback-form/feedback-form.component';
 import { FeedbackFormCardComponent } from './feedback-form/feedback-form-card/feedback-form-card.component';
 import { FeedbackFormRatingComponent } from './feedback-form/feedback-form-rating/feedback-form-rating.component';
 import { LimitJobComponent } from './limit-job/limit-job.component';
+import { JobsKanbanComponent } from './jobs/jobs-kanban/jobs-kanban.component';
+import { JobsKanbanColumnComponent } from './jobs/jobs-kanban/jobs-kanban-column/jobs-kanban-column.component';
+import { JobsKanbanCardComponent } from './jobs/jobs-kanban/jobs-kanban-card/jobs-kanban-card.component';
 
 registerLocaleData(localePt);
 
@@ -440,6 +443,9 @@ registerLocaleData(localePt);
     FeedbackFormCardComponent,
     FeedbackFormRatingComponent,
     LimitJobComponent,
+    JobsKanbanComponent,
+    JobsKanbanColumnComponent,
+    JobsKanbanCardComponent,
   ],
   imports: [
     CurrencyMaskModule,

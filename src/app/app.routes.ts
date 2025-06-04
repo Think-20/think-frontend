@@ -75,6 +75,7 @@ import { OrganizationComponent } from './organization/organization.component';
 import { ExternalCheckInComponent } from './external/external-check-in/external-check-in.component';
 import { ExternalExtrasRefuseComponent } from './external/external-extras-refuse/external-extras-refuse.component';
 import { ExternalFeedbackComponent } from './external/external-feedback/external-feedback.component';
+import { JobsKanbanComponent } from './jobs/jobs-kanban/jobs-kanban.component';
 
 export const ROUTES: Routes = [
   {
@@ -296,6 +297,9 @@ export const ROUTES: Routes = [
           },
           {
             path: 'list', component: JobListComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'kanban', component: JobsKanbanComponent, canActivate: [AuthGuard]
           }
         ]
       },

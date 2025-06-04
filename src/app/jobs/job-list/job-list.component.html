@@ -22,7 +22,17 @@
     <mat-card-title>
       <div class="row search-bar-group">
         <div class="title">
-          Lista
+          Lista 
+
+          <div *ngIf="!isFinancial" class="views-buttons">
+            <a [routerLink]="'/jobs/list'" title="Lista">
+              <mat-icon>view_headline</mat-icon>
+            </a>
+
+            <a [routerLink]="'/jobs/kanban'" title="Kanban">
+              <mat-icon>view_column</mat-icon>
+            </a>
+          </div>
         </div>
         <mat-form-field class="bar">
           <input #search matInput formControlName="search" placeholder="Qual job você procura?" autocomplete="off">

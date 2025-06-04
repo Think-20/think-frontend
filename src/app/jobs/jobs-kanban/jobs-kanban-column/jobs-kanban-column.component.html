@@ -1,0 +1,25 @@
+<div class="kanban-column">
+    <div class="kanban-column__header">
+        <h4 class="kanban-column__header__title">{{ status.description }}</h4>
+        
+        <span *ngIf="total >= 0" class="kanban-column__header__total">
+            {{ total }}
+        </span>
+    </div>
+
+    <div class="kanban-column__cards" cdkDropList
+        [cdkDropListData]="jobs"
+        (cdkDropListDropped)="drop($event)">
+        <cb-jobs-kanban-card *ngFor="let job of jobs; trackBy: trackByJob" cdkDrag
+            class="kanban-column__cards__card"
+            [class.kanban-column__cards__card--loading]="job['loading']"
+            [job]="job">
+            <div class="kanban-column__cards__card__placeholder" *cdkDragPlaceholder></div>
+        </cb-jobs-kanban-card>
+
+        <div *ngIf="hasNext" class="kanban-column__cards__loading"
+            [id]="'kanban-column-loading--' + status.id">
+            Carregando...
+        </div>
+    </div>
+</div>

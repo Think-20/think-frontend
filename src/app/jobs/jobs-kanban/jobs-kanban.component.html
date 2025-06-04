@@ -1,0 +1,129 @@
+<div class="my-container">
+    <h3 class="lead">Jobs</h3>
+</div>
+
+<div class="col-md-12 pr-0" id="searchForm">
+    <form [formGroup]="searchForm" autocomplete="off">
+        <mat-card-title>
+            <div class="row search-bar-group">
+                <div class="title">
+                    Kanban
+
+                    <div class="views-buttons">
+                        <a [routerLink]="'/jobs/list'" title="Lista">
+                            <mat-icon>view_headline</mat-icon>
+                        </a>
+
+                        <a [routerLink]="'/jobs/kanban'" title="Kanban">
+                            <mat-icon>view_column</mat-icon>
+                        </a>
+                    </div>
+                </div>
+
+                <mat-form-field class="bar">
+                    <input #search matInput formControlName="search" placeholder="Qual job você procura?" autocomplete="off">
+                </mat-form-field>
+
+                <div class="buttons">
+                    <a mat-button (click)="search.focus()">
+                        <mat-icon>search</mat-icon>
+                    </a>
+
+                    <a mat-button (click)="filter = !filter"
+                        [class.filter-button-active]="searchForm.dirty">
+                        <mat-icon>keyboard_arrow_down</mat-icon>
+                    </a>
+
+                    <a [routerLink]="['/jobs/new']" mat-button>
+                        <mat-icon>add</mat-icon>
+                    </a>
+
+                    <a matTooltip="Limpar filtro" *ngIf="searchForm.dirty" (click)="clearFilter()" mat-button>
+                        <mat-icon>clear</mat-icon>
+                    </a>
+                </div>
+            </div>
+        </mat-card-title>
+
+        <mat-card *ngIf="filter" class="filter-grid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row" style="padding: 0 15px;">
+                        <mat-form-field class="col-md-2-3">
+                            <input matInput formControlName="client" [matAutocomplete]="autocompleteclient" placeholder="Cliente">
+                        </mat-form-field>
+                        
+                        <mat-autocomplete #autocompleteclient="matAutocomplete">
+                            <mat-option
+                                *ngFor="let client of clients"
+                                [value]="client.fantasy_name">
+                                {{ client.fantasy_name }}
+                            </mat-option>
+                        </mat-autocomplete>
+
+                        <mat-form-field *ngIf="isAdmin" class="col-md-2-3">
+                            <mat-select placeholder="Atendimento" formControlName="attendance"
+                                [compareWith]="compareAttendance">
+                                <mat-option></mat-option>
+                                <mat-option
+                                    *ngFor="let attendance of attendances"
+                                    [value]="attendance">
+                                    {{ attendance.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="col-md-2-3">
+                            <mat-select placeholder="Projetista" formControlName="creation"
+                                [compareWith]="compareAttendance">
+                                <mat-option></mat-option>
+                                <mat-option
+                                    *ngFor="let creation of creations"
+                                    [value]="creation">
+                                    {{ creation.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="col-md-2-3">
+                            <mat-select placeholder="Tipo" formControlName="job_type" [compareWith]="compareJobType">
+                                <mat-option></mat-option>
+                                <mat-option
+                                    *ngFor="let jobType of jobTypes"
+                                    [value]="jobType">
+                                    {{ jobType.description }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <hr>
+
+                    <div class="col-md-12">
+                        <p><small>Você também pode filtrar por período do cronograma</small></p>
+                        <br>
+                    </div>
+
+                    <mat-form-field class="col-md-3">
+                        <input [matDatepicker]="initialDatepicker" formControlName="initial_date" matInput placeholder="Data inicial">
+                        <mat-datepicker-toggle matSuffix [for]="initialDatepicker"></mat-datepicker-toggle>
+                        <mat-datepicker #initialDatepicker></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="col-md-3">
+                        <input [matDatepicker]="finalDatepicker" formControlName="final_date" matInput placeholder="Data final">
+                        <mat-datepicker-toggle matSuffix [for]="finalDatepicker"></mat-datepicker-toggle>
+                        <mat-datepicker #finalDatepicker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card>
+    </form>
+
+    <mat-card class="kanban__content" cdkDropListGroup cdkScrollable>
+        <cb-jobs-kanban-column
+            *ngFor="let status of allStatus; trackBy: trackByColumn"
+            [status]="status"
+        ></cb-jobs-kanban-column>
+    </mat-card>
+</div>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Http, Headers, RequestOptions, ResponseContentType } from '@angular/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -16,13 +16,16 @@ import { Client } from '../clients/client.model';
 import { DataInfo } from '../shared/data-info.model';
 import { PerformanceReportLite } from '../reports/performance-report-lite/performance-report-lite.model';
 import { JobTabStatus } from './job-tab-status.model';
+import { JobStatus } from 'app/job-status/job-status.model';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Injectable()
-export class JobService {
+export class JobService implements OnDestroy {
   data: Job = new Job
-  searchValue = {}
   pageIndex = 0
+
+  searchValue$ = new BehaviorSubject<unknown>({});
 
   constructor(
     private http: Http,
@@ -191,6 +194,26 @@ export class JobService {
       })
   }
 
+  updateStatus(id: number, status: JobStatus): Observable<any> {
+    let url = 'job/edit';
+    let prefix = this.auth.hasAccess('job/edit') ? '' : 'my-';
+
+    url = prefix + url;
+
+    return this.http.put(
+      `${API}/${url}`,
+      JSON.stringify({ id, status_id: status.id }),
+      new RequestOptions()
+    )
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      });
+  }
+
   delete(id: number): Observable<any> {
     let url = `job/remove/${id}`
     let prefix = this.auth.hasAccess('job/remove/{id}') ? '' : 'my-'
@@ -232,5 +255,9 @@ export class JobService {
     url = prefix + url
 
     window.open(`${API}/${url}`, '_blank')
+  }
+
+  ngOnDestroy(): void {
+    this.searchValue$.complete();
   }
 }

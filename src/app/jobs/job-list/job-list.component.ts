@@ -22,7 +22,7 @@ import { DataInfo } from '../../shared/data-info.model';
 @Component({
   selector: 'cb-job-list',
   templateUrl: './job-list.component.html',
-  styleUrls: ['./job-list.component.css'],
+  styleUrls: ['./job-list.component.scss'],
   animations: [
     trigger('rowAppeared', [
       state('ready', style({ opacity: 1 })),
@@ -111,10 +111,10 @@ export class JobListComponent implements OnInit {
 
     this.formCopy = this.searchForm.value
 
-    if(JSON.stringify(this.jobService.searchValue) == JSON.stringify({})) {
-      this.jobService.searchValue = this.searchForm.value
+    if(JSON.stringify(this.jobService.searchValue$) == JSON.stringify({})) {
+      this.jobService.searchValue$.next(this.searchForm.value);
     } else {
-      this.searchForm.setValue(this.jobService.searchValue)
+      this.searchForm.setValue(this.jobService.searchValue$.value)
     }
 
     this.searchForm.controls.client.valueChanges
@@ -133,7 +133,7 @@ export class JobListComponent implements OnInit {
 
         this.pageIndex = 0
         this.jobService.pageIndex = 0
-        this.jobService.searchValue = searchValue
+        this.jobService.searchValue$.next(searchValue);
         this.updateFilterActive()
       })
   }
@@ -159,7 +159,7 @@ export class JobListComponent implements OnInit {
   }
 
   updateFilterActive() {
-    if (JSON.stringify(this.jobService.searchValue) === JSON.stringify(this.formCopy)) {
+    if (JSON.stringify(this.jobService.searchValue$.value) === JSON.stringify(this.formCopy)) {
       this.hasFilterActive = false
     } else {
       this.hasFilterActive = true
@@ -167,7 +167,7 @@ export class JobListComponent implements OnInit {
   }
 
   clearFilter() {
-    this.jobService.searchValue = {}
+    this.jobService.searchValue$.next({});
     this.jobService.pageIndex = 0
     this.pageIndex = 0
     this.createForm()
@@ -175,10 +175,10 @@ export class JobListComponent implements OnInit {
   }
 
   loadInitialData() {
-    if (JSON.stringify(this.jobService.searchValue) === JSON.stringify(this.formCopy)) {
+    if (JSON.stringify(this.jobService.searchValue$.value) === JSON.stringify(this.formCopy)) {
       this.loadJobs(this.isFinancial ? { status: 3 } : {}, this.pageIndex + 1);
     } else {
-      this.params = this.getParams(this.jobService.searchValue)
+      this.params = this.getParams(this.jobService.searchValue$.value)
       this.loadJobs(this.params, this.pageIndex + 1)
     }
 
@@ -252,7 +252,7 @@ export class JobListComponent implements OnInit {
   changePage($event) {
     this.searching = true
     this.jobs = []
-    this.jobService.jobs(this.jobService.searchValue, ($event.pageIndex + 1)).subscribe(dataInfo => {
+    this.jobService.jobs(this.jobService.searchValue$.value, ($event.pageIndex + 1)).subscribe(dataInfo => {
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
       this.jobs = dataInfo.pagination.data

@@ -36,7 +36,7 @@ export class JobsKanbanColumnComponent implements OnInit, AfterViewInit, OnDestr
 
     this.loadJobs('init');
 
-    this.jobService.searchValue$
+    this.jobService.searchValueKanban$
       .pipe(
         takeUntil(this.onDestroy$)
       )
@@ -80,7 +80,7 @@ export class JobsKanbanColumnComponent implements OnInit, AfterViewInit, OnDestr
       this.total = null;
     }
 
-    const params = this.getParams(this.jobService.searchValue$.value);
+    const params = this.getParams(this.jobService.searchValueKanban$.value);
 
     this.jobService.jobs(params, this.page).subscribe({
       next: (dataInfo) => {

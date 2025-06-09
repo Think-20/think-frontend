@@ -26,6 +26,7 @@ export class JobService implements OnDestroy {
   pageIndex = 0
 
   searchValue$ = new BehaviorSubject<unknown>({});
+  searchValueKanban$ = new BehaviorSubject<unknown>({});
 
   constructor(
     private http: Http,
@@ -259,5 +260,6 @@ export class JobService implements OnDestroy {
 
   ngOnDestroy(): void {
     this.searchValue$.complete();
+    this.searchValueKanban$.complete();
   }
 }

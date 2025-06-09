@@ -41,13 +41,13 @@
           <a mat-button (click)="search.focus()">
             <mat-icon>search</mat-icon>
           </a>
-          <a mat-button (click)="filter = filter ? false : true" [class.filter-button-active]="hasFilterActive">
+          <a mat-button (click)="filter = filter ? false : true" [class.filter-button-active]="searchForm.dirty">
             <mat-icon>keyboard_arrow_down</mat-icon>
           </a>
           <a [routerLink]="['/jobs/new']" mat-button>
             <mat-icon>add</mat-icon>
           </a>
-          <a matTooltip="Limpar filtro" *ngIf="hasFilterActive" (click)="clearFilter()" mat-button>
+          <a matTooltip="Limpar filtro" *ngIf="searchForm.dirty" (click)="clearFilter()" mat-button>
             <mat-icon>clear</mat-icon>
           </a>
         </div>

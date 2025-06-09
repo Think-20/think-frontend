@@ -60,7 +60,6 @@ export class JobListComponent implements OnInit {
   pageIndex: number
   filter = false
   params = {}
-  hasFilterActive = false
   isAdmin: boolean = false
 
   isFinancial = false;
@@ -114,7 +113,7 @@ export class JobListComponent implements OnInit {
     if(JSON.stringify(this.jobService.searchValue$) == JSON.stringify({})) {
       this.jobService.searchValue$.next(this.searchForm.value);
     } else {
-      this.searchForm.setValue(this.jobService.searchValue$.value)
+      this.searchForm.patchValue(this.jobService.searchValue$.value)
     }
 
     this.searchForm.controls.client.valueChanges
@@ -134,7 +133,6 @@ export class JobListComponent implements OnInit {
         this.pageIndex = 0
         this.jobService.pageIndex = 0
         this.jobService.searchValue$.next(searchValue);
-        this.updateFilterActive()
       })
   }
 
@@ -158,20 +156,16 @@ export class JobListComponent implements OnInit {
     }
   }
 
-  updateFilterActive() {
-    if (JSON.stringify(this.jobService.searchValue$.value) === JSON.stringify(this.formCopy)) {
-      this.hasFilterActive = false
-    } else {
-      this.hasFilterActive = true
-    }
-  }
-
   clearFilter() {
-    this.jobService.searchValue$.next({});
-    this.jobService.pageIndex = 0
-    this.pageIndex = 0
-    this.createForm()
-    this.loadInitialData()
+    this.searchForm.reset();
+
+    this.jobService.pageIndex = 0;
+    
+    this.pageIndex = 0;
+    
+    this.createForm();
+    
+    this.loadInitialData();
   }
 
   loadInitialData() {
@@ -181,8 +175,6 @@ export class JobListComponent implements OnInit {
       this.params = this.getParams(this.jobService.searchValue$.value)
       this.loadJobs(this.params, this.pageIndex + 1)
     }
-
-    this.updateFilterActive()
   }
 
   loadJobs(params, page: number) {

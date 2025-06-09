@@ -65,10 +65,6 @@ export class JobsKanbanComponent implements OnInit, OnDestroy {
       this.paramAttendance = this.authService.currentUser().employee;
     }
 
-    this.searchForm.patchValue(this.jobService.searchValue$.value);
-
-    this.loadJobStatus();
-
     this.loadEmployees();
 
     this.loadJobTypes();
@@ -76,6 +72,33 @@ export class JobsKanbanComponent implements OnInit, OnDestroy {
     this.observerClients();
 
     this.observerFormChanges();
+
+    this.setDefaultSearchValues()
+      .then(() => this.loadJobStatus());
+  }
+
+  private setDefaultSearchValues(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const today = new Date();
+      today.setUTCHours(0, 0, 0, 0);
+  
+      const thirtyDaysAgo = new Date(today);
+      thirtyDaysAgo.setUTCDate(today.getUTCDate() - 30);
+  
+      this.searchForm.patchValue({
+        ...this.jobService.searchValueKanban$.value as {
+          [key: string]: any;
+        },
+        initial_date: thirtyDaysAgo,
+        final_date: today,
+      });
+  
+      this.jobService.searchValueKanban$.next(this.searchForm.value);
+
+      this.searchForm.markAsDirty();
+
+      resolve();
+    });
   }
 
   private loadJobTypes(): void {
@@ -103,7 +126,7 @@ export class JobsKanbanComponent implements OnInit, OnDestroy {
     this.searchForm.valueChanges
       .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe((searchValue) => {
-        this.jobService.searchValue$.next(searchValue);
+        this.jobService.searchValueKanban$.next(searchValue);
       })
   }
 

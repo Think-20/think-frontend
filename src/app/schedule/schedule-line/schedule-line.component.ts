@@ -157,9 +157,6 @@ export class ScheduleLineComponent implements OnInit {
     let className = ''
 
     if(!item || !item.task || !item.task.job || item.task.job.id == null) {
-      console.log(item);
-      
-      
       return className
     }
 

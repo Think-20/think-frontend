@@ -1,0 +1,17 @@
+<div class="my-container">
+    <h3 class="lead">Jobs</h3>
+</div>
+
+<div class="col-md-12 pr-0" id="searchForm">
+    <cb-workflow-header
+        [title]="'Workflow Produção'"
+    ></cb-workflow-header>
+
+    <mat-card class="workflow__content" cdkDropListGroup cdkScrollable>
+        <cb-workflow-column
+            *ngFor="let column of columns; trackBy: trackByColumn"
+            [column]="column"
+            [service]="service"
+        ></cb-workflow-column>
+    </mat-card>
+</div>

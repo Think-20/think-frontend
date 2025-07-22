@@ -1,0 +1,18 @@
+.workflow {
+  &__content {
+    display: flex;
+
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    gap: 0.65rem;
+
+    height: calc(100vh - 145px);
+
+    min-height: 350px;
+
+    padding: 1rem !important;
+
+    overflow: auto;
+  }
+}

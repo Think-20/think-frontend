@@ -144,7 +144,7 @@ export class JobsKanbanColumnComponent implements OnInit, AfterViewInit, OnDestr
   private updateJobStatus(job: Job): void {
     job['loading'] = true;
     
-    this.jobService.updateStatus(job.id, this.status).subscribe({
+    this.jobService.updateStatus(job.id, this.status.id).subscribe({
       next: (result) => {
         job['loading'] = false;
 

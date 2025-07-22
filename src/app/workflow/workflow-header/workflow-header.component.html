@@ -1,17 +1,14 @@
-<div class="my-container">
-    <h3 class="lead">Jobs</h3>
-</div>
+<form [formGroup]="searchForm" autocomplete="off">
+    <mat-card-title>
+        <div class="row search-bar-group">
+            <div class="title">
+                {{ title }}
+            </div>
 
-<div class="col-md-12 pr-0" id="searchForm">
-    <form [formGroup]="searchForm" autocomplete="off">
-        <mat-card-title>
-            <div class="row search-bar-group">
-                <div class="title">
-                    Workflow Atendimento
-                </div>
-
+            <div class="field-and-buttons">
                 <mat-form-field class="bar">
-                    <input #search matInput formControlName="search" placeholder="Qual job você procura?" autocomplete="off">
+                    <input #search matInput formControlName="search" placeholder="Qual job você procura?"
+                        autocomplete="off">
                 </mat-form-field>
 
                 <div class="buttons">
@@ -19,8 +16,7 @@
                         <mat-icon>search</mat-icon>
                     </a>
 
-                    <a mat-button (click)="filter = !filter"
-                        [class.filter-button-active]="searchForm.dirty">
+                    <a mat-button (click)="filter = !filter" [class.filter-button-active]="searchForm.dirty">
                         <mat-icon>keyboard_arrow_down</mat-icon>
                     </a>
 
@@ -33,9 +29,10 @@
                     </a>
                 </div>
             </div>
-        </mat-card-title>
+        </div>
+    </mat-card-title>
 
-        <mat-card *ngIf="filter" class="filter-grid">
+    <mat-card *ngIf="filter" class="filter-grid">
             <div class="row">
                 <div class="col-md-12">
                     <div class="row" style="padding: 0 15px;">
@@ -108,12 +105,4 @@
                 </div>
             </div>
         </mat-card>
-    </form>
-
-    <mat-card class="kanban__content" cdkDropListGroup cdkScrollable>
-        <cb-jobs-kanban-column
-            *ngFor="let status of allStatus; trackBy: trackByColumn"
-            [status]="status"
-        ></cb-jobs-kanban-column>
-    </mat-card>
-</div>
+</form>

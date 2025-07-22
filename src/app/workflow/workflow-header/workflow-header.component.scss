@@ -1,0 +1,23 @@
+:host ::ng-deep .mat-form-field-should-float .mat-form-field-label.mat-empty {
+  text-align: left !important;
+
+  transition: .2s text-align;
+}
+
+.search-bar-group {
+    gap: 1rem;
+
+    justify-content: space-between;
+    
+    & .title {
+        flex: none;
+    }
+
+    & .field-and-buttons {
+        display: flex;
+
+        justify-content: flex-end;
+
+        width: 60%;
+    }
+}

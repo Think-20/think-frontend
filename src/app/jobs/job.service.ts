@@ -195,7 +195,7 @@ export class JobService implements OnDestroy {
       })
   }
 
-  updateStatus(id: number, status: JobStatus): Observable<any> {
+  updateStatus(id: number, statusId: number): Observable<any> {
     let url = 'job/edit';
     let prefix = this.auth.hasAccess('job/edit') ? '' : 'my-';
 
@@ -203,7 +203,7 @@ export class JobService implements OnDestroy {
 
     return this.http.put(
       `${API}/${url}`,
-      JSON.stringify({ id, status_id: status.id }),
+      JSON.stringify({ id, status_id: statusId }),
       new RequestOptions()
     )
       .map(response => response.json())

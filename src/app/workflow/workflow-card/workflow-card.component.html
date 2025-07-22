@@ -1,0 +1,84 @@
+<mat-menu #menu="matMenu">
+  <ng-template matMenuContent let-job="job">
+      <a [disabled]="!permissionVerify('show', job)" [routerLink]="['/jobs/show', job.id]" mat-menu-item>
+        <mat-icon>subject</mat-icon> Visualização
+      </a>
+      <a [disabled]="!permissionVerify('edit', job)" [routerLink]="['/jobs/edit', job.id]" mat-menu-item>
+        <mat-icon>mode_edit</mat-icon> Editar
+      </a>
+      <button [disabled]="!permissionVerify('delete', job)" (click)="delete()" mat-menu-item>
+        <mat-icon>delete</mat-icon> Remover
+      </button>
+  </ng-template>
+</mat-menu>
+
+<ng-content></ng-content>
+
+<div class="kanban-card">
+    <div class="kanban-card__header">
+        <h6>#{{ jobService.showId(job) }} - {{ client }}</h6>
+
+        <a [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }">
+            <mat-icon>more_vert</mat-icon>
+        </a>
+    </div>
+
+    <div class="kanban-card__grid">
+        <div class="kanban-card__group">
+            <span class="kanban-card__group__label">Evento</span>
+
+            <p class="kanban-card__group__text">{{ job.event }}</p>
+        </div>
+
+        <div class="kanban-card__group">
+            <span class="kanban-card__group__label">Tipo</span>
+
+            <p class="kanban-card__group__text">{{ type }}</p>
+        </div>
+    </div>
+
+    <div class="kanban-card__grid">
+        <div class="kanban-card__group text-ellipsis">
+            <span class="kanban-card__group__label">Atendimento</span>
+
+            <p class="kanban-card__group__text text-ellipsis">{{ job.attendance.name }}</p>
+        </div>
+
+        <div class="kanban-card__group text-ellipsis">
+            <span class="kanban-card__group__label">Criação</span>
+
+            <p class="kanban-card__group__text text-ellipsis">{{ jobService.displayCreation(job) }}</p>
+        </div>
+    </div>
+
+    <div class="kanban-card__grid">
+        <div class="kanban-card__group">
+            <span class="kanban-card__group__label">Data</span>
+
+            <p class="kanban-card__group__text">{{ (job.created_at | date:'dd/MM/yy') || '-'}}</p>
+        </div>
+
+        <div class="kanban-card__group">
+            <span class="kanban-card__group__label">Crono</span>
+
+            <p class="kanban-card__group__text">{{ (job?.available_date | date:'dd/MM/yy') || '-' }}</p>
+        </div>
+    </div>
+
+    <div class="kanban-card__grid">
+        <div class="kanban-card__group">
+            <span class="kanban-card__group__label">Definição</span>
+
+            <p class="kanban-card__group__text">{{ (job?.status_updated_at | date:'dd/MM/yy') || '-' }}</p>
+        </div>
+
+        <div style="display: flex; font-size: 0; margin-top: 0.25rem;">
+            <cb-stars class="star-input" label="Score"
+                [hasLabel]="false"
+                [readonly]="true"
+                [rate]="1">
+                <input matInput>
+            </cb-stars>
+        </div>
+    </div>
+</div>

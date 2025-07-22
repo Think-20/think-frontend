@@ -50,6 +50,8 @@
           </a>
           <div [@rowAppeared]="state" *ngIf="atendimento">
             <div class="sub-navbar">
+              <a mat-raised-button [routerLink]="['/jobs/workflow']">Workflow</a>
+
               <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Agenda</a>
               <a [routerLink]="['/clients']" [disabled]="hasNoPermission(user, '/clients/list')" mat-raised-button>Clientes</a>
               <a (click)="events = !events" mat-raised-button>Eventos</a>
@@ -72,6 +74,8 @@
           </a>
           <div [@rowAppeared]="state" *ngIf="criacao">
             <div class="sub-navbar">
+              <a mat-raised-button [routerLink]="['/creation/workflow']">Workflow</a>
+
               <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Agenda</a>
               <a (click)="events = !events" mat-raised-button>Eventos</a>
               <div [@rowAppeared]="state" *ngIf="events">
@@ -115,7 +119,7 @@
           </a>
           <div [@rowAppeared]="state" *ngIf="planejamento">
             <div class="sub-navbar">
-                <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Agenda</a>
+              <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Agenda</a>
               <a (click)="centroCusto = centroCusto === true ? false : true" mat-raised-button>Centro de custos</a>
               <div [@rowAppeared]="state" *ngIf="centroCusto" class="sub-navbar">
                 <a mat-raised-button [routerLink]="['/cost-categories']" [disabled]="hasNoPermission(user, '/cost-categories/list')">Categorias de custo</a>
@@ -150,6 +154,7 @@
           </a>
           <div [@rowAppeared]="state" *ngIf="producao">
             <div class="sub-navbar">
+              <a mat-raised-button [routerLink]="['/production/workflow']">Workflow</a>
               <a (click)="events = !events" mat-raised-button>Eventos</a>
               <div [@rowAppeared]="state" *ngIf="events">
                 <div class="sub-navbar">

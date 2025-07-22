@@ -274,6 +274,12 @@ import { LimitJobComponent } from './limit-job/limit-job.component';
 import { JobsKanbanComponent } from './jobs/jobs-kanban/jobs-kanban.component';
 import { JobsKanbanColumnComponent } from './jobs/jobs-kanban/jobs-kanban-column/jobs-kanban-column.component';
 import { JobsKanbanCardComponent } from './jobs/jobs-kanban/jobs-kanban-card/jobs-kanban-card.component';
+import { WorkflowAtendimentoComponent } from './workflow-atendimento/workflow-atendimento.component';
+import { WorkflowHeaderComponent } from './workflow/workflow-header/workflow-header.component';
+import { WorkflowCriacaoComponent } from './workflow-criacao/workflow-criacao.component';
+import { WorkflowProducaoComponent } from './workflow-producao/workflow-producao.component';
+import { WorkflowColumnComponent } from './workflow/workflow-column/workflow-column.component';
+import { WorkflowCardComponent } from './workflow/workflow-card/workflow-card.component';
 
 registerLocaleData(localePt);
 
@@ -446,6 +452,12 @@ registerLocaleData(localePt);
     JobsKanbanComponent,
     JobsKanbanColumnComponent,
     JobsKanbanCardComponent,
+    WorkflowAtendimentoComponent,
+    WorkflowCriacaoComponent,
+    WorkflowProducaoComponent,
+    WorkflowHeaderComponent,
+    WorkflowColumnComponent,
+    WorkflowCardComponent
   ],
   imports: [
     CurrencyMaskModule,

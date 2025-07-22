@@ -1,0 +1,26 @@
+<div class="workflow-column">
+    <div class="workflow-column__header">
+        <h4 class="workflow-column__header__title">{{ column.title }}</h4>
+
+        <span *ngIf="total >= 0" class="workflow-column__header__total">
+            {{ total }}
+        </span>
+    </div>
+
+    <div class="workflow-column__cards" cdkDropList
+        [cdkDropListData]="jobs"
+        (cdkDropListDropped)="drop($event)">
+        <cb-workflow-card *ngFor="let job of jobs; trackBy: trackByjob" cdkDrag
+            class="workflow-column__cards__card"
+            [class.workflow-column__cards__card--loading]="job['loading']"
+            [job]="job"
+            (deleteJob)="delete(job)">
+            <div class="workflow-column__cards__card__placeholder" *cdkDragPlaceholder></div>
+        </cb-workflow-card>
+
+        <div *ngIf="hasNext" class="workflow-column__cards__loading"
+            [id]="'workflow-column-loading--' + column.id">
+            Carregando...
+        </div>
+    </div>
+</div>

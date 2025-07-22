@@ -11,6 +11,8 @@ import { Briefing } from '../briefings/briefing.model';
 import { Budget } from '../budgets/budget.model';
 import { Task } from '../schedule/task.model';
 import { CheckInModel } from 'app/check-in/check-in.model';
+import { ECreationStatus } from 'app/shared/enums/creation-status.enum';
+import { EProductionStatus } from 'app/shared/enums/production-status.enum';
 
 export class Job {
     id: number;
@@ -46,6 +48,8 @@ export class Job {
     main_expectation?: JobMainExpectation
     how_come_id?: number
     how_come?: JobHowCome
+    creation_status?: ECreationStatus;
+    production_status?: EProductionStatus;
     status_id?: number
     status: JobStatus
     levels?: JobLevel

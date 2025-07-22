@@ -13,16 +13,16 @@
     {{ jobDisplay(item) }}
   </div>
   <div class="mat-cell mat-column-type">
-    {{ item.task.job.job_type?.description }}
+    {{ item.task?.job?.job_type?.description }}
   </div>
   <div class="mat-cell mat-column-client">
-    {{ item.task.job.client != null ? item.task.job.client.fantasy_name : item.task.job.not_client }}
+    {{ item.task?.job?.client != null ? item.task.job.client.fantasy_name : item.task?.job?.not_client }}
   </div>
   <div class="mat-cell mat-column-agency">
-    {{ item.task.job.agency ? item.task.job.agency.fantasy_name : '' }}
+    {{ item.task?.job?.agency ? item.task.job.agency.fantasy_name : '' }}
   </div>
   <div class="mat-cell mat-column-event">
-    {{ item.task.job.event }}
+    {{ item.task?.job?.event }}
   </div>
   <div class="mat-cell mat-column-event-date">
     &nbsp;

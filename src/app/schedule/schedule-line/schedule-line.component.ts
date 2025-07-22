@@ -65,7 +65,7 @@ export class ScheduleLineComponent implements OnInit {
   }
 
   timeDisplay(item: TaskItem, chrono: Chrono) {
-    if(item.task.job.id == null) {
+    if(!item || !item.task || !item.task.job || item.task.job.id == null) {
       return ''
     }
 
@@ -156,7 +156,10 @@ export class ScheduleLineComponent implements OnInit {
   getLineClass(item: TaskItem) {
     let className = ''
 
-    if(item.task.job.id == null) {
+    if(!item || !item.task || !item.task.job || item.task.job.id == null) {
+      console.log(item);
+      
+      
       return className
     }
 
@@ -211,7 +214,7 @@ export class ScheduleLineComponent implements OnInit {
   }
 
   jobDisplay(item: TaskItem) {
-    if(item.task.job.id == null) {
+    if(!item || !item.task || !item.task.job || item.task.job.id == null) {
       return ''
     }
 

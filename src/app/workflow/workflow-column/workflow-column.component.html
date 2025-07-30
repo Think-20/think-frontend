@@ -10,7 +10,7 @@
     <div class="workflow-column__cards" cdkDropList
         [cdkDropListData]="jobs"
         (cdkDropListDropped)="drop($event)">
-        <cb-workflow-card *ngFor="let job of jobs; trackBy: trackByjob" cdkDrag
+        <cb-workflow-card *ngFor="let job of jobs; trackBy: trackByJob" cdkDrag
             class="workflow-column__cards__card"
             [class.workflow-column__cards__card--loading]="job['loading']"
             [job]="job"

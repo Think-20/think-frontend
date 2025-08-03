@@ -123,22 +123,57 @@ export class CheckInService {
     delete checkInModel.extras_obs;
   }
 
-  getOtherCnpjs() {
-    const response: IOtherCnpj[] = [
-      {
-        id: 1,
-        cnpj: '12.345.678/9012-34',
-        name: 'CNPJ 1',
-        value: 10000,
-      },
-      {
-        id: 1,
-        cnpj: '12.345.678/9012-34',
-        name: 'CNPJ 2',
-        value: 5000,
-      },
-    ];
+  getOtherCnpjs(checkInId: number): Observable<IOtherCnpj[]> {
+    return this.http
+      .get(`${API}/cnpjs/${checkInId}`)
+      .map((response) => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000,
+        });
 
-    return of(response);
+        return ErrorHandler.capture(err);
+      });
+  }
+
+  postOtherCnpj(body: IOtherCnpj): Observable<{ object: IOtherCnpj }> {
+    delete body.id;
+    
+    return this.http
+      .post(`${API}/cnpjs`, JSON.stringify(body), new RequestOptions())
+      .map((response) => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000,
+        });
+
+        return ErrorHandler.capture(err);
+      });
+  }
+
+  putOtherCnpj(body: IOtherCnpj): Observable<{ object: IOtherCnpj }> {
+    return this.http
+      .put(`${API}/cnpjs`, JSON.stringify(body), new RequestOptions())
+      .map((response) => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000,
+        });
+
+        return ErrorHandler.capture(err);
+      });
+  }
+
+  deleteOtherCnpj(id: number): Observable<any> {
+    return this.http
+      .delete(`${API}/cnpjs/${id}`)
+      .map((response) => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000,
+        });
+
+        return ErrorHandler.capture(err);
+      });
   }
 }

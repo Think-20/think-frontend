@@ -162,9 +162,11 @@ export class CheckInBillingComponent implements AfterViewInit, OnChanges, OnDest
   }
 
   faturarOutrosCNPJs(): void {
-    this.dialog.open(CheckInOtherCnpjsComponent, {
+    const modal = this.dialog.open(CheckInOtherCnpjsComponent, {
       width: '500px',
     });
+
+    modal.componentInstance.checkInId = this.checkInModel.id;
   }
 
   ngOnDestroy(): void {

@@ -10,6 +10,7 @@
     <div class="row px-3 py-1 gap-1" formArray="formArray">
         <cb-check-in-other-cnpj #otherCnpj *ngFor="let form of formArray.controls; let index = $index"
             [form]="form"
+            [checkInId]="checkInId"
             (remove)="remove(index)"
         ></cb-check-in-other-cnpj>
     </div>

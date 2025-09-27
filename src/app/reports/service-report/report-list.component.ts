@@ -211,7 +211,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
       date_init: this.fb.control(""),
       date_end: this.fb.control(""),
       jobs_amount: this.fb.control(30),
-      condition: this.fb.control(1),
+      condition: this.fb.control(true),
       outsider: this.fb.control(""),
     });
 
@@ -272,10 +272,6 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
       .subscribe((searchValue) => {
         this.destroy$.next();
         this.params = this.getParams(searchValue);
-
-        if (!this.params["condition"] && !!this.params["outsider"]) {
-          return;
-        }
         
         this.loadJobs(this.params, 1);
         
@@ -297,7 +293,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
     this.statusFilter = searchValue.status;
     this.jobActivityFilter = searchValue.job_activity;
     this.eventFilter = searchValue.event;
-    this.condition = searchValue.condition;
+    this.condition = searchValue.condition ? 1 : 2;
     this.outsider = searchValue.outsider;
     this.attendanceFilterStatus = attendanceFilter;
 

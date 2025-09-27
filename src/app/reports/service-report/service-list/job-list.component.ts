@@ -126,7 +126,7 @@ export class ServiceListComponent implements OnInit {
       event: this.fb.control(''),
       initial_date: this.fb.control(''),
       final_date: this.fb.control(''),
-      condition: this.fb.control(1),
+      condition: this.fb.control(true),
       outsider: this.fb.control(''),
     })
 

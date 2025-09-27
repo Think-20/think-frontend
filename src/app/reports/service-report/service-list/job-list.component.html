@@ -171,32 +171,22 @@
               </mat-select>
             </mat-form-field>
 
-            <hr />
-
-            <div class="col-md-12">
-              <p>
-                <small>Você também pode filtrar por clientes estrangeiros</small>
-              </p>
-              <br />
-            </div>
-
-            <mat-form-field class="col-md-2-4">
-              <mat-select placeholder="Condição" formControlName="condition">
-                <mat-option (click)="0" *ngFor="let condicao of condicoes" [value]="condicao.id">
-                  {{ condicao.label }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-
             <mat-form-field class="col-md-2-4">
               <input matInput formControlName="outsider" [matAutocomplete]="autocompleteOutsider" placeholder="Outsider" />
             </mat-form-field>
-
+            
             <mat-autocomplete #autocompleteOutsider="matAutocomplete">
               <mat-option *ngFor="let outsider of outsiders" [value]="outsider.fantasy_name">
                 {{ outsider.fantasy_name }}
               </mat-option>
             </mat-autocomplete>
+            
+            <mat-checkbox
+              #conditionElement
+              class="cb-normal-checkbox col-md-2-4"
+              formControlName="condition">
+              {{ searchForm.controls.condition.value ? 'Contém' : 'Não contém' }}
+            </mat-checkbox>
           </div>
         </div>
       </mat-card>

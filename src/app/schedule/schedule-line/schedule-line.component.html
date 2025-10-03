@@ -1,11 +1,11 @@
 <div class="line-job"
-[class.text-muted]="!canShowDetails(item)"
-#menuTrigger="matMenuTrigger"
-(menuOpened)="openMenu(item)"
-[matMenuTriggerFor]="menu"
-[matMenuTriggerData]="{item: item, chrono: chrono}"
-[ngClass]="getLineClass(item)"
-(dblclick)="goToJob(item.task.job, item)">
+  [class.text-muted]="!canShowDetails(item)"
+  #menuTrigger="matMenuTrigger"
+  (menuOpened)="openMenu(item)"
+  [matMenuTriggerFor]="menu"
+  [matMenuTriggerData]="{item: item, chrono: chrono}"
+  [ngClass]="getLineClass(item)"
+  (dblclick)="goToJob(item.task.job, item)">
   <div class="mat-cell mat-column-creation">
     {{ item.task?.responsible?.name }}
   </div>

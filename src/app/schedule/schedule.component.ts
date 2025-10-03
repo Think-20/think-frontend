@@ -299,7 +299,8 @@ export class ScheduleComponent implements OnInit {
       job_activity_array: this.fb.control([]),
       client: this.fb.control(''),
       department_array: this.fb.control([]),
-      status_array: this.fb.control([])
+      status_array: this.fb.control([]),
+      late: this.fb.control(false),
     })
 
     this.formCopy = this.searchForm.value
@@ -331,6 +332,7 @@ export class ScheduleComponent implements OnInit {
 
   getParams(searchValue) {
     let clientName = searchValue.client != '' ? searchValue.client : searchValue.search
+
     return {
       clientName: clientName,
       status_array: searchValue.status_array,
@@ -338,7 +340,8 @@ export class ScheduleComponent implements OnInit {
       responsible_array: searchValue.responsible_array,
       job_type_array: searchValue.job_type_array,
       job_activity_array: searchValue.job_activity_array,
-      department_array: searchValue.department_array
+      department_array: searchValue.department_array,
+      late: searchValue.late,
     }
   }
 

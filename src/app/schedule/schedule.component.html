@@ -4,23 +4,25 @@
       <a *ngIf="task.job.id == undefined" (click)="addTask(chrono.day)" mat-menu-item>
         <mat-icon>add</mat-icon> Adicionar
       </a>
-      <a [disabled]="!permissionVerify('show', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/show', task.job.id]" [queryParams]="getQueryParams(task)"
-        mat-menu-item>
+      <a [disabled]="!permissionVerify('show', task.job)" *ngIf="task.job.id != undefined"
+        [routerLink]="['/jobs/show', task.job.id]" [queryParams]="getQueryParams(task)" mat-menu-item>
         <mat-icon>done</mat-icon> {{ task.done ? 'Tarefa realizada' : 'Realizar tarefa' }}
       </a>
-      <a [disabled]="!permissionVerify('show', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/show', task.job.id]"
-        mat-menu-item>
+      <a [disabled]="!permissionVerify('show', task.job)" *ngIf="task.job.id != undefined"
+        [routerLink]="['/jobs/show', task.job.id]" mat-menu-item>
         <mat-icon>subject</mat-icon> Visualizar job
       </a>
-      <a [disabled]="!permissionVerify('task.edit', task.job)" *ngIf="task.id != undefined" [routerLink]="['/schedule/edit', task.id]"
-        mat-menu-item>
+      <a [disabled]="!permissionVerify('task.edit', task.job)" *ngIf="task.id != undefined"
+        [routerLink]="['/schedule/edit', task.id]" mat-menu-item>
         <mat-icon>mode_edit</mat-icon> Editar agendamento
       </a>
-      <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/edit', task.job.id]" [queryParams]="{ taskId: item.task.id, backscreen: 'agenda' }"
+      <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined"
+        [routerLink]="['/jobs/edit', task.job.id]" [queryParams]="{ taskId: item.task.id, backscreen: 'agenda' }"
         mat-menu-item>
         <mat-icon>mode_edit</mat-icon> Editar job
       </a>
-      <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined && (task.job.status?.id == 5 || task.job.status?.id == 1)"
+      <a [disabled]="!permissionVerify('edit', task.job)"
+        *ngIf="task.job.id != undefined && (task.job.status?.id == 5 || task.job.status?.id == 1)"
         (click)="signal(task)" mat-menu-item>
         <span *ngIf="task.job.status?.id == 1">
           <mat-icon>flag</mat-icon> Sinalizar
@@ -29,10 +31,12 @@
           <mat-icon>outlined_flag</mat-icon> Remover sinalização
         </span>
       </a>
-      <button [disabled]="!permissionVerify('delete', task.job)" *ngIf="task.job.id != undefined" (click)="deleteTask(item)" mat-menu-item>
+      <button [disabled]="!permissionVerify('delete', task.job)" *ngIf="task.job.id != undefined"
+        (click)="deleteTask(item)" mat-menu-item>
         <mat-icon>delete</mat-icon> Remover tarefa
       </button>
-      <button [disabled]="!permissionVerify('delete', task.job)" *ngIf="task.job.id != undefined" (click)="deleteJob(item)" mat-menu-item>
+      <button [disabled]="!permissionVerify('delete', task.job)" *ngIf="task.job.id != undefined"
+        (click)="deleteJob(item)" mat-menu-item>
         <mat-icon>delete</mat-icon> Remover job
       </button>
     </div>
@@ -99,7 +103,7 @@
       <mat-card *ngIf="filter" class="filter-grid">
         <div class="row">
           <div class="col-md-12">
-            <mat-form-field class="col-md-1-7">
+            <mat-form-field class="col-md-2-4">
               <mat-select placeholder="Departamento" formControlName="department_array"
                 [compareWith]="compareDepartment" multiple>
                 <mat-option disabled (click)="toggleDepartments()">Selecionar todos</mat-option>
@@ -108,7 +112,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field class="col-md-1-7">
+            <mat-form-field class="col-md-2-4">
               <mat-select placeholder="Responsável" formControlName="responsible_array"
                 [compareWith]="compareAttendance" multiple>
                 <mat-option disabled (click)="toggleResponsibles()">Selecionar todos</mat-option>
@@ -117,7 +121,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field class="col-md-1-7">
+            <mat-form-field class="col-md-2-4">
               <mat-select placeholder="Job" formControlName="job_activity_array" [compareWith]="compareJobActivity"
                 multiple>
                 <mat-option disabled (click)="toggleJobActivities()">Selecionar todos</mat-option>
@@ -126,7 +130,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field class="col-md-1-7">
+            <mat-form-field class="col-md-2-4">
               <mat-select placeholder="Tipo" formControlName="job_type_array" [compareWith]="compareJobType" multiple>
                 <mat-option disabled (click)="toggleJobTypes()">Selecionar todos</mat-option>
                 <mat-option *ngFor="let type of jobTypes" [value]="type">
@@ -134,7 +138,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field class="col-md-1-7">
+            <mat-form-field class="col-md-2-4">
               <input matInput formControlName="client" [matAutocomplete]="autocompleteclient" placeholder="Cliente">
             </mat-form-field>
             <mat-autocomplete #autocompleteclient="matAutocomplete">
@@ -142,7 +146,7 @@
                 {{ client.fantasy_name }}
               </mat-option>
             </mat-autocomplete>
-            <mat-form-field class="col-md-1-7">
+            <mat-form-field class="col-md-2-4">
               <mat-select placeholder="Atendimento" formControlName="attendance_array" [compareWith]="compareAttendance"
                 multiple>
                 <mat-option disabled (click)="toggleAttendances()">Selecionar todos</mat-option>
@@ -151,7 +155,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field class="col-md-1-7">
+            <mat-form-field class="col-md-2-4">
               <mat-select placeholder="Status" formControlName="status_array" [compareWith]="compareStatus" multiple>
                 <mat-option disabled (click)="toggleStatus()">Selecionar todos</mat-option>
                 <mat-option *ngFor="let s of jobStatus" [value]="s">
@@ -159,6 +163,10 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
+
+            <mat-checkbox class="cb-normal-checkbox col-md-2-4" formControlName="late">
+              {{ searchForm.controls.late.value ? 'Fora do prazo' : 'No prazo' }}
+            </mat-checkbox>
           </div>
         </div>
       </mat-card>
@@ -187,33 +195,40 @@
               {{ months[chrono[i]?.month - 1].name }}
             </h4>
             <div class="line-chrono" [class.hidden]="paramsHasFilter && chr.length == 0"
-             [ngClass]="lineChronoClass(chr, employees)">
-             <div class="schedule-goals mat-cell mat-column-date day-chrono day-{{ chr.day }} month-{{ chr.month }} year-{{ chr.year }}">
-              <div *ngIf="chr.meta" class="schedule-goals-item">
-                <span class="schedule-goals-title">Total acum/ano:</span>
-                <div class="meta-values">
-                  <div style="display: flex; flex-direction: column;">
+              [ngClass]="lineChronoClass(chr, employees)">
+              <div
+                class="schedule-goals mat-cell mat-column-date day-chrono day-{{ chr.day }} month-{{ chr.month }} year-{{ chr.year }}">
+                <div *ngIf="chr.meta" class="schedule-goals-item">
+                  <span class="schedule-goals-title">Total acum/ano:</span>
+                  <div class="meta-values">
+                    <div style="display: flex; flex-direction: column;">
                       <span class="line-height1-3">Autorais</span>
                       <span>{{ chr.meta.anual.atualInternoReais | thousands }}</span>
-                  </div>
+                    </div>
 
-                  <div class="schedule-goals-item-percentage">
-                    <mat-icon [class.keyboard_arrow_up]="chr.meta.anual.atualInternoReais >= chr.meta.anual.metaReaisInterna" class="icon keyboard_arrow_down">{{ chr.meta.anual.atualInternoReais >= chr.meta.anual.metaReaisInterna ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
-                    <span>{{ round(chr.meta.anual.porcentagemInternoReais) }}%</span>
+                    <div class="schedule-goals-item-percentage">
+                      <mat-icon
+                        [class.keyboard_arrow_up]="chr.meta.anual.atualInternoReais >= chr.meta.anual.metaReaisInterna"
+                        class="icon keyboard_arrow_down">{{ chr.meta.anual.atualInternoReais >=
+                        chr.meta.anual.metaReaisInterna ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
+                      <span>{{ round(chr.meta.anual.porcentagemInternoReais) }}%</span>
+                    </div>
                   </div>
-                </div>
-                <div class="meta-values meta-values-pt">
-                  <div style="display: flex; flex-direction: column;">
+                  <div class="meta-values meta-values-pt">
+                    <div style="display: flex; flex-direction: column;">
                       <span class="line-height1-3">Externos</span>
                       <span>{{ chr.meta.anual.atualExternoReais | thousands }}</span>
-                  </div>
+                    </div>
 
-                  <div class="schedule-goals-item-percentage">
-                    <mat-icon [class.keyboard_arrow_up]="chr.meta.anual.atualExternoReais >= chr.meta.anual.metaReaisExterna" class="icon keyboard_arrow_down">{{ chr.meta.anual.atualExternoReais >= chr.meta.anual.metaReaisExterna ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
-                    <span>{{ round(chr.meta.anual.porcentagemExternoReais) }}%</span>
+                    <div class="schedule-goals-item-percentage">
+                      <mat-icon
+                        [class.keyboard_arrow_up]="chr.meta.anual.atualExternoReais >= chr.meta.anual.metaReaisExterna"
+                        class="icon keyboard_arrow_down">{{ chr.meta.anual.atualExternoReais >=
+                        chr.meta.anual.metaReaisExterna ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
+                      <span>{{ round(chr.meta.anual.porcentagemExternoReais) }}%</span>
+                    </div>
                   </div>
                 </div>
-              </div>
                 <div>
                   <span>{{ chr.day }}-{{ chr.dayOfWeek?.abbrev }}</span>
                   <button *ngIf="isAdmin" class="cb-button add-chrono" (click)="addTask(chr.day)">
@@ -227,38 +242,42 @@
                 </div>
                 <div *ngIf="chr.meta" class="schedule-goals-item">
                   <span class="schedule-goals-title">Total acum/mês:</span>
-                    <div class="meta-values">
-                      <div style="display: flex; flex-direction: column;">
-                        <span class="line-height1-3">Autorais</span>
-                        <span>{{ chr.meta.mes.atualInternoReais | thousands }}</span>
-                      </div>
-    
-                      <div class="schedule-goals-item-percentage">
-                        <mat-icon [class.keyboard_arrow_up]="chr.meta.mes.atualInternoReais >= chr.meta.mes.metaReaisInterna" class="icon keyboard_arrow_down">{{ chr.meta.mes.atualInternoReais >= chr.meta.mes.metaReaisInterna ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
-                        <span>{{ round(chr.meta.mes.porcentagemInternoReais) }}%</span>
-                      </div>
+                  <div class="meta-values">
+                    <div style="display: flex; flex-direction: column;">
+                      <span class="line-height1-3">Autorais</span>
+                      <span>{{ chr.meta.mes.atualInternoReais | thousands }}</span>
                     </div>
-                    <div class="meta-values meta-values-pt">
-                      <div style="display: flex; flex-direction: column;">
-                          <span class="line-height1-3">Externos</span>
-                          <span>{{ chr.meta.mes.atualExternoReais | thousands }}</span>
-                      </div>
-    
-                      <div class="schedule-goals-item-percentage">
-                        <mat-icon [class.keyboard_arrow_up]="chr.meta.mes.atualExternoReais >= chr.meta.mes.metaReaisExterna" class="icon keyboard_arrow_down">{{ chr.meta.mes.atualExternoReais >= chr.meta.mes.metaReaisExterna ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
-                        <span>{{ round(chr.meta.mes.porcentagemExternoReais) }}%</span>
-                      </div>
+
+                    <div class="schedule-goals-item-percentage">
+                      <mat-icon
+                        [class.keyboard_arrow_up]="chr.meta.mes.atualInternoReais >= chr.meta.mes.metaReaisInterna"
+                        class="icon keyboard_arrow_down">{{ chr.meta.mes.atualInternoReais >=
+                        chr.meta.mes.metaReaisInterna ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
+                      <span>{{ round(chr.meta.mes.porcentagemInternoReais) }}%</span>
                     </div>
+                  </div>
+                  <div class="meta-values meta-values-pt">
+                    <div style="display: flex; flex-direction: column;">
+                      <span class="line-height1-3">Externos</span>
+                      <span>{{ chr.meta.mes.atualExternoReais | thousands }}</span>
+                    </div>
+
+                    <div class="schedule-goals-item-percentage">
+                      <mat-icon
+                        [class.keyboard_arrow_up]="chr.meta.mes.atualExternoReais >= chr.meta.mes.metaReaisExterna"
+                        class="icon keyboard_arrow_down">{{ chr.meta.mes.atualExternoReais >=
+                        chr.meta.mes.metaReaisExterna ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
+                      <span>{{ round(chr.meta.mes.porcentagemExternoReais) }}%</span>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="line-jobs">
-                <cb-schedule-line *ngFor="let item of chrono[i].items"
-                  class="line-job" [menu]="menu" [cdkDragData]="item"
-                  cdkDrag cdkDragLockAxis="y" (cdkDragMoved)="dragMoved($event)"
-                  (cdkDragEnded)="dragEnded($event)" (mouseup)="mouseUp(item)"
-                  [chrono]="chrono[i]" [item]="item" [today]="today" [jobStatus]="jobStatus"
-                  [month]="month" [paramsHasFilter]="paramsHasFilter" [date]="date"
-                  (changeMonthEmitter)="changeMonthByLine($event)">
+                <cb-schedule-line *ngFor="let item of chrono[i].items" class="line-job" [menu]="menu"
+                  [cdkDragData]="item" cdkDrag cdkDragLockAxis="y" (cdkDragMoved)="dragMoved($event)"
+                  (cdkDragEnded)="dragEnded($event)" (mouseup)="mouseUp(item)" [chrono]="chrono[i]" [item]="item"
+                  [today]="today" [jobStatus]="jobStatus" [month]="month" [paramsHasFilter]="paramsHasFilter"
+                  [date]="date" (changeMonthEmitter)="changeMonthByLine($event)">
                 </cb-schedule-line>
               </div>
             </div>

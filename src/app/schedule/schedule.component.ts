@@ -300,7 +300,7 @@ export class ScheduleComponent implements OnInit {
       client: this.fb.control(''),
       department_array: this.fb.control([]),
       status_array: this.fb.control([]),
-      late: this.fb.control(false),
+      late: this.fb.control(null),
     })
 
     this.formCopy = this.searchForm.value
@@ -374,9 +374,10 @@ export class ScheduleComponent implements OnInit {
   checkParamsHasFilter() {
     this.paramsHasFilter = false
     Object.keys(this.params).forEach((key) => {
-      if (this.params[key] != undefined
+      if ((key === "late" && this.params[key] !== null)
+        || (this.params[key] != undefined
         && this.params[key] != null
-        && this.params[key] != '')
+        && this.params[key] != ''))
         this.paramsHasFilter = true
     })
   }
@@ -602,8 +603,8 @@ export class ScheduleComponent implements OnInit {
       preserveFragment: true
     });
 
-    this.iniDate.setDate(this.iniDate.getDate() - 10)
-    this.finDate.setDate(this.finDate.getDate() + 10)
+    this.iniDate.setDate(1)
+    this.finDate.setDate(new Date(this.year, this.month.id, 0).getDate())
 
     this.router.navigateByUrl(urlTree)
 

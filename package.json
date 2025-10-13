@@ -9,7 +9,8 @@
     "build:dev": "ng build --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "a": "set \"NG_DISABLE_VERSION_CHECK=1\" && npx @angular/cli@9 update @angular/cli@9 @angular/core@9"
   },
   "private": true,
   "dependencies": {

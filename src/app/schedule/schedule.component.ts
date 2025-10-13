@@ -663,6 +663,10 @@ export class ScheduleComponent implements OnInit {
           return a.task.responsible.department_id > b.task.responsible.department_id ? 1 : -1
       })
 
+      if (this.searchForm.get("late").value !== null) {
+        filteredAux = filteredAux.filter(item => !item.is_empty);
+      }
+
       chrono = {
         day: date.getDate(),
         month: (date.getMonth() + 1),
@@ -931,7 +935,6 @@ export class ScheduleComponent implements OnInit {
   compareStatus(var1: JobStatus, var2: JobStatus) {
     return var1.id === var2.id
   }
-
 }
 
 @Component({

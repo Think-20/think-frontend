@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "a": "set \"NG_DISABLE_VERSION_CHECK=1\""
+    "a": "set \"NG_DISABLE_VERSION_CHECK=0\""
   },
   "private": true,
   "dependencies": {

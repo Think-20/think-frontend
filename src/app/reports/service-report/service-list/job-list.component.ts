@@ -81,6 +81,12 @@ export class ServiceListComponent implements OnInit {
   nextMonthName: string = '';
   nextYear: number = 0;
   nextMonth: Month;
+
+  condicoes = [
+    { id: 1, label: 'Contém' },
+    { id: 2, label: 'Não contém' },
+  ];
+
   destroy$ = new Subject<void>();
   constructor(
     private fb: FormBuilder,
@@ -120,6 +126,8 @@ export class ServiceListComponent implements OnInit {
       event: this.fb.control(''),
       initial_date: this.fb.control(''),
       final_date: this.fb.control(''),
+      condition: this.fb.control(true),
+      outsider: this.fb.control(''),
     })
 
     if(this.isAdmin)

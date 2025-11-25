@@ -299,7 +299,8 @@ export class ScheduleComponent implements OnInit {
       job_activity_array: this.fb.control([]),
       client: this.fb.control(''),
       department_array: this.fb.control([]),
-      status_array: this.fb.control([])
+      status_array: this.fb.control([]),
+      late: this.fb.control(null),
     })
 
     this.formCopy = this.searchForm.value
@@ -331,6 +332,7 @@ export class ScheduleComponent implements OnInit {
 
   getParams(searchValue) {
     let clientName = searchValue.client != '' ? searchValue.client : searchValue.search
+
     return {
       clientName: clientName,
       status_array: searchValue.status_array,
@@ -338,7 +340,8 @@ export class ScheduleComponent implements OnInit {
       responsible_array: searchValue.responsible_array,
       job_type_array: searchValue.job_type_array,
       job_activity_array: searchValue.job_activity_array,
-      department_array: searchValue.department_array
+      department_array: searchValue.department_array,
+      late: searchValue.late,
     }
   }
 
@@ -371,9 +374,10 @@ export class ScheduleComponent implements OnInit {
   checkParamsHasFilter() {
     this.paramsHasFilter = false
     Object.keys(this.params).forEach((key) => {
-      if (this.params[key] != undefined
+      if ((key === "late" && this.params[key] !== null)
+        || (this.params[key] != undefined
         && this.params[key] != null
-        && this.params[key] != '')
+        && this.params[key] != ''))
         this.paramsHasFilter = true
     })
   }
@@ -599,8 +603,8 @@ export class ScheduleComponent implements OnInit {
       preserveFragment: true
     });
 
-    this.iniDate.setDate(this.iniDate.getDate() - 10)
-    this.finDate.setDate(this.finDate.getDate() + 10)
+    this.iniDate.setDate(1)
+    this.finDate.setDate(new Date(this.year, this.month.id, 0).getDate())
 
     this.router.navigateByUrl(urlTree)
 
@@ -658,6 +662,10 @@ export class ScheduleComponent implements OnInit {
         if (a.task.responsible != null && b.task.responsible != null)
           return a.task.responsible.department_id > b.task.responsible.department_id ? 1 : -1
       })
+
+      if (this.searchForm.get("late").value !== null) {
+        filteredAux = filteredAux.filter(item => !item.is_empty);
+      }
 
       chrono = {
         day: date.getDate(),
@@ -927,7 +935,6 @@ export class ScheduleComponent implements OnInit {
   compareStatus(var1: JobStatus, var2: JobStatus) {
     return var1.id === var2.id
   }
-
 }
 
 @Component({

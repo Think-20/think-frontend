@@ -274,6 +274,7 @@ import { LimitJobComponent } from './limit-job/limit-job.component';
 import { JobsKanbanComponent } from './jobs/jobs-kanban/jobs-kanban.component';
 import { JobsKanbanColumnComponent } from './jobs/jobs-kanban/jobs-kanban-column/jobs-kanban-column.component';
 import { JobsKanbanCardComponent } from './jobs/jobs-kanban/jobs-kanban-card/jobs-kanban-card.component';
+import { AlertsInactiveCustomersComponent } from './alerts/components/alerts-inactive-customers/alerts-inactive-customers.component';
 
 registerLocaleData(localePt);
 
@@ -398,6 +399,7 @@ registerLocaleData(localePt);
 
     AlertsContainerComponent,
     AlertsCheckInComponent,
+    AlertsInactiveCustomersComponent,
     MemoriesContainerComponent,
     FormatMaskDirective,
     ChartPreviewComponent,

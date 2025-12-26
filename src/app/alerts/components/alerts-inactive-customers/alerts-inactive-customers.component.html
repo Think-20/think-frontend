@@ -1,0 +1,59 @@
+<div class="my-container">
+  <h3 class="title">Alertas</h3>
+</div>
+
+<div class="col-md-12">
+  <mat-card style="min-height: 25rem;" class="container-fluid d-flex flex-column">
+    <div class="title">
+      Clientes sem atividade identificada há mais de 90 dias
+    </div>
+
+    <div *ngIf="clients?.length" class="table-responsive mt-4" style="padding-bottom: 1rem;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="text-center mat-header-cell">CLIENTE</th>
+            <th class="text-center mat-header-cell">TIPO</th>
+            <th class="text-center mat-header-cell">DATA DE CADASTRO</th>
+            <th class="text-center mat-header-cell">ATENDIMENTO</th>
+            <th class="text-center mat-header-cell">DIAS SEM ATIVIDADE</th>
+            <th class="text-center mat-header-cell"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!-- <tr *ngFor="let client of clients"> -->
+          <tr>
+            <td class="text-center">A Cuca</td>
+            <td class="text-center">
+              <div class="client-type">
+                <div>
+                  Expositor
+                </div>
+              </div>
+            </td>
+            <td class="text-center">19/08/2024</td>
+            <td class="text-center">Ernesto Milanese</td>
+            <td class="text-center">104 dia(s)</td>
+            <td class="text-center">Assumir</td>
+          </tr>
+
+          <tr>
+            <td class="text-center">Ace Revestimento</td>
+            <td class="text-center">
+              <div class="client-type">
+                <div>
+                  Agência
+                </div>
+              </div>
+            </td>
+            <td class="text-center">19/08/2024</td>
+            <td class="text-center">Ana Julia Botti</td>
+            <td class="text-center">90 dia(s)</td>
+            <td class="text-center">Assumir</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </mat-card>
+</div>

@@ -1,0 +1,99 @@
+.title {
+    font-size: 20px;
+    color: #727272;
+    font-weight: 300;
+}
+
+.table th {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: none;
+}
+
+.table td {
+    font-size: 12px;
+}
+
+.btn-secondary {
+    color: #000000;
+    background-color: #ffffff;
+    border: none;
+    padding: 0;
+    font-size: 12px;
+}
+
+.btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle {
+    color: #000000;
+    background-color: #ffffff;
+    border: none;
+}
+
+.btn-secondary:not(:disabled):not(.disabled).active:focus, .btn-secondary:not(:disabled):not(.disabled):active:focus, .show>.btn-secondary.dropdown-toggle:focus {
+    box-shadow: none;
+}
+
+.dropdown-menu {
+    position: absolute;
+    will-change: transform;
+    z-index: 1000;
+    float: left;
+    padding: 0;
+    margin: 0.125rem 0 0;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 2px solid #eaeaeb;
+    border-radius: 0.25rem;
+    min-width: 5.5rem;
+}
+
+.dropdown-menu a {
+    padding: 0;
+    font-size: 12px;
+    text-align: center;
+    padding: 0 5px;
+    margin-bottom: 3px;
+    cursor: pointer;
+}
+
+.dropdown-menu a:hover {
+    background-color: #eaeaeb;
+}
+
+.time-icon {
+    font-size: 18px !important;
+}
+
+.time-icon-done {
+    color: #9EB25D;
+}
+
+.time-icon-alarm {
+    color: #C44536;
+}
+
+.fs-12 {
+    font-size: 12px;
+}
+
+.client-type {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    & div {
+        padding: 2px 12px;
+        
+        color: #3d3d3d;
+        background-color: #ececec;
+        
+        border-radius: 50rem;
+        border: 1px solid #727272;
+
+        text-align: center;
+    }
+}

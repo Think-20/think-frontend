@@ -76,6 +76,7 @@ import { ExternalCheckInComponent } from './external/external-check-in/external-
 import { ExternalExtrasRefuseComponent } from './external/external-extras-refuse/external-extras-refuse.component';
 import { ExternalFeedbackComponent } from './external/external-feedback/external-feedback.component';
 import { JobsKanbanComponent } from './jobs/jobs-kanban/jobs-kanban.component';
+import { AlertsInactiveCustomersComponent } from './alerts/components/alerts-inactive-customers/alerts-inactive-customers.component';
 
 export const ROUTES: Routes = [
   {
@@ -398,6 +399,9 @@ export const ROUTES: Routes = [
       },
       {
         path: 'alerts', component: AlertsContainerComponent, canActivate: [AuthGuard]
+      },
+      {
+        path: 'alerts-customers', component: AlertsInactiveCustomersComponent, canActivate: [AuthGuard]
       },
       {
         path: 'memories', component: MemoriesContainerComponent, canActivate: [AuthGuard]

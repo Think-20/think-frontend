@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { ErrorHandler } from 'app/shared/error-handler.service';
 import { EditStatus, ProjectStatus, ProjectsPendency } from './alerts.model';
 import { catchError, map } from 'rxjs/operators';
+import { Client } from 'app/clients/client.model';
 
 
 @Injectable()
@@ -96,4 +97,28 @@ export class AlertService {
     this._listEmptySubject.next(value);
   }
 
+  getAlertClientsInactive(): Observable<Client[]> {
+    const url = `clients/inactive`;
+
+    return this.http.get(`${API}/${url}`)
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        });
+
+        return ErrorHandler.capture(err)
+      });
+  }
+
+  hasAlertClientsInactive(): Observable<boolean> {
+    return this.getAlertClientsInactive().pipe(
+      map(clients => clients.length > 0),
+      catchError(err => {
+        console.error('Error checking for inactive clients:', err);
+
+        return of(false);
+      })
+    );
+  }
 }

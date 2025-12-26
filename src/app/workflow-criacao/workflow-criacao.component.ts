@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { IWorkflowColumn } from "app/workflow/models/workflow-column.model";
 import { WorkflowCriacaoService } from "./workflow-criacao.service";
 import { ECreationStatus } from "app/shared/enums/creation-status.enum";
+import { IWorkflowFilter } from 'app/workflow/models/workflow-filter.model';
 
 @Component({
   selector: "cb-workflow-criacao",
@@ -30,6 +31,10 @@ export class WorkflowCriacaoComponent {
   ];
 
   constructor(readonly service: WorkflowCriacaoService) {}
+
+  onFormChanged(form: IWorkflowFilter): void {
+    this.service.form$.next(form);
+  }
 
   trackByColumn(index: number, column: IWorkflowColumn) {
     return column.id;

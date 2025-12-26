@@ -81,4 +81,20 @@
             </cb-stars>
         </div>
     </div>
+
+    <div class="kanban-card__status">
+        <span
+            *ngIf="showCreationStatus && hasCreationStatus"
+            class="kanban-card__status__badge-creation kanban-card__status__badge-creation--{{ job.creation_status }}"
+            matTooltip="Status workflow criação">
+            {{ creationStatus }}
+        </span>
+
+        <span
+            *ngIf="showProductionStatus && hasProductionStatus"
+            class="kanban-card__status__badge-production kanban-card__status__badge-production--{{ job.production_status }}"
+            matTooltip="Status workflow produção">
+            {{ productionStatus }}
+        </span>
+    </div>
 </div>

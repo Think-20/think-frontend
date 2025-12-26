@@ -48,7 +48,6 @@ export class WorkflowHeaderComponent implements OnInit, OnDestroy {
   onDestroy$ = new Subject<void>();
 
   constructor(
-    private jobService: JobService,
     private authService: AuthService,
     private clientService: ClientService,
     private jobTypeService: JobTypeService,
@@ -77,7 +76,7 @@ export class WorkflowHeaderComponent implements OnInit, OnDestroy {
 
     this.observerFormChanges();
 
-    this.setDefaultSearchValues();
+    // this.setDefaultSearchValues();
   }
 
   private setDefaultSearchValues(): void {

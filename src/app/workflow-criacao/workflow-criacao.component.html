@@ -5,6 +5,7 @@
 <div class="col-md-12 pr-0" id="searchForm">
     <cb-workflow-header
         [title]="'Workflow Criativo'"
+        (formChanged)="onFormChanged($event)"
     ></cb-workflow-header>
 
     <mat-card class="workflow__content" cdkDropListGroup cdkScrollable>

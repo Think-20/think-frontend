@@ -6,6 +6,10 @@ import { IWorkflowColumn } from "app/workflow/models/workflow-column.model";
 import { IWorkflowFilter } from "app/workflow/models/workflow-filter.model";
 import { JobService } from "app/jobs/job.service";
 import { tap } from "rxjs/operators";
+import { Http, RequestOptions } from "@angular/http";
+import { ErrorHandler } from "app/shared/error-handler.service";
+import { API } from "app/app.api";
+import { MatSnackBar } from "@angular/material";
 
 @Injectable({
   providedIn: "root",
@@ -13,7 +17,11 @@ import { tap } from "rxjs/operators";
 export class WorkflowAtendimentoService implements IWorkflowService {
   form$ = new BehaviorSubject<IWorkflowFilter>({} as IWorkflowFilter);
 
-  constructor(private jobService: JobService) {}
+  constructor(
+    private http: Http,
+    private snackBar: MatSnackBar,
+    private jobService: JobService
+  ) {}
 
   get(
     column: IWorkflowColumn,
@@ -26,16 +34,20 @@ export class WorkflowAtendimentoService implements IWorkflowService {
       last_page: number;
     };
   }> {
-    return of({
-      pagination: {
-        data: [
-          { attendance: { name: "Teste" } } as Job,
-          { attendance: { name: "Teste" } } as Job,
-        ],
-        total: 2,
-        last_page: 1,
-      },
-    });
+    return this.http
+      .post(
+        `${API}/workflow-atendimento?page=${page}`,
+        JSON.stringify({ ...filter, creation_status: column.id }),
+        new RequestOptions()
+      )
+      .map((response) => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000,
+        });
+        
+        return ErrorHandler.capture(err);
+      });
   }
 
   updateStatus(

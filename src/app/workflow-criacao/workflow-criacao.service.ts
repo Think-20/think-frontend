@@ -1,3 +1,4 @@
+import { Http, RequestOptions } from "@angular/http";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { IWorkflowService } from "app/workflow/services/workflow.service";
@@ -6,6 +7,9 @@ import { IWorkflowColumn } from "app/workflow/models/workflow-column.model";
 import { IWorkflowFilter } from "app/workflow/models/workflow-filter.model";
 import { JobService } from "app/jobs/job.service";
 import { tap } from "rxjs/operators";
+import { MatSnackBar } from "@angular/material";
+import { API } from 'app/app.api';
+import { ErrorHandler } from 'app/shared/error-handler.service';
 
 @Injectable({
   providedIn: "root",
@@ -13,7 +17,11 @@ import { tap } from "rxjs/operators";
 export class WorkflowCriacaoService implements IWorkflowService {
   form$ = new BehaviorSubject<IWorkflowFilter>({} as IWorkflowFilter);
 
-  constructor(private jobService: JobService) {}
+  constructor(
+    private http: Http,
+    private snackBar: MatSnackBar,
+    private jobService: JobService
+  ) {}
 
   get(
     column: IWorkflowColumn,
@@ -26,29 +34,40 @@ export class WorkflowCriacaoService implements IWorkflowService {
       last_page: number;
     };
   }> {
-    return of({
-      pagination: {
-        data: [
-          { attendance: { name: "Teste" } } as Job,
-          { attendance: { name: "Teste" } } as Job,
-        ],
-        total: 2,
-        last_page: 1,
-      },
-    });
+    return this.http
+      .post(
+        `${API}/workflow-criativo?page=${page}`,
+        JSON.stringify({ ...filter, creation_status: column.id }),
+        new RequestOptions()
+      )
+      .map((response) => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000,
+        });
+        
+        return ErrorHandler.capture(err);
+      });
   }
 
   updateStatus(
     column: IWorkflowColumn,
     job: Job
   ): Observable<{ status: boolean }> {
-    return of({ status: true }).pipe(
-      tap((response) => {
-        if (response && response.status) {
-          job.creation_status = Number(column.id);
-        }
-      })
-    );
+    return this.http
+      .put(
+        `${API}/workflow-criativo`,
+        JSON.stringify({ job_id: job.id, creation_status: column.id }),
+        new RequestOptions()
+      )
+      .map((response) => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000,
+        });
+
+        return ErrorHandler.capture(err);
+      });
   }
 
   delete(job: Job): Observable<{ status: boolean }> {

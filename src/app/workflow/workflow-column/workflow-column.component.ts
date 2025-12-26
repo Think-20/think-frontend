@@ -16,16 +16,22 @@ import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { IWorkflowColumn } from "app/workflow/models/workflow-column.model";
 import { IWorkflowService } from "../services/workflow.service";
-import { IWorkflowFilter } from '../models/workflow-filter.model';
+import { IWorkflowFilter } from "../models/workflow-filter.model";
 
 @Component({
   selector: "cb-workflow-column",
   templateUrl: "./workflow-column.component.html",
   styleUrls: ["./workflow-column.component.scss"],
 })
-export class WorkflowColumnComponent implements OnInit, AfterViewInit, OnDestroy {
+export class WorkflowColumnComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @Input() column: IWorkflowColumn;
+  @Input() disabled = false;
   @Input() service: IWorkflowService;
+
+  @Input() showCreationStatus = false;
+  @Input() showProductionStatus = false;
 
   jobs: Job[] = [];
 
@@ -38,9 +44,7 @@ export class WorkflowColumnComponent implements OnInit, AfterViewInit, OnDestroy
 
   private onDestroy$ = new Subject<void>();
 
-  constructor(
-    private authService: AuthService
-  ) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
     this.isAdmin = this.authService.hasAccess("job/save");
@@ -115,8 +119,7 @@ export class WorkflowColumnComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   private getFilter(filter: IWorkflowFilter): IWorkflowFilter {
-    let clientName =
-      filter.client != "" ? filter.client : filter.search;
+    let clientName = filter.client != "" ? filter.client : filter.search;
 
     let attendanceFilter = this.isAdmin
       ? { attendance: filter.attendance }
@@ -132,7 +135,19 @@ export class WorkflowColumnComponent implements OnInit, AfterViewInit, OnDestroy
     } as IWorkflowFilter;
   }
 
+  onCardEnter(): void {
+    this.total += 1;
+  }
+
+  onCardExit(): void {
+    this.total -= 1;
+  }
+
   drop(event: CdkDragDrop<Job[]>) {
+    if (this.disabled) {
+      return;
+    }
+
     if (event.previousContainer === event.container) {
       moveItemInArray(
         event.container.data,
@@ -157,7 +172,7 @@ export class WorkflowColumnComponent implements OnInit, AfterViewInit, OnDestroy
     job["loading"] = true;
 
     this.service.updateStatus(this.column, job).subscribe({
-      next: () => job["loading"] = false,
+      next: () => (job["loading"] = false),
       error: () => (job["loading"] = false),
     });
   }

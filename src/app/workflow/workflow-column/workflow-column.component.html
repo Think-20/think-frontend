@@ -9,11 +9,16 @@
 
     <div class="workflow-column__cards" cdkDropList
         [cdkDropListData]="jobs"
+        [cdkDropListDisabled]="disabled"
+        (cdkDropListEntered)="onCardEnter()"
+        (cdkDropListExited)="onCardExit()"
         (cdkDropListDropped)="drop($event)">
         <cb-workflow-card *ngFor="let job of jobs; trackBy: trackByJob" cdkDrag
             class="workflow-column__cards__card"
             [class.workflow-column__cards__card--loading]="job['loading']"
             [job]="job"
+            [showCreationStatus]="showCreationStatus"
+            [showProductionStatus]="showProductionStatus"
             (deleteJob)="delete(job)">
             <div class="workflow-column__cards__card__placeholder" *cdkDragPlaceholder></div>
         </cb-workflow-card>

@@ -3,13 +3,19 @@
 </div>
 
 <div class="workflow col-md-12 pr-0" id="searchForm">
-    <cb-workflow-header [title]="'Workflow Atendimento'"></cb-workflow-header>
+    <cb-workflow-header
+        [title]="'Workflow Atendimento'"
+        (formChanged)="onFormChanged($event)"
+    ></cb-workflow-header>
 
     <mat-card class="workflow__content" cdkDropListGroup cdkScrollable>
         <cb-workflow-column
             *ngFor="let column of columns; trackBy: trackByColumn"
             [column]="column"
             [service]="service"
+            [disabled]="column.id === aguardandoCriativo"
+            [showCreationStatus]="column.id === aguardandoCriativo"
+            [showProductionStatus]="column.id === aprovado"
         ></cb-workflow-column>
     </mat-card>
 </div>

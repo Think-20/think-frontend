@@ -2,6 +2,12 @@ import { JobService } from "app/jobs/job.service";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Job } from "app/jobs/job.model";
 import { AuthService } from "app/login/auth.service";
+import { EProductionStatus, productionStatusLabels } from "app/shared/enums/production-status.enum";
+import {
+  creationStatusLabels,
+  ECreationStatus,
+} from "app/shared/enums/creation-status.enum";
+import { EJobStatus } from "app/shared/enums/job-status.enum";
 
 @Component({
   selector: "cb-workflow-card",
@@ -10,6 +16,9 @@ import { AuthService } from "app/login/auth.service";
 })
 export class WorkflowCardComponent {
   @Input() job = new Job();
+
+  @Input() showCreationStatus = false;
+  @Input() showProductionStatus = false;
 
   @Output() deleteJob = new EventEmitter<void>();
 
@@ -27,6 +36,22 @@ export class WorkflowCardComponent {
     }
 
     return this.job.client ? this.job.client.fantasy_name : this.job.not_client;
+  }
+
+  get hasCreationStatus(): boolean {
+    return this.job && !!this.job.creation_status;
+  }
+  
+  get creationStatus(): string {
+    return creationStatusLabels.get(this.job.creation_status);
+  }
+
+  get hasProductionStatus(): boolean {
+    return this.job && !!this.job.production_status;
+  }
+
+  get productionStatus(): string {
+    return productionStatusLabels.get(this.job.production_status);
   }
 
   constructor(

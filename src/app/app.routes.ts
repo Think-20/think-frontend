@@ -30,7 +30,7 @@ import { ItemListComponent } from './items/item-list/item-list.component';
 import { ItemShowComponent } from './items/item-show/item-show.component';
 import { ItemsComponent } from './items/items.component';
 
-import { JobListComponent } from './jobs/job-list/job-list.component';
+import { JobListComponent as JobListOldComponent } from './jobs/job-list/job-list.component';
 import { JobsComponent } from './jobs/jobs.component';
 
 import { TimecardComponent } from './timecard/timecard.component';
@@ -76,6 +76,7 @@ import { ExternalCheckInComponent } from './external/external-check-in/external-
 import { ExternalExtrasRefuseComponent } from './external/external-extras-refuse/external-extras-refuse.component';
 import { ExternalFeedbackComponent } from './external/external-feedback/external-feedback.component';
 import { JobsKanbanComponent } from './jobs/jobs-kanban/jobs-kanban.component';
+import { JobListComponent } from './job-list/job-list.component';
 
 export const ROUTES: Routes = [
   {
@@ -294,6 +295,9 @@ export const ROUTES: Routes = [
           },
           {
             path: 'show/:id', component: JobTabsComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'list-old', component: JobListOldComponent, canActivate: [AuthGuard]
           },
           {
             path: 'list', component: JobListComponent, canActivate: [AuthGuard]

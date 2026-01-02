@@ -1,0 +1,8 @@
+<button
+    class="icon-button icon-button--{{ size }}"
+    [type]="type"
+    [class.icon-button--disabled]="disabled"
+    [class.icon-button--selected]="selected"
+    [class.icon-button--rounded]="rounded">
+    <ng-content slot="[icon]"></ng-content>
+</button>

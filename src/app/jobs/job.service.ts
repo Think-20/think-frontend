@@ -25,6 +25,7 @@ export class JobService implements OnDestroy {
   data: Job = new Job
   pageIndex = 0
 
+  formValue$ = new BehaviorSubject<unknown>({});
   searchValue$ = new BehaviorSubject<unknown>({});
   searchValueKanban$ = new BehaviorSubject<unknown>({});
 

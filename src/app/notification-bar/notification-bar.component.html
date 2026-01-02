@@ -1,12 +1,12 @@
-<div class="my-container row">
-  <h3 class="lead col-md-6">Feed</h3>
-  <div class="col-md-6">
-    <!--<button mat-button><mat-icon (click)="now()">refresh</mat-icon></button>-->
+<section class="notification-bar">
+  <div class="notification-bar__header">
+    <h3 class="notification-bar__header__title">Feed</h3>
   </div>
-</div>
-<div class="scroll-notifications cb-scroll">
-  <cb-notification-item
-    *ngFor="let userNotification of userNotifications"
-    [userNotification]="userNotification">
-  </cb-notification-item>
-</div>
+
+  <div class="notification-bar__container cb-scroll">
+    <cb-notification-item
+      *ngFor="let userNotification of userNotifications"
+      [userNotification]="userNotification">
+    </cb-notification-item>
+  </div>
+</section>

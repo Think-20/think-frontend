@@ -1,18 +1,16 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserNotification } from '../user-notification/user-notification.model';
-import { NotificationType } from '../notification-type/notification-type.model';
 import { Notification } from '../notification/notification.model';
 import { Router } from '@angular/router';
 import { TaskService } from '../../schedule/task.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 import { API } from 'app/app.api';
-import { SafePipe } from '../../shared/safe.pipe';
 
 @Component({
   selector: 'cb-notification-item',
   templateUrl: './notification-item.component.html',
-  styleUrls: ['./notification-item.component.css']
+  styleUrls: ['./notification-item.component.scss']
 })
 export class NotificationItemComponent implements OnInit {
 

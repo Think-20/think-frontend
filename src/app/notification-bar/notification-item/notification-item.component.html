@@ -1,16 +1,31 @@
-<mat-card
-  [class.new]="printNew && userNotification.read == 0"
-  class="notification-item-content">
-  <button class="button-fixed" mat-button (click)="goTo(userNotification?.notification)">
-    <mat-icon>add</mat-icon>
-  </button>
-  <mat-card-header>
-    <div mat-card-avatar class="mat-card-photo" [ngStyle]="{ 'background-image' : userNotification?.notification?.notifier?.image }"></div>
-    <mat-card-title>{{userNotification?.notification?.notifier?.name}}</mat-card-title>
-    <mat-card-subtitle>{{userNotification?.notification?.date | date:'dd/MM/yyyy H:mm'}}</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
-    <p *ngIf="userNotification?.special == 0">{{userNotification?.notification?.message}}</p>
-    <p *ngIf="userNotification?.special == 1">{{userNotification?.special_message}}</p>
-  </mat-card-content>
-</mat-card>
+<div class="notification-item" (click)="goTo(userNotification?.notification)">
+  <div class="notification-item__image"
+    [ngStyle]="{ 'background-image': userNotification?.notification?.notifier?.image }">
+  </div>
+
+  <div class="notification-item__container">
+    <h4 class="notification-item__container__title">
+      {{ userNotification?.notification?.notifier?.name }}
+
+      <span>{{ userNotification?.notification?.date | date: "dd/MM/yyyy H:mm" }}</span>
+    </h4>
+
+    <p
+      *ngIf="userNotification?.notification?.type?.description"
+      class="notification-item__container__type">
+      {{ userNotification?.notification?.type?.description }}
+    </p>
+
+    <p
+      *ngIf="userNotification?.special == 0"
+      class="notification-item__container__message">
+      {{ userNotification?.notification?.message }}
+    </p>
+
+    <p
+      *ngIf="userNotification?.special == 1"
+      class="notification-item__container__message">
+      {{ userNotification?.special_message }}
+    </p>
+  </div>
+</div>

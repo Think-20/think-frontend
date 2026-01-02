@@ -1,0 +1,180 @@
+.menu {
+  display: grid;
+
+  grid-template-rows: 97px calc(100% - 97px);
+
+  width: 255px;
+  height: 100%;
+
+  border-right: 1px solid oklch(0.928 0.006 264.531);
+
+  background-color: #ffffff;
+
+  &__user {
+    display: flex;
+
+    flex-direction: row;
+
+    gap: 12px;
+
+    align-items: center;
+
+    padding: 24px;
+
+    border-bottom: 1px solid oklch(0.928 0.006 264.531);
+
+    &__photo {
+      width: 48px;
+      height: 48px;
+
+      border-radius: 50%;
+
+      object-fit: cover;
+    }
+
+    &__name {
+      color: oklch(0.278 0.033 256.848);
+
+      font-size: 14px;
+      font-weight: 600;
+
+      line-height: 1.5;
+    }
+  }
+
+  &__nav {
+    padding: 16px 0;
+
+    overflow: auto;
+
+    &__item {
+      & button {
+        display: flex;
+
+        gap: 12px;
+
+        align-items: center;
+
+        width: 100%;
+        height: 45px;
+
+        padding: 12px 24px;
+
+        border: none;
+
+        background-color: #ffffff;
+
+        & span {
+          flex: 1;
+
+          color: oklch(0.373 0.034 259.733);
+
+          font-size: 14px;
+
+          text-align: left;
+        }
+
+        &:hover {
+          background-color: oklch(0.985 0.002 247.839);
+        }
+
+        &:focus-visible {
+          outline: 2px #000000 solid !important;
+          outline-offset: 2px;
+        }
+
+        & cb-icon-arrow-right {
+          display: flex;
+
+          width: 16px;
+          height: 16px;
+
+          color: oklch(0.707 0.022 261.325);
+
+          &.opened {
+            transform: rotate(90deg);
+          }
+        }
+      }
+
+      &__administradores::before,
+      &__administrativo::before,
+      &__atendimento::before,
+      &__criacao::before,
+      &__diretoria::before,
+      &__planejamento::before,
+      &__producao::before {
+        content: "";
+
+        display: inline-block;
+
+        width: 12px;
+        height: 12px;
+
+        border-radius: 6px;
+      }
+
+      &__administradores::before {
+        background-color: #a4ce3a;
+      }
+
+      &__administrativo::before {
+        background-color: #f5d547;
+      }
+
+      &__atendimento::before {
+        background-color: #ff9f43;
+      }
+
+      &__criacao::before {
+        background-color: #54a0ff;
+      }
+
+      &__diretoria::before {
+        background-color: #a29bfe;
+      }
+
+      &__planejamento::before {
+        background-color: #b2bec3;
+      }
+
+      &__producao::before {
+        background-color: #fd79a8;
+      }
+
+      &__sub-item,
+      &__sub-item__sub-item {
+        background-color: oklch(0.985 0.002 247.839);
+
+        & button {
+          height: 40px;
+
+          padding: 8px 24px 8px 48px;
+
+          border: none;
+
+          background-color: transparent;
+
+          color: oklch(0.446 0.03 256.802);
+
+          font-size: 13px;
+
+          text-align: left;
+
+          &:hover {
+            background-color: oklch(0.967 0.003 264.542);
+          }
+
+          &:focus-visible {
+            outline: 2px #000000 solid !important;
+            outline-offset: 2px;
+          }
+        }
+
+        &__sub-item {
+          padding-left: 24px;
+        }
+      }
+    }
+  }
+}

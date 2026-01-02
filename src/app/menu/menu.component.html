@@ -1,0 +1,279 @@
+<aside *ngIf="opened" class="menu">
+  <div class="menu__user">
+    <img class="menu__user__photo" src="{{ api }}/assets/images/{{user.employee.image}}" alt="Photo" />
+
+    <p class="menu__user__name" [matTooltip]="user.employee.department.description">
+      {{user.employee.name}}
+    </p>
+  </div>
+
+  <nav class="menu__nav cb-scroll">
+    <div *ngIf="user.employee.department_id == 2" class="menu__nav__item">
+      <button class="menu__nav__item__administradores" (click)="administradores = !administradores">
+        <span>Administradores</span>
+
+        <cb-icon-arrow-right [class.opened]="administradores"></cb-icon-arrow-right>
+      </button>
+
+      <div *ngIf="administradores">
+        <div class="menu__nav__item__sub-item">
+          <button [routerLink]="['/displays']">Acesso das telas</button>
+          <button [routerLink]="['/functionalities']">Funcionalidades da API</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="admVisible" class="menu__nav__item">
+      <button class="menu__nav__item__administrativo" (click)="administrativo = !administrativo">
+        <span>Administrativo</span>
+
+        <cb-icon-arrow-right [class.opened]="administrativo"></cb-icon-arrow-right>
+      </button>
+
+      <div *ngIf="administrativo">
+        <div class="menu__nav__item__sub-item">
+          <button [routerLink]="['/financial/list']">Financeiro</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu__nav__item">
+      <button class="menu__nav__item__atendimento" (click)="atendimento = !atendimento">
+        <span>Atendimento</span>
+
+        <cb-icon-arrow-right [class.opened]="atendimento"></cb-icon-arrow-right>
+      </button>
+
+      <div *ngIf="atendimento">
+        <div class="menu__nav__item__sub-item">
+          <button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">
+            Agenda
+          </button>
+
+          <button [routerLink]="['/clients']" [disabled]="hasNoPermission(user, '/clients/list')">
+            Clientes
+          </button>
+
+          <button (click)="events = !events">Eventos</button>
+
+          <div *ngIf="events">
+            <div class="menu__nav__item__sub-item__sub-item">
+              <button [routerLink]="['/events']" [disabled]="hasNoPermission(user, '/events/list')">
+                Eventos
+              </button>
+
+              <button [routerLink]="['/places']" [disabled]="hasNoPermission(user, '/places/list')">
+                Locais
+              </button>
+            </div>
+          </div>
+
+          <button [routerLink]="['/jobs']" [disabled]="hasNoPermission(user, '/jobs/list')">
+            Jobs
+          </button>
+
+          <button [routerLink]="['/service-report']"
+            [disabled]="hasNoPermissionDepartament(user, '/reports/service-report', 'Atendimento')">
+            Relatórios
+          </button>
+
+          <button [routerLink]="['/organizations']">
+            Organizadoras
+          </button>
+
+          <button [routerLink]="['/dashboard']">
+            Dashboards
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu__nav__item">
+      <button class="menu__nav__item__criacao" (click)="criacao = !criacao">
+        <span>Criação</span>
+
+        <cb-icon-arrow-right [class.opened]="criacao"></cb-icon-arrow-right>
+      </button>
+
+      <div *ngIf="criacao">
+        <div class="menu__nav__item__sub-item">
+          <button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">
+            Agenda
+          </button>
+
+          <button (click)="events = !events">
+            Eventos
+          </button>
+
+          <div *ngIf="events">
+            <div class="menu__nav__item__sub-item__sub-item">
+              <button [routerLink]="['/events']" [disabled]="hasNoPermission(user, '/events/list')">
+                Eventos
+              </button>
+
+              <button [routerLink]="['/places']" [disabled]="hasNoPermission(user, '/places/list')">
+                Locais
+              </button>
+            </div>
+          </div>
+
+          <button [routerLink]="['/jobs']" [disabled]="hasNoPermission(user, '/jobs/list')">
+            Jobs
+          </button>
+
+          <button [routerLink]="['/service-report']"
+            [disabled]="hasNoPermissionDepartament(user, '/reports/service-report', 'Criação')">
+            Relatório de jobs
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu__nav__item">
+      <button *ngIf="!hasNoPermission(user, '/employees')" class="menu__nav__item__diretoria"
+        (click)="diretoria = !diretoria">
+        <span>Diretoria</span>
+
+        <cb-icon-arrow-right [class.opened]="diretoria"></cb-icon-arrow-right>
+      </button>
+
+      <div *ngIf="diretoria">
+        <div class="menu__nav__item__sub-item">
+          <button [routerLink]="['/employees']" [disabled]="hasNoPermission(user, '/employees/list')">
+            Colaboradores
+          </button>
+        </div>
+
+        <div class="menu__nav__item__sub-item">
+          <button (click)="reports = !reports">
+            Relatórios
+          </button>
+
+          <div *ngIf="reports">
+            <div class="menu__nav__item__sub-item__sub-item">
+              <button [routerLink]="['/performance-lite']" [disabled]="hasNoPermission(user, '/performance-lite')">
+                Performance (Lite)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu__nav__item__sub-item">
+          <button [routerLink]="['/goals']" [disabled]="hasNoPermission(user, '/goals')">
+            Metas
+          </button>
+
+          <button [routerLink]="['/manage-client-types']" [disabled]="hasNoPermission(user, '/manage-client-types')">
+            Notificação/inativação cliente
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu__nav__item">
+      <button class="menu__nav__item__planejamento" (click)="planejamento = !planejamento">
+        <span>Planejamento</span>
+
+        <cb-icon-arrow-right [class.opened]="planejamento"></cb-icon-arrow-right>
+      </button>
+
+      <div *ngIf="planejamento">
+        <div class="menu__nav__item__sub-item">
+          <button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">
+            Agenda
+          </button>
+
+          <button (click)="centroCusto = !centroCusto">
+            Centro de custos
+          </button>
+
+          <div *ngIf="centroCusto" class="menu__nav__item__sub-item__sub-item">
+            <button [routerLink]="['/cost-categories']" [disabled]="hasNoPermission(user, '/cost-categories/list')">
+              Categorias de custo
+            </button>
+
+            <button [routerLink]="['/item-categories']" [disabled]="hasNoPermission(user, '/item-categories/list')">
+              Categorias de item
+            </button>
+
+            <button [routerLink]="['/items']" [disabled]="hasNoPermission(user, '/items/list')">
+              Itens
+            </button>
+          </div>
+        </div>
+
+        <div class="menu__nav__item__sub-item">
+          <button (click)="events = !events">Eventos</button>
+
+          <div *ngIf="events">
+            <div class="menu__nav__item__sub-item__sub-item">
+              <button [routerLink]="['/events']" [disabled]="hasNoPermission(user, '/events/list')">
+                Eventos
+              </button>
+
+              <button [routerLink]="['/places']" [disabled]="hasNoPermission(user, '/places/list')">
+                Locais
+              </button>
+            </div>
+          </div>
+
+          <button disabled [routerLink]="['/costs-sheet']" [disabled]="hasNoPermission(user, '/costs-sheet')">
+            Ficha de custos
+          </button>
+
+          <button [routerLink]="['/jobs']" [disabled]="hasNoPermission(user, '/jobs/list')">
+            Jobs
+          </button>
+        </div>
+
+        <div class="menu__nav__item__sub-item">
+          <button (click)="orcamento = !orcamento">Orçamento</button>
+
+          <div *ngIf="orcamento" class="menu__nav__item__sub-item__sub-item">
+            <button disabled [routerLink]="['/costs-sheet']" [disabled]="hasNoPermission(user, '/costs-sheet')">
+              Planilha de custos
+            </button>
+
+            <button disabled [routerLink]="['/specification']"
+              [disabled]="hasNoPermission(user, '/provispecificationders')">
+              Memorial descritivo
+            </button>
+          </div>
+
+          <button [routerLink]="['/service-report']"
+            [disabled]="hasNoPermissionDepartament(user, '/reports/service-report', 'Planejamento')">
+            Relatório de jobs
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu__nav__item">
+      <button class="menu__nav__item__producao" (click)="producao = !producao">
+        <span>Produção</span>
+
+        <cb-icon-arrow-right [class.opened]="producao"></cb-icon-arrow-right>
+      </button>
+
+      <div *ngIf="producao">
+        <div class="menu__nav__item__sub-item">
+          <button (click)="events = !events">Eventos</button>
+
+          <div *ngIf="events">
+            <div class="menu__nav__item__sub-item__sub-item">
+              <button [routerLink]="['/events']" [disabled]="hasNoPermission(user, '/events/list')">Eventos</button>
+
+              <button [routerLink]="['/places']" [disabled]="hasNoPermission(user, '/places/list')">Locais</button>
+            </div>
+          </div>
+
+          <button [routerLink]="['/providers']" [disabled]="hasNoPermission(user, '/providers/list')">
+            Fornecedores
+          </button>
+
+          <button [routerLink]="['/organizations']">Organizadoras</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+</aside>

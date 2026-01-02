@@ -1,0 +1,62 @@
+<header class="header">
+    <img
+        class="header__image"
+        src="{{ api }}/assets/images/logo/think-normal.png"
+        alt="Think Ideias"
+        [routerLink]="['/home']"
+    />
+
+    <div class="header__actions">
+        <cb-icon-button
+            size="lg"
+            [rounded]="true"
+            (click)="toggleMenu()">
+            <mat-icon icon>menu</mat-icon>
+        </cb-icon-button>
+
+        <cb-icon-button
+            size="lg"
+            [rounded]="true"
+            [routerLink]="['/timecard']">
+            <mat-icon icon>query_builder</mat-icon>
+        </cb-icon-button>
+
+        <cb-icon-button
+            size="lg"
+            [rounded]="true" 
+            [matMenuTriggerFor]="menuNotifications"
+            (menuClosed)="readMessages()">
+            <mat-icon
+                icon 
+                matBadgeColor="warn"
+                [matBadge]="notReads"
+                [matBadgeHidden]="notReads == 0">
+                notifications
+            </mat-icon>
+        </cb-icon-button>
+
+        <cb-icon-button
+            size="lg"
+            [rounded]="true"
+            [routerLink]="['/employees/profile']">
+            <mat-icon icon>account_circle</mat-icon>
+        </cb-icon-button>
+
+        <cb-icon-button
+            size="lg"
+            [rounded]="true"
+            [routerLink]="['/login']">
+            <mat-icon icon>close</mat-icon>
+        </cb-icon-button>
+    </div>
+</header>
+
+<mat-menu #menuNotifications class="menuNotifications">
+    <div mat-menu-item class="menuItemNotification" *ngFor="let userNotification of userNotifications">
+        <cb-notification-item
+            class="cbNotificationItem"
+            [printNew]="true"
+            [userNotification]="userNotification">
+        </cb-notification-item>
+    </div>
+</mat-menu>

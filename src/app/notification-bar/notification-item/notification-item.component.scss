@@ -7,12 +7,23 @@
 
   padding: 16px;
 
+  border: none;
+
   border-bottom: 1px solid #f6f3f4;
 
+  background-color: #00000000;
+
+  text-align: left;
+  
   cursor: pointer;
 
   &:hover {
     background-color: #fbf9fa;
+  }
+
+  &:focus-visible {
+    outline: 2px #000000 solid !important;
+    outline-offset: -2px;
   }
 
   &__image {

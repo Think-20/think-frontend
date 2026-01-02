@@ -1,6 +1,14 @@
 #container-box {
-    height: calc(100% - 64px);
-    padding: 5px 15px;
+  height: 100%;
+  padding: 0 15px;
+}
+  
+.my-container {
+  width: 100vw;
+
+  &.opened {
+    width: calc(100vw - 255px);
+  }
 }
 
 cb-sidenav.opened {
@@ -17,7 +25,11 @@ cb-sidenav.opened {
 
 #my-master-container {
   position: absolute;
-  display: flex;
+  
+  display: grid;
+
+  grid-template-rows: 61px calc(100vh - 61px);
+
   width: 100%;
   height: 100%;
 }
@@ -25,7 +37,11 @@ cb-sidenav.opened {
 #my-second-container {
   flex: 1 85%;
   max-height: 100%;
-  max-width: 85%;
+
+  display: flex;
+  
+  flex-direction: row;
+  flex-wrap: nowrap;
 }
 
 #my-second-container {
@@ -33,14 +49,19 @@ cb-sidenav.opened {
 }
 
 #timeline-container {
-  max-width: 19.25%;
+  max-width: calc(100% - 77.75%);
+
+  padding: 0;
+
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
 }
 
 #all-container {
   padding: 0;
   width: 80.75%;
   flex: 80.75%;
-  max-width: 80.75%;
+  max-width: 77.75%;
   overflow-x: hidden !important;
 }
 

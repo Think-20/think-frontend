@@ -1,0 +1,62 @@
+.header {
+  display: flex;
+
+  gap: 12px;
+
+  align-items: center;
+  justify-content: space-between;
+
+  height: 100%;
+
+  padding: 12px 24px;
+
+  border-bottom: 1px solid oklch(0.928 0.006 264.531);
+
+  background-color: #ffffff;
+
+  &__image {
+    height: 36px;
+
+    cursor: pointer;
+  }
+
+  &__actions {
+    display: flex;
+
+    flex-direction: row;
+
+    align-items: center;
+
+    gap: 12px;
+
+    &::ng-deep .mat-icon {
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      width: 20px;
+      height: 20px;
+
+      color: oklch(.707 .022 261.325);
+    }
+  }
+}
+
+.menuNotifications {
+  max-height: 90%;
+}
+
+.menuItemNotification {
+  padding: 0 !important;
+  height: auto !important;
+}
+
+.cbNotificationItem {
+  display: flex;
+  border-bottom: 1px solid #eee;
+}
+
+.cbNotificationItem:last-child {
+  border-bottom: none !important;
+}

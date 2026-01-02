@@ -123,7 +123,7 @@ import { JobStatusService } from 'app/job-status/job-status.service';
 
 import { JobTabsComponent } from './jobs/job-tabs/job-tabs.component';
 import { JobsComponent } from './jobs/jobs.component';
-import { JobListComponent } from './jobs/job-list/job-list.component';
+import { JobListComponent as JobListOldComponent } from './jobs/job-list/job-list.component';
 import { JobService } from './jobs/job.service';
 import { ReportService} from './reports/service-report/report-list.service';
 import { JobFormComponent } from './jobs/job-form/job-form.component';
@@ -280,6 +280,26 @@ import { WorkflowCriacaoComponent } from './workflow-criacao/workflow-criacao.co
 import { WorkflowProducaoComponent } from './workflow-producao/workflow-producao.component';
 import { WorkflowColumnComponent } from './workflow/workflow-column/workflow-column.component';
 import { WorkflowCardComponent } from './workflow/workflow-card/workflow-card.component';
+import { JobListComponent } from './job-list/job-list.component';
+import { JobHeaderComponent } from './job-list/job-header/job-header.component';
+import { IconButtonComponent } from './components/icon-button/icon-button.component';
+import { IconListComponent } from './components/icons/icon-list/icon-list.component';
+import { IconKanbanComponent } from './components/icons/icon-kanban/icon-kanban.component';
+import { IconSearchComponent } from './components/icons/icon-search/icon-search.component';
+import { IconArrowDownComponent } from './components/icons/icon-arrow-down/icon-arrow-down.component';
+import { IconMoreComponent } from './components/icons/icon-more/icon-more.component';
+import { SearchComponent } from './components/search/search.component';
+import { IconArrowLeftComponent } from './components/icons/icon-arrow-left/icon-arrow-left.component';
+import { IconArrowRightComponent } from './components/icons/icon-arrow-right/icon-arrow-right.component';
+import { IconAddComponent } from './components/icons/icon-add/icon-add.component';
+import { MenuComponent } from './menu/menu.component';
+import { HeaderComponent } from './header/header.component';
+import { IconBagComponent } from './components/icons/icon-bag/icon-bag.component';
+import { IconCalendarComponent } from './components/icons/icon-calendar/icon-calendar.component';
+import { IconCheckCircleComponent } from './components/icons/icon-check-circle/icon-check-circle.component';
+import { IconTimeComponent } from './components/icons/icon-time/icon-time.component';
+import { IconCloseCircleComponent } from './components/icons/icon-close-circle/icon-close-circle.component';
+import { IconCloseComponent } from './components/icons/icon-close/icon-close.component';
 
 registerLocaleData(localePt);
 
@@ -325,7 +345,7 @@ registerLocaleData(localePt);
     ItemCategoryShowComponent,
 
     JobsComponent,
-    JobListComponent,
+    JobListOldComponent,
     ServiceListComponent,
 
     StandFormComponent,
@@ -457,7 +477,27 @@ registerLocaleData(localePt);
     WorkflowProducaoComponent,
     WorkflowHeaderComponent,
     WorkflowColumnComponent,
-    WorkflowCardComponent
+    WorkflowCardComponent,
+    JobListComponent,
+    JobHeaderComponent,
+    IconButtonComponent,
+    IconListComponent,
+    IconKanbanComponent,
+    IconSearchComponent,
+    IconArrowDownComponent,
+    IconMoreComponent,
+    SearchComponent,
+    IconArrowLeftComponent,
+    IconArrowRightComponent,
+    IconAddComponent,
+    MenuComponent,
+    HeaderComponent,
+    IconBagComponent,
+    IconCalendarComponent,
+    IconCheckCircleComponent,
+    IconTimeComponent,
+    IconCloseCircleComponent,
+    IconCloseComponent
   ],
   imports: [
     CurrencyMaskModule,

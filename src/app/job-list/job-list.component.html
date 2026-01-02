@@ -1,0 +1,152 @@
+<section class="job-list">
+    <h2 class="job-list__title">{{ title }}</h2>
+
+    <cb-job-header
+        [from]="from"
+        [to]="to"
+        [total]="total"
+        [totalPerPage]="totalPerPage"
+        [hasNext]="hasNext"
+        [isFinancial]="isFinancial"
+        (next)="next()"
+        (previous)="previous()"
+    ></cb-job-header>
+
+    <div class="job-list__container">
+        <div class="job-list__container__overflow-auto">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th style="min-width: 130px;">Cliente</th>
+                        <th>Evento</th>
+                        <th>Tipo</th>
+                        <th style="min-width: 130px;">Atendimento</th>
+                        <th style="min-width: 130px;">Criação</th>
+                        <th>Data</th>
+                        <th>Crono</th>
+                        <th>Status</th>
+                        <th>Definição</th>
+                        <th style="text-align: center;">Ação</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let job of jobs"
+                        [class.is-loading]="job.isLoading">
+                        <td>
+                            {{ jobService.showId(job) }}
+                        </td>
+
+                        <td>
+                            <div class="cliente">
+                                {{ job.client ? job.client.fantasy_name : job.not_client }}
+                            </div>
+                        </td>
+                        
+                        <td>
+                            <div class="evento">
+                                <cb-icon-bag></cb-icon-bag>
+                                
+                                {{ job.event }}
+                            </div>
+                        </td>
+                        
+                        <td>
+                            <span class="tipo tipo--{{job.job_type.id}}">
+                                {{ job.job_type.description }}
+                            </span>
+                        </td>
+                        
+                        <td>{{ job.attendance.name }}</td>
+                        
+                        <td>{{ jobService.displayCreation(job) }}</td>
+                        
+                        <td>
+                            <div class="data">
+                                <cb-icon-calendar></cb-icon-calendar>
+                                
+                                {{ job.created_at | date:'dd/MM/yy' }}
+                            </div>
+                        </td>
+                        
+                        <td>
+                            <div class="crono">
+                                <cb-icon-calendar></cb-icon-calendar>
+                                
+                                {{ job?.available_date | date:'dd/MM/yy' }}
+                            </div>
+                        </td>
+                        
+                        <td>
+                            <span class="status status--{{job.status.id}}">
+                                <ng-container [ngSwitch]="job.status.id">
+                                    <cb-icon-close-circle class="status__icon" *ngSwitchCase="2"></cb-icon-close-circle>
+                                    <cb-icon-check-circle class="status__icon" *ngSwitchCase="3"></cb-icon-check-circle>
+                                    <cb-icon-close-circle class="status__icon" *ngSwitchCase="4"></cb-icon-close-circle>
+                                    <cb-icon-time class="status__icon" *ngSwitchDefault></cb-icon-time>
+                                </ng-container>
+                                
+                                {{ job.status.description }}
+                            </span>
+                        </td>
+                        
+                        <td>
+                            <div class="definicao">
+                                <cb-icon-calendar></cb-icon-calendar>
+                                
+                                {{ job?.status_updated_at | date:'dd/MM/yy' }}
+                            </div>
+                        </td>
+                        
+                        <td>
+                            <cb-icon-button
+                                class="button"
+                                [matMenuTriggerFor]="menu"
+                                [matMenuTriggerData]="{ job: job }">
+                                <cb-icon-more icon></cb-icon-more>
+                            </cb-icon-button>
+                        </td>
+                    </tr>
+
+                    <tr *ngIf="!hasJobs && !loading">
+                        <td class="job-list__container__no-itens" colspan="11">
+                            Não encontramos resultados para sua busca
+                        </td>
+                    </tr>
+
+                    <tr *ngIf="!hasJobs && loading">
+                        <td class="job-list__container__loading" colspan="11">
+                            Aguarde, carregando os dados...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<mat-menu #menu="matMenu">
+    <ng-template matMenuContent let-job="job">
+        <a
+            mat-menu-item
+            [disabled]="!permissionVerify('show', job)"
+            [routerLink]="['/jobs/show', job.id]">
+            <mat-icon>subject</mat-icon> Visualização
+        </a>
+
+        <a
+            mat-menu-item
+            [disabled]="!permissionVerify('edit', job)"
+            [routerLink]="['/jobs/edit', job.id]">
+            <mat-icon>mode_edit</mat-icon> Editar
+        </a>
+
+        <button
+            mat-menu-item
+            [disabled]="!permissionVerify('delete', job)"
+            (click)="delete(job)">
+            <mat-icon>delete</mat-icon> Remover
+        </button>
+    </ng-template>
+</mat-menu>

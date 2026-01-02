@@ -1,0 +1,76 @@
+.notification-item {
+  display: grid;
+
+  grid-template-columns: 40px 1fr;
+
+  gap: 12px;
+
+  padding: 16px;
+
+  border-bottom: 1px solid #f6f3f4;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: #fbf9fa;
+  }
+
+  &__image {
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+
+    background-size: 100%;
+
+    overflow: hidden;
+  }
+
+  &__container {
+    display: flex;
+
+    flex-direction: column;
+
+    &__title {
+      margin-bottom: 4px;
+
+      padding: 0;
+
+      color: #1e2939;
+
+      font-size: 13px;
+      font-weight: 600;
+
+      line-height: 1.5;
+
+      & span {
+        padding-left: 5px;
+
+        color: #99a1af;
+
+        font-size: 11px;
+        font-weight: 400;
+      }
+    }
+
+    &__type {
+      margin-bottom: 4px;
+
+      color: #364153;
+
+      font-size: 12px;
+      font-weight: 400;
+
+      line-height: 1.5;
+    }
+
+    &__message {
+      color: #6a7282;
+
+      font-size: 11px;
+      font-weight: 400;
+
+      line-height: 1.4;
+    }
+  }
+}

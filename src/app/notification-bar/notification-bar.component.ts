@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'cb-notification-bar',
   templateUrl: './notification-bar.component.html',
-  styleUrls: ['./notification-bar.component.css'],
+  styleUrls: ['./notification-bar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotificationBarComponent implements OnInit {

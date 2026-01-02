@@ -1,0 +1,19 @@
+<div
+    tabindex="0"
+    class="search"
+    (click)="focus()"
+    (keydown.enter)="focus()">
+    <div class="search__icon">
+        <cb-icon-search></cb-icon-search>
+    </div>
+
+    <input
+        #inputText
+        type="text"
+        tabindex="-1"
+        class="search__field"
+        [placeholder]="placeholder"
+        [value]="value"
+        (input)="change($event)"
+    />
+</div>

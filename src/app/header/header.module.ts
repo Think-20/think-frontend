@@ -12,7 +12,6 @@ import { RouterModule } from '@angular/router';
 
 import { ROUTES } from '../app.routes';
 
-import { NotificationItemComponent } from '../notification-bar/notification-item/notification-item.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { NotificationModule } from '../notification-bar/notification.module';

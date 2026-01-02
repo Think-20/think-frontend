@@ -1,0 +1,57 @@
+.icon-button {
+  width: 32px;
+  height: 32px;
+
+  padding: 8px !important;
+
+  border: none;
+  border-radius: 4px;
+
+  background-color: #00000000;
+
+  transition: 0.05s outline;
+
+  &:hover {
+    background-color: oklch(0.967 0.003 264.542);
+  }
+
+  &:focus-visible {
+    outline: 2px #000000 solid !important;
+    outline-offset: 2px;
+  }
+
+  &--sm {
+    width: 24px;
+    height: 24px;
+
+    padding: 4px !important;
+  }
+
+  &--md {
+    width: 32px;
+    height: 32px;
+
+    padding: 8px !important;
+  }
+
+  &--lg {
+    width: 36px;
+    height: 36px;
+
+    padding: 8px !important;
+  }
+
+  &--disabled {
+    opacity: 0.5;
+    
+    cursor: not-allowed;
+  }
+
+  &--selected {
+    background-color: oklch(0.928 0.006 264.531);
+  }
+
+  &--rounded {
+    border-radius: 50%;
+  }
+}

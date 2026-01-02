@@ -1,0 +1,181 @@
+<form [formGroup]="form" class="job-header">
+    <div class="job-header__top">
+        <div class="job-header__top__left">
+            <h3 class="job-header__top__left__title">Lista</h3>
+
+            <div class="job-header__top__left__options">
+                <cb-icon-button
+                    matTooltip="Lista"
+                    [selected]="true"
+                    [routerLink]="isFinancial ? ['/financial/list'] :  ['/jobs/list']">
+                    <cb-icon-list icon></cb-icon-list>
+                </cb-icon-button>
+
+                <cb-icon-button
+                    matTooltip="Kanban"
+                    [routerLink]="['/jobs/kanban']">
+                    <cb-icon-kanban icon></cb-icon-kanban>
+                </cb-icon-button>
+            </div>
+        </div>
+
+        <div class="job-header__top__right">
+            <cb-search
+                #search
+                placeholder="Qual job você procura?"
+                formControlName="search">
+            </cb-search>
+
+            <cb-icon-button (click)="focus()">
+                <cb-icon-search icon></cb-icon-search>
+            </cb-icon-button>
+
+            <cb-icon-button
+                class="job-header__top__right__arrow"
+                [class.job-header__top__right__arrow--opened]="opened"
+                [class.job-header__top__right__arrow--dirty]="form.dirty"
+                (click)="showForm()">
+                <cb-icon-arrow-down icon></cb-icon-arrow-down>
+            </cb-icon-button>
+
+            <cb-icon-button [routerLink]="['/jobs/new']">
+                <cb-icon-add icon></cb-icon-add>
+            </cb-icon-button>
+
+            <cb-icon-button *ngIf="form.dirty" (click)="clear()">
+                <cb-icon-close icon></cb-icon-close>
+            </cb-icon-button>
+        </div>
+    </div>
+
+    <div *ngIf="opened" class="job-header__form">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="job-header__form__fields row" style="padding: 0 15px;">
+                    <mat-form-field class="{{ isFinancial ? 'col-md-2-3' : 'col-md-2-4' }}">
+                        <input
+                            matInput
+                            formControlName="client"
+                            [matAutocomplete]="autocompleteclient"
+                            placeholder="Cliente"
+                        />
+                    </mat-form-field>
+                    
+                    <mat-autocomplete #autocompleteclient="matAutocomplete">
+                        <mat-option
+                            *ngFor="let client of clients"
+                            [value]="client.fantasy_name">
+                            {{ client.fantasy_name }}
+                        </mat-option>
+                    </mat-autocomplete>
+
+                    <mat-form-field *ngIf="isAdmin" class="{{ isFinancial ? 'col-md-2-3' : 'col-md-2-4' }}">
+                        <mat-select
+                            placeholder="Atendimento"
+                            formControlName="attendance"
+                            [compareWith]="compareAttendance">
+                            <mat-option></mat-option>
+
+                            <mat-option
+                                *ngFor="let attendance of attendances"
+                                [value]="attendance">
+                                {{ attendance.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="{{ isFinancial ? 'col-md-2-3' : 'col-md-2-4' }}">
+                        <mat-select
+                            placeholder="Projetista"
+                            formControlName="creation"
+                            [compareWith]="compareAttendance">
+                            <mat-option></mat-option>
+
+                            <mat-option
+                                *ngFor="let creation of creations"
+                                [value]="creation">
+                                {{ creation.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="{{ isFinancial ? 'col-md-2-3' : 'col-md-2-4' }}">
+                        <mat-select
+                            placeholder="Tipo"
+                            formControlName="job_type"
+                            [compareWith]="compareJobType">
+                            <mat-option></mat-option>
+
+                            <mat-option
+                                *ngFor="let jobType of jobTypes"
+                                [value]="jobType">
+                                {{ jobType.description }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field *ngIf="!isFinancial" class="{{ isFinancial ? 'col-md-2-3' : 'col-md-2-4' }}">
+                        <mat-select
+                            placeholder="Status"
+                            formControlName="status"
+                            [compareWith]="compareStatus">
+                            <mat-option></mat-option>
+
+                            <mat-option *ngFor="let s of status" [value]="s">
+                                {{ s.description }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="job-header__form__dates">
+                    <div class="col-md-12">
+                        <p style="color: oklch(0.551 0.027 264.364);">
+                            <small>Você também pode filtrar por período do cronograma</small>
+                        </p>
+
+                        <br>
+                    </div>
+
+                    <mat-form-field class="col-md-3">
+                        <input [matDatepicker]="initialDatepicker" formControlName="initial_date" matInput placeholder="Data inicial">
+                        <mat-datepicker-toggle matSuffix [for]="initialDatepicker"></mat-datepicker-toggle>
+                        <mat-datepicker #initialDatepicker></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="col-md-3">
+                        <input [matDatepicker]="finalDatepicker" formControlName="final_date" matInput placeholder="Data final">
+                        <mat-datepicker-toggle matSuffix [for]="finalDatepicker"></mat-datepicker-toggle>
+                        <mat-datepicker #finalDatepicker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="job-header__bottom">
+        <span>
+            Itens por página: {{ totalPerPage }}
+        </span>
+
+        <span>
+            {{ from }} - {{ to }} de {{ total }}
+        </span>
+
+        <div>
+            <cb-icon-button
+                size="sm"
+                [disabled]="from <= 1"
+                (click)="previousPage()">
+                <cb-icon-arrow-left icon></cb-icon-arrow-left>
+            </cb-icon-button>
+
+            <cb-icon-button
+                size="sm"
+                [disabled]="!hasNext"
+                (click)="nextPage()">
+                <cb-icon-arrow-right icon></cb-icon-arrow-right>
+            </cb-icon-button>
+        </div>
+    </div>
+</form>

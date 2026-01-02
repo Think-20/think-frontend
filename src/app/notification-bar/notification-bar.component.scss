@@ -1,0 +1,45 @@
+.notification-bar {
+  height: 100%;
+
+  background-color: #ffffff;
+
+  border-left: 1px solid #ebe6e7;
+
+  &__header {
+    height: 73px;
+
+    padding: 24px;
+
+    border-bottom: 1px solid #ebe6e7;
+
+    &__title {
+      margin: 0;
+      padding: 0;
+
+      color: oklch(0.278 0.033 256.848);
+
+      font-size: 16px;
+      font-weight: 600;
+
+      line-height: 1.5;
+    }
+  }
+
+  &__container {
+    height: calc(100% - 73px);
+
+    overflow-y: auto;
+  }
+}
+
+.my-container {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.scroll-notifications {
+  height: calc(100% - 86px);
+  overflow-y: scroll;
+  margin-right: -15px;
+  padding-right: 15px;
+}

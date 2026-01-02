@@ -75,7 +75,6 @@ import { OrganizationComponent } from './organization/organization.component';
 import { ExternalCheckInComponent } from './external/external-check-in/external-check-in.component';
 import { ExternalExtrasRefuseComponent } from './external/external-extras-refuse/external-extras-refuse.component';
 import { ExternalFeedbackComponent } from './external/external-feedback/external-feedback.component';
-import { JobsKanbanComponent } from './jobs/jobs-kanban/jobs-kanban.component';
 import { WorkflowAtendimentoComponent } from './workflow-atendimento/workflow-atendimento.component';
 import { WorkflowCriacaoComponent } from './workflow-criacao/workflow-criacao.component';
 import { WorkflowProducaoComponent } from './workflow-producao/workflow-producao.component';
@@ -307,7 +306,7 @@ export const ROUTES: Routes = [
           },
           {
             path: 'workflow', component: WorkflowAtendimentoComponent, canActivate: [AuthGuard]
-          }
+          },
         ]
       },
       {

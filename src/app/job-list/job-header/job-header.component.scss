@@ -30,21 +30,6 @@
         font-size: 13px;
         font-weight: 400;
       }
-
-      &__options {
-        display: flex;
-
-        flex-direction: row;
-
-        align-items: center;
-
-        gap: 8px;
-
-        & cb-icon-list,
-        & cb-icon-kanban {
-          color: oklch(0.446 0.03 256.802);
-        }
-      }
     }
 
     &__right {

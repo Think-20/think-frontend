@@ -2,21 +2,6 @@
     <div class="job-header__top">
         <div class="job-header__top__left">
             <h3 class="job-header__top__left__title">Lista</h3>
-
-            <div class="job-header__top__left__options">
-                <cb-icon-button
-                    matTooltip="Lista"
-                    [selected]="true"
-                    [routerLink]="isFinancial ? ['/financial/list'] :  ['/jobs/list']">
-                    <cb-icon-list icon></cb-icon-list>
-                </cb-icon-button>
-
-                <cb-icon-button
-                    matTooltip="Kanban"
-                    [routerLink]="['/jobs/kanban']">
-                    <cb-icon-kanban icon></cb-icon-kanban>
-                </cb-icon-button>
-            </div>
         </div>
 
         <div class="job-header__top__right">

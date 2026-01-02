@@ -46,6 +46,8 @@
 
       <div *ngIf="atendimento">
         <div class="menu__nav__item__sub-item">
+          <button [routerLink]="['/jobs/workflow']">Workflow</button>
+          
           <button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">
             Agenda
           </button>
@@ -97,6 +99,8 @@
 
       <div *ngIf="criacao">
         <div class="menu__nav__item__sub-item">
+          <button [routerLink]="['/creation/workflow']">Workflow</button>
+
           <button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">
             Agenda
           </button>
@@ -257,6 +261,8 @@
 
       <div *ngIf="producao">
         <div class="menu__nav__item__sub-item">
+          <button [routerLink]="['/production/workflow']">Workflow</button>
+
           <button (click)="events = !events">Eventos</button>
 
           <div *ngIf="events">

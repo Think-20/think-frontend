@@ -80,7 +80,7 @@
 
         &:focus-visible {
           outline: 2px #000000 solid !important;
-          outline-offset: 2px;
+          outline-offset: -2px;
         }
 
         & cb-icon-arrow-right {
@@ -167,7 +167,7 @@
 
           &:focus-visible {
             outline: 2px #000000 solid !important;
-            outline-offset: 2px;
+            outline-offset: -2px;
           }
         }
 

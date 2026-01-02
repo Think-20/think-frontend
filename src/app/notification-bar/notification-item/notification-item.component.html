@@ -1,4 +1,4 @@
-<div class="notification-item" (click)="goTo(userNotification?.notification)">
+<button class="notification-item" (click)="goTo(userNotification?.notification)">
   <div class="notification-item__image"
     [ngStyle]="{ 'background-image': userNotification?.notification?.notifier?.image }">
   </div>
@@ -28,4 +28,4 @@
       {{ userNotification?.special_message }}
     </p>
   </div>
-</div>
+</button>

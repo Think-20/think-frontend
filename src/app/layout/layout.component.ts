@@ -9,7 +9,7 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'cb-layout',
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.css']
+  styleUrls: ['./layout.component.scss']
 })
 export class LayoutComponent implements AfterViewInit {
   currentRoute: string;

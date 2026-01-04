@@ -12,7 +12,7 @@
   transition: 0.05s outline;
 
   &:hover {
-    background-color: oklch(0.967 0.003 264.542);
+    background-color: #f3f4f6;
   }
 
   &:focus-visible {
@@ -48,7 +48,7 @@
   }
 
   &--selected {
-    background-color: oklch(0.928 0.006 264.531);
+    background-color: #e5e7eb;
   }
 
   &--rounded {

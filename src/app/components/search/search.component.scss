@@ -11,7 +11,7 @@
 
   padding: 8px 16px;
 
-  border: 1px solid oklch(0.872 0.01 258.338);
+  border: 1px solid #d1d5db;
   border-radius: 10px;
 
   &:has(&__field:focus) {
@@ -29,7 +29,7 @@
     width: 16px;
     height: 16px;
 
-    color: oklch(0.707 0.022 261.325);
+    color: #99a1af;
 
     & cb-icon-search {
       display: contents;
@@ -45,10 +45,10 @@
 
     font-size: 13px;
 
-    color: oklch(0.446 0.03 256.802);
+    color: #4a5565;
 
     &::placeholder {
-      color: oklch(0.446 0.03 256.802 / 0.5);
+      color: #4a556580;
     }
   }
 }

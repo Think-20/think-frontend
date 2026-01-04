@@ -96,7 +96,7 @@ export class JobHeaderComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.formObserver();
 
-    if (JSON.stringify(this.jobService.formValue$.value) == JSON.stringify({})) {
+    if (JSON.stringify(this.jobService.formValue$.value) == JSON.stringify({}) || this.jobService.formValue$.value) {
       this.jobService.formValue$.next(this.form.value);
     } else {
       this.form.patchValue(this.jobService.formValue$.value);

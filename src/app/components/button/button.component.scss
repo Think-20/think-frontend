@@ -1,0 +1,46 @@
+.button {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 8px 16px;
+
+  border-radius: 10px;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+
+  &:focus-visible {
+    outline: 2px #000000 solid !important;
+    outline-offset: 2px;
+  }
+
+  &--transparent {
+    border: 1px solid #d1d5dc;
+
+    background-color: #00000000;
+
+    color: #364153;
+
+    &:hover,
+		&:active {
+      background-color: #fbf9fa;
+    }
+  }
+
+  &--info {
+    border: none;
+
+    background-color: #155dfc;
+
+    color: #ffffff;
+
+    &:hover,
+		&:active {
+      background-color: #1447e6;
+    }
+  }
+}

@@ -1,0 +1,8 @@
+<cb-icon-button
+    size="lg"
+    [rounded]="true"
+    (click)="toggle($event)">
+    <cb-icon-eye *ngIf="visible"></cb-icon-eye>
+
+    <cb-icon-eye-closed *ngIf="!visible"></cb-icon-eye-closed>
+</cb-icon-button>

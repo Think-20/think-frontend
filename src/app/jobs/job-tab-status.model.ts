@@ -8,6 +8,7 @@ export class JobTabStatus {
         public descriptive_memorial_check?: EJobTabStatus,
         public checkin_check?: EJobTabStatus,
         public budget_check?: EJobTabStatus,
+        public financial_check?: EJobTabStatus,
         public contract_nf_check?: EJobTabStatus,
         public project_photos_check?: EJobTabStatus,
         public feedback_check?: EJobTabStatus,

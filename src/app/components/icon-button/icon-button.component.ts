@@ -8,7 +8,6 @@ import { Component, Input } from '@angular/core';
 export class IconButtonComponent {
   @Input() type: 'button' | 'submit' | 'reset' = 'button';
   @Input() size: 'sm' | 'md' | 'lg' = 'md';
-  @Input() icon = '';
   
   @Input() rounded = false;
 

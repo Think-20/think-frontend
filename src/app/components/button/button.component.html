@@ -1,0 +1,10 @@
+<button
+    class="button button--{{theme}}"
+    [type]="type"
+    [disabled]="disabled">
+    <ng-content select="[iconStart]"></ng-content>
+
+    <ng-content></ng-content>
+
+    <ng-content select="[iconEnd]"></ng-content>
+</button>

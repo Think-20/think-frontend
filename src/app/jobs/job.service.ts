@@ -144,6 +144,7 @@ export class JobService implements OnDestroy {
         descriptive_memorial_check: response["descriptive_memorial_check"],
         checkin_check: response["checkin_check"],
         budget_check: response["budget_check"],
+        financial_check: response["financial_check"],
         contract_nf_check: response["contract_nf_check"],
         project_photos_check: response["project_photos_check"],
         feedback_check: response["feedback_check"],

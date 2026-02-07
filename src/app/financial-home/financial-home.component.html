@@ -1,0 +1,274 @@
+<section class="financial">
+    <h2 class="financial__title">Financeiro</h2>
+
+    <div class="financial__cards">
+        <div
+            class="financial__cards__income"
+            (click)="stepChangeFn(financialStep.revenues)">
+            <div class="financial__cards__income__header">
+                <h3 class="financial__cards__income__header__title">
+                    Receita
+                </h3>
+
+                <div class="financial__cards__income__header__filter">
+                    Hoje
+
+                    <cb-icon-arrow-down></cb-icon-arrow-down>
+                </div>
+            </div>
+
+            <div class="financial__cards__income__amount">
+                <cb-currency-value [value]="9943.50"></cb-currency-value>
+
+                <cb-value-visibility-control class="financial__cards__income__amount__icon"></cb-value-visibility-control>
+            </div>
+
+            <button class="financial__cards__income__button">
+                Ver extrato ›
+            </button>
+        </div>
+
+        <div
+            class="financial__cards__expenses"
+            (click)="stepChangeFn(financialStep.expenses)">
+            <div class="financial__cards__expenses__header">
+                <h3 class="financial__cards__expenses__header__title">
+                    Despesa
+                </h3>
+
+                <div class="financial__cards__expenses__header__filter">
+                    Hoje
+
+                    <cb-icon-arrow-down></cb-icon-arrow-down>
+                </div>
+            </div>
+
+            <div class="financial__cards__expenses__amount">
+                <cb-currency-value [value]="-125.25"></cb-currency-value>
+
+                <cb-value-visibility-control class="financial__cards__expenses__amount__icon"></cb-value-visibility-control>
+            </div>
+
+            <button class="financial__cards__expenses__button">
+                Ver extrato ›
+            </button>
+        </div>
+
+        <div class="financial__cards__my-account">
+            <div class="financial__cards__my-account__header">
+                <h3 class="financial__cards__my-account__header__title">
+                    Minha Conta
+                </h3>
+
+                <div class="financial__cards__my-account__header__change">
+                    🔄 Trocar
+                </div>
+            </div>
+
+            <div class="financial__cards__my-account__body">
+                <div class="financial__cards__my-account__body__logo">
+                    inter
+                </div>
+
+                <div class="financial__cards__my-account__body__content">
+                    <p class="financial__cards__my-account__body__content__bank">
+                        Banco Inter
+                    </p>
+
+                    <span class="financial__cards__my-account__body__content__account">
+                        Conta: 478989 - 01
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="financial__controls">
+        <div class="financial__controls__revenue-control">
+            <div class="financial__controls__revenue-control__header">
+                <h3 class="financial__controls__revenue-control__header__title">
+                    Controle de Receitas
+                </h3>
+
+                <button class="financial__controls__revenue-control__header__button">
+                    <cb-icon-add class="financial__controls__revenue-control__header__button__icon"></cb-icon-add>
+
+                    Novo lançamento
+                </button>
+            </div>
+
+            <div class="financial__controls__revenue-control__body">
+                <div *ngFor="let revenue of revenues" class="financial__controls__revenue-control__body__item">
+                    <div class="financial__controls__revenue-control__body__item__content">
+                        <span class="financial__controls__revenue-control__body__item__content__date">
+                            {{ revenue.date | date: 'dd/MM' }}
+                        </span>
+
+                        <span class="financial__controls__revenue-control__body__item__content__description">
+                            {{ revenue.description }}
+                        </span>
+
+                        <span class="financial__controls__revenue-control__body__item__content__category">
+                            <span
+                                class="financial__controls__revenue-control__body__item__content__category__dot"></span>
+
+                            {{ revenue.category }}
+                        </span>
+                    </div>
+
+                    <span class="financial__controls__revenue-control__body__item__value">
+                        <cb-currency-value [value]="revenue.value"></cb-currency-value>
+                    </span>
+                </div>
+            </div>
+
+            <button class="financial__controls__revenue-control__button">
+                Ver relatório completo
+
+                <cb-icon-external-link
+                    class="financial__controls__revenue-control__button__icon"></cb-icon-external-link>
+            </button>
+        </div>
+
+        <div class="financial__controls__expense-control">
+            <div class="financial__controls__expense-control__header">
+                <h3 class="financial__controls__expense-control__header__title">
+                    Controle de Despesas
+                </h3>
+
+                <button class="financial__controls__expense-control__header__button">
+                    <cb-icon-add class="financial__controls__expense-control__header__button__icon"></cb-icon-add>
+
+                    Novo lançamento
+                </button>
+            </div>
+
+            <div class="financial__controls__expense-control__body">
+                <div *ngFor="let expense of expenses" class="financial__controls__expense-control__body__item">
+                    <div class="financial__controls__expense-control__body__item__content">
+                        <span class="financial__controls__expense-control__body__item__content__date">
+                            {{ expense.date | date: 'dd/MM' }}
+                        </span>
+
+                        <span class="financial__controls__expense-control__body__item__content__description">
+                            {{ expense.description }}
+                        </span>
+
+                        <span class="financial__controls__expense-control__body__item__content__category">
+                            <span
+                                class="financial__controls__expense-control__body__item__content__category__dot"></span>
+
+                            {{ expense.category }}
+                        </span>
+                    </div>
+
+                    <span class="financial__controls__expense-control__body__item__value">
+                        <cb-currency-value [value]="expense.value"></cb-currency-value>
+                    </span>
+                </div>
+            </div>
+
+            <button class="financial__controls__expense-control__button">
+                Ver relatório completo
+
+                <cb-icon-external-link
+                    class="financial__controls__expense-control__button__icon"></cb-icon-external-link>
+            </button>
+        </div>
+    </div>
+
+    <div class="financial__group">
+        <div class="financial__group__bank-statement">
+            <div class="financial__group__bank-statement__header">
+                <h3 class="financial__group__bank-statement__header__title">
+                    Extrato
+                </h3>
+
+                <button class="financial__group__bank-statement__header__filter">
+                    Últimos 7 dias
+
+                    <cb-icon-arrow-down
+                        class="financial__group__bank-statement__header__filter__icon"></cb-icon-arrow-down>
+                </button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Entradas</th>
+                        <th>Saídas</th>
+                        <th>Resultado</th>
+                        <th>Saldo</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let bankStatement of bankStatements">
+                        <td>
+                            {{ bankStatement.date | date: 'dd/MM/yyyy' }}
+                        </td>
+
+                        <td class="green">
+                            <cb-currency-value [value]="bankStatement.income"></cb-currency-value>
+                        </td>
+
+                        <td class="red">
+                            <cb-currency-value [value]="bankStatement.expense"></cb-currency-value>
+                        </td>
+
+                        <td class="green">
+                            <cb-currency-value [value]="bankStatement.result"></cb-currency-value>
+                        </td>
+
+                        <td class="green">
+                            <cb-currency-value [value]="bankStatement.balance"></cb-currency-value>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="financial__group__bank-statement__footer">
+                <span class="financial__group__bank-statement__footer__total">
+                    Saldo total:
+                </span>
+
+                <span class="financial__group__bank-statement__footer__amount">
+                    <cb-currency-value [value]="5588"></cb-currency-value>
+                </span>
+            </div>
+        </div>
+
+        <div class="financial__group__quick-access">
+            <h3 class="financial__group__quick-access__title">
+                Acesso rápido
+            </h3>
+
+            <div class="financial__group__quick-access__buttons">
+                <button class="financial__group__quick-access__buttons__button">
+                    <div class="financial__group__quick-access__buttons__button__text">
+                        <div class="financial__group__quick-access__buttons__button__text__icon green">
+                            <cb-icon-add></cb-icon-add>
+                        </div>
+
+                        Cadastrar receita
+                    </div>
+
+                    <cb-icon-arrow-right></cb-icon-arrow-right>
+                </button>
+
+                <button class="financial__group__quick-access__buttons__button">
+                    <div class="financial__group__quick-access__buttons__button__text">
+                        <div class="financial__group__quick-access__buttons__button__text__icon red">
+                            <cb-icon-negative></cb-icon-negative>
+                        </div>
+
+                        Cadastrar despesa
+                    </div>
+
+                    <cb-icon-arrow-right></cb-icon-arrow-right>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>

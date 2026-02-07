@@ -36,11 +36,12 @@ export class JobTabsComponent implements OnInit {
     {index: 4, description: 'check-in'},
     {index: 5, description: 'extras'},
     {index: 6, description: 'budget-form'},
-    {index: 7, description: 'contract'},
-    {index: 8, description: 'contract-nf'},
-    {index: 9, description: 'project-photos'},
-    {index: 10, description: 'feedback'},
-    {index: 11, description: 'detailing'},
+    {index: 7, description: 'financial'},
+    {index: 8, description: 'contract'},
+    {index: 9, description: 'contract-nf'},
+    {index: 10, description: 'project-photos'},
+    {index: 11, description: 'feedback'},
+    {index: 12, description: 'detailing'},
   ]
 
   get valorTotalExtrasRecebido(): number {

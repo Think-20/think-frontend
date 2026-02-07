@@ -928,3 +928,17 @@ cb-proposals .mat-expansion-panel-body {
   --animate-duration: 2s;
   --animate-delay: 1.5s;
 }
+
+.cdk-overlay-backdrop {
+  backdrop-filter: blur(12px);
+
+  background-color: #00000000;
+}
+
+.custom-modal .mat-dialog-container {
+  padding: 0;
+
+  border-radius: 10px;
+
+  box-shadow: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
+}

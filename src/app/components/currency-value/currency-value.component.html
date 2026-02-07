@@ -1,0 +1,7 @@
+<ng-container *ngIf="visible$ | async; else masked">
+    {{ value | currency:currencyCode:display:digitsInfo }}
+</ng-container>
+
+<ng-template #masked>
+    {{ mask }}
+</ng-template>

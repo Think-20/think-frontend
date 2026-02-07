@@ -1,0 +1,78 @@
+<div class="financial-summary-modal__header">
+    <h1 class="financial-summary-modal__header__title">
+        Resumo por Categoria - Receitas
+    </h1>
+
+    <cb-icon-button size="lg" [rounded]="true" (click)="close()">
+        <cb-icon-close></cb-icon-close>
+    </cb-icon-button>
+</div>
+
+<div class="financial-summary-modal__content">
+    <div class="financial-summary-modal__content__table">
+        <table>
+            <thead>
+                <tr>
+                    <th>CATEGORIA</th>
+                    <th>ORÇADO</th>
+                    <th>REALIZADO</th>
+                    <th>DESVIO (R$)</th>
+                    <th>DESVIO (%)</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let category of categories">
+                    <td>
+                        <span class="--{{category.type}}">
+                            <span></span>
+
+                            {{ category.description }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <cb-currency-value
+                            [value]="category.budgeted"
+                            [digitsInfo]="'1.2'"
+                        ></cb-currency-value>
+                    </td>
+
+                    <td>
+                        <cb-currency-value
+                            [value]="category.realized_value"
+                            [digitsInfo]="'1.2'"
+                        ></cb-currency-value>
+                    </td>
+
+                    <td 
+                        class="deviation-value"
+                        [class.deviation-value--positive]="category.deviation_value > 0"
+                        [class.deviation-value--negative]="category.deviation_value < 0">
+                        <cb-icon-positive-graph></cb-icon-positive-graph>
+
+                        <cb-icon-negative-graph></cb-icon-negative-graph>
+                        
+                        <cb-currency-value
+                            [value]="category.deviation_value"
+                            [digitsInfo]="'1.2'"
+                        ></cb-currency-value>
+                    </td>
+
+                    <td
+                        class="percentage-deviation"
+                        [class.percentage-deviation--positive]="category.percentage_deviation > 0"
+                        [class.percentage-deviation--negative]="category.percentage_deviation < 0">
+                        {{ category.percentage_deviation | decimal: "1.2" }}%
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="financial-summary-modal__actions">
+    <cb-button (click)="close()">
+        Fechar
+    </cb-button>
+</div>

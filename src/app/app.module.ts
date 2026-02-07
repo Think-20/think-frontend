@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, LOCALE_ID } from '@angular/core';
-import { registerLocaleData, DatePipe, CommonModule } from '@angular/common';
+import { NgModule, LOCALE_ID, APP_INITIALIZER } from '@angular/core';
+import { registerLocaleData, DatePipe, CommonModule, CurrencyPipe } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -294,6 +294,25 @@ import { IconCheckCircleComponent } from './components/icons/icon-check-circle/i
 import { IconTimeComponent } from './components/icons/icon-time/icon-time.component';
 import { IconCloseCircleComponent } from './components/icons/icon-close-circle/icon-close-circle.component';
 import { IconCloseComponent } from './components/icons/icon-close/icon-close.component';
+import { FinancialComponent } from './financial/financial.component';
+import { IconEyeComponent } from './components/icons/icon-eye/icon-eye.component';
+import { IconExternalLinkComponent } from './components/icons/icon-external-link/icon-external-link.component';
+import { IconNegativeComponent } from './components/icons/icon-negative/icon-negative.component';
+import { CurrencyValueService } from './shared/services/currency-value.service';
+import { CurrencyValueComponent } from './components/currency-value/currency-value.component';
+import { FinancialHomeComponent } from './financial-home/financial-home.component';
+import { FinancialRevenuesComponent } from './financial-revenues/financial-revenues.component';
+import { FinancialExpensesComponent } from './financial-expenses/financial-expenses.component';
+import { IconEyeClosedComponent } from './components/icons/icon-eye-closed/icon-eye-closed.component';
+import { ValueVisibilityControlComponent } from './components/value-visibility-control/value-visibility-control.component';
+import { ButtonComponent } from './components/button/button.component';
+import { IconDownloadComponent } from './components/icons/icon-download/icon-download.component';
+import { IconPrintComponent } from './components/icons/icon-print/icon-print.component';
+import { IconFilterComponent } from './components/icons/icon-filter/icon-filter.component';
+import { IconMenuComponent } from './components/icons/icon-menu/icon-menu.component';
+import { FinancialSummaryModalComponent } from './financial-summary-modal/financial-summary-modal.component';
+import { IconPositiveGraphComponent } from './components/icons/icon-positive-graph/icon-positive-graph.component';
+import { IconNegativeGraphComponent } from './components/icons/icon-negative-graph/icon-negative-graph.component';
 
 registerLocaleData(localePt);
 
@@ -485,7 +504,25 @@ registerLocaleData(localePt);
     IconCheckCircleComponent,
     IconTimeComponent,
     IconCloseCircleComponent,
-    IconCloseComponent
+    IconCloseComponent,
+    FinancialComponent,
+    IconEyeComponent,
+    IconExternalLinkComponent,
+    IconNegativeComponent,
+    CurrencyValueComponent,
+    FinancialHomeComponent,
+    FinancialRevenuesComponent,
+    FinancialExpensesComponent,
+    IconEyeClosedComponent,
+    ValueVisibilityControlComponent,
+    ButtonComponent,
+    IconDownloadComponent,
+    IconPrintComponent,
+    IconFilterComponent,
+    IconMenuComponent,
+    FinancialSummaryModalComponent,
+    IconPositiveGraphComponent,
+    IconNegativeGraphComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -605,12 +642,20 @@ registerLocaleData(localePt);
     ConfirmDialogService,
     CustomeNotificationInactivationService,
     DatePipe,
+    CurrencyPipe,
+    CurrencyValueService,
     {provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
     {provide: LOCALE_ID, useValue: 'pt-BR'},
     {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
     {provide: MatPaginatorIntl, useClass: PaginatorIntl},
     {provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
-    {provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true},
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (currencyValueService: CurrencyValueService) => () => currencyValueService.init(),
+      deps: [CurrencyValueService],
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
   entryComponents: [
@@ -625,6 +670,7 @@ registerLocaleData(localePt);
     ChartPreviewComponent,
     ConfirmDialogComponent,
     OrganizationFormComponent,
+    FinancialSummaryModalComponent,
     LimitJobComponent,
     CheckInOtherCnpjsComponent,
     CheckInPeopleComponent,

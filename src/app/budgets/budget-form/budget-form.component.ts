@@ -893,7 +893,7 @@ export class BudgetFormComponent implements OnInit {
         return;
       }
 
-      this.router.navigateByUrl(`/jobs/edit/${this.job.id}?tab=contract`)
+      this.router.navigateByUrl(`/jobs/edit/${this.job.id}?tab=financial`)
     })
   }
 

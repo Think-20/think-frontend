@@ -1,3 +1,4 @@
+import { tap } from 'rxjs/operators';
 import { Component, OnInit, ViewChildren, QueryList, NgZone, ElementRef, Inject, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NgModel } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
@@ -14,7 +15,7 @@ import { TaskService } from './task.service';
 import { TaskItem } from './task-item.model';
 import { Chrono, ScheduleGoal } from './chrono.model';
 
-import { Observable, timer, Subscription, Subject } from 'rxjs';
+import { Observable, timer, Subscription, Subject, race } from 'rxjs';
 import 'rxjs/add/operator/filter';
 import { JobStatusService } from '../job-status/job-status.service';
 import { JobStatus } from '../job-status/job-status.model';
@@ -106,6 +107,9 @@ export class ScheduleComponent implements OnInit {
   counter: number = 0
   hasFilterActive = false
   scheduleGoals: ScheduleGoal[] = [];
+
+  private cancel$ = new Subject<{ canceled: boolean }>();
+
   constructor(
     private fb: FormBuilder,
     private clientService: ClientService,
@@ -312,14 +316,18 @@ export class ScheduleComponent implements OnInit {
     }
 
     this.searchForm.valueChanges
-      .pipe(distinctUntilChanged(), debounceTime(500))
+      .pipe(
+        tap(() => this.cancel$.next({ canceled: true })),
+        distinctUntilChanged(),
+        debounceTime(500)
+      )
       .subscribe((searchValue) => {
         this.params = this.getParams(searchValue)
         this.taskService.searchValue = searchValue
         this.updateFilterActive()
         this.checkParamsHasFilter()
         this.changeMonth()
-      })
+      });
 
     this.searchForm.controls.client.valueChanges
       .pipe(distinctUntilChanged(), debounceTime(500))
@@ -586,9 +594,8 @@ export class ScheduleComponent implements OnInit {
   }
 
   changeMonth() {
-    if(this.searching) return;
-
     this.searching = true
+
     let snackBar = this.snackBar.open('Carregando agenda...')
 
     this.items = []
@@ -608,12 +615,24 @@ export class ScheduleComponent implements OnInit {
 
     this.router.navigateByUrl(urlTree)
 
-    this.taskService.taskItems({
-      iniDate: this.datePipe.transform(this.iniDate, 'yyyy-MM-dd'),
-      finDate: this.datePipe.transform(this.finDate, 'yyyy-MM-dd'),
-      paginate: false,
-      ...this.params
-    }).subscribe(async dataInfo => {
+    race([
+      this.taskService.taskItems({
+        iniDate: this.datePipe.transform(this.iniDate, 'yyyy-MM-dd'),
+        finDate: this.datePipe.transform(this.finDate, 'yyyy-MM-dd'),
+        paginate: false,
+        ...this.params
+      }),
+      this.cancel$.asObservable()
+    ]).subscribe(async dataInfo => {
+      if (dataInfo && dataInfo.canceled) {
+        this.scrollToDateFlag = true;
+        this.searching = false;
+        
+        snackBar.dismiss();
+
+        return;
+      }
+      
       this.items = dataInfo.pagination.data
       this.dataInfo = dataInfo
       this.setUpdatedMessage()

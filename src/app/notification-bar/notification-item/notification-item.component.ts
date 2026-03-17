@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { UserNotification } from '../user-notification/user-notification.model';
 import { Notification } from '../notification/notification.model';
 import { Router } from '@angular/router';
@@ -12,12 +12,11 @@ import { API } from 'app/app.api';
   templateUrl: './notification-item.component.html',
   styleUrls: ['./notification-item.component.scss']
 })
-export class NotificationItemComponent implements OnInit {
+export class NotificationItemComponent {
 
   @Input() printNew: boolean = false
   @Input() userNotification: UserNotification
   image: string
-
 
   constructor(
     private router: Router,
@@ -25,10 +24,6 @@ export class NotificationItemComponent implements OnInit {
     private snackbar: MatSnackBar,
     private taskService: TaskService
   ) { }
-
-  ngOnInit() {
-    this.userNotification.notification.notifier.image = this.getBackgroundUrl(this.userNotification)
-  }
 
   getUrl(userNotification: UserNotification): string {
     return `/assets/images/users/${userNotification.notification.notifier_id}.jpg`

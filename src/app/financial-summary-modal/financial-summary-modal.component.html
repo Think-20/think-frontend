@@ -1,15 +1,9 @@
-<div class="financial-summary-modal__header">
-    <h1 class="financial-summary-modal__header__title">
+<cb-modal class="financial-summary-modal" (close)="close()">
+    <h1 header>
         Resumo por Categoria - Receitas
     </h1>
 
-    <cb-icon-button size="lg" [rounded]="true" (click)="close()">
-        <cb-icon-close></cb-icon-close>
-    </cb-icon-button>
-</div>
-
-<div class="financial-summary-modal__content">
-    <div class="financial-summary-modal__content__table">
+    <div class="financial-summary-modal__table cb-scroll">
         <table>
             <thead>
                 <tr>
@@ -24,43 +18,27 @@
             <tbody>
                 <tr *ngFor="let category of categories">
                     <td>
-                        <span class="--{{category.type}}">
-                            <span></span>
-
-                            {{ category.description }}
-                        </span>
+                        <cb-category-tag [category]="category"></cb-category-tag>
                     </td>
 
                     <td>
-                        <cb-currency-value
-                            [value]="category.budgeted"
-                            [digitsInfo]="'1.2'"
-                        ></cb-currency-value>
+                        <cb-currency-value [value]="category.budgeted" [digitsInfo]="'1.2'"></cb-currency-value>
                     </td>
 
                     <td>
-                        <cb-currency-value
-                            [value]="category.realized_value"
-                            [digitsInfo]="'1.2'"
-                        ></cb-currency-value>
+                        <cb-currency-value [value]="category.realized_value" [digitsInfo]="'1.2'"></cb-currency-value>
                     </td>
 
-                    <td 
-                        class="deviation-value"
-                        [class.deviation-value--positive]="category.deviation_value > 0"
+                    <td class="deviation-value" [class.deviation-value--positive]="category.deviation_value > 0"
                         [class.deviation-value--negative]="category.deviation_value < 0">
                         <cb-icon-positive-graph></cb-icon-positive-graph>
 
                         <cb-icon-negative-graph></cb-icon-negative-graph>
-                        
-                        <cb-currency-value
-                            [value]="category.deviation_value"
-                            [digitsInfo]="'1.2'"
-                        ></cb-currency-value>
+
+                        <cb-currency-value [value]="category.deviation_value" [digitsInfo]="'1.2'"></cb-currency-value>
                     </td>
 
-                    <td
-                        class="percentage-deviation"
+                    <td class="percentage-deviation"
                         [class.percentage-deviation--positive]="category.percentage_deviation > 0"
                         [class.percentage-deviation--negative]="category.percentage_deviation < 0">
                         {{ category.percentage_deviation | decimal: "1.2" }}%
@@ -69,10 +47,52 @@
             </tbody>
         </table>
     </div>
-</div>
 
-<div class="financial-summary-modal__actions">
-    <cb-button (click)="close()">
+    <div class="financial-summary-modal__values">
+        <div class="financial-summary-modal__values__total-budgeted">
+            <div class="financial-summary-modal__values__total-budgeted__title">
+                Total orçado
+            </div>
+
+            <p>
+                <cb-currency-value [value]="2000000" [digitsInfo]="'1.2'"></cb-currency-value>
+            </p>
+        </div>
+
+        <div class="financial-summary-modal__values__total-realized">
+            <div class="financial-summary-modal__values__total-realized__title">
+                Total realizado
+            </div>
+
+            <p>
+                <cb-currency-value [value]="1786763" [digitsInfo]="'1.2'"></cb-currency-value>
+            </p>
+        </div>
+
+        <div class="financial-summary-modal__values__total-deviation">
+            <div class="financial-summary-modal__values__total-deviation__title">
+                Desvio total (R$)
+            </div>
+
+            <p>
+                <cb-icon-negative-graph></cb-icon-negative-graph>
+
+                <cb-currency-value [value]="213237" [digitsInfo]="'1.2'"></cb-currency-value>
+            </p>
+        </div>
+
+        <div class="financial-summary-modal__values__percentage-total-deviation">
+            <div class="financial-summary-modal__values__percentage-total-deviation__title">
+                Desvio total (%)
+            </div>
+
+            <p>
+                {{ -10.66 | decimal: "1.2" }}%
+            </p>
+        </div>
+    </div>
+
+    <cb-button footer (click)="close()">
         Fechar
     </cb-button>
-</div>
+</cb-modal>

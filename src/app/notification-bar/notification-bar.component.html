@@ -1,4 +1,6 @@
-<section class="notification-bar">
+<div *ngIf="opened" class="notification-bar__backdrop" (click)="closeFn()"></div>
+
+<section *ngIf="opened" class="notification-bar">
   <div class="notification-bar__header">
     <h3 class="notification-bar__header__title">Feed</h3>
   </div>

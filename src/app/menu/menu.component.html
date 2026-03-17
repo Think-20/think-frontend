@@ -1,3 +1,5 @@
+<div *ngIf="opened" class="menu__backdrop" (click)="closeFn()"></div>
+
 <aside *ngIf="opened" class="menu">
   <div class="menu__user">
     <img class="menu__user__photo" src="{{ api }}/assets/images/{{user.employee.image}}" alt="Photo" />

@@ -1,19 +1,24 @@
 <div id="my-master-container">
-    <cb-header #navbar (toggleMenuEmitter)="sidenav.toggleMenu()" [opened]="sidenav.opened"></cb-header>
-    
-    <div id="my-second-container" [class.max-size]="!sidenav.opened">
-        <cb-menu #sidenav opened="opened" [class.opened]="sidenav.opened"></cb-menu>
+    <cb-header
+        #navbar
+        (toggleMenu)="menu.toggle($event)"
+        (toggleFeed)="feed.toggle($event)">
+    </cb-header>
 
-        <div id="container-box" [class.opened]="sidenav.opened" class="my-container">
-            <div class="row">
-                <div id="all-container" class="col-md-8 {{currentRoute}}">
-                  <router-outlet></router-outlet>
-                </div>
+    <div id="my-second-container" [class.max-size]="!menu.opened">
+        <cb-menu
+            #menu
+            (close)="navbar.openMenu(false)"
+        ></cb-menu>
 
-                <div *ngIf="sidenav.opened" id="timeline-container" class="col-md-4">
-                    <cb-notification-bar (notificationLoadEmitter)="navbar.notificationsLoaded($event)"></cb-notification-bar>
-                </div>
-            </div>
+        <div id="all-container" class="cb-scroll {{currentRoute}}">
+            <router-outlet></router-outlet>
         </div>
+
+        <cb-notification-bar
+            #feed
+            (notificationLoadEmitter)="navbar.notificationsLoaded($event)"
+            (close)="navbar.openFeed(false)"
+        ></cb-notification-bar>
     </div>
 </div>

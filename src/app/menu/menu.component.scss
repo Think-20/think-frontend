@@ -177,4 +177,41 @@
       }
     }
   }
+
+  @media screen and (max-width: 1200px) {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    z-index: 9999999999;
+
+    width: 310px;
+
+    &__backdrop {
+      position: fixed;
+
+      top: 0;
+      left: 0;
+
+      width: 100vw;
+      height: 100vh;
+
+      backdrop-filter: blur(2px);
+
+      z-index: 9999999998;
+
+      transition: backdrop-filter 0.3s ease-in-out;
+    }
+  }
+
+  @media screen and (max-width: 320px) {
+    width: 100%;
+
+    border-right: none;
+  }
+  
+  @media print {
+    display: none;
+  }
 }

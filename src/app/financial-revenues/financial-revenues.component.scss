@@ -85,10 +85,12 @@
   &__total {
     display: flex;
 
+    flex-wrap: wrap;
+
     align-items: center;
     justify-content: space-between;
 
-    gap: 16px;
+    gap: 32px 16px;
 
     border: 1px solid #ebe6e7;
     border-radius: 10px;
@@ -103,6 +105,8 @@
       flex-direction: column;
 
       gap: 4px;
+
+      max-width: 100%;
 
       & p {
         font-size: 13px;
@@ -125,6 +129,10 @@
           font-size: 32px;
 
           line-height: 1.5;
+
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
         }
 
         & cb-value-visibility-control {
@@ -148,9 +156,14 @@
     &__buttons {
       display: flex;
 
+      flex-wrap: wrap;
+
       align-items: center;
+      justify-content: flex-end;
 
       gap: 12px;
+
+      margin-left: auto;
 
       & cb-icon-print,
       & cb-icon-download,
@@ -166,6 +179,8 @@
   &__filter {
     display: flex;
 
+    flex-wrap: wrap;
+
     align-items: center;
     justify-content: space-between;
 
@@ -180,29 +195,51 @@
 
     & cb-search {
       flex: 1;
+
+      min-width: 190px;
     }
 
-    & cb-icon-calendar,
-    & cb-icon-filter,
-    & cb-icon-menu,
-    & cb-icon-arrow-down {
+    &__buttons {
       display: flex;
 
-      width: 16px;
-      height: 16px;
+      flex-wrap: wrap;
+
+      align-items: center;
+      justify-content: flex-end;
+
+      gap: 16px;
+
+      margin-left: auto;
+
+      & cb-icon-calendar,
+      & cb-icon-filter,
+      & cb-icon-menu,
+      & cb-icon-arrow-down {
+        display: flex;
+
+        width: 16px;
+        height: 16px;
+      }
     }
   }
 
   &__table {
-    border: 1px solid #ebe6e7;
-    border-radius: 10px;
+    // max-height: 70dvh;
 
-    overflow: hidden;
+    border: 1px solid #ebe6e7;
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+
+    overflow: auto;
 
     & table {
       width: 100%;
 
       & thead {
+        position: sticky;
+
+        top: 0;
+
         background-color: #fbf9fa;
 
         border-bottom: 1px solid #ebe6e7;
@@ -215,6 +252,8 @@
           font-size: 12px;
 
           text-align: left;
+
+          white-space: nowrap;
 
           &.text-right {
             text-align: right;
@@ -234,6 +273,11 @@
 
           &:hover {
             background-color: #fbf9fa;
+          }
+
+          &:focus-visible {
+            outline: 2px #000000 solid !important;
+            outline-offset: -2px;
           }
 
           & td {
@@ -338,85 +382,102 @@
         }
       }
     }
+  }
 
-    &__summary {
+  &__summary {
+    display: flex;
+
+    flex-direction: column;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    padding: 16px;
+
+    border: 1px solid #ebe6e7;
+    border-radius: 0 0 10px 10px;
+
+    background-color: #fbf9fa;
+
+    &__top {
       display: flex;
 
-      flex-direction: column;
+      flex-wrap: wrap;
 
-      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
 
-      padding: 16px;
+      gap: 24px 16px;
 
-      border-top: 1px solid #ebe6e7;
-      background-color: #fbf9fa;
+      & span {
+        color: #4a5565;
 
-      &__top {
-        display: flex;
+        font-size: 13px;
 
-        align-items: center;
-        justify-content: space-between;
-
-        gap: 8px;
-
-        & span {
-          color: #4a5565;
-
-          font-size: 13px;
-
-          line-height: 1.5;
-        }
-
-        &__total {
-          display: flex;
-
-          align-items: center;
-
-          gap: 8px;
-
-          line-height: 1.5;
-
-          & cb-currency-value {
-            color: #00a63e;
-
-            font-size: 16px;
-
-            line-height: 1.5;
-          }
-        }
+        line-height: 1.5;
       }
 
-      &__to-receive,
-      &__forecast {
+      &__total {
         display: flex;
 
         align-items: center;
-        justify-content: flex-end;
 
         gap: 8px;
 
-        & span {
-          color: #4a5565;
+        margin-left: auto;
 
-          font-size: 13px;
-
-          line-height: 1.5;
-        }
+        line-height: 1.5;
 
         & cb-currency-value {
+          color: #00a63e;
+
           font-size: 16px;
 
           line-height: 1.5;
         }
       }
+    }
 
-      &__to-receive cb-currency-value {
-        color: #f54a00;
+    &__to-receive,
+    &__forecast {
+      display: flex;
+
+      align-items: center;
+      justify-content: flex-end;
+
+      gap: 8px;
+
+      & span {
+        color: #4a5565;
+
+        font-size: 13px;
+
+        line-height: 1.5;
       }
 
-      &__forecast cb-currency-value {
-        color: #155dfc;
+      & cb-currency-value {
+        font-size: 16px;
+
+        line-height: 1.5;
       }
+    }
+
+    &__to-receive cb-currency-value {
+      color: #f54a00;
+    }
+
+    &__forecast cb-currency-value {
+      color: #155dfc;
+    }
+  }
+
+  @media print {
+    &__tabs,
+    &__filter,
+    & cb-button,
+    & cb-value-visibility-control {
+      display: none;
     }
   }
 }

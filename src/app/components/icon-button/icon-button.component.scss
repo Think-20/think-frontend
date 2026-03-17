@@ -24,21 +24,21 @@
     width: 24px;
     height: 24px;
 
-    padding: 4px !important;
+    padding: var(--button-icon-sm-padding, 4px) !important;
   }
 
   &--md {
     width: 32px;
     height: 32px;
 
-    padding: 8px !important;
+    padding: var(--button-icon-md-padding, 8px) !important;
   }
 
   &--lg {
     width: 36px;
     height: 36px;
 
-    padding: 8px !important;
+    padding: var(--button-icon-lg-padding, 8px) !important;
   }
 
   &--disabled {

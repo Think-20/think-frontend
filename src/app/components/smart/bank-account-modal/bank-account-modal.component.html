@@ -1,0 +1,85 @@
+<cb-modal class="back-account-modal" (close)="close()">
+    <h1 header>
+        Cadastrar conta bancária
+    </h1>
+
+    <div class="back-account-modal__preview">
+        <cb-bank-image [bank]="bank.value"></cb-bank-image>
+
+        <div class="back-account-modal__preview__content">
+            <p class="back-account-modal__preview__content__bank">
+                {{ name.value || "Nome da conta" }}
+            </p>
+
+            <div class="back-account-modal__preview__content__data">
+                <span class="back-account-modal__preview__content__data__agency">
+                    Agência: {{ agency.value || "0000" }}
+                </span>
+                
+                <span class="back-account-modal__preview__content__data__account">
+                    Conta: {{ account.value || "00000-0" }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <cb-form [formGroup]="form">
+        <cb-form-field>
+            <cb-label>Instituição</cb-label>
+
+            <cb-select
+                input
+                formControlName="bank"
+                placeholder="Informe a instituição"
+                labelField="name"
+                [hasError]="bank.invalid && (this.submitted || this.bank.touched)"
+                [options]="banks">
+            </cb-select>
+        </cb-form-field>
+
+        <cb-form-field>
+            <cb-label>Nome</cb-label>
+
+            <cb-input-text
+                input
+                formControlName="name"
+                placeholder="Escreva o nome da conta"
+                [hasError]="name.invalid && (this.submitted || this.name.touched)"
+            ></cb-input-text>
+        </cb-form-field>
+
+        <div class="back-account-modal__form-group">
+            <cb-form-field>
+                <cb-label>Agência</cb-label>
+
+                <cb-input-text
+                    input
+                    formControlName="agency"
+                    placeholder="0000"
+                    [hasError]="agency.invalid && (this.submitted || this.agency.touched)"
+                ></cb-input-text>
+            </cb-form-field>
+
+            <cb-form-field>
+                <cb-label>Conta</cb-label>
+
+                <cb-input-text
+                    input
+                    formControlName="account"
+                    placeholder="00000-0"
+                    [hasError]="account.invalid && (this.submitted || this.account.touched)"
+                ></cb-input-text>
+            </cb-form-field>
+        </div>
+    </cb-form>
+
+    <div footer class="back-account-modal__footer">
+        <cb-button theme="error" (click)="close()">
+            Cancelar
+        </cb-button>
+
+        <cb-button theme="success" (click)="save()">
+            Salvar
+        </cb-button>
+    </div>
+</cb-modal>

@@ -1,10 +1,6 @@
 <section class="financial-revenues">
     <div class="financial-revenues__tabs">
-        <a
-            tabindex="0"
-            class="financial-revenues__tabs__tab"
-            (click)="toHome()"
-            (keyup.enter)="toHome()">
+        <a tabindex="0" class="financial-revenues__tabs__tab" (click)="toHome()" (keyup.enter)="toHome()">
             <span>
                 Financeiro
             </span>
@@ -32,11 +28,8 @@
             <p>Total de Receitas</p>
 
             <div class="financial-revenues__total__description__value">
-                <cb-currency-value
-                    [value]="19813"
-                    [digitsInfo]="'1.2'"
-                ></cb-currency-value>
-                
+                <cb-currency-value [value]="19813" [digitsInfo]="'1.2'"></cb-currency-value>
+
                 <cb-value-visibility-control></cb-value-visibility-control>
             </div>
 
@@ -44,7 +37,7 @@
         </div>
 
         <div class="financial-revenues__total__buttons">
-            <cb-button>
+            <cb-button (click)="print()">
                 <cb-icon-print iconStart></cb-icon-print>
 
                 Imprimir
@@ -52,44 +45,45 @@
 
             <cb-button>
                 <cb-icon-download iconStart></cb-icon-download>
-                
+
                 Exportar
             </cb-button>
 
             <cb-button theme="info">
                 <cb-icon-add iconStart></cb-icon-add>
-                
+
                 Nova Receita
             </cb-button>
         </div>
     </div>
 
     <div class="financial-revenues__filter">
-        <cb-search
-            placeholder="Buscar por descrição..."
-        ></cb-search>
-        
-        <cb-button>
-            <cb-icon-calendar iconStart></cb-icon-calendar>
-            
-            Período
+        <cb-search placeholder="Buscar por descrição..."></cb-search>
 
-            <cb-icon-arrow-down iconEnd></cb-icon-arrow-down>
-        </cb-button>
+        <div class="financial-revenues__filter__buttons">
 
-        <cb-button>
-            <cb-icon-filter iconStart></cb-icon-filter>
-            
-            Filtros
-            
-            <cb-icon-arrow-down iconEnd></cb-icon-arrow-down>
-        </cb-button>
+            <cb-button>
+                <cb-icon-calendar iconStart></cb-icon-calendar>
 
-        <cb-button (click)="openSummaryModal()">
-            <cb-icon-menu iconStart></cb-icon-menu>
-            
-            Resumo
-        </cb-button>
+                Período
+
+                <cb-icon-arrow-down iconEnd></cb-icon-arrow-down>
+            </cb-button>
+
+            <cb-button (click)="filter()">
+                <cb-icon-filter iconStart></cb-icon-filter>
+
+                Filtros
+
+                <cb-icon-arrow-down iconEnd></cb-icon-arrow-down>
+            </cb-button>
+
+            <cb-button (click)="openSummaryModal()">
+                <cb-icon-menu iconStart></cb-icon-menu>
+
+                Resumo
+            </cb-button>
+        </div>
     </div>
 
     <div class="financial-revenues__table">
@@ -108,7 +102,7 @@
             </thead>
 
             <tbody>
-                <tr *ngFor="let revenue of revenues">
+                <tr tabindex="0" *ngFor="let revenue of revenues">
                     <td>
                         {{ revenue.date | date: 'dd/MM/yyyy' }}
                     </td>
@@ -122,11 +116,7 @@
                     </td>
 
                     <td class="category">
-                        <span class="category__element">
-                            <span class="category__element__dot"></span>
-
-                            {{ revenue.category }}
-                        </span>
+                        <cb-category-tag [category]="revenue.category"></cb-category-tag>
                     </td>
 
                     <td class="payment-method">
@@ -144,46 +134,34 @@
                     </td>
 
                     <td class="value">
-                        <cb-currency-value
-                            [value]="revenue.value"
-                            [digitsInfo]="'1.2'"
-                        ></cb-currency-value>
+                        <cb-currency-value [value]="revenue.value" [digitsInfo]="'1.2'"></cb-currency-value>
                     </td>
                 </tr>
             </tbody>
         </table>
+    </div>
 
-        <div class="financial-revenues__table__summary">
-            <div class="financial-revenues__table__summary__top">
-                <span>Mostrando 10 de 10 receitas</span>
+    <div class="financial-revenues__summary">
+        <div class="financial-revenues__summary__top">
+            <span>Mostrando 10 de 10 receitas</span>
 
-                <div class="financial-revenues__table__summary__top__total">
-                    <span>Total Realizado:</span>
+            <div class="financial-revenues__summary__top__total">
+                <span>Total Realizado:</span>
 
-                    <cb-currency-value
-                        [value]="75500"
-                        [digitsInfo]="'1.2'"
-                    ></cb-currency-value>
-                </div>
+                <cb-currency-value [value]="75500" [digitsInfo]="'1.2'"></cb-currency-value>
             </div>
+        </div>
 
-            <div class="financial-revenues__table__summary__to-receive">
-                <span>À Receber:</span>
+        <div class="financial-revenues__summary__to-receive">
+            <span>À Receber:</span>
 
-                <cb-currency-value
-                    [value]="892450"
-                    [digitsInfo]="'1.2'"
-                ></cb-currency-value>
-            </div>
+            <cb-currency-value [value]="892450" [digitsInfo]="'1.2'"></cb-currency-value>
+        </div>
 
-            <div class="financial-revenues__table__summary__forecast">
-                <span>Previsto:</span>
+        <div class="financial-revenues__summary__forecast">
+            <span>Previsto:</span>
 
-                <cb-currency-value
-                    [value]="968000"
-                    [digitsInfo]="'1.2'"
-                ></cb-currency-value>
-            </div>
+            <cb-currency-value [value]="968000" [digitsInfo]="'1.2'"></cb-currency-value>
         </div>
     </div>
 </section>

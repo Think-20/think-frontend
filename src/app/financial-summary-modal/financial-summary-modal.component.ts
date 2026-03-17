@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { MatDialogRef } from "@angular/material";
+import { ECategoryColor } from 'app/shared/enums/category-color.enum';
 
 @Component({
   selector: "cb-financial-summary-modal",
@@ -9,24 +10,24 @@ import { MatDialogRef } from "@angular/material";
 export class FinancialSummaryModalComponent {
   categories = [
     {
-      description: "Venda",
-      type: 1,
+      name: "Venda",
+      theme: ECategoryColor.cyan,
       budgeted: 1200000,
       realized_value: 1016763,
       deviation_value: -183237,
       percentage_deviation: -15.27,
     },
     {
-      description: "Serviços",
-      type: 2,
+      name: "Serviços",
+      theme: ECategoryColor.darkBlue,
       budgeted: 500000,
       realized_value: 450000,
       deviation_value: -50000,
       percentage_deviation: -10,
     },
     {
-      description: "Consultoria",
-      type: 3,
+      name: "Consultoria",
+      theme: ECategoryColor.darkGreen,
       budgeted: 300000,
       realized_value: 320000,
       deviation_value: 20000,

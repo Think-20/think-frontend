@@ -1,0 +1,9 @@
+<input
+    type="text"
+    class="input-text"
+    [class.input-text--has-error]="hasError"
+    [placeholder]="placeholder"
+    [value]="value"
+    (input)="change($event)"
+    (focusout)="onTouched()"
+/>

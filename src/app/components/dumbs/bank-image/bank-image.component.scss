@@ -1,0 +1,17 @@
+.bank-image {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: var(--bank-image-size, 48px);
+  height: var(--bank-image-size, 48px);
+
+  border-radius: 400px;
+
+  background-color: var(--color-gray-300);
+}
+
+img.bank-image {
+  background-color: #ffffff;
+}

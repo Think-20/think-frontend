@@ -1,0 +1,231 @@
+.form-category-color {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  &__color {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 400px;
+
+    transition: 0.15s cubic-bezier(0.4, 0, 0.2, 1) scale;
+
+    &:hover {
+      scale: 110% 110%;
+    }
+
+    &:focus-visible {
+      outline: 2px #000000 solid !important;
+      outline-offset: 2px;
+    }
+
+    &--1 {
+      background-color: var(--color-gray-400);
+    }
+
+    &--2 {
+      background-color: var(--color-gray-600);
+    }
+
+    &--3 {
+      background-color: var(--color-yellow-500);
+    }
+
+    &--4 {
+      background-color: var(--color-pink-300);
+    }
+
+    &--5 {
+      background-color: var(--color-orange-400);
+    }
+
+    &--6 {
+      background-color: var(--color-red-500);
+    }
+
+    &--7 {
+      background-color: var(--color-green-400);
+    }
+
+    &--8 {
+      background-color: var(--color-green-500);
+    }
+
+    &--9 {
+      background-color: var(--color-pink-500);
+    }
+
+    &--10 {
+      background-color: var(--color-pink-600);
+    }
+
+    &--11 {
+      background-color: var(--color-purple-400);
+    }
+
+    &--12 {
+      background-color: var(--color-cyan-400);
+    }
+
+    &--13 {
+      background-color: var(--color-blue-400);
+    }
+
+    &--14 {
+      background-color: var(--color-blue-600);
+    }
+
+    &--15 {
+      background-color: var(--color-purple-600);
+    }
+
+    &--16 {
+      background-color: var(--color-purple-700);
+    }
+
+    &--17 {
+      background-color: var(--color-yellow-700);
+    }
+
+    &--18 {
+      background-color: var(--color-yellow-900);
+    }
+
+    &--selected {
+      &.form-category-color__color {
+        &--1 {
+          background-color: var(--color-gray-50);
+
+          color: var(--color-gray-500);
+        }
+
+        &--2 {
+          background-color: var(--color-gray-100);
+
+          color: var(--color-gray-600);
+        }
+
+        &--3 {
+          background-color: var(--color-yellow-50);
+
+          color: var(--color-yellow-600);
+        }
+
+        &--4 {
+          background-color: var(--color-pink-50);
+
+          color: var(--color-pink-400);
+        }
+
+        &--5 {
+          background-color: var(--color-orange-50);
+
+          color: var(--color-orange-500);
+        }
+
+        &--6 {
+          background-color: var(--color-red-50);
+
+          color: var(--color-red-500);
+        }
+
+        &--7 {
+          background-color: var(--color-green-50);
+
+          color: var(--color-green-600);
+        }
+
+        &--8 {
+          background-color: var(--color-green-100);
+
+          color: var(--color-green-700);
+        }
+
+        &--9 {
+          background-color: var(--color-pink-100);
+
+          color: var(--color-pink-500);
+        }
+
+        &--10 {
+          background-color: var(--color-pink-200);
+
+          color: var(--color-pink-600);
+        }
+
+        &--11 {
+          background-color: var(--color-purple-50);
+
+          color: var(--color-purple-400);
+        }
+
+        &--12 {
+          background-color: var(--color-cyan-100);
+
+          color: var(--color-cyan-600);
+        }
+
+        &--13 {
+          background-color: var(--color-blue-50);
+
+          color: var(--color-blue-500);
+        }
+
+        &--14 {
+          background-color: var(--color-blue-100);
+
+          color: var(--color-blue-600);
+        }
+
+        &--15 {
+          background-color: var(--color-purple-50);
+
+          color: var(--color-purple-600);
+        }
+
+        &--16 {
+          background-color: var(--color-purple-100);
+
+          color: var(--color-purple-800);
+        }
+
+        &--17 {
+          background-color: var(--color-yellow-100);
+
+          color: var(--color-yellow-700);
+        }
+
+        &--18 {
+          background-color: var(--color-yellow-200);
+
+          color: var(--color-yellow-900);
+        }
+
+        & cb-icon-check {
+          display: flex;
+        }
+      }
+    }
+
+    & cb-icon-check {
+      display: none;
+
+      width: 16px;
+      height: 16px;
+    }
+  }
+}

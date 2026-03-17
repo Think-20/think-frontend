@@ -1,0 +1,11 @@
+<img
+    *ngIf="bank; else defaultImage"
+    class="bank-image"
+    [src]="bank.image"
+    [alt]="bank.name"
+    [matTooltip]="bank.name"
+/>
+
+<ng-template #defaultImage>
+    <div class="bank-image"></div>
+</ng-template>

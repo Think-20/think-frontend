@@ -1,0 +1,81 @@
+.back-account-modal {
+  --beautiful-modal-font-size: 16px;
+
+  --beautiful-modal-padding: 16px 24px;
+
+  &__preview {
+    display: grid;
+
+    grid-template-columns: 48px 1fr;
+
+    gap: 0 12px;
+
+    padding: 12px;
+
+    margin-bottom: 25px;
+
+    border-radius: 8px;
+
+    background-color: var(--color-gray-50);
+
+    &__content {
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+      &__bank {
+        color: #1e2939;
+
+        font-size: 15px;
+        font-weight: 400;
+
+        line-height: 1.5;
+      }
+
+      &__data {
+        display: flex;
+
+        flex-wrap: wrap;
+
+        gap: 0 36px;
+
+        &__agency,
+        &__account {
+          color: #99a1af;
+
+          font-size: 12px;
+          font-weight: 400;
+
+          line-height: 1.5;
+
+          text-wrap: nowrap;
+        }
+      }
+    }
+  }
+
+  &__form-group {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px 24px;
+  }
+
+  &__footer {
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: calc(var(--spacing) * 3);
+  }
+
+  @media screen and (max-width: 520px) {
+    &__form-group {
+      grid-template-columns: 1fr;
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { API } from "app/app.api";
 import { AuthService } from "app/login/auth.service";
 import { User } from "app/user/user.model";
@@ -9,10 +9,12 @@ import { User } from "app/user/user.model";
   styleUrls: ["./menu.component.scss"],
 })
 export class MenuComponent implements OnInit {
+  @Output() close = new EventEmitter<void>();
+  
+  opened = false;
+
   api = API;
   user: User = null;
-
-  opened = true;
 
   administradores = false;
   administrativo = false;
@@ -67,7 +69,11 @@ export class MenuComponent implements OnInit {
     return this.hasNoPermission(user, url) || userDepartament !== department;
   }
 
-  toggleMenu() {
-    this.opened = !this.opened;
+  toggle(opened: boolean) {
+    this.opened = opened;
+  }
+
+  closeFn(): void {
+    this.close.emit()
   }
 }

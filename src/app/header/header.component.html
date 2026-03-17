@@ -8,21 +8,38 @@
 
     <div class="header__actions">
         <cb-icon-button
-            size="lg"
+            class="header__actions__toggle"
+            [size]="iconSize"
             [rounded]="true"
-            (click)="toggleMenu()">
+            (click)="toggle()">
             <mat-icon icon>menu</mat-icon>
         </cb-icon-button>
 
         <cb-icon-button
-            size="lg"
+            class="header__actions__menu"
+            [size]="iconSize"
+            [rounded]="true"
+            (click)="openMenu()">
+            <mat-icon icon>menu</mat-icon>
+        </cb-icon-button>
+
+        <cb-icon-button
+            class="header__actions__feed"
+            [size]="iconSize"
+            [rounded]="true"
+            (click)="openFeed()">
+            <mat-icon icon>message</mat-icon>
+        </cb-icon-button>
+
+        <cb-icon-button
+            [size]="iconSize"
             [rounded]="true"
             [routerLink]="['/timecard']">
             <mat-icon icon>query_builder</mat-icon>
         </cb-icon-button>
 
         <cb-icon-button
-            size="lg"
+            [size]="iconSize"
             [rounded]="true" 
             [matMenuTriggerFor]="menuNotifications"
             (menuClosed)="readMessages()">
@@ -36,14 +53,14 @@
         </cb-icon-button>
 
         <cb-icon-button
-            size="lg"
+            [size]="iconSize"
             [rounded]="true"
             [routerLink]="['/employees/profile']">
             <mat-icon icon>account_circle</mat-icon>
         </cb-icon-button>
 
         <cb-icon-button
-            size="lg"
+            [size]="iconSize"
             [rounded]="true"
             [routerLink]="['/login']">
             <mat-icon icon>close</mat-icon>

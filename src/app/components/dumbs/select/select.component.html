@@ -1,0 +1,21 @@
+<select
+  class="select"
+  [class.select--empty]="!value"
+  [class.select--has-error]="hasError"
+  [ngModel]="value"
+  (ngModelChange)="selectValue($event)"
+>
+  <option
+    class="select__placeholder"
+    [ngValue]="null">
+    {{ placeholder }}
+  </option>
+
+  <option
+    class="select__option"
+    *ngFor="let option of options"
+    [ngValue]="option"
+  >
+    {{ option[labelField] }}
+  </option>
+</select>

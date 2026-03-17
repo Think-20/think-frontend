@@ -10,7 +10,7 @@ import { EFinancialStep } from 'app/shared/enums/financial-step.enum';
 export class FinancialComponent {
   @Input() job: Job;
 
-  step = EFinancialStep.home;
+  step = EFinancialStep.revenues;
 
   financialStep = EFinancialStep;
 

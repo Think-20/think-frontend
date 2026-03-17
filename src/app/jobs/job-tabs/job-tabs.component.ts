@@ -11,7 +11,7 @@ import { JobTabStatus } from '../job-tab-status.model';
 @Component({
   selector: 'cb-job-tabs',
   templateUrl: './job-tabs.component.html',
-  styleUrls: ['./job-tabs.component.css']
+  styleUrls: ['./job-tabs.component.scss']
 })
 @Injectable()
 export class JobTabsComponent implements OnInit {

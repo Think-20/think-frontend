@@ -1,5 +1,7 @@
 <ng-container *ngIf="visible$ | async; else masked">
-    {{ value | currency:currencyCode:display:digitsInfo }}
+    <p [title]="value | currency:currencyCode:display:digitsInfo">
+        {{ value | currency:currencyCode:display:digitsInfo }}
+    </p>
 </ng-container>
 
 <ng-template #masked>

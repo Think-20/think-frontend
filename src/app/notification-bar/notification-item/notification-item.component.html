@@ -1,6 +1,6 @@
 <button class="notification-item" (click)="goTo(userNotification?.notification)">
   <div class="notification-item__image"
-    [ngStyle]="{ 'background-image': userNotification?.notification?.notifier?.image }">
+    [ngStyle]="{ 'background-image': getBackgroundUrl(userNotification) }">
   </div>
 
   <div class="notification-item__container">

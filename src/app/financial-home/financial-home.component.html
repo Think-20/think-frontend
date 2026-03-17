@@ -2,9 +2,7 @@
     <h2 class="financial__title">Financeiro</h2>
 
     <div class="financial__cards">
-        <div
-            class="financial__cards__income"
-            (click)="stepChangeFn(financialStep.revenues)">
+        <div class="financial__cards__income" (click)="stepChangeFn(financialStep.revenues)">
             <div class="financial__cards__income__header">
                 <h3 class="financial__cards__income__header__title">
                     Receita
@@ -18,9 +16,10 @@
             </div>
 
             <div class="financial__cards__income__amount">
-                <cb-currency-value [value]="9943.50"></cb-currency-value>
+                <cb-currency-value [value]="9943.50" [digitsInfo]="'1.2'"></cb-currency-value>
 
-                <cb-value-visibility-control class="financial__cards__income__amount__icon"></cb-value-visibility-control>
+                <cb-value-visibility-control
+                    class="financial__cards__income__amount__icon"></cb-value-visibility-control>
             </div>
 
             <button class="financial__cards__income__button">
@@ -28,9 +27,7 @@
             </button>
         </div>
 
-        <div
-            class="financial__cards__expenses"
-            (click)="stepChangeFn(financialStep.expenses)">
+        <div class="financial__cards__expenses" (click)="stepChangeFn(financialStep.expenses)">
             <div class="financial__cards__expenses__header">
                 <h3 class="financial__cards__expenses__header__title">
                     Despesa
@@ -44,9 +41,10 @@
             </div>
 
             <div class="financial__cards__expenses__amount">
-                <cb-currency-value [value]="-125.25"></cb-currency-value>
+                <cb-currency-value [value]="125.25" [digitsInfo]="'1.2'"></cb-currency-value>
 
-                <cb-value-visibility-control class="financial__cards__expenses__amount__icon"></cb-value-visibility-control>
+                <cb-value-visibility-control
+                    class="financial__cards__expenses__amount__icon"></cb-value-visibility-control>
             </div>
 
             <button class="financial__cards__expenses__button">
@@ -76,7 +74,7 @@
                     </p>
 
                     <span class="financial__cards__my-account__body__content__account">
-                        Conta: 478989 - 01
+                        Conta: 478989-01
                     </span>
                 </div>
             </div>

@@ -313,6 +313,18 @@ import { IconMenuComponent } from './components/icons/icon-menu/icon-menu.compon
 import { FinancialSummaryModalComponent } from './financial-summary-modal/financial-summary-modal.component';
 import { IconPositiveGraphComponent } from './components/icons/icon-positive-graph/icon-positive-graph.component';
 import { IconNegativeGraphComponent } from './components/icons/icon-negative-graph/icon-negative-graph.component';
+import { CategoryTagComponent } from './components/category-tag/category-tag.component';
+import { ModalComponent } from './components/modal/modal.component';
+import { CategoryModalComponent } from './components/smart/category-modal/category-modal.component';
+import { FormCategoryColorComponent } from './components/dumbs/form-category-color/form-category-color.component';
+import { IconCheckComponent } from './components/icons/icon-check/icon-check.component';
+import { FormFieldComponent } from './components/dumbs/form-field/form-field.component';
+import { LabelComponent } from './components/dumbs/label/label.component';
+import { InputTextComponent } from './components/dumbs/input-text/input-text.component';
+import { FormComponent } from './components/dumbs/form/form.component';
+import { BankAccountModalComponent } from './components/smart/bank-account-modal/bank-account-modal.component';
+import { BankImageComponent } from './components/dumbs/bank-image/bank-image.component';
+import { SelectComponent } from './components/dumbs/select/select.component';
 
 registerLocaleData(localePt);
 
@@ -523,6 +535,18 @@ registerLocaleData(localePt);
     FinancialSummaryModalComponent,
     IconPositiveGraphComponent,
     IconNegativeGraphComponent,
+    CategoryTagComponent,
+    ModalComponent,
+    CategoryModalComponent,
+    FormCategoryColorComponent,
+    IconCheckComponent,
+    FormFieldComponent,
+    LabelComponent,
+    InputTextComponent,
+    FormComponent,
+    BankAccountModalComponent,
+    BankImageComponent,
+    SelectComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -671,6 +695,8 @@ registerLocaleData(localePt);
     ConfirmDialogComponent,
     OrganizationFormComponent,
     FinancialSummaryModalComponent,
+    CategoryModalComponent,
+    BankAccountModalComponent,
     LimitJobComponent,
     CheckInOtherCnpjsComponent,
     CheckInPeopleComponent,

@@ -1,0 +1,15 @@
+<div #header class="modal__header">
+    <ng-content select="[header]"></ng-content>
+
+    <cb-icon-button *ngIf="showCloseIcon" size="lg" [rounded]="true" (click)="closeFn()">
+        <cb-icon-close></cb-icon-close>
+    </cb-icon-button>
+</div>
+
+<div class="modal__content cb-scroll" [style.maxHeight]="'calc(' + maxHeigth + 'dvh - ' + (headerHeight + footerHeight + 48) + 'px)'">
+    <ng-content></ng-content>
+</div>
+
+<div #footer class="modal__footer">
+    <ng-content select="[footer]"></ng-content>
+</div>

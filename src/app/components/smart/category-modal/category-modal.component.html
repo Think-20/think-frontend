@@ -1,0 +1,34 @@
+<cb-modal class="category-modal" (close)="close()">
+    <h1 header>
+        Criar nova categoria
+    </h1>
+
+    <cb-form [formGroup]="form">
+        <cb-form-field>
+            <cb-label>Nome da categoria</cb-label>
+
+            <cb-input-text
+                input
+                autofocus
+                formControlName="name"
+                placeholder="Escreva o nome da categoria"
+            ></cb-input-text>
+        </cb-form-field>
+
+        <cb-form-field>
+            <cb-label>Escolha uma cor</cb-label>
+
+            <cb-form-category-color input formControlName="color"></cb-form-category-color>
+        </cb-form-field>
+    </cb-form>
+
+    <div footer class="category-modal__footer">
+        <cb-button theme="error" (click)="close()">
+            Cancelar
+        </cb-button>
+
+        <cb-button theme="success" (click)="save()">
+            Salvar
+        </cb-button>
+    </div>
+</cb-modal>

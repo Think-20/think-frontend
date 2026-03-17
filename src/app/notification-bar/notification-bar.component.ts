@@ -1,67 +1,82 @@
-import { Component, OnInit, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
-import { UserNotification } from './user-notification/user-notification.model';
-import { UserNotificationService } from './user-notification/user-notification.service';
+import { Component, OnInit, EventEmitter, Output } from "@angular/core";
+import { UserNotification } from "./user-notification/user-notification.model";
+import { UserNotificationService } from "./user-notification/user-notification.service";
 
-import { Observable } from 'rxjs/Observable'
-import { Subscription } from 'rxjs';
+import { Observable } from "rxjs/Observable";
+import { Subscription } from "rxjs";
 
 @Component({
-  selector: 'cb-notification-bar',
-  templateUrl: './notification-bar.component.html',
-  styleUrls: ['./notification-bar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  selector: "cb-notification-bar",
+  templateUrl: "./notification-bar.component.html",
+  styleUrls: ["./notification-bar.component.scss"],
 })
 export class NotificationBarComponent implements OnInit {
+  @Output() close = new EventEmitter<void>();
 
-  userNotifications: UserNotification[] = []
-  timerSubscription: Subscription
-  @Output() notificationLoadEmitter: EventEmitter<UserNotification[]> = new EventEmitter()
+  opened = false;
 
-  constructor(
-    private userNotificationService: UserNotificationService
-  ) { }
+  userNotifications: UserNotification[] = [];
+  timerSubscription: Subscription;
+
+  @Output() notificationLoadEmitter: EventEmitter<UserNotification[]> =
+    new EventEmitter();
+
+  constructor(private userNotificationService: UserNotificationService) {}
 
   ngOnInit() {
-    this.loadRecents()
-    this.listenInit()
+    this.loadRecents();
+    this.listenInit();
   }
 
   now() {
-    this.timerSubscription.unsubscribe()
-    this.listenInit()
+    this.timerSubscription.unsubscribe();
+    this.listenInit();
   }
 
   ngOnDestroy() {
-    this.timerSubscription.unsubscribe()
+    this.timerSubscription.unsubscribe();
   }
 
   loadRecents() {
-    this.userNotificationService.recents().subscribe(dataInfo => {
-      let userNotifications = <UserNotification[]> dataInfo.pagination.data
-      this.appendNotifications(userNotifications)
-    })
+    this.userNotificationService.recents().subscribe((dataInfo) => {
+      let userNotifications = <UserNotification[]>dataInfo.pagination.data;
+      this.appendNotifications(userNotifications);
+    });
   }
 
   appendNotifications(userNotifications: UserNotification[]) {
-    this.notificationLoadEmitter.emit(userNotifications)
+    this.notificationLoadEmitter.emit(userNotifications);
 
-    let filteredUserNotifications = userNotifications.filter(userNotification => { return userNotification.special == 0})
-    if(filteredUserNotifications.length == 0) return;
+    let filteredUserNotifications = userNotifications.filter(
+      (userNotification) => {
+        return userNotification.special == 0;
+      },
+    );
+    if (filteredUserNotifications.length == 0) return;
 
-    this.userNotifications = filteredUserNotifications.concat(this.userNotifications)
+    this.userNotifications = filteredUserNotifications.concat(
+      this.userNotifications,
+    );
   }
 
   listenInit() {
-    let interval = 60 * 1000
+    let interval = 60 * 1000;
     this.timerSubscription = Observable.timer(5000, interval).subscribe(() => {
-      this.listenNotifications()
-    })
+      this.listenNotifications();
+    });
   }
 
   listenNotifications() {
     this.userNotificationService.listen().subscribe((userNotifications) => {
-      this.appendNotifications(userNotifications)
-    })
+      this.appendNotifications(userNotifications);
+    });
   }
 
+  toggle(opened: boolean): void {
+    this.opened = opened;
+  }
+
+  closeFn(): void {
+    this.close.emit();
+  }
 }

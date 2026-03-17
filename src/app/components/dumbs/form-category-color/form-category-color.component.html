@@ -1,0 +1,10 @@
+<div class="form-category-color">
+    <button 
+        *ngFor="let color of colors"
+        type="button"
+        class="form-category-color__color form-category-color__color--{{color}}"
+        [class.form-category-color__color--selected]="value === color"
+        (click)="change(color)">
+        <cb-icon-check></cb-icon-check>
+    </button>
+</div>

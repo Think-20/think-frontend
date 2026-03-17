@@ -29,6 +29,20 @@
 
     gap: 12px;
 
+    margin-left: auto;
+
+    &__toggle {
+      display: flex;
+    }
+
+    &__menu {
+      display: none;
+    }
+
+    &__feed {
+      display: none;
+    }
+
     &::ng-deep .mat-icon {
       display: flex;
 
@@ -39,6 +53,49 @@
       height: 20px;
 
       color: #99a1af;
+    }
+  }
+
+  @media screen and (max-width: 1200px) {
+    &__actions {
+      &__toggle {
+        display: none;
+      }
+
+      &__menu {
+        display: flex;
+      }
+
+      &__feed {
+        display: flex;
+      }
+    }
+  }
+
+  @media screen and (max-width: 535px) {
+    &__image {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 430px) {
+    &__actions {
+      --button-icon-md-padding: 6px;
+
+      gap: 8px;
+
+      &::ng-deep .mat-icon {
+        width: 20px;
+        height: 20px;
+
+        font-size: 20px;
+      }
+    }
+  }
+
+  @media print {
+    &__actions {
+      display: none;
     }
   }
 }

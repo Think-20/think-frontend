@@ -269,7 +269,7 @@
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }"
                   class="mat-cell mat-column-budgeted">
                   <span *ngIf="job.specialFinalValue">{{ job.specialFinalValue | number: '1.2' }}</span>
-                  <span *ngIf="!job.specialFinalValue">{{ job.lastValue ? (job.lastValue | number: '1.2') : '-'
+                  <span *ngIf="!job.specialFinalValue">{{ job.final_value ? (job.final_value | number: '1.2') : '-'
                     }}<br /></span>
                   {{ '-' }}
                 </div>

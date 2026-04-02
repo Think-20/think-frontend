@@ -163,7 +163,7 @@ export class ClientFormComponent implements OnInit, OnDestroy {
         Validators.minLength(3),
         Validators.maxLength(50),
       ]),
-      site: this.formBuilder.control("", [Validators.minLength(7)]),
+      site: this.formBuilder.control("", [Validators.required, Validators.minLength(7)]),
       client_type: clientTypeControl,
       comission: comissionControl,
       client_status: clientStatusControl,

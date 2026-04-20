@@ -1,21 +1,44 @@
-<select
+<div
   class="select"
-  [class.select--empty]="!value"
+  [class.select--empty]="isEmpty"
   [class.select--has-error]="hasError"
-  [ngModel]="value"
-  (ngModelChange)="selectValue($event)"
+  [class.select--open]="isOpen"
+  [class.select--disabled]="isDisabled"
+  [class.select--open-upwards]="openUpwards"
 >
-  <option
-    class="select__placeholder"
-    [ngValue]="null">
-    {{ placeholder }}
-  </option>
+  <button
+    #trigger
+    type="button"
+    class="select__trigger"
+    [disabled]="isDisabled"
+    (keydown)="handleTriggerKeydown($event)"
+    (click)="toggleOpen()">
+    <span class="select__value">{{ selectedLabel }}</span>
+    <span class="select__arrow">▾</span>
+  </button>
 
-  <option
-    class="select__option"
-    *ngFor="let option of options"
-    [ngValue]="option"
-  >
-    {{ option[labelField] }}
-  </option>
-</select>
+  <div class="select__dropdown" [ngStyle]="dropdownStyles" *ngIf="isOpen">
+    <input
+      #searchInput
+      type="text"
+      class="select__search"
+      [placeholder]="'Filtrar ' + placeholder.toLowerCase()"
+      (keydown)="handleSearchKeydown($event)"
+      (ngModelChange)="onSearchTermChange()"
+      [(ngModel)]="searchTerm" />
+
+    <button
+      type="button"
+      class="select__option"
+      *ngFor="let option of filteredOptions; let i = index"
+      [class.select__option--selected]="isSelected(option)"
+      [class.select__option--highlighted]="isHighlighted(i)"
+      (click)="selectValue(option)">
+      {{ getOptionLabel(option) }}
+    </button>
+
+    <p class="select__empty-state" *ngIf="filteredOptions.length === 0">
+      Nenhuma opção encontrada
+    </p>
+  </div>
+</div>

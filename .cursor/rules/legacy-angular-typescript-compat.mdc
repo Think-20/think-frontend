@@ -1,0 +1,30 @@
+---
+description: Compatibilidade com Angular 8 e TypeScript 3.5
+alwaysApply: true
+---
+
+# Angular/TypeScript Legado
+
+Este projeto usa `@angular/core@8.2.14` e `typescript@3.5.3`.
+Toda implementação deve respeitar recursos disponíveis nessas versões.
+
+- Evite sintaxe moderna não suportada no TS 3.5, como:
+  - optional chaining (`obj?.prop`, `obj?.[key]`)
+  - nullish coalescing (`valor ?? fallback`)
+- Prefira alternativas compatíveis:
+  - `obj && obj.prop`
+  - `valor !== null && valor !== undefined ? valor : fallback`
+- Ao usar decorators e APIs Angular, mantenha padrões compatíveis com Angular 8.
+- Não introduza dependências, APIs ou padrões que exijam upgrade de Angular/TypeScript.
+- Antes de finalizar mudanças, valide se compila sem erros de sintaxe de versão.
+
+## Exemplo rápido
+
+```ts
+// ❌ Evitar
+const name = user?.profile?.name ?? "Sem nome";
+
+// ✅ Compatível com TS 3.5
+const hasProfile = user && user.profile;
+const name = hasProfile && user.profile.name ? user.profile.name : "Sem nome";
+```

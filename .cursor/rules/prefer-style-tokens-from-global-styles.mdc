@@ -1,0 +1,32 @@
+---
+description: Priorizar tokens globais de src/styles.scss
+alwaysApply: true
+---
+
+# Preferencia por Design Tokens Globais
+
+Use preferencialmente os tokens CSS definidos em `src/styles.scss` ao criar ou alterar estilos.
+
+- Evite cores hardcoded em hexadecimal (`#...`) quando existir token equivalente.
+- Prefira `var(--color-...)` para cores de texto, fundo, borda e estados.
+- Prefira `var(--spacing)` para espaçamentos e seus múltiplos (`calc(var(--spacing) * n)`).
+- Prefira tokens de tipografia (`--text-*`) e cores neutras (`--color-gray-*`) antes de criar valores novos.
+- Só use valor literal quando não houver token adequado; nesse caso, comente no SCSS o motivo.
+
+## Exemplo rapido
+
+```scss
+/* ❌ Evitar */
+.card {
+  color: #1e2939;
+  background: #f9fafb;
+  padding: 12px 16px;
+}
+
+/* ✅ Preferir */
+.card {
+  color: var(--color-gray-800);
+  background: var(--color-gray-50);
+  padding: calc(var(--spacing) * 3) calc(var(--spacing) * 4);
+}
+```

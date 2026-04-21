@@ -1,0 +1,31 @@
+---
+description: Padronizar BEM e migrar CSS para SCSS
+alwaysApply: true
+---
+
+# Convenções de Estilo (BEM + SCSS)
+
+Sempre que criar ou alterar estilos neste projeto:
+
+- Use nomenclatura **BEM** para classes CSS:
+  - Bloco: `.card`
+  - Elemento: `.card__header`
+  - Modificador: `.card--active` e `.card__header--small`
+- Evite nomes genéricos (`.box`, `.item`, `.left`) quando não representam um bloco BEM claro.
+- Ao tocar em arquivos `.css`, prefira migrar para `.scss` no mesmo componente/contexto.
+- Para novas implementações, crie diretamente em `.scss` (não criar novos `.css`).
+- Preserve compatibilidade visual: após migração, mantenha comportamento e classes do HTML coerentes.
+
+## Exemplo rápido
+
+```scss
+/* ❌ Evitar */
+.header {}
+.title {}
+
+/* ✅ Preferir */
+.bank-modal {}
+.bank-modal__header {}
+.bank-modal__title {}
+.bank-modal--loading {}
+```

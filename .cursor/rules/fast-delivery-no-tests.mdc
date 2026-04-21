@@ -1,0 +1,27 @@
+---
+description: Ignorar arquivos de teste e focar em entrega rápida
+alwaysApply: true
+---
+
+# Entrega Rápida Sem Testes
+
+Neste projeto, não criamos nem mantemos testes automatizados.
+Ao executar tarefas, priorize velocidade, qualidade prática e resultado funcional.
+
+- Ignore arquivos e pastas de teste ao explorar ou editar código:
+  - `**/*.spec.ts`
+  - `**/*.test.ts`
+  - `**/__tests__/**`
+- Não propor criação de testes unitários/integrados/e2e como parte padrão das entregas.
+- Não bloquear implementação por ausência de testes.
+- Foque em:
+  - código limpo e legível
+  - comportamento funcional correto
+  - validação prática (build, lint, execução local quando aplicável)
+
+## Exemplo de postura esperada
+
+```text
+✅ Fazer: implementar funcionalidade, validar compilação e corrigir erros de execução.
+❌ Evitar: abrir tarefas de criação de testes automatizados para cada mudança.
+```

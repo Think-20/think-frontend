@@ -6,6 +6,7 @@ import {
 import { MatDialog } from "@angular/material";
 import { BankAccountModalComponent } from "app/components/smart/bank-account-modal/bank-account-modal.component";
 import { CategoryModalComponent } from "app/components/smart/category-modal/category-modal.component";
+import { FinancialRevenuesModalComponent } from "app/components/smart/financial-revenues-modal/financial-revenues-modal.component";
 import { FinancialSummaryModalComponent } from "app/financial-summary-modal/financial-summary-modal.component";
 import { EFinancialStep } from "app/shared/enums/financial-step.enum";
 
@@ -225,6 +226,13 @@ export class FinancialRevenuesComponent {
   openSummaryModal(): void {
     this.dialog.open(FinancialSummaryModalComponent, {
       width: "1024px",
+      panelClass: "beautiful-modal",
+    });
+  }
+
+  openRevenueModal(revenue: any): void {
+    this.dialog.open(FinancialRevenuesModalComponent, {
+      width: "768px",
       panelClass: "beautiful-modal",
     });
   }

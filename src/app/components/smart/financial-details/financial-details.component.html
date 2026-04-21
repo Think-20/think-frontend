@@ -1,0 +1,124 @@
+<div class="financial-details" *ngIf="transaction as t">
+    <div class="financial-details__grid">
+        <div class="financial-details__field financial-details__field--description">
+            <p class="financial-details__label">
+                <cb-icon-file class="financial-details__icon"></cb-icon-file>
+
+                DESCRIÇÃO
+            </p>
+
+            <p class="financial-details__text">{{ t.descricao }}</p>
+        </div>
+
+        <div class="financial-details__field">
+            <p class="financial-details__label">
+                <cb-icon-calendar class="financial-details__icon"></cb-icon-calendar>
+
+                DATA DE RECEBIMENTO
+            </p>
+
+            <p class="financial-details__text">{{ t.datarecebimento | date: "dd/MM/yyyy" }}</p>
+        </div>
+
+        <div class="financial-details__field">
+            <p class="financial-details__label">
+                <cb-icon-calendar class="financial-details__icon"></cb-icon-calendar>
+                DATA DA COBRANÇA
+            </p>
+
+            <p class="financial-details__text">{{ t.datacobranca | date: "dd/MM/yyyy" }}</p>
+        </div>
+
+        <div class="financial-details__field">
+            <p class="financial-details__label">
+                <cb-icon-tag class="financial-details__icon"></cb-icon-tag>
+
+                CATEGORIA
+            </p>
+
+            <cb-category-tag [category]="t.categoria"></cb-category-tag>
+        </div>
+
+        <div class="financial-details__field">
+            <p class="financial-details__label">
+                <cb-icon-lucide-building class="financial-details__icon"></cb-icon-lucide-building>
+
+                CONTA
+            </p>
+
+            <p class="financial-details__text">{{ t.contabancaria && t.contabancaria.nome }}</p>
+        </div>
+
+        <div class="financial-details__field">
+            <p class="financial-details__label">
+                <cb-icon-credit-card class="financial-details__icon"></cb-icon-credit-card>
+
+                FORMA DE PAGAMENTO
+            </p>
+
+            <p class="financial-details__text">{{ getFormaPagamentoNome(t.formapagamento) }}</p>
+        </div>
+
+        <div class="financial-details__field">
+            <p class="financial-details__label">
+                <cb-icon-lucide-repeat class="financial-details__icon"></cb-icon-lucide-repeat>
+
+                TIPO DE LANÇAMENTO
+            </p>
+
+            <p class="financial-details__text">{{ getPeriodoNome(t.periodo) }}</p>
+        </div>
+    </div>
+
+    <div class="financial-details__bank-data">
+        <h2 class="financial-details__section-title">Dados Bancários</h2>
+
+        <div class="financial-details__bank-data-grid">
+            <div class="financial-details__field">
+                <p class="financial-details__label">BANCO</p>
+                <p class="financial-details__text">{{ bancoExibicao(t) }}</p>
+            </div>
+
+            <div class="financial-details__field">
+                <p class="financial-details__label">AGÊNCIA</p>
+                <p class="financial-details__text">{{ agenciaExibicao(t) }}</p>
+            </div>
+
+            <div class="financial-details__field">
+                <p class="financial-details__label">CONTA CORRENTE</p>
+                <p class="financial-details__text">{{ contaExibicao(t) }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="financial-details__field">
+        <p class="financial-details__label">
+            <cb-icon-tag class="financial-details__icon"></cb-icon-tag>
+
+            TAGS
+        </p>
+
+        <div class="financial-details__tags">
+            <span class="financial-details__tag" *ngFor="let tag of t.tags">
+                {{ tag.descricao }}
+            </span>
+        </div>
+    </div>
+
+    <div class="financial-details__obs">
+        <p class="financial-details__label">OBSERVAÇÕES</p>
+        <p class="financial-details__obs-text">{{ t.observacao }}</p>
+    </div>
+
+    <div class="financial-details__field" *ngIf="t.diretorioarquivoboleto">
+        <p class="financial-details__label">
+            <cb-icon-paperclip class="financial-details__icon"></cb-icon-paperclip>
+
+            BOLETO / ARQUIVO
+        </p>
+
+        <div class="financial-details__attachments">
+            <span class="financial-details__attachment">{{ t.diretorioarquivoboleto }}</span>
+        </div>
+    </div>
+</div>

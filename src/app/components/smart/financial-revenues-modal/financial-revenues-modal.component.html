@@ -1,0 +1,54 @@
+<cb-modal class="financial-revenues-modal" (close)="close()">
+    <h1 header>
+        Detalhes da Receita #{{ transaction.idtransacao }}
+    </h1>
+
+    <div class="financial-revenues-modal__header">
+        <cb-financial-status [(ngModel)]="transaction.status" name="transactionStatus"></cb-financial-status>
+
+        <p class="financial-revenues-modal__value">
+            <cb-currency-value [value]="transaction.valortotal" [digitsInfo]="'1.2'"></cb-currency-value>
+        </p>
+    </div>
+
+    <cb-financial-details
+        *ngIf="!isEditing"
+        [transaction]="transaction"
+        [formasPagamento]="formasPagamento"
+        [periodos]="periodos"
+    ></cb-financial-details>
+
+    <cb-financial-form
+        *ngIf="isEditing"
+        [transaction]="transaction"
+        [categories]="categories"
+        [accounts]="accounts"
+        [formasPagamento]="formasPagamento"
+        [periodos]="periodos"
+        (saved)="onTransactionSaved($event)"
+    ></cb-financial-form>
+
+    <div footer class="financial-revenues-modal__footer" *ngIf="!isEditing">
+        <cb-button (click)="close()">
+            Fechar
+        </cb-button>
+
+        <cb-button theme="info" (click)="edit()">
+            Editar Receita
+        </cb-button>
+    </div>
+
+    <div footer class="financial-revenues-modal__footer" *ngIf="isEditing">
+        <cb-button (click)="close()">
+            Fechar
+        </cb-button>
+
+        <cb-button theme="success" (click)="save()">
+            Salvar
+        </cb-button>
+
+        <cb-button theme="error" (click)="cancelEdit()">
+            Cancelar
+        </cb-button>
+    </div>
+</cb-modal>

@@ -1,9 +1,11 @@
 .label {
-  display: block;
+  display: flex;
 
-  margin-bottom: 0  ;
+  align-items: center;
 
-  color: var(--color-gray-800);
+  margin-bottom: 0;
 
-  font-size: 14px;
+  color: var(--color-gray-500);
+
+  font-size: 12px;
 }

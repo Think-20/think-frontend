@@ -325,6 +325,17 @@ import { FormComponent } from './components/dumbs/form/form.component';
 import { BankAccountModalComponent } from './components/smart/bank-account-modal/bank-account-modal.component';
 import { BankImageComponent } from './components/dumbs/bank-image/bank-image.component';
 import { SelectComponent } from './components/dumbs/select/select.component';
+import { FinancialRevenuesModalComponent } from './components/smart/financial-revenues-modal/financial-revenues-modal.component';
+import { FinancialStatusComponent } from './components/dumbs/financial-status/financial-status.component';
+import { IconCheckedCircleComponent } from './components/icons/icon-checked-circle/icon-checked-circle.component';
+import { IconFileComponent } from './components/icons/icon-file/icon-file.component';
+import { IconTagComponent } from './components/icons/icon-tag/icon-tag.component';
+import { IconCreditCardComponent } from './components/icons/icon-credit-card/icon-credit-card.component';
+import { IconLucideBuildingComponent } from './components/icons/icon-lucide-building/icon-lucide-building.component';
+import { IconLucideRepeatComponent } from './components/icons/icon-lucide-repeat/icon-lucide-repeat.component';
+import { IconPaperclipComponent } from './components/icons/icon-paperclip/icon-paperclip.component';
+import { FinancialDetailsComponent } from './components/smart/financial-details/financial-details.component';
+import { FinancialFormComponent } from './components/smart/financial-form/financial-form.component';
 
 registerLocaleData(localePt);
 
@@ -547,6 +558,17 @@ registerLocaleData(localePt);
     BankAccountModalComponent,
     BankImageComponent,
     SelectComponent,
+    FinancialRevenuesModalComponent,
+    FinancialStatusComponent,
+    IconCheckedCircleComponent,
+    IconFileComponent,
+    IconTagComponent,
+    IconCreditCardComponent,
+    IconLucideBuildingComponent,
+    IconLucideRepeatComponent,
+    IconPaperclipComponent,
+    FinancialDetailsComponent,
+    FinancialFormComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -695,6 +717,7 @@ registerLocaleData(localePt);
     ConfirmDialogComponent,
     OrganizationFormComponent,
     FinancialSummaryModalComponent,
+    FinancialRevenuesModalComponent,
     CategoryModalComponent,
     BankAccountModalComponent,
     LimitJobComponent,

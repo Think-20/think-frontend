@@ -1,0 +1,33 @@
+<div class="financial-status">
+  <button
+    type="button"
+    class="financial-status__trigger financial-status__trigger--{{ value }}"
+    [disabled]="isDisabled"
+    (click)="toggle($event)"
+    [attr.aria-expanded]="isOpen"
+    aria-haspopup="listbox"
+  >
+    <cb-icon-checked-circle
+      *ngIf="value === transactionStatuses.reconciled"
+      class="financial-status__trigger-icon"
+    ></cb-icon-checked-circle>
+
+    <span class="financial-status__trigger-label">{{ triggerLabel }}</span>
+    
+    <cb-icon-arrow-down class="financial-status__trigger-chevron"></cb-icon-arrow-down>
+  </button>
+
+  <div class="financial-status__dropdown" *ngIf="isOpen" role="listbox">
+    <button
+      type="button"
+      class="financial-status__option"
+      *ngFor="let opt of statusOptions"
+      [class.financial-status__option--selected]="opt.id === value"
+      role="option"
+      [attr.aria-selected]="opt.id === value"
+      (click)="selectStatus(opt.id, $event)"
+    >
+      {{ opt.label }}
+    </button>
+  </div>
+</div>

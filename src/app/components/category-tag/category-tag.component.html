@@ -1,7 +1,7 @@
 <div class="category-tag">
-    <div class="category-tag__element category-tag__element--{{category.theme}}">
+    <div class="category-tag__element category-tag__element--{{ category.theme || category.tema }}">
         <span class="category-tag__element__dot"></span>
-        
-        {{ category.name }}
+
+        {{ category.name || category.nome }}
     </div>
 </div>

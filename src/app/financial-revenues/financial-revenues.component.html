@@ -102,7 +102,11 @@
             </thead>
 
             <tbody>
-                <tr tabindex="0" *ngFor="let revenue of revenues">
+                <tr
+                    tabindex="0"
+                    *ngFor="let revenue of revenues"
+                    (click)="openRevenueModal(revenue)"
+                    (keyup.enter)="openRevenueModal(revenue)">
                     <td>
                         {{ revenue.date | date: 'dd/MM/yyyy' }}
                     </td>

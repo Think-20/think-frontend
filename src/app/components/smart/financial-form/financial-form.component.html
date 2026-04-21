@@ -1,0 +1,111 @@
+<cb-form [formGroup]="form" class="financial-form">
+    <div class="financial-form__grid">
+        <cb-form-field class="financial-form__field--description">
+            <cb-label>
+                <cb-icon-file class="financial-form__icon"></cb-icon-file>
+                DESCRIÇÃO
+            </cb-label>
+            <cb-input-text input formControlName="descricao"></cb-input-text>
+        </cb-form-field>
+
+        <cb-form-field>
+            <cb-label>
+                <cb-icon-calendar class="financial-form__icon"></cb-icon-calendar>
+                DATA DE RECEBIMENTO
+            </cb-label>
+            <cb-input-text input formControlName="datarecebimento" placeholder="AAAA-MM-DD"></cb-input-text>
+        </cb-form-field>
+
+        <cb-form-field>
+            <cb-label>
+                <cb-icon-calendar class="financial-form__icon"></cb-icon-calendar>
+                DATA DA COBRANÇA
+            </cb-label>
+            <cb-input-text input formControlName="datacobranca" placeholder="AAAA-MM-DD"></cb-input-text>
+        </cb-form-field>
+
+        <cb-form-field>
+            <cb-label>
+                <cb-icon-tag class="financial-form__icon"></cb-icon-tag>
+                CATEGORIA
+            </cb-label>
+            <cb-select input formControlName="categoria" [options]="categories" labelField="nome"></cb-select>
+        </cb-form-field>
+
+        <cb-form-field>
+            <cb-label>
+                <cb-icon-lucide-building class="financial-form__icon"></cb-icon-lucide-building>
+                CONTA
+            </cb-label>
+            <cb-select input formControlName="contabancaria" [options]="accounts" labelField="nome"></cb-select>
+        </cb-form-field>
+
+        <cb-form-field>
+            <cb-label>
+                <cb-icon-credit-card class="financial-form__icon"></cb-icon-credit-card>
+                FORMA DE PAGAMENTO
+            </cb-label>
+            <cb-select input formControlName="formapagamento" [options]="formasPagamento" labelField="nome"></cb-select>
+        </cb-form-field>
+
+        <cb-form-field>
+            <cb-label>
+                <cb-icon-lucide-repeat class="financial-form__icon"></cb-icon-lucide-repeat>
+                TIPO DE LANÇAMENTO
+            </cb-label>
+            <cb-select input formControlName="periodo" [options]="periodos" labelField="nome"></cb-select>
+        </cb-form-field>
+    </div>
+
+    <div class="financial-form__bank-data">
+        <h2 class="financial-form__section-title">Dados Bancários</h2>
+
+        <div class="financial-form__bank-data-grid">
+            <cb-form-field>
+                <cb-label>BANCO</cb-label>
+                <cb-input-text input formControlName="banco"></cb-input-text>
+            </cb-form-field>
+
+            <cb-form-field>
+                <cb-label>AGÊNCIA</cb-label>
+                <cb-input-text input formControlName="agencia"></cb-input-text>
+            </cb-form-field>
+
+            <cb-form-field>
+                <cb-label>CONTA CORRENTE</cb-label>
+                <cb-input-text input formControlName="contacorrente"></cb-input-text>
+            </cb-form-field>
+        </div>
+    </div>
+
+    <div class="financial-form__field" *ngIf="transaction && transaction.tags && transaction.tags.length">
+        <p class="financial-form__label">
+            <cb-icon-tag class="financial-form__icon"></cb-icon-tag>
+            TAGS
+        </p>
+
+        <div class="financial-form__tags">
+            <span class="financial-form__tag" *ngFor="let tag of transaction.tags">
+                {{ tag.descricao }}
+            </span>
+        </div>
+    </div>
+
+    <div class="financial-form__obs-field">
+        <cb-form-field>
+            <cb-label>OBSERVAÇÕES</cb-label>
+            <textarea input class="financial-form__textarea" formControlName="observacao"></textarea>
+        </cb-form-field>
+    </div>
+
+    <div class="financial-form__field" *ngIf="transaction && transaction.diretorioarquivoboleto">
+        <p class="financial-form__label">
+            <cb-icon-paperclip class="financial-form__icon"></cb-icon-paperclip>
+            BOLETO / ARQUIVO
+        </p>
+
+        <div class="financial-form__attachments">
+            <span class="financial-form__attachment">{{ transaction.diretorioarquivoboleto }}</span>
+        </div>
+    </div>
+</cb-form>

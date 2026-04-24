@@ -78,12 +78,12 @@ import { ExternalFeedbackComponent } from "./external/external-feedback/external
 import { JobsKanbanComponent } from "./jobs/jobs-kanban/jobs-kanban.component";
 import { JobListComponent } from "./job-list/job-list.component";
 import { FinancialHomeComponent } from "./financial-home/financial-home.component";
-import { FinancialRevenuesComponent } from "./financial-revenues/financial-revenues.component";
+import { FinancialTransactionComponent } from "./financial-transaction/financial-transaction.component";
 
 export const ROUTES: Routes = [
   {
     path: "login",
-    component: LoginComponent,
+    component: LoginComponent
   },
   {
     path: "external",
@@ -91,21 +91,21 @@ export const ROUTES: Routes = [
     children: [
       {
         path: "extras/:id/:hash",
-        component: ExternalExtrasComponent,
+        component: ExternalExtrasComponent
       },
       {
         path: "extras/refuse/:id/:hash",
-        component: ExternalExtrasRefuseComponent,
+        component: ExternalExtrasRefuseComponent
       },
       {
         path: "check-in/:id/:hash/:status",
-        component: ExternalCheckInComponent,
+        component: ExternalCheckInComponent
       },
       {
         path: "feedback/:id/:hash",
-        component: ExternalFeedbackComponent,
-      },
-    ],
+        component: ExternalFeedbackComponent
+      }
+    ]
   },
   {
     path: "",
@@ -114,27 +114,27 @@ export const ROUTES: Routes = [
       {
         path: "",
         redirectTo: "home",
-        pathMatch: "full",
+        pathMatch: "full"
       },
       {
         path: "dashboard",
         component: HomeComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard]
       },
       {
         path: "home",
         component: HomeEmptyComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard]
       },
       {
         path: "performance-lite",
         component: PerformanceReportLiteComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard]
       },
       {
         path: "service-report",
         component: ServiceReportComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard]
       },
       {
         path: "cost-categories",
@@ -144,29 +144,29 @@ export const ROUTES: Routes = [
             path: "",
             redirectTo: "list",
             pathMatch: "full",
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "new",
             component: CostCategoryFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "edit/:id",
             component: CostCategoryFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "show/:id",
             component: CostCategoryShowComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "list",
             component: CostCategoryListComponent,
-            canActivate: [AuthGuard],
-          },
-        ],
+            canActivate: [AuthGuard]
+          }
+        ]
       },
       {
         path: "item-categories",
@@ -175,29 +175,29 @@ export const ROUTES: Routes = [
           {
             path: "",
             redirectTo: "list",
-            pathMatch: "full",
+            pathMatch: "full"
           },
           {
             path: "new",
             component: ItemCategoryFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "edit/:id",
             component: ItemCategoryFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "show/:id",
             component: ItemCategoryShowComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "list",
             component: ItemCategoryListComponent,
-            canActivate: [AuthGuard],
-          },
-        ],
+            canActivate: [AuthGuard]
+          }
+        ]
       },
       {
         path: "items",
@@ -206,29 +206,29 @@ export const ROUTES: Routes = [
           {
             path: "",
             redirectTo: "list",
-            pathMatch: "full",
+            pathMatch: "full"
           },
           {
             path: "new",
             component: ItemFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "edit/:id",
             component: ItemFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "show/:id",
             component: ItemShowComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "list",
             component: ItemListComponent,
-            canActivate: [AuthGuard],
-          },
-        ],
+            canActivate: [AuthGuard]
+          }
+        ]
       },
       {
         path: "clients",
@@ -237,34 +237,34 @@ export const ROUTES: Routes = [
           {
             path: "",
             redirectTo: "list",
-            pathMatch: "full",
+            pathMatch: "full"
           },
           {
             path: "new",
             component: ClientFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "edit/:id",
             component: ClientFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "show/:id",
             component: ClientShowComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "list",
             component: ClientListComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "import",
             component: ClientImportComponent,
-            canActivate: [AuthGuard],
-          },
-        ],
+            canActivate: [AuthGuard]
+          }
+        ]
       },
       {
         path: "employees",
@@ -273,34 +273,34 @@ export const ROUTES: Routes = [
           {
             path: "",
             redirectTo: "list",
-            pathMatch: "full",
+            pathMatch: "full"
           },
           {
             path: "new",
             component: EmployeeTabsComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "profile",
             component: EmployeeTabsComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "edit/:id",
             component: EmployeeTabsComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "show/:id",
             component: EmployeeShowComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "list",
             component: EmployeeListComponent,
-            canActivate: [AuthGuard],
-          },
-        ],
+            canActivate: [AuthGuard]
+          }
+        ]
       },
       {
         path: "providers",
@@ -309,29 +309,29 @@ export const ROUTES: Routes = [
           {
             path: "",
             redirectTo: "list",
-            pathMatch: "full",
+            pathMatch: "full"
           },
           {
             path: "new",
             component: ProviderFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "edit/:id",
             component: ProviderFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "show/:id",
             component: ProviderShowComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "list",
             component: ProviderListComponent,
-            canActivate: [AuthGuard],
-          },
-        ],
+            canActivate: [AuthGuard]
+          }
+        ]
       },
       {
         path: "displays",
@@ -340,29 +340,29 @@ export const ROUTES: Routes = [
           {
             path: "",
             redirectTo: "list",
-            pathMatch: "full",
+            pathMatch: "full"
           },
           {
             path: "new",
             component: DisplayFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "edit/:id",
             component: DisplayFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "show/:id",
             component: DisplayShowComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "list",
             component: DisplayListComponent,
-            canActivate: [AuthGuard],
-          },
-        ],
+            canActivate: [AuthGuard]
+          }
+        ]
       },
       {
         path: "functionalities",
@@ -371,29 +371,29 @@ export const ROUTES: Routes = [
           {
             path: "",
             redirectTo: "list",
-            pathMatch: "full",
+            pathMatch: "full"
           },
           {
             path: "new",
             component: FunctionalityFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "edit/:id",
             component: FunctionalityFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "show/:id",
             component: FunctionalityShowComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "list",
             component: FunctionalityListComponent,
-            canActivate: [AuthGuard],
-          },
-        ],
+            canActivate: [AuthGuard]
+          }
+        ]
       },
       {
         path: "jobs",
@@ -402,44 +402,44 @@ export const ROUTES: Routes = [
           {
             path: "",
             redirectTo: "list",
-            pathMatch: "full",
+            pathMatch: "full"
           },
           {
             path: "new",
             component: JobTabsComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "new/:available_date",
             component: JobTabsComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "edit/:id",
             component: JobTabsComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "show/:id",
             component: JobTabsComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "list-old",
             component: JobListOldComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "list",
             component: JobListComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "kanban",
             component: JobsKanbanComponent,
-            canActivate: [AuthGuard],
-          },
-        ],
+            canActivate: [AuthGuard]
+          }
+        ]
       },
       {
         path: "financial",
@@ -448,41 +448,41 @@ export const ROUTES: Routes = [
           {
             path: "",
             redirectTo: "list",
-            pathMatch: "full",
+            pathMatch: "full"
           },
           {
             path: "new",
             component: JobTabsComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "new/:available_date",
             component: JobTabsComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "edit/:id",
             component: JobTabsComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "show/:id",
             component: JobTabsComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "list",
             component: JobListComponent,
             canActivate: [AuthGuard],
             data: {
-              path: "financial",
-            },
-          },
-        ],
+              path: "financial"
+            }
+          }
+        ]
       },
       {
         path: "organizations",
-        component: OrganizationComponent,
+        component: OrganizationComponent
       },
       {
         path: "places",
@@ -491,29 +491,29 @@ export const ROUTES: Routes = [
           {
             path: "",
             redirectTo: "list",
-            pathMatch: "full",
+            pathMatch: "full"
           },
           {
             path: "new",
             component: PlaceFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "edit/:id",
             component: PlaceFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "show/:id",
             component: PlaceFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "list",
             component: PlaceListComponent,
-            canActivate: [AuthGuard],
-          },
-        ],
+            canActivate: [AuthGuard]
+          }
+        ]
       },
       {
         path: "events",
@@ -522,29 +522,29 @@ export const ROUTES: Routes = [
           {
             path: "",
             redirectTo: "list",
-            pathMatch: "full",
+            pathMatch: "full"
           },
           {
             path: "new",
             component: EventFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "edit/:id",
             component: EventFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "show/:id",
             component: EventFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "list",
             component: EventListComponent,
-            canActivate: [AuthGuard],
-          },
-        ],
+            canActivate: [AuthGuard]
+          }
+        ]
       },
       {
         path: "timecard",
@@ -553,65 +553,65 @@ export const ROUTES: Routes = [
           {
             path: "",
             redirectTo: "list",
-            pathMatch: "full",
+            pathMatch: "full"
           },
           {
             path: "new",
             component: TimecardFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "edit/:id",
             component: TimecardFormComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "list",
             component: TimecardListComponent,
-            canActivate: [AuthGuard],
+            canActivate: [AuthGuard]
           },
           {
             path: "approvals",
             component: TimecardApprovalsComponent,
-            canActivate: [AuthGuard],
-          },
-        ],
+            canActivate: [AuthGuard]
+          }
+        ]
       },
       {
         path: "schedule",
         component: ScheduleComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard]
       },
       {
         path: "schedule/new",
         component: ScheduleFormComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard]
       },
       {
         path: "schedule/edit/:id",
         component: ScheduleFormComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard]
       },
       {
         path: "alerts",
         component: AlertsContainerComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard]
       },
       {
         path: "memories",
         component: MemoriesContainerComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard]
       },
       {
         path: "goals",
         component: GoalsComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard]
       },
       {
         path: "manage-client-types",
         component: CustomeNotificationInactivationComponente,
-        canActivate: [AuthGuard],
-      },
-    ],
-  },
+        canActivate: [AuthGuard]
+      }
+    ]
+  }
 ];

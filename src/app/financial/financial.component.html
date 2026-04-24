@@ -1,14 +1,19 @@
 <cb-financial-home
-    *ngIf="step === financialStep.home"
-    (stepChange)="stepChange($event)"
+  *ngIf="step === financialStep.home"
+  [job]="job"
+  (stepChange)="stepChange($event)"
 ></cb-financial-home>
 
-<cb-financial-revenues
-    *ngIf="step === financialStep.revenues"
-    (stepChange)="stepChange($event)"
-></cb-financial-revenues>
+<cb-financial-transaction
+  *ngIf="step === financialStep.revenues"
+  [job]="job"
+  [transactionType]="financialStep.revenues"
+  (stepChange)="stepChange($event)"
+></cb-financial-transaction>
 
-<cb-financial-expenses
-    *ngIf="step === financialStep.expenses"
-    (stepChange)="stepChange($event)"
-></cb-financial-expenses>
+<cb-financial-transaction
+  *ngIf="step === financialStep.expenses"
+  [job]="job"
+  [transactionType]="financialStep.expenses"
+  (stepChange)="stepChange($event)"
+></cb-financial-transaction>

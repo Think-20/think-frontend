@@ -29,6 +29,14 @@ export interface FinancialTransactionBankAccount {
   datacadastro: string;
 }
 
+/** Metadados de um arquivo anexado (boleto ou anexos). */
+export interface FinancialTransactionArquivo {
+  idarquivo: number;
+  nomearquivo: string;
+  diretorio: string;
+  dataupload: string;
+}
+
 export interface FinancialTransaction {
   idtransacao: number;
   idjob: number;
@@ -45,6 +53,8 @@ export interface FinancialTransaction {
   categoria: FinancialTransactionCategory;
   idcontabancaria: number;
   contabancaria: FinancialTransactionBankAccount;
+  idcontabancariacartaocredito?: number;
+  contabancariacartaocredito?: FinancialTransactionBankAccount;
   formapagamento: number;
   numparcelas: number;
   valortotal: number;
@@ -53,7 +63,8 @@ export interface FinancialTransaction {
   banco: string;
   agencia: string;
   contacorrente: string;
-  diretorioarquivoboleto: string;
+  arquivoboleto?: FinancialTransactionArquivo;
+  arquivos?: FinancialTransactionArquivo[];
   parcelas: FinancialTransactionParcela[];
   tags: FinancialTransactionTag[];
 }

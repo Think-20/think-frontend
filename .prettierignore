@@ -1,0 +1,8 @@
+node_modules
+dist
+coverage
+tmp
+.angular
+e2e
+*.min.js
+package-lock.json

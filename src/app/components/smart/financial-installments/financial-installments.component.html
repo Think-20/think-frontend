@@ -1,0 +1,29 @@
+<div
+  class="financial-installments"
+  *ngIf="form && parcelas"
+>
+  <h2 class="financial-installments__heading">Parcelas</h2>
+
+  <div
+    class="financial-installments__row"
+    *ngFor="let row of parcelas.controls; let i = index; trackBy: trackByIndex"
+  >
+    <span class="financial-installments__row-label">Parcela {{ i + 1 }}</span>
+
+    <cb-form-field class="financial-installments__row-field">
+      <cb-input-price
+        input
+        [formControl]="valorControlAt(i)"
+      ></cb-input-price>
+    </cb-form-field>
+
+    <cb-form-field class="financial-installments__row-field">
+      <cb-input-datetime
+        input
+        [formControl]="dataControlAt(i)"
+        mode="date"
+        placeholder="DD/MM/AAAA"
+      ></cb-input-datetime>
+    </cb-form-field>
+  </div>
+</div>

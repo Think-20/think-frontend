@@ -1,0 +1,231 @@
+<section
+  class="financial-revenues"
+  [class.financial-revenues--expenses]="transactionType === financialStep.expenses"
+>
+  <div class="financial-revenues__tabs">
+    <a
+      tabindex="0"
+      class="financial-revenues__tabs__tab"
+      (click)="toHome()"
+      (keyup.enter)="toHome()"
+    >
+      <span> Financeiro </span>
+
+      <cb-icon-arrow-right></cb-icon-arrow-right>
+
+      <span> Início </span>
+    </a>
+
+    <span class="financial-revenues__tabs__current-tab">
+      <cb-icon-arrow-right></cb-icon-arrow-right>
+
+      {{ controlPageTitle }}
+    </span>
+  </div>
+
+  <h2 class="financial-revenues__title">{{ controlPageTitle }}</h2>
+
+  <div class="financial-revenues__total">
+    <div class="financial-revenues__total__description">
+      <p>{{ totalAmountLabel }}</p>
+
+      <div class="financial-revenues__total__description__value">
+        <cb-currency-value
+          [value]="revenuesTotal"
+          [digitsInfo]="'1.2'"
+        ></cb-currency-value>
+
+        <cb-value-visibility-control></cb-value-visibility-control>
+      </div>
+
+      <span>{{ revenuesCount }} de {{ totalTransactionsCount }} lançamento(s)</span>
+    </div>
+
+    <div class="financial-revenues__total__buttons">
+      <cb-button (click)="print()">
+        <cb-icon-print iconStart></cb-icon-print>
+
+        Imprimir
+      </cb-button>
+
+      <cb-button (click)="exportToPdf()">
+        <cb-icon-download iconStart></cb-icon-download>
+
+        Exportar
+      </cb-button>
+
+      <cb-button
+        theme="info"
+        (click)="openCreateRevenueModal()"
+      >
+        <cb-icon-add iconStart></cb-icon-add>
+
+        {{ newTransactionButtonLabel }}
+      </cb-button>
+    </div>
+  </div>
+
+  <div class="financial-revenues__filter">
+    <cb-search
+      placeholder="Buscar por descrição..."
+      name="revenueSearch"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="scheduleSearchDebounce()"
+    ></cb-search>
+
+    <div class="financial-revenues__filter__buttons">
+      <span class="financial-revenues__filter-button-wrap">
+        <cb-button (click)="openFiltersPanel()">
+          <cb-icon-filter iconStart></cb-icon-filter>
+
+          Filtros
+
+          <cb-icon-arrow-down iconEnd></cb-icon-arrow-down>
+        </cb-button>
+
+        <span
+          *ngIf="filterHasActiveSelection"
+          class="financial-revenues__filter-badge"
+          aria-hidden="true"
+        ></span>
+      </span>
+
+      <cb-button (click)="openSummaryModal()">
+        <cb-icon-menu iconStart></cb-icon-menu>
+
+        Resumo
+      </cb-button>
+    </div>
+  </div>
+
+  <div class="financial-revenues__table">
+    <table>
+      <thead>
+        <tr>
+          <ng-container *ngIf="transactionType === financialStep.revenues">
+            <th>DATA RECEBIMENTO</th>
+
+            <th>DATA COBRANÇA</th>
+          </ng-container>
+
+          <ng-container *ngIf="transactionType === financialStep.expenses">
+            <th>DATA VENCIMENTO</th>
+
+            <th>DATA REALIZADO</th>
+          </ng-container>
+
+          <th>DESCRIÇÃO</th>
+          <th>CATEGORIA</th>
+          <th>FORMA DE PAGAMENTO</th>
+          <th>CONTA</th>
+          <th>STATUS</th>
+          <th class="text-right">VALOR</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr
+          tabindex="0"
+          *ngFor="let transaction of filteredTransactions"
+          (click)="openRevenueModal(transaction)"
+          (keyup.enter)="openRevenueModal(transaction)"
+          (keydown)="onTransactionRowKeydown($event, transaction)"
+        >
+          <ng-container *ngIf="transactionType === financialStep.revenues">
+            <td>
+              {{ transaction.datarecebimento | date : "dd/MM/yyyy" }}
+            </td>
+
+            <td>
+              {{ transaction.datacobranca | date : "dd/MM/yyyy" }}
+            </td>
+          </ng-container>
+
+          <ng-container *ngIf="transactionType === financialStep.expenses">
+            <td>
+              {{ transaction.datavencimento | date : "dd/MM/yyyy" }}
+            </td>
+
+            <td>
+              {{ transaction.datarealizado | date : "dd/MM/yyyy" }}
+            </td>
+          </ng-container>
+
+          <td class="description">
+            {{ transaction.descricao }}
+          </td>
+
+          <td class="category">
+            <cb-category-tag [category]="transaction.categoria"></cb-category-tag>
+          </td>
+
+          <td class="payment-method">
+            {{ paymentMethodLabel(transaction.formapagamento) }}
+          </td>
+
+          <td class="account">
+            {{ transaction.contabancaria.nome }}
+          </td>
+
+          <td class="status">
+            <span class="status__element status__element--{{ transaction.status }}">
+              {{ statusLabel(transaction.status) }}
+            </span>
+          </td>
+
+          <td class="value">
+            <cb-currency-value
+              [value]="transaction.valortotal"
+              [digitsInfo]="'1.2'"
+            ></cb-currency-value>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="financial-revenues__summary">
+    <div class="financial-revenues__summary__top">
+      <span>{{ summaryFooterLine }}</span>
+
+      <div class="financial-revenues__summary__top__total">
+        <span>{{ summaryRealizedLabel }}</span>
+
+        <cb-currency-value
+          [value]="75500"
+          [digitsInfo]="'1.2'"
+        ></cb-currency-value>
+      </div>
+    </div>
+
+    <div class="financial-revenues__summary__to-receive">
+      <span>{{ summaryToPayLabel }}</span>
+
+      <cb-currency-value
+        [value]="892450"
+        [digitsInfo]="'1.2'"
+      ></cb-currency-value>
+    </div>
+
+    <div class="financial-revenues__summary__forecast">
+      <span>{{ summaryForecastLabel }}</span>
+
+      <cb-currency-value
+        [value]="968000"
+        [digitsInfo]="'1.2'"
+      ></cb-currency-value>
+    </div>
+  </div>
+
+  <cb-financial-filter
+    [transactions]="allTransactions"
+    [searchTerm]="debouncedSearchTerm"
+    [transactionType]="transactionType"
+    [hintText]="filterPanelHint"
+    [dateFromLabel]="filterDateFromLabel"
+    [dateToLabel]="filterDateToLabel"
+    [(open)]="filtersPanelOpen"
+    (filteredTransactionsChange)="filteredTransactions = $event"
+    (activeFiltersChange)="filterHasActiveSelection = $event"
+  ></cb-financial-filter>
+</section>

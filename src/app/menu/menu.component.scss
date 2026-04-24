@@ -10,6 +10,10 @@
 
   background-color: #ffffff;
 
+  &__close {
+    display: none;
+  }
+
   &__user {
     display: flex;
 
@@ -33,6 +37,9 @@
     }
 
     &__name {
+      margin: 0;
+      padding: 0;
+
       color: #1e2939;
 
       font-size: 14px;
@@ -179,6 +186,10 @@
   }
 
   @media screen and (max-width: 1200px) {
+    display: flex;
+
+    flex-direction: column;
+
     position: fixed;
 
     top: 0;
@@ -187,6 +198,41 @@
     z-index: 9999999999;
 
     width: 310px;
+
+    &__close {
+      position: absolute;
+
+      top: calc(var(--spacing) * 4);
+      right: calc(var(--spacing) * 4);
+
+      z-index: 1;
+
+      display: flex;
+
+      color: var(--color-gray-500);
+    }
+
+    &__user {
+      flex-shrink: 0;
+
+      padding-right: calc(var(--spacing) * 12);
+    }
+
+    &__user__name {
+      min-width: 0;
+
+      overflow: hidden;
+
+      text-overflow: ellipsis;
+
+      white-space: nowrap;
+    }
+
+    &__nav {
+      flex: 1;
+
+      min-height: 0;
+    }
 
     &__backdrop {
       position: fixed;

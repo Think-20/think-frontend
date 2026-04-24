@@ -1,0 +1,13 @@
+<input
+  type="number"
+  class="input-number"
+  [class.input-number--has-error]="hasError"
+  [placeholder]="placeholder"
+  [value]="value"
+  [disabled]="disabled"
+  [attr.min]="min !== null && min !== undefined ? min : null"
+  [attr.max]="max !== null && max !== undefined ? max : null"
+  [attr.step]="step !== null && step !== undefined ? step : null"
+  (input)="change($event)"
+  (focusout)="onTouched()"
+/>

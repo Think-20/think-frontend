@@ -1,0 +1,25 @@
+<div class="financial-date-filter">
+  <button
+    type="button"
+    class="financial-date-filter__trigger"
+    (click)="openDatepicker($event)"
+  >
+    {{ displayValue() }}
+
+    <cb-icon-arrow-down class="financial-date-filter__icon"></cb-icon-arrow-down>
+  </button>
+
+  <input
+    class="financial-date-filter__input"
+    matInput
+    [matDatepicker]="datepicker"
+    [max]="maxDate"
+    [matDatepickerFilter]="pastOrTodayDateFilter"
+    [value]="selectedDate"
+    readonly
+    (click)="$event.stopPropagation()"
+    (dateChange)="onDateChange($event)"
+  />
+</div>
+
+<mat-datepicker #datepicker></mat-datepicker>

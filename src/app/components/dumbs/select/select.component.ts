@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Component({
@@ -18,8 +18,12 @@ export class SelectComponent<T> implements ControlValueAccessor {
 
   @Input() labelField: string = "name";
   @Input() placeholder: string = "Selecione";
+  @Input() showFilter = true;
+  @Input() actionButtonLabel = "";
+  @Input() closeOnAction = true;
 
   @Input() hasError = false;
+  @Output() actionButtonClick = new EventEmitter<void>();
 
   value: T | null = null;
   isOpen = false;
@@ -66,7 +70,7 @@ export class SelectComponent<T> implements ControlValueAccessor {
         this.updateDropdownPosition();
         this.syncHighlightedWithValue();
 
-        if (this.searchInput) {
+        if (this.showFilter && this.searchInput) {
           this.searchInput.nativeElement.focus();
         }
       });
@@ -90,6 +94,10 @@ export class SelectComponent<T> implements ControlValueAccessor {
   }
 
   get filteredOptions(): T[] {
+    if (!this.showFilter) {
+      return this.options;
+    }
+
     const term = this.searchTerm.trim().toLowerCase();
 
     if (!term) {
@@ -141,7 +149,24 @@ export class SelectComponent<T> implements ControlValueAccessor {
 
       if (!this.isOpen) {
         this.toggleOpen();
+        return;
       }
+
+      this.moveHighlightedOption(event.key === "ArrowDown" ? 1 : -1);
+      return;
+    }
+
+    if (this.isOpen && event.key === "Enter") {
+      if (this.highlightedIndex >= 0 && this.highlightedIndex < this.filteredOptions.length) {
+        event.preventDefault();
+        this.selectValue(this.filteredOptions[this.highlightedIndex]);
+      }
+      return;
+    }
+
+    if (this.isOpen && event.key === "Escape") {
+      event.preventDefault();
+      this.closeDropdown();
     }
   }
 
@@ -173,6 +198,14 @@ export class SelectComponent<T> implements ControlValueAccessor {
       if (this.trigger) {
         this.trigger.nativeElement.focus();
       }
+    }
+  }
+
+  onActionButtonClick(): void {
+    this.actionButtonClick.emit();
+
+    if (this.closeOnAction) {
+      this.closeDropdown();
     }
   }
 
@@ -292,12 +325,26 @@ export class SelectComponent<T> implements ControlValueAccessor {
     this.openUpwards = spaceBelow < preferredHeight && spaceAbove > spaceBelow;
 
     const maxHeight = Math.max(120, this.openUpwards ? spaceAbove : spaceBelow);
-    const top = this.openUpwards ? rect.top - maxHeight - 6 : rect.bottom + 6;
+    const spacing = 6;
     const left = Math.max(margin, rect.left);
     const width = Math.min(rect.width, viewportWidth - left - margin);
+    const top = rect.bottom + spacing;
+    const bottom = viewportHeight - rect.top + spacing;
+
+    if (this.openUpwards) {
+      this.dropdownStyles = {
+        top: "auto",
+        bottom: bottom + "px",
+        left: left + "px",
+        width: width + "px",
+        maxHeight: maxHeight + "px",
+      };
+      return;
+    }
 
     this.dropdownStyles = {
       top: top + "px",
+      bottom: "auto",
       left: left + "px",
       width: width + "px",
       maxHeight: maxHeight + "px",

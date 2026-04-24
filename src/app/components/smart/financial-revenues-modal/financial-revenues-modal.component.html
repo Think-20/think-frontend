@@ -1,6 +1,10 @@
-<cb-modal class="financial-revenues-modal" (close)="close()">
+<cb-modal
+  class="financial-revenues-modal"
+  [class.financial-revenues-modal--expenses]="isExpenseModal"
+  (close)="close()"
+>
     <h1 header>
-        Detalhes da Receita #{{ transaction.idtransacao }}
+        {{ detailModalTitle }}
     </h1>
 
     <div class="financial-revenues-modal__header">
@@ -14,6 +18,7 @@
     <cb-financial-details
         *ngIf="!isEditing"
         [transaction]="transaction"
+        [transactionType]="resolvedTransactionType"
         [formasPagamento]="formasPagamento"
         [periodos]="periodos"
     ></cb-financial-details>
@@ -21,6 +26,7 @@
     <cb-financial-form
         *ngIf="isEditing"
         [transaction]="transaction"
+        [transactionType]="resolvedTransactionType"
         [categories]="categories"
         [accounts]="accounts"
         [formasPagamento]="formasPagamento"
@@ -29,26 +35,34 @@
     ></cb-financial-form>
 
     <div footer class="financial-revenues-modal__footer" *ngIf="!isEditing">
-        <cb-button (click)="close()">
-            Fechar
+        <cb-button theme="error" class="financial-revenues-modal__footer__delete" (click)="confirmDelete()">
+            Excluir
         </cb-button>
 
-        <cb-button theme="info" (click)="edit()">
-            Editar Receita
-        </cb-button>
+        <div class="financial-revenues-modal__footer__actions">
+            <cb-button (click)="close()">
+                Fechar
+            </cb-button>
+
+            <cb-button theme="info" (click)="edit()">
+                {{ editTransactionButtonLabel }}
+            </cb-button>
+        </div>
     </div>
 
     <div footer class="financial-revenues-modal__footer" *ngIf="isEditing">
-        <cb-button (click)="close()">
-            Fechar
-        </cb-button>
+        <div class="financial-revenues-modal__footer__actions">
+            <cb-button (click)="close()">
+                Fechar
+            </cb-button>
 
-        <cb-button theme="success" (click)="save()">
-            Salvar
-        </cb-button>
+            <cb-button theme="success" (click)="save()">
+                Salvar
+            </cb-button>
 
-        <cb-button theme="error" (click)="cancelEdit()">
-            Cancelar
-        </cb-button>
+            <cb-button theme="error" (click)="cancelEdit()">
+                Cancelar
+            </cb-button>
+        </div>
     </div>
 </cb-modal>

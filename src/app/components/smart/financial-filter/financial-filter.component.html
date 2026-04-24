@@ -1,0 +1,110 @@
+<div class="financial-filter">
+  <div
+    *ngIf="open"
+    class="financial-filter__backdrop"
+    (click)="closePanel()"
+  ></div>
+
+  <aside *ngIf="open" class="financial-filter__panel">
+    <header class="financial-filter__panel__header">
+      <h3 class="financial-filter__panel__title">Filtros</h3>
+
+      <cb-icon-button
+        type="button"
+        size="lg"
+        [rounded]="true"
+        class="financial-filter__panel__close"
+        (click)="closePanel()"
+        aria-label="Fechar filtros"
+      >
+        <cb-icon-close></cb-icon-close>
+      </cb-icon-button>
+    </header>
+
+    <div class="financial-filter__panel__body cb-scroll">
+      <p class="financial-filter__panel__hint">{{ hintText }}</p>
+
+      <cb-form-field class="financial-filter__field">
+        <cb-label>{{ dateFromLabel }}</cb-label>
+
+        <cb-input-datetime
+          input
+          id="financial-filter-date-from"
+          mode="date"
+          name="draftDateFrom"
+          [(ngModel)]="draftDateFrom"
+        ></cb-input-datetime>
+      </cb-form-field>
+
+      <cb-form-field class="financial-filter__field">
+        <cb-label>{{ dateToLabel }}</cb-label>
+
+        <cb-input-datetime
+          input
+          id="financial-filter-date-to"
+          mode="date"
+          name="draftDateTo"
+          [(ngModel)]="draftDateTo"
+        ></cb-input-datetime>
+      </cb-form-field>
+
+      <cb-form-field class="financial-filter__field">
+        <cb-label>Status</cb-label>
+
+        <cb-select
+          input
+          [(ngModel)]="draftStatus"
+          [options]="statusFilterOptions"
+          labelField="name"
+          placeholder="Status"
+          [showFilter]="false"
+        ></cb-select>
+      </cb-form-field>
+
+      <cb-form-field class="financial-filter__field">
+        <cb-label>Forma de pagamento</cb-label>
+
+        <cb-select
+          input
+          [(ngModel)]="draftPayment"
+          [options]="paymentFilterOptions"
+          labelField="name"
+          placeholder="Forma de pagamento"
+          [showFilter]="true"
+        ></cb-select>
+      </cb-form-field>
+
+      <cb-form-field class="financial-filter__field">
+        <cb-label>Conta bancária</cb-label>
+
+        <cb-select
+          input
+          [(ngModel)]="draftAccount"
+          [options]="accountFilterOptions"
+          labelField="name"
+          placeholder="Conta"
+          [showFilter]="true"
+        ></cb-select>
+      </cb-form-field>
+
+      <cb-form-field class="financial-filter__field">
+        <cb-label>Categoria</cb-label>
+
+        <cb-select
+          input
+          [(ngModel)]="draftCategory"
+          [options]="categoryFilterOptions"
+          labelField="name"
+          placeholder="Categoria"
+          [showFilter]="true"
+        ></cb-select>
+      </cb-form-field>
+    </div>
+
+    <footer class="financial-filter__panel__footer">
+      <cb-button type="button" (click)="clearPanelFilters()"> Limpar </cb-button>
+
+      <cb-button type="button" theme="info" (click)="applyFiltersFromPanel()"> Aplicar </cb-button>
+    </footer>
+  </aside>
+</div>

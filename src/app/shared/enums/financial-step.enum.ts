@@ -1,5 +1,5 @@
 export enum EFinancialStep {
-  home = 1,
-  revenues = 2,
-  expenses = 3,
+  home = 0,
+  revenues = 1,
+  expenses = 2
 }

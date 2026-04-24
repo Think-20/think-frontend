@@ -19,6 +19,7 @@
 
   <div class="select__dropdown" [ngStyle]="dropdownStyles" *ngIf="isOpen">
     <input
+      *ngIf="showFilter"
       #searchInput
       type="text"
       class="select__search"
@@ -40,5 +41,15 @@
     <p class="select__empty-state" *ngIf="filteredOptions.length === 0">
       Nenhuma opção encontrada
     </p>
+
+    <ng-content select="[select-action]"></ng-content>
+
+    <button
+      type="button"
+      class="select__action-button"
+      *ngIf="actionButtonLabel"
+      (click)="onActionButtonClick()">
+      {{ actionButtonLabel }}
+    </button>
   </div>
 </div>

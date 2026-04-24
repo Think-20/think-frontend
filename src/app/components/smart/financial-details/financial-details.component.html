@@ -1,124 +1,333 @@
-<div class="financial-details" *ngIf="transaction as t">
-    <div class="financial-details__grid">
-        <div class="financial-details__field financial-details__field--description">
-            <p class="financial-details__label">
-                <cb-icon-file class="financial-details__icon"></cb-icon-file>
+<div
+  class="financial-details"
+  *ngIf="transaction as t"
+>
+  <div class="financial-details__grid">
+    <div class="financial-details__field financial-details__field--description">
+      <p class="financial-details__label">
+        <cb-icon-file class="financial-details__icon"></cb-icon-file>
 
-                DESCRIÇÃO
-            </p>
+        DESCRIÇÃO
+      </p>
 
-            <p class="financial-details__text">{{ t.descricao }}</p>
-        </div>
-
-        <div class="financial-details__field">
-            <p class="financial-details__label">
-                <cb-icon-calendar class="financial-details__icon"></cb-icon-calendar>
-
-                DATA DE RECEBIMENTO
-            </p>
-
-            <p class="financial-details__text">{{ t.datarecebimento | date: "dd/MM/yyyy" }}</p>
-        </div>
-
-        <div class="financial-details__field">
-            <p class="financial-details__label">
-                <cb-icon-calendar class="financial-details__icon"></cb-icon-calendar>
-                DATA DA COBRANÇA
-            </p>
-
-            <p class="financial-details__text">{{ t.datacobranca | date: "dd/MM/yyyy" }}</p>
-        </div>
-
-        <div class="financial-details__field">
-            <p class="financial-details__label">
-                <cb-icon-tag class="financial-details__icon"></cb-icon-tag>
-
-                CATEGORIA
-            </p>
-
-            <cb-category-tag [category]="t.categoria"></cb-category-tag>
-        </div>
-
-        <div class="financial-details__field">
-            <p class="financial-details__label">
-                <cb-icon-lucide-building class="financial-details__icon"></cb-icon-lucide-building>
-
-                CONTA
-            </p>
-
-            <p class="financial-details__text">{{ t.contabancaria && t.contabancaria.nome }}</p>
-        </div>
-
-        <div class="financial-details__field">
-            <p class="financial-details__label">
-                <cb-icon-credit-card class="financial-details__icon"></cb-icon-credit-card>
-
-                FORMA DE PAGAMENTO
-            </p>
-
-            <p class="financial-details__text">{{ getFormaPagamentoNome(t.formapagamento) }}</p>
-        </div>
-
-        <div class="financial-details__field">
-            <p class="financial-details__label">
-                <cb-icon-lucide-repeat class="financial-details__icon"></cb-icon-lucide-repeat>
-
-                TIPO DE LANÇAMENTO
-            </p>
-
-            <p class="financial-details__text">{{ getPeriodoNome(t.periodo) }}</p>
-        </div>
+      <p class="financial-details__text">{{ t.descricao }}</p>
     </div>
 
-    <div class="financial-details__bank-data">
-        <h2 class="financial-details__section-title">Dados Bancários</h2>
+    <ng-container *ngIf="!isExpenseDetails">
+      <div class="financial-details__field">
+        <p class="financial-details__label">
+          <cb-icon-calendar class="financial-details__icon"></cb-icon-calendar>
 
-        <div class="financial-details__bank-data-grid">
-            <div class="financial-details__field">
-                <p class="financial-details__label">BANCO</p>
-                <p class="financial-details__text">{{ bancoExibicao(t) }}</p>
-            </div>
+          DATA DE RECEBIMENTO
+        </p>
 
-            <div class="financial-details__field">
-                <p class="financial-details__label">AGÊNCIA</p>
-                <p class="financial-details__text">{{ agenciaExibicao(t) }}</p>
-            </div>
+        <p class="financial-details__text">{{ t.datarecebimento | date : "dd/MM/yyyy" }}</p>
+      </div>
 
-            <div class="financial-details__field">
-                <p class="financial-details__label">CONTA CORRENTE</p>
-                <p class="financial-details__text">{{ contaExibicao(t) }}</p>
-            </div>
-        </div>
-    </div>
+      <div class="financial-details__field">
+        <p class="financial-details__label">
+          <cb-icon-calendar class="financial-details__icon"></cb-icon-calendar>
+
+          DATA DA COBRANÇA
+        </p>
+
+        <p class="financial-details__text">{{ t.datacobranca | date : "dd/MM/yyyy" }}</p>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="isExpenseDetails">
+      <div class="financial-details__field">
+        <p class="financial-details__label">
+          <cb-icon-calendar class="financial-details__icon"></cb-icon-calendar>
+
+          DATA DE VENCIMENTO
+        </p>
+
+        <p class="financial-details__text">{{ t.datavencimento | date : "dd/MM/yyyy" }}</p>
+      </div>
+
+      <div class="financial-details__field">
+        <p class="financial-details__label">
+          <cb-icon-calendar class="financial-details__icon"></cb-icon-calendar>
+
+          DATA REALIZADO
+        </p>
+
+        <p class="financial-details__text">{{ t.datarealizado | date : "dd/MM/yyyy" }}</p>
+      </div>
+
+      <div class="financial-details__field">
+        <p class="financial-details__label">
+          <cb-icon-calendar class="financial-details__icon"></cb-icon-calendar>
+
+          DATA DA COBRANÇA
+        </p>
+
+        <p class="financial-details__text">{{ t.datacobranca | date : "dd/MM/yyyy" }}</p>
+      </div>
+    </ng-container>
 
     <div class="financial-details__field">
-        <p class="financial-details__label">
-            <cb-icon-tag class="financial-details__icon"></cb-icon-tag>
+      <p class="financial-details__label">
+        <cb-icon-tag class="financial-details__icon"></cb-icon-tag>
 
-            TAGS
+        CATEGORIA
+      </p>
+
+      <cb-category-tag [category]="t.categoria"></cb-category-tag>
+    </div>
+
+    <ng-container *ngIf="!isExpenseDetails">
+      <div class="financial-details__field">
+        <p class="financial-details__label">
+          <cb-icon-lucide-building class="financial-details__icon"></cb-icon-lucide-building>
+
+          CONTA
         </p>
 
-        <div class="financial-details__tags">
-            <span class="financial-details__tag" *ngFor="let tag of t.tags">
-                {{ tag.descricao }}
-            </span>
-        </div>
-    </div>
+        <p class="financial-details__text">{{ t.contabancaria && t.contabancaria.nome }}</p>
+      </div>
 
-    <div class="financial-details__obs">
-        <p class="financial-details__label">OBSERVAÇÕES</p>
-        <p class="financial-details__obs-text">{{ t.observacao }}</p>
-    </div>
-
-    <div class="financial-details__field" *ngIf="t.diretorioarquivoboleto">
+      <div class="financial-details__field financial-details__field--payment-method">
         <p class="financial-details__label">
-            <cb-icon-paperclip class="financial-details__icon"></cb-icon-paperclip>
+          <cb-icon-credit-card class="financial-details__icon"></cb-icon-credit-card>
 
-            BOLETO / ARQUIVO
+          FORMA DE PAGAMENTO
         </p>
 
-        <div class="financial-details__attachments">
-            <span class="financial-details__attachment">{{ t.diretorioarquivoboleto }}</span>
-        </div>
+        <p class="financial-details__text">{{ getFormaPagamentoNome(t.formapagamento) }}</p>
+      </div>
+    </ng-container>
+
+    <div
+      *ngIf="isExpenseDetails"
+      class="financial-details__inline-row financial-details__inline-row--account-payment"
+    >
+      <div class="financial-details__field">
+        <p class="financial-details__label">
+          <cb-icon-lucide-building class="financial-details__icon"></cb-icon-lucide-building>
+
+          CONTA
+        </p>
+
+        <p class="financial-details__text">{{ t.contabancaria && t.contabancaria.nome }}</p>
+      </div>
+
+      <div class="financial-details__field financial-details__field--payment-method">
+        <p class="financial-details__label">
+          <cb-icon-credit-card class="financial-details__icon"></cb-icon-credit-card>
+
+          FORMA DE PAGAMENTO
+        </p>
+
+        <p class="financial-details__text">{{ getFormaPagamentoNome(t.formapagamento) }}</p>
+      </div>
     </div>
+
+    <div
+      class="financial-details__bank-data"
+      *ngIf="isDepositPayment(t)"
+    >
+      <h2 class="financial-details__section-title">Dados bancários</h2>
+
+      <div class="financial-details__bank-data-grid">
+        <div class="financial-details__field">
+          <p class="financial-details__label">BANCO</p>
+          <p class="financial-details__text">{{ t.banco }}</p>
+        </div>
+
+        <div class="financial-details__field">
+          <p class="financial-details__label">AGÊNCIA</p>
+          <p class="financial-details__text">{{ t.agencia }}</p>
+        </div>
+
+        <div class="financial-details__field">
+          <p class="financial-details__label">CONTA CORRENTE</p>
+          <p class="financial-details__text">{{ t.contacorrente }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="financial-details__bank-data"
+      *ngIf="isPixPayment(t)"
+    >
+      <h2 class="financial-details__section-title">Pix</h2>
+
+      <div class="financial-details__field">
+        <p class="financial-details__label">CHAVE PIX</p>
+        <p class="financial-details__text">{{ t.chavepix }}</p>
+      </div>
+    </div>
+
+    <div
+      class="financial-details__bank-data"
+      *ngIf="isCreditCardPayment(t)"
+    >
+      <h2 class="financial-details__section-title">Cartão de crédito</h2>
+
+      <div class="financial-details__field">
+        <p class="financial-details__label">
+          <cb-icon-lucide-building class="financial-details__icon"></cb-icon-lucide-building>
+          CONTA PARA LIQUIDAÇÃO NO CARTÃO
+        </p>
+
+        <p class="financial-details__text">
+          {{ t.contabancariacartaocredito && t.contabancariacartaocredito.nome }}
+        </p>
+      </div>
+    </div>
+
+    <div
+      class="financial-details__bank-data"
+      *ngIf="isBankSlipPayment(t)"
+    >
+      <h2 class="financial-details__section-title">Arquivo Boleto</h2>
+
+      <div
+        class="financial-details__attachments"
+        *ngIf="hasArquivoboletoPrincipal(t)"
+      >
+        <span class="financial-details__attachment">{{ getBoletoArquivoNome(t) }}</span>
+      </div>
+
+      <p
+        class="financial-details__empty-hint"
+        *ngIf="!hasArquivoboletoPrincipal(t)"
+      >
+        Nenhum arquivo cadastrado.
+      </p>
+    </div>
+
+    <div class="financial-details__field financial-details__field--launch-span">
+      <div class="financial-details__launch-row">
+        <div class="financial-details__launch-type">
+          <p class="financial-details__label">
+            <cb-icon-lucide-repeat class="financial-details__icon"></cb-icon-lucide-repeat>
+
+            TIPO DE LANÇAMENTO
+          </p>
+
+          <p class="financial-details__text">{{ getPeriodoNome(t.periodo) }}</p>
+        </div>
+
+        <div class="financial-details__launch-companion">
+          <div *ngIf="isSingleValueLaunch(t)">
+            <p class="financial-details__label">VALOR TOTAL</p>
+
+            <p class="financial-details__text">
+              <cb-currency-value
+                [value]="t.valortotal"
+                [digitsInfo]="'1.2'"
+              ></cb-currency-value>
+            </p>
+          </div>
+
+          <div *ngIf="isInstallmentLaunch(t)">
+            <p class="financial-details__label">NÚMERO DE PARCELAS</p>
+
+            <p class="financial-details__text">{{ t.numparcelas }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    *ngIf="isInstallmentLaunch(t)"
+    class="financial-details__parcelas-block"
+  >
+    <table
+      *ngIf="parcelasOrdenadas.length"
+      class="financial-details__installments-table"
+    >
+      <thead>
+        <tr>
+          <th
+            scope="col"
+            class="financial-details__installments-th financial-details__installments-th--num"
+          >
+            Parcela
+          </th>
+          <th
+            scope="col"
+            class="financial-details__installments-th financial-details__installments-th--money"
+          >
+            Valor
+          </th>
+          <th
+            scope="col"
+            class="financial-details__installments-th financial-details__installments-th--date"
+          >
+            Vencimento
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let p of parcelasOrdenadas; let i = index; trackBy: trackByParcela">
+          <td class="financial-details__installments-td financial-details__installments-td--num">Parcela {{ i + 1 }}</td>
+
+          <td class="financial-details__installments-td financial-details__installments-td--money">
+            <cb-currency-value
+              [value]="p.valor === null || p.valor === undefined ? 0 : p.valor"
+              [digitsInfo]="'1.2'"
+            ></cb-currency-value>
+          </td>
+
+          <td class="financial-details__installments-td financial-details__installments-td--date">
+            {{ p.data | date : "dd/MM/yyyy" }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    class="financial-details__field financial-details__field--tags"
+    *ngIf="t.tags && t.tags.length"
+  >
+    <p class="financial-details__label">
+      <cb-icon-tag class="financial-details__icon"></cb-icon-tag>
+
+      TAGS
+    </p>
+
+    <div class="financial-details__tags">
+      <span
+        class="financial-details__tag"
+        *ngFor="let tag of t.tags"
+      >
+        {{ tag.descricao }}
+      </span>
+    </div>
+  </div>
+
+  <div
+    *ngIf="t.observacao"
+    class="financial-details__obs"
+  >
+    <p class="financial-details__label">OBSERVAÇÕES</p>
+
+    <p class="financial-details__obs-text">{{ t.observacao }}</p>
+  </div>
+
+  <div
+    class="financial-details__field financial-details__field--anexos"
+    *ngIf="hasTransactionAnexos(t)"
+  >
+    <p class="financial-details__label">
+      <cb-icon-paperclip class="financial-details__icon"></cb-icon-paperclip>
+      ANEXOS
+    </p>
+
+    <div class="financial-details__attachments">
+      <span
+        class="financial-details__attachment"
+        *ngFor="let arq of t.arquivos"
+      >
+        {{ arq.nomearquivo }}
+      </span>
+    </div>
+  </div>
 </div>

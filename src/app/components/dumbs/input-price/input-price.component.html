@@ -1,0 +1,9 @@
+<input
+  type="text"
+  class="input-price"
+  [class.input-price--has-error]="hasError"
+  [placeholder]="placeholder"
+  currencyMask
+  [formControl]="innerControl"
+  (focusout)="blur()"
+/>

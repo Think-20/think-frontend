@@ -1,6 +1,17 @@
 <div *ngIf="opened" class="menu__backdrop" (click)="closeFn()"></div>
 
 <aside *ngIf="opened" class="menu">
+  <cb-icon-button
+    type="button"
+    size="lg"
+    [rounded]="true"
+    class="menu__close"
+    (click)="closeFn()"
+    aria-label="Fechar menu"
+  >
+    <cb-icon-close></cb-icon-close>
+  </cb-icon-button>
+
   <div class="menu__user">
     <img class="menu__user__photo" src="{{ api }}/assets/images/{{user.employee.image}}" alt="Photo" />
 

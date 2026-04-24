@@ -1,6 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, Inject, Optional } from "@angular/core";
 import { MatDialogRef } from "@angular/material";
-import { ECategoryColor } from 'app/shared/enums/category-color.enum';
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { ECategoryColor } from "app/shared/enums/category-color.enum";
+import { EFinancialStep } from "app/shared/enums/financial-step.enum";
 
 @Component({
   selector: "cb-financial-summary-modal",
@@ -35,7 +37,17 @@ export class FinancialSummaryModalComponent {
     },
   ];
 
-  constructor(public dialog: MatDialogRef<FinancialSummaryModalComponent>) {}
+  constructor(
+    public dialog: MatDialogRef<FinancialSummaryModalComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) private dialogData: { transactionType?: EFinancialStep }
+  ) {}
+
+  get summaryTitle(): string {
+    if (this.dialogData && this.dialogData.transactionType === EFinancialStep.expenses) {
+      return "Resumo por Categoria - Despesas";
+    }
+    return "Resumo por Categoria - Receitas";
+  }
 
   close(): void {
     this.dialog.close();

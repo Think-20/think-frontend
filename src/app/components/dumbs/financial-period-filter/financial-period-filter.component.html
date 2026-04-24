@@ -1,0 +1,20 @@
+<button
+  type="button"
+  class="financial-period-filter"
+  [matMenuTriggerFor]="periodMenu"
+  (click)="$event.stopPropagation()"
+>
+  {{ selectedLabel() }}
+
+  <cb-icon-arrow-down class="financial-period-filter__icon"></cb-icon-arrow-down>
+</button>
+
+<mat-menu #periodMenu="matMenu">
+  <button
+    mat-menu-item
+    *ngFor="let option of options"
+    (click)="selectPeriod(option.days)"
+  >
+    {{ option.label }}
+  </button>
+</mat-menu>

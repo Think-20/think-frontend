@@ -1,6 +1,6 @@
 <cb-modal class="back-account-modal" (close)="close()">
     <h1 header>
-        Cadastrar conta bancária
+        {{ modalTitle }}
     </h1>
 
     <div class="back-account-modal__preview">
@@ -32,7 +32,7 @@
                 formControlName="bank"
                 placeholder="Informe a instituição"
                 labelField="name"
-                [hasError]="bank.invalid && (this.submitted || this.bank.touched)"
+                [hasError]="bank.invalid && (submitted || bank.touched)"
                 [options]="banks">
             </cb-select>
         </cb-form-field>
@@ -44,7 +44,7 @@
                 input
                 formControlName="name"
                 placeholder="Escreva o nome da conta"
-                [hasError]="name.invalid && (this.submitted || this.name.touched)"
+                [hasError]="name.invalid && (submitted || name.touched)"
             ></cb-input-text>
         </cb-form-field>
 
@@ -56,7 +56,7 @@
                     input
                     formControlName="agency"
                     placeholder="0000"
-                    [hasError]="agency.invalid && (this.submitted || this.agency.touched)"
+                    [hasError]="agency.invalid && (submitted || agency.touched)"
                 ></cb-input-text>
             </cb-form-field>
 
@@ -67,7 +67,7 @@
                     input
                     formControlName="account"
                     placeholder="00000-0"
-                    [hasError]="account.invalid && (this.submitted || this.account.touched)"
+                    [hasError]="account.invalid && (submitted || account.touched)"
                 ></cb-input-text>
             </cb-form-field>
         </div>

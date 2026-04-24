@@ -74,12 +74,6 @@
 }
 
 @media screen and (max-width: 500px) {
-  #all-container {
-    width: 100%;
-    flex: 100%;
-    max-width: 100%;
-  }
-
   #my-master-container {
     flex-wrap: nowrap;
   }

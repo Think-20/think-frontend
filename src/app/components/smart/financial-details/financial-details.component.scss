@@ -7,10 +7,134 @@
     gap: calc(var(--spacing) * 6) calc(var(--spacing) * 4);
   }
 
+  &__inline-row {
+    display: grid;
+
+    grid-column: 1 / 3;
+
+    grid-template-columns: 1fr 1fr;
+
+    align-items: start;
+
+    gap: calc(var(--spacing) * 6) calc(var(--spacing) * 4);
+  }
+
+  &__grid > &__field--payment-method {
+    grid-column: 1 / 3;
+  }
+
   &__field {
-    &--description {
+    &--description,
+    &--launch-span {
       grid-column: 1 / 3;
     }
+
+    &--tags,
+    &--anexos {
+      margin-top: calc(var(--spacing) * 6);
+    }
+  }
+
+  &__launch-row {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    align-items: start;
+
+    gap: calc(var(--spacing) * 4) calc(var(--spacing) * 6);
+  }
+
+  &__launch-type {
+    min-width: 0;
+  }
+
+  &__launch-companion {
+    min-width: 0;
+  }
+
+  &__parcelas-block {
+    margin-top: calc(var(--spacing) * 4);
+
+    border: 1px solid var(--color-gray-200);
+
+    border-radius: 10px;
+
+    overflow: hidden;
+  }
+
+  &__installments-table {
+    width: 100%;
+
+    min-width: 280px;
+
+    border-collapse: collapse;
+
+    font-size: 15px;
+  }
+
+  &__installments-th {
+    padding: calc(var(--spacing) * 2) calc(var(--spacing) * 3);
+
+    border-bottom: 1px solid var(--color-gray-200);
+
+    color: var(--color-gray-600);
+
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+
+    background-color: var(--color-gray-100);
+
+    &--num {
+      text-align: left;
+    }
+
+    &--money,
+    &--date {
+      text-align: right;
+    }
+  }
+
+  &__installments-td {
+    padding: calc(var(--spacing) * 2.5) calc(var(--spacing) * 3);
+
+    border-bottom: 1px solid var(--color-gray-100);
+
+    color: var(--color-gray-800);
+
+    vertical-align: middle;
+
+    &--num {
+      color: var(--color-gray-600);
+
+      font-size: 13px;
+      font-weight: 400;
+
+      text-align: left;
+    }
+
+    &--money {
+      text-align: right;
+
+      ::ng-deep p {
+        margin: 0;
+      }
+    }
+
+    &--date {
+      text-align: right;
+    }
+  }
+
+  tbody tr:last-child .financial-details__installments-td {
+    border-bottom: 0;
+  }
+
+  tbody tr:hover .financial-details__installments-td {
+    background-color: var(--color-gray-50);
   }
 
   &__label {
@@ -53,13 +177,26 @@
   }
 
   &__bank-data {
-    margin: calc(var(--spacing) * 6) 0;
+    grid-column: 1 / 3;
 
     padding: calc(var(--spacing) * 3);
 
     border-radius: 8px;
 
     background-color: var(--color-gray-50);
+  }
+
+  &__bank-data + &__bank-data {
+    margin-top: calc(var(--spacing) * 3);
+  }
+
+  &__empty-hint {
+    margin: 0;
+
+    color: var(--color-gray-600);
+
+    font-size: var(--text-sm);
+    line-height: 1.5;
   }
 
   &__bank-data-grid {
@@ -94,7 +231,7 @@
   }
 
   &__obs {
-    margin: calc(var(--spacing) * 6) 0;
+    margin-top: calc(var(--spacing) * 6);
 
     padding: calc(var(--spacing) * 4);
 
@@ -136,6 +273,29 @@
 
     &__bank-data-grid {
       grid-template-columns: 1fr;
+    }
+
+    &__launch-row {
+      grid-template-columns: 1fr;
+    }
+
+    &__bank-data {
+      grid-column: span 1;
+    }
+
+    &__field {
+      &--description,
+      &--launch-span {
+        grid-column: span 1;
+      }
+    }
+
+    &__grid > &__field--payment-method {
+      grid-column: span 1;
+    }
+
+    &__inline-row {
+      grid-column: span 1;
     }
   }
 }

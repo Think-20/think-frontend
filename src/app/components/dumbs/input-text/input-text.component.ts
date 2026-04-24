@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Component({
@@ -13,12 +13,27 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
     },
   ],
 })
-export class InputTextComponent implements ControlValueAccessor {
+export class InputTextComponent implements ControlValueAccessor, AfterViewInit, OnChanges {
   @Input() hasError = false;
-  
+
   @Input() placeholder = "";
+  @Input() autoFocus = false;
+  @Input() selectOnAutoFocus = true;
+
+  @ViewChild("inputElement", { static: false }) inputElement: ElementRef<HTMLInputElement>;
 
   value = "";
+  private focusTimer: any;
+
+  ngAfterViewInit(): void {
+    this.queueAutoFocus();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.autoFocus && changes.autoFocus.currentValue) {
+      this.queueAutoFocus();
+    }
+  }
 
   writeValue(value: string): void {
     if (!value) {
@@ -47,5 +62,32 @@ export class InputTextComponent implements ControlValueAccessor {
     this.onChange(this.value);
 
     this.onTouched();
+  }
+
+  private queueAutoFocus(): void {
+    if (!this.autoFocus) {
+      return;
+    }
+    if (this.focusTimer) {
+      clearTimeout(this.focusTimer);
+      this.focusTimer = null;
+    }
+    this.focusTimer = setTimeout(() => {
+      this.applyAutoFocus();
+    }, 120);
+  }
+
+  private applyAutoFocus(): void {
+    if (!this.autoFocus || !this.inputElement || !this.inputElement.nativeElement) {
+      return;
+    }
+    const input = this.inputElement.nativeElement;
+    if (input.disabled) {
+      return;
+    }
+    input.focus();
+    if (this.selectOnAutoFocus && input.value) {
+      input.select();
+    }
   }
 }

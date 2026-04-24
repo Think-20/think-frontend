@@ -1,0 +1,22 @@
+.financial-period-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background-color: transparent;
+  color: #99a1af;
+  font-size: 12px;
+  cursor: pointer;
+
+  &:hover {
+    color: #4a5565;
+  }
+
+  &__icon {
+    display: flex;
+    width: 16px;
+    height: 16px;
+  }
+}

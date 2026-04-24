@@ -1,0 +1,10 @@
+<input
+  [type]="mode"
+  class="input-datetime"
+  [class.input-datetime--has-error]="hasError"
+  [placeholder]="placeholder"
+  [value]="value"
+  [disabled]="disabled"
+  (input)="change($event)"
+  (blur)="blur()"
+/>

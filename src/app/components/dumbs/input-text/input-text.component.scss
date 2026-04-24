@@ -1,14 +1,27 @@
 .input-text {
+  box-sizing: border-box;
+
+  display: block;
+
   width: 100%;
 
-  padding: 8px 12px;
+  height: calc(var(--spacing) * 10 + 2px);
+  min-height: calc(var(--spacing) * 10 + 2px);
+
+  margin: 0;
+
+  padding: calc(var(--spacing) * 2) calc(var(--spacing) * 3);
 
   border-radius: 4px;
   border: 1px solid var(--color-gray-300);
 
-  font-size: 14px;
-
+  font-family: inherit;
+  font-size: var(--text-sm);
   line-height: 1.465;
+
+  color: var(--color-gray-700);
+
+  background-color: var(--color-white);
 
   &:focus {
     box-shadow: 0 0 0 calc(2px) var(--color-blue-500);

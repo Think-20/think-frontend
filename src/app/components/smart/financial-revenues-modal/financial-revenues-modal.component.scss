@@ -5,6 +5,10 @@
   &__header {
     display: flex;
 
+    flex-wrap: wrap;
+
+    gap: 20px 10px;
+
     align-items: center;
     justify-content: space-between;
 
@@ -20,9 +24,34 @@
     line-height: 1;
   }
 
+  &--expenses &__value {
+    color: var(--color-red-600);
+
+    & cb-currency-value {
+      color: var(--color-red-600);
+    }
+  }
+
   &__footer {
     display: flex;
 
+    flex-wrap: wrap;
+
+    align-items: center;
+    justify-content: flex-end;
+
     gap: calc(var(--spacing) * 2);
+
+    &__delete {
+      margin-right: auto;
+    }
+
+    &__actions {
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: calc(var(--spacing) * 2);
+    }
   }
 }

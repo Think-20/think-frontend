@@ -1,0 +1,19 @@
+<cb-modal class="financial-create" (close)="close()">
+  <h1 header>{{ createModalTitle }}</h1>
+
+  <cb-financial-form
+    [transaction]="draft"
+    [transactionType]="resolvedTransactionType"
+    [categories]="categories"
+    [accounts]="accounts"
+    [formasPagamento]="formasPagamento"
+    [periodos]="periodos"
+    (saved)="onCreated($event)"
+  ></cb-financial-form>
+
+  <div footer class="financial-create__footer">
+    <cb-button (click)="close()">Cancelar</cb-button>
+
+    <cb-button theme="success" (click)="save()">Salvar</cb-button>
+  </div>
+</cb-modal>

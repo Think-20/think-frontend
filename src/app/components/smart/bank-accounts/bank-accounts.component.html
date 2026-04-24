@@ -1,0 +1,83 @@
+<div class="bank-accounts">
+  <div
+    *ngIf="open"
+    class="bank-accounts__backdrop"
+    (click)="closePanel()"
+  ></div>
+
+  <aside
+    *ngIf="open"
+    class="bank-accounts__panel"
+  >
+    <header class="bank-accounts__panel__header">
+      <h3 class="bank-accounts__panel__title">Contas bancárias</h3>
+
+      <cb-icon-button
+        type="button"
+        size="lg"
+        [rounded]="true"
+        class="bank-accounts__panel__close"
+        (click)="closePanel()"
+        aria-label="Fechar contas bancárias"
+      >
+        <cb-icon-close></cb-icon-close>
+      </cb-icon-button>
+    </header>
+
+    <div class="bank-accounts__panel__body cb-scroll">
+      <button
+        type="button"
+        class="bank-accounts__new-button"
+        (click)="createAccount()"
+      >
+        + Cadastrar conta bancária
+      </button>
+
+      <div class="bank-accounts__list">
+        <div
+          class="bank-accounts__item"
+          *ngFor="let account of accounts; trackBy: trackByAccountId"
+          [class.bank-accounts__item--selected]="isSelected(account)"
+          (click)="selectAccount(account)"
+        >
+          <div class="bank-accounts__item__main">
+            <cb-bank-image [bank]="account && account.banco ? banks.get(account.banco) : null"></cb-bank-image>
+
+            <div class="bank-accounts__item__content">
+              <span class="bank-accounts__item__name">{{ account.nome }}</span>
+              <span class="bank-accounts__item__bank">{{ resolveBankName(account.banco) }}</span>
+              <span class="bank-accounts__item__account">Ag. {{ account.agencia }} • Conta {{ account.conta }}</span>
+            </div>
+          </div>
+
+          <div
+            class="bank-accounts__item__actions"
+            (click)="$event.stopPropagation()"
+          >
+            <button
+              type="button"
+              class="bank-accounts__link"
+              (click)="editAccount(account)"
+            >
+              Editar
+            </button>
+            <button
+              type="button"
+              class="bank-accounts__link bank-accounts__link--danger"
+              (click)="deleteAccount(account)"
+            >
+              Excluir
+            </button>
+          </div>
+        </div>
+
+        <p
+          *ngIf="!accounts.length"
+          class="bank-accounts__empty"
+        >
+          Nenhuma conta bancária cadastrada.
+        </p>
+      </div>
+    </div>
+  </aside>
+</div>

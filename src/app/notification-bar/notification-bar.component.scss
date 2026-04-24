@@ -8,6 +8,13 @@
   border-left: 1px solid #ebe6e7;
 
   &__header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: calc(var(--spacing) * 3);
+
     height: 73px;
 
     padding: 24px;
@@ -24,6 +31,12 @@
       font-weight: 600;
 
       line-height: 1.5;
+    }
+
+    &__close {
+      display: none;
+
+      color: var(--color-gray-500);
     }
   }
 
@@ -59,6 +72,10 @@
       z-index: 9999999998;
 
       transition: backdrop-filter 0.3s ease-in-out;
+    }
+
+    &__header__close {
+      display: flex;
     }
   }
 

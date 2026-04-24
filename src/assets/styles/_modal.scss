@@ -1,7 +1,15 @@
+/* Base para qualquer backdrop do CDK (datepicker, menu, dialog, etc.). */
 .cdk-overlay-backdrop {
-  backdrop-filter: blur(12px);
-
   background-color: #00000000;
+}
+
+/*
+ * Blur “de modal” do projeto: não aplicar ao backdrop transparente do Angular
+ * Material (`mat-overlay-transparent-backdrop`), usado pelo datepicker — senão
+ * o fundo inteiro (incluindo a própria tela) recebia blur ao abrir o calendário.
+ */
+.cdk-overlay-backdrop:not(.mat-overlay-transparent-backdrop) {
+  backdrop-filter: blur(12px);
 }
 
 .beautiful-modal {

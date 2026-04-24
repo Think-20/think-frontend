@@ -1,0 +1,53 @@
+.financial-installments {
+  padding: calc(var(--spacing) * 3);
+
+  border-radius: 8px;
+
+  background-color: var(--color-gray-50);
+
+  &__heading {
+    margin: 0 0 calc(var(--spacing) * 3);
+
+    padding: 0;
+
+    color: var(--color-gray-700);
+
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  &__row {
+    display: grid;
+
+    grid-template-columns: minmax(88px, auto) 1fr 1fr;
+
+    align-items: center;
+
+    gap: calc(var(--spacing) * 3);
+
+    margin-bottom: calc(var(--spacing) * 3);
+  }
+
+  &__row-label {
+    color: var(--color-gray-500);
+
+    font-size: 13px;
+    font-weight: 400;
+  }
+
+  &__row-field {
+    margin: 0;
+  }
+
+  @media screen and (max-width: 880px) {
+    &__row {
+      grid-template-columns: 1fr;
+
+      gap: calc(var(--spacing) * 2);
+    }
+
+    &__row-label {
+      padding-top: 0;
+    }
+  }
+}

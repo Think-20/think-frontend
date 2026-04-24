@@ -3,6 +3,17 @@
 <section *ngIf="opened" class="notification-bar">
   <div class="notification-bar__header">
     <h3 class="notification-bar__header__title">Feed</h3>
+
+    <cb-icon-button
+      type="button"
+      size="lg"
+      [rounded]="true"
+      class="notification-bar__header__close"
+      (click)="closeFn()"
+      aria-label="Fechar notificações"
+    >
+      <cb-icon-close></cb-icon-close>
+    </cb-icon-button>
   </div>
 
   <div class="notification-bar__container cb-scroll">

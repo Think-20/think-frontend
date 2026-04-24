@@ -1,0 +1,36 @@
+.financial-date-filter {
+  position: relative;
+  display: inline-flex;
+
+  &__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    color: #99a1af;
+    font-size: 12px;
+    cursor: pointer;
+
+    &:hover {
+      color: #4a5565;
+    }
+  }
+
+  &__input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    width: 1px;
+    height: 1px;
+  }
+
+  &__icon {
+    display: flex;
+    width: 16px;
+    height: 16px;
+  }
+}

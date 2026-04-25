@@ -1,0 +1,41 @@
+---
+description: Node via nvm, comandos de build e empacotamento (think.dev / think.prod)
+alwaysApply: true
+---
+
+# Node, build e release local
+
+## Versão do Node
+
+- O time usa **nvm** para controlar a versão do Node.
+- Para **buildar este projeto**, use **Node 16.14.0** (alinha com Webpack/OpenSSL do stack atual e evita erros como `ERR_OSSL_EVP_UNSUPPORTED` em versões novas do Node).
+
+```bash
+nvm use 16.14.0
+```
+
+## Comandos de build
+
+Os scripts `build:dev` e `build:prod` no `package.json` fazem, em sequência:
+
+1. `ng build` com a configuração correspondente (`development` ou `production`).
+2. **`bestzip`** compactando a pasta de saída em um ZIP na **raiz do repositório**.
+
+```bash
+npm run build:dev   # think.dev/ + think.dev.zip
+npm run build:prod  # think.prod/ + think.prod.zip
+```
+
+- Se o **build falhar**, o **zip não é gerado** (a cadeia usa `&&`).
+- Pastas de saída vêm do `angular.json` (`think.dev` / `think.prod`).
+
+## Só ZIP (sem rebuild)
+
+Útil quando a pasta já existe e você quer só atualizar o arquivo:
+
+```bash
+npm run zip:dev
+npm run zip:prod
+```
+
+Ao sugerir ou documentar release local, lembrar **nvm + Node 16.14.0** e que **`npm run build:dev` / `npm run build:prod` já incluem o zip** (não há scripts separados `build:*:zip`).

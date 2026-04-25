@@ -32,7 +32,8 @@ p {
 }
 
 .container-memorial {
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-weight: lighter;
   margin-left: -24px;
   margin-right: -24px;
@@ -51,12 +52,12 @@ p {
 }
 
 .memorial-cabecalho {
-  background-image: url('/assets/images/timbrado_cabecalho.jpg');
+  background-image: url("/assets/images/timbrado_cabecalho.webp");
   min-height: 173px;
 }
 
 .memorial-corpo {
-  background-image: url('/assets/images/timbrado_corpo.jpg');
+  background-image: url("/assets/images/timbrado_corpo.webp");
   min-height: 730px;
   padding-top: 0;
   background-repeat: repeat-y;
@@ -67,7 +68,7 @@ p {
 }
 
 .memorial-rodape {
-  background-image: url('/assets/images/timbrado_rodape.jpg');
+  background-image: url("/assets/images/timbrado_rodape.webp");
   min-height: 273px;
 }
 

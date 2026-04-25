@@ -1,40 +1,68 @@
 <div class="external-check-in">
-    <h3 class="animate__animated animate__fadeIn">Olá! 😊</h3>
+  <h3 class="animate__animated animate__fadeIn">Olá! 😊</h3>
 
-    <p *ngIf="statusAccept" class="animate__animated animate__fadeIn animate__delay-1s">
-        Gostaríamos de expressar nossa gratidão pela confiança e parceria.
-    </p>
+  <p
+    *ngIf="statusAccept"
+    class="animate__animated animate__fadeIn animate__delay-1s"
+  >
+    Gostaríamos de expressar nossa gratidão pela confiança e parceria.
+  </p>
 
-    <p *ngIf="statusRefuse" class="animate__animated animate__fadeIn animate__delay-1s">
-        <span *ngIf="!success">Por favor, escreva o motivo da recusa da proposta no campo abaixo:</span>
-        <span *ngIf="success">A proposta foi recusada. Você já pode fechar esta guia.</span>
-    </p>
+  <p
+    *ngIf="statusRefuse"
+    class="animate__animated animate__fadeIn animate__delay-1s"
+  >
+    <span *ngIf="!success">Por favor, escreva o motivo da recusa da proposta no campo abaixo:</span>
+    <span *ngIf="success">A proposta foi recusada. Você já pode fechar esta guia.</span>
+  </p>
 
-    <div *ngIf="viewBox" class="external-check-in__box">
-        <span *ngIf="statusAccept && success" class="animate__animated animate__fadeIn">
-            Proposta aceita com sucesso!
-        </span>
+  <div
+    *ngIf="viewBox"
+    class="external-check-in__box"
+  >
+    <span
+      *ngIf="statusAccept && success"
+      class="animate__animated animate__fadeIn"
+    >
+      Proposta aceita com sucesso!
+    </span>
 
-        <span *ngIf="statusRefuse && success" class="animate__animated animate__fadeIn">
-            Proposta recusada com sucesso!
-        </span>
+    <span
+      *ngIf="statusRefuse && success"
+      class="animate__animated animate__fadeIn"
+    >
+      Proposta recusada com sucesso!
+    </span>
 
-        <div *ngIf="statusRefuse && !success"
-            class="external-check-in__box__reason-for-rejection animate__animated animate__fadeIn animate__delay-1s">
-            <textarea #reasonForRejectionField name="reasonForRejection" id="reasonForRejection" row="2" maxlength="255"
-                [formControl]="reasonForRejection"
-                [readOnly]="loading"
-            ></textarea>
+    <div
+      *ngIf="statusRefuse && !success"
+      class="external-check-in__box__reason-for-rejection animate__animated animate__fadeIn animate__delay-1s"
+    >
+      <textarea
+        #reasonForRejectionField
+        name="reasonForRejection"
+        id="reasonForRejection"
+        row="2"
+        maxlength="255"
+        [formControl]="reasonForRejection"
+        [readOnly]="loading"
+      ></textarea>
 
-            <button type="button"
-                [disabled]="loading"
-                (click)="refuse()">
-                Recusar Proposta
-            </button>
-        </div>
+      <button
+        type="button"
+        [disabled]="loading"
+        (click)="refuse()"
+      >
+        Recusar Proposta
+      </button>
     </div>
+  </div>
 </div>
 
 <div class="logo animate__animated animate__fadeIn animate__delay-2s">
-    <img src="assets/images/think.jpeg" alt="Logo" width="40px" />
+  <img
+    src="assets/images/think.webp"
+    alt="Logo"
+    width="40px"
+  />
 </div>

@@ -216,7 +216,7 @@ import { HomeService } from "./home/home.service";
 import { NgApexchartsModule } from "ng-apexcharts";
 import { ChartPreviewComponent } from "./home/components/chart-preview.component";
 import { CountAnimationPipe } from "./shared/count-animation.pipe";
-import { CountUpDirective, Destroy } from "./shared/count-animation.directive";
+import { CountUpDirective } from "./shared/count-animation.directive";
 import { HomeEmptyComponent } from "./home-empty/home-empty.component";
 import { RoundPipe } from "./shared/round.pipe";
 import { GoalsComponent } from "./goals/goals.component";
@@ -344,10 +344,10 @@ import { InputPriceComponent } from "./components/dumbs/input-price/input-price.
 import { IconUploadComponent } from "./components/icons/icon-upload/icon-upload.component";
 import { FinancialFilterComponent } from "./components/smart/financial-filter/financial-filter.component";
 import { FinancialCreateComponent } from "./components/smart/financial-create/financial-create.component";
-import { FinancialDateFilterComponent } from './components/dumbs/financial-date-filter/financial-date-filter.component';
-import { FinancialPeriodFilterComponent } from './components/dumbs/financial-period-filter/financial-period-filter.component';
-import { BankAccountsComponent } from './components/smart/bank-accounts/bank-accounts.component';
-import { GamificationComponent } from './gamification/gamification.component';
+import { FinancialDateFilterComponent } from "./components/dumbs/financial-date-filter/financial-date-filter.component";
+import { FinancialPeriodFilterComponent } from "./components/dumbs/financial-period-filter/financial-period-filter.component";
+import { BankAccountsComponent } from "./components/smart/bank-accounts/bank-accounts.component";
+import { GamificationComponent } from "./gamification/gamification.component";
 
 registerLocaleData(localePt);
 
@@ -702,7 +702,6 @@ registerLocaleData(localePt);
     HomeService,
     GoalsService,
     UserGoalService,
-    Destroy,
     MatDialog,
     MatSnackBar,
     MatSlideToggle,

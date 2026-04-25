@@ -54,6 +54,10 @@ export class InputTextComponent implements ControlValueAccessor, AfterViewInit, 
   private onChange: (value: string) => void = () => {};
   private onTouched: () => void = () => {};
 
+  handleBlur(): void {
+    this.onTouched();
+  }
+
   change(event: Event) {
     const input = event.target as HTMLInputElement;
 

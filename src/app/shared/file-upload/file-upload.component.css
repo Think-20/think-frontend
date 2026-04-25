@@ -7,17 +7,20 @@
   margin-bottom: 10px;
 }
 
-.add-file, .delete-file, .download-file, .aux-button {
+.add-file,
+.delete-file,
+.download-file,
+.aux-button {
   z-index: 10;
   min-width: 10px !important;
   margin-top: 10px;
   padding: 0px !important;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .aux-button {
   min-width: 40px !important;
-  color: rgba(0,0,0,0.2);
+  color: rgba(0, 0, 0, 0.2);
 }
 
 .add-file {
@@ -26,10 +29,11 @@
   left: 0px;
 }
 
-.delete-file, .download-file {
-position: absolute;
-z-index: 10;
-right: -0px;
+.delete-file,
+.download-file {
+  position: absolute;
+  z-index: 10;
+  right: -0px;
 }
 
 .download-file {
@@ -37,7 +41,7 @@ right: -0px;
 }
 
 .project-image {
-  background: url('/assets/images/sem-foto.jpg');
+  background: url("/assets/images/sem-foto.webp");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -51,7 +55,8 @@ right: -0px;
   min-width: 145px;
 }
 
-.project-image-container, .project-image {
+.project-image-container,
+.project-image {
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -64,8 +69,8 @@ right: -0px;
   left: 0px;
   width: calc(100%);
   height: calc(100%);
-  content: '';
-  background-color: rgba(0,0,0,0.7);
+  content: "";
+  background-color: rgba(0, 0, 0, 0.7);
   transition: all 0.4s linear;
 }
 
@@ -75,7 +80,6 @@ right: -0px;
 
 .pdf {
   background-size: 32px 32px !important;
-
 }
 
 .container-bar-add {

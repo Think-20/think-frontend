@@ -87,4 +87,8 @@ export class InputNumberComponent implements ControlValueAccessor {
   private onChange: (value: any) => void = () => {};
 
   private onTouched: () => void = () => {};
+
+  handleBlur(): void {
+    this.onTouched();
+  }
 }

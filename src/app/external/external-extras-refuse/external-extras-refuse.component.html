@@ -1,40 +1,58 @@
 <div class="external-check-in">
-    <h3 class="animate__animated animate__fadeIn">Olá!</h3>
+  <h3 class="animate__animated animate__fadeIn">Olá!</h3>
 
-    <p class="animate__animated animate__fadeIn animate__delay-1s">
-        <span *ngIf="!success">Por favor, escreva o motivo da recusa no campo abaixo:</span>
-        <span *ngIf="success">Os itens extras foram recusados. Você já pode fechar esta guia.</span>
-    </p>
+  <p class="animate__animated animate__fadeIn animate__delay-1s">
+    <span *ngIf="!success">Por favor, escreva o motivo da recusa no campo abaixo:</span>
+    <span *ngIf="success">Os itens extras foram recusados. Você já pode fechar esta guia.</span>
+  </p>
 
-    <div class="external-check-in__box">
-        <span *ngIf="success" class="animate__animated animate__fadeIn">
-            Itens extras recusados com sucesso!
-        </span>
+  <div class="external-check-in__box">
+    <span
+      *ngIf="success"
+      class="animate__animated animate__fadeIn"
+    >
+      Itens extras recusados com sucesso!
+    </span>
 
-        <div *ngIf="!success"
-            class="external-check-in__box__reason-for-rejection animate__animated animate__fadeIn animate__delay-1s">
-            <textarea #reasonForRejectionField name="reasonForRejection" id="reasonForRejection" row="2" maxlength="255"
-                [formControl]="reasonForRejection"
-                [readOnly]="loading"
-            ></textarea>
+    <div
+      *ngIf="!success"
+      class="external-check-in__box__reason-for-rejection animate__animated animate__fadeIn animate__delay-1s"
+    >
+      <textarea
+        #reasonForRejectionField
+        name="reasonForRejection"
+        id="reasonForRejection"
+        row="2"
+        maxlength="255"
+        [formControl]="reasonForRejection"
+        [readOnly]="loading"
+      ></textarea>
 
-            <div class="external-check-in__box__reason-for-rejection__buttons">
-                <button type="button"
-                    [disabled]="loading"
-                    (click)="goBack()">
-                    Voltar
-                </button>
-    
-                <button type="button"
-                    [disabled]="loading"
-                    (click)="refuse()">
-                    Recusar
-                </button>
-            </div>
-        </div>
+      <div class="external-check-in__box__reason-for-rejection__buttons">
+        <button
+          type="button"
+          [disabled]="loading"
+          (click)="goBack()"
+        >
+          Voltar
+        </button>
+
+        <button
+          type="button"
+          [disabled]="loading"
+          (click)="refuse()"
+        >
+          Recusar
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 
 <div class="logo animate__animated animate__fadeIn animate__delay-2s">
-    <img src="assets/images/think.jpeg" alt="Logo" width="40px" />
+  <img
+    src="assets/images/think.webp"
+    alt="Logo"
+    width="40px"
+  />
 </div>

@@ -1,0 +1,37 @@
+<div class="containerPrincipal">
+    <div class="headContainer">
+        <div class="btnTitle">
+            <mat-icon>expand_less</mat-icon>
+            <p>Opção de Conta 1</p>
+        </div>
+        <button>Excluir</button>
+    </div>
+    <div class="containerForm">
+        <form [formGroup]="form">
+            <div class="form-group">
+                <label for="tiposConta">Tipo de Conta*</label>
+                <select formControlName="tiposConta" id="">
+                    <option value="contaC">Conta Corrente</option>
+                    <option value="contaP">Conta Poupança</option>
+                    <option value="contaS">Conta Salário</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="codBanco">Código do Banco*</label>
+                <input type="text" formControlName="codBanco" id="">
+            </div>
+            <div class="form-group">
+                <label for="agenciaBanco">Agencia*</label>
+                <input type="text" formControlName="agenciaBanco" id="">
+            </div>
+            <div class="form-group">
+                <label for="numConta">Número e Dígito da Conta*</label>
+                <input type="text" formControlName="numConta" id="">
+            </div>
+            <div class="form-group">
+                <label for="description">Descrição</label>
+                <input type="text" formControlName="description" id="">
+            </div>
+        </form>
+    </div>
+</div>

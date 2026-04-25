@@ -1,0 +1,538 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+html,body{
+    width: 100%;
+    height: 100%;
+}
+
+/* Container do layout */
+.containerPrincipal{
+    max-width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+/* Container do head */
+.containerHead{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Titulo cabecalho */
+.headTitle{
+    width: 50%;
+}
+
+/* Titulo Pagina */
+.Title{
+    font-size: 25px;
+    font-weight: 400;
+    margin-bottom: 4px;
+}
+
+/* SubTitle Pagina */
+.SubTitle{  
+    font-size: 18px;
+    font-weight: 200;
+    color: #888585;
+}
+
+/* Div botões cabecalho */
+.headButtons{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    width: 45%;
+    padding: 4px;
+    gap: 10px;
+}
+
+/* Div mudança de layout */
+.choiceLayout{
+    border: 1px solid #ccc; 
+    border-radius: 7px;
+    padding: 5px;
+    min-width: 45%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Botão & icons */
+#kanban, #list {
+    flex: 1; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+/* BTN add Cedente */
+.btnAddCedente {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #48855e;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+mat-icon{
+    font-size: 20px;
+    font-weight: 500;
+    color:rgb(228, 228, 228);
+}
+
+.btnadd{
+    border: 0;
+    background-color: rgb(72, 133, 94);
+    color: rgb(251,252,255);
+    font-size: 15px;
+}
+
+/* Fundo Select vem do banco */
+.fundoSelect{
+    width: 100%;
+    padding: 13px 10px 13px 10px;
+    background-color: rgb(245, 245, 245);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.infoFundo{
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 17px;
+    /* background-color: bisque; */
+}
+
+.codTitle{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.areaIcon{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background-color: rgb(168, 221, 187);
+}
+
+.codTitle{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+#carteira{
+    color: rgb(25, 90, 50);
+}
+
+#titleFundo{
+    font-size: 14px;
+    font-weight: 300;
+    color: rgb(136, 133, 133);
+}
+
+#titleFundoPrincipal{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#BtntrocarFundo{
+    height: 40px;
+    width: 120px;
+    border: none;
+    border-radius: 10px;
+}
+
+#carteira{
+    color:black;
+}
+
+.descicaoFundo{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Container Status*/
+.containerStatus{
+    width: 100%;
+    display: flex;
+    gap: 15px;
+}
+
+.boxStatus{
+    flex: 1;
+    height: 100px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:12px;
+    border-radius: 15px;
+    background-color: rgb(245, 245, 245);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.infoStatus{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.titleStatus{
+    font-size: 15px;
+    font-weight: 200;
+    color: rgb(102, 102, 102);
+}
+
+.numberStatus{
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+/* icons Status */
+.iconStatus{
+    width: 28px;
+    height: 28px;
+    padding: 2px;
+    border-radius: 5px;
+    background-color: rgb(223, 215, 215);
+    text-align: center;
+    font-size: 23px;
+}
+
+#iconBusinessPedenete{
+    color: rgb(134, 134, 136);
+}
+#iconBusinessAvalia{
+    color: rgb(30, 79, 211);
+}
+#iconBusinessIconsiste{
+    color: rgb(235, 162, 28);
+}
+#iconBusinessAprovado{
+    color: rgb(18, 172, 18);
+}
+#iconBusinessVencido{
+    color: rgb(255, 0, 0);
+}
+#iconBusinessCancelado{
+    color: rgb(128, 128, 128);
+}
+
+/* FiltroSpecific */
+.containerFiltro{
+    width: 100%;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: rgb(247, 247, 247);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* Linha de busca */
+.searchButton{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Form ocupa tudo */
+#formSeach{
+    flex: 1;
+}
+
+/* Input */
+.inputDiv{
+    width: 100%;
+    position: relative; 
+}
+
+#inputSearch{
+    width: 100%;
+    padding: 10px 45px 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgb(221, 221, 221);
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+#inputSearch:focus{
+    outline: none;
+    border-color: rgb(76, 175, 80);
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.15);
+}
+
+/* Botão search dentro do input */
+#btnSearch{
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgb(119, 119, 119);
+}
+
+/* Botão Novo */
+.btnSearch{
+    border-radius: 10px;
+    padding: 8px 12px;
+    background-color: rgb(72, 133, 94);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btnSearch:hover{
+    background-color: #3a6d4d;
+}
+
+.btnadd{
+    border: none;
+    background: none;
+    color: rgb(255, 255, 255);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Filtros */
+.filtroEspecific{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Icone filtro */
+#iconFiltro{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* Selects */
+.fieldSelect{
+   flex: 1;
+   min-width: 180px;
+}
+
+select{
+    width: 100%;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background-color: white;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+select:focus{
+    outline: none;
+    border-color: #4caf50;
+}
+
+/* Checkbox */
+#checkBox{
+    width: 100%;
+    padding: 8px 15px;
+    border-radius: 10px;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    border: 1px solid #ddd;
+}
+
+label{
+    font-size: 14px;
+    color: #444;
+}
+
+#SLAVencido{
+    width: 16px;
+    height: 16px;
+}
+
+/* Quantidade */
+#qtdCadastro{
+    margin-left: auto;
+    font-weight: 500;
+    color: #555;
+}
+
+/* Status */
+.status{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.statusFilter{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+}
+
+/* Bolinhas */
+.spanStatus{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+/* Cores */
+#spanPedente{ background-color: #868688; }
+#spanAvaliacao{ background-color: #1e4fd3; }
+#spanInconsistencia{ background-color: #eba21c; }
+#spanAprovado{ background-color: #12ac12; }
+#spanVencidos{ background-color: #ff0000; }
+#spanCancelado{ background-color: #808080; }
+
+/* Container Kanban */
+.containerKanban {
+    max-width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    padding: 10px;
+    overflow-x: auto; 
+    overflow-y: hidden;
+}
+
+/* Coluna */
+.containerCards {
+    min-width: 320px; 
+    max-width: 320px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: #f4f5f7;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+/* Header da coluna */
+.titleKanban {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+/* Bolinha de status */
+.kanbanStatus {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+/* Área dos cards */
+.cardsKanban {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Card */
+.cardsKanban {
+    background: white;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Topo do card */
+.titleCards {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+/* Corpo */
+.corpoKanban {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+}
+
+/* Linhas internas */
+.nomeFundo,
+.responsavel,
+.doc,
+.sla {
+    display: flex;
+    align-items: center;
+}
+
+.sla{
+    flex-direction: row;
+    gap:5px;
+}
+
+/* Linha separadora */
+hr {
+    border: none;
+    border-top: 1px solid #eee;
+}
+
+.areaIconKanban{
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 8px;
+    background-color: rgb(168, 221, 187);
+}
+
+.kanbanCardIcon{
+    font-size: 20px;
+}

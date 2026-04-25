@@ -13,7 +13,7 @@ mat-toolbar {
 
 .cbNotificationItem {
   display: flex;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #eeeeee;
 }
 
 .cbNotificationItem:last-child {
@@ -21,7 +21,7 @@ mat-toolbar {
 }
 
 .mat-toolbar {
-  background-color: #e5e6e8 !important;
+  background-color: rgb(45, 95, 63) !important;
   color: white !important;
   padding-left: 0 !important;
 }

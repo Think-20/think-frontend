@@ -3,7 +3,8 @@
 }
 
 .my-container {
-  padding: 20px 15px;
+  border-bottom: .01px solid rgb(219, 216, 216);
+  padding: 10px 10px;
 }
 
 #sidenav-container {
@@ -33,7 +34,7 @@
 }
 
 #menu-container {
-  height: calc(100% - 64px);
+  height: calc(100% - 50px);
   overflow: auto;
 }
 
@@ -51,16 +52,17 @@
 }
 
 #logo-container {
-  background-color: #e5e6e8 !important;
-  padding: 12px;
-  margin-bottom: 5px;
+  background-color: rgb(45, 95, 63)!important;
+  padding:5px;
+  margin-bottom: 6px;
   display: flex;
   justify-content: space-between;
   color: white !important;
 }
 
 #logo-container img {
-  width: 124px;
+  width: 150px;
+  height: 47px;
   margin-left: 5px;
 }
 
@@ -69,13 +71,16 @@
   padding-right: 9px;
   text-align: right;
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
+  flex-direction: row-reverse;
+  justify-content: space-around;
+  align-items: center;
   padding-top: 27px;
 }
 
 .user-photo img {
-  display: block;
+  width: 53px;
+  height: 53px;
+  border-radius: 100%;
 }
 
 .user-name {
@@ -87,14 +92,19 @@
 }
 
 .nav-navbar {
+  display: flex;
+  flex-direction: column;
   margin-top: 30px;
   padding-right: 8px;
+  /* border: 4px solid rgb(45, 2, 201); */
 }
 
 .nav-navbar .nav-item {
   text-indent: 10px;
   margin-bottom: 15px;
 }
+
+
 
 .nav-item a[disabled] {
   background-color: white;
@@ -107,7 +117,6 @@
   font-size: 13px;
   color: #7b7b7b;
   box-shadow: none;
-  text-align: right;
   font-weight: 300;
 }
 
@@ -120,6 +129,22 @@
 .nav-navbar .nav-item a {
   text-decoration: none;
   padding-left: 0;
+}
+
+/* bolinhas do menu */
+.department {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.department-container {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start; /* esquerda */
+  gap: 10px;
+  text-align: left !important;
 }
 
 #menu-sidenav {

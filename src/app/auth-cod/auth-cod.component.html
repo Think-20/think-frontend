@@ -1,0 +1,19 @@
+<div class="fundo">
+    <img class="logo" src="../../../assets/images/login/logo.png"/>
+    <h3>Workflow <span>&</span> Projetos</h3>
+    <div class="container">
+        <div class="titulo">
+            <h4>Código de Verificação</h4>
+        </div>
+        <form>
+            <div class="spaceInput">
+                <input #field1 name="field1" type="text" maxlength="1" (keyup)="move($event, null, field2)">
+                <input #field2 name="field2" type="text" maxlength="1" (keyup)="move($event, field1, field3)">
+                <input #field3 name="field3" type="text" maxlength="1" (keyup)="move($event, field2, field4)">
+                <input #field4 name="field4" type="text" maxlength="1" (keyup)="move($event, field3, field5)">
+                <input #field5 name="field5" type="text" maxlength="1" (keyup)="move($event, field4, null)">
+            </div>
+            <button class="btn" [routerLink]="['/login']">Verificar</button>
+        </form>
+    </div>
+</div>

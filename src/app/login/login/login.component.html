@@ -1,27 +1,36 @@
-<div id="login-container">
-    <div id="login-content" class="col-md-3">
-      <form [formGroup]="loginForm" novalidate>
-          <div class="row">
-            <div class="col-md-12">
-              <div id="logo-container">
-                <img src="{{ API }}/assets/images/logo/think-normal.png" alt="Think Ideias">
-              </div>
+<div class="fundo">
+    <img class="logo" src="../../../assets/images/login/carmel_logo.png"/>
+    <h3>Workflow <span>&</span> Projetos</h3>
+
+    <div class="container">
+        <div class="titulo">
+            <h4>Bem-Vindo</h4>
+            <p id="subtitulo">Faça login para acessar o sistema</p>
+        </div>
+        <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
+            <label>Usuário:</label>
+            <div class="spaceInput">
+                <mat-icon matSuffix>person</mat-icon>
+                <input 
+                    formControlName="email"
+                    type="text"
+                    placeholder="Digite seu usuário">
             </div>
-            <mat-form-field class="col-md-12">
-              <input autocomplete="off" formControlName="email" matInput placeholder="E-mail">
-            </mat-form-field>
-            <mat-form-field class="col-md-12">
-              <input autocomplete="off" type="password" formControlName="password" matInput placeholder="Senha">
-            </mat-form-field>
-            <div class="col-md-12">
-              <button [@alert-message]="state" 
-              class="cb-button" 
-              [disabled]="!loginForm.valid" 
-              (click)="login(loginForm.value)" mat-raised-button>
-                {{message}}
-              </button>
+            <label>Senha:</label>
+            <div class="spaceInput">
+                <mat-icon>lock</mat-icon>
+                <input 
+                    formControlName="password"
+                    type="password"
+                    placeholder="Digite sua senha">
+                <mat-icon>visibility</mat-icon>
             </div>
-          </div>
-      </form>
+            <div class="checkbox">
+                <input type="checkbox">
+                <p>Lembrar-me</p>
+            </div>
+            <button type="submit" class="btn cb-button">Entrar</button>
+        </form>
+        <a [routerLink]="['/forget-password']">Esqueceu a senha?</a>
     </div>
 </div>

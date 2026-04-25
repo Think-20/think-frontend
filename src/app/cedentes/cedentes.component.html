@@ -1,0 +1,24 @@
+<div class="titlePg">
+    <h1>Cadastro Cedentes</h1>
+    <h3>Gerencie os cedentes cadastrados no sistema</h3>
+</div>
+
+<!-- Container Cedentes -->
+<div class="container">
+    <div class="area_cedentes">
+        <div class="back_icon">
+            <mat-icon id="icon_wallet">wallet</mat-icon>
+        </div>
+        <h2>Selecione um Fundo</h2>
+        <h3 class="subTitle">Para visualizar e gerenciar os cedentes, primeiro selecione o fundo que deseja consultar</h3>
+        <div class="cards_fundos">
+            <p>aqui é um JS DO BANCO</p>
+        </div>
+        <button class="btn_add_cedentes" type="button"  (click)="openModal()">
+            <mat-icon>add</mat-icon>
+            <p>Ativar Novo Fundo</p>
+        </button>
+    </div>
+</div>
+
+<cb-modal-cedentes *ngIf = "showModal" (toggleModal)="closeModal()"></cb-modal-cedentes>

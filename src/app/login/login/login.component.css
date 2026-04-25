@@ -1,44 +1,153 @@
-#login-container {
-    animation: bg 5s linear infinite alternate;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+*{
+    padding:0;
+    margin:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-#logo-container {
-    margin-bottom: 80px;
+mat-icon{
+    font-family: 'Material Icons' !important;
+    font-size: 17px;
+    text-align: center;
 }
 
-#logo-container img {
-    max-width: 100%;
+body{
+    min-height:100vh;
 }
 
-#login-container .cb-button {
-    width: 100%;
-    margin-top: 39px;
+.fundo{
+    width:100%;
+    min-height:100vh;
+    background-image:
+    linear-gradient(rgba(40,70,5,0.9), rgba(30,55,3,0.9)),
+    url('../../../assets/images/login/planoFundo.jpg');
+    background-size:cover;
+    background-position:center;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
 }
 
-.cb-button {
-    background-color: transparent;
-    width: 100%;
-    box-shadow: none;
-    border: 1px solid #dcdcdc;
-    color: #AAA;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-    font-weight: normal;
-    border-radius: 0;
+.logo{
+    width:260px;
+    max-width:70%;
+    margin-bottom:15px;
 }
 
-.cb-button:focus {
-    outline: none;
+h3{
+    font-size: 20px;
+    font-weight:300;
+    color:white;
+    margin-bottom:25px;
+    text-align:center;
 }
 
-.alert-message {
-    color: white;
-    font-size: 12px;
+.container{
+    width:100%;
+    max-width:350px;
+    padding:25px;
+    border:1px solid rgb(145,153,123);
+    background:rgb(255, 255, 255);
+    border-radius:15px;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
 }
 
-.alert-message p {
-    padding: 10px;
+.titulo h4{
+    font-size:20px;
+    font-weight:500;
+}
+
+#subtitulo{
+    font-size:13px;
+    color:rgb(158,150,150);
+}
+
+form{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+label{
+    font-size:14px;
+}
+
+.spaceInput{
+    width:100%;
+    height:42px;
+    padding:0 10px;
+    background-color:rgb(255, 255, 255);
+    border:1px solid rgb(218,204,204);
+    border-radius:7px;
+    display:flex;
+    align-items:center;
+}
+
+.spaceInput input{
+    flex:1;
+    height:100%;
+    border:0;
+    font-size:14px;
+}
+
+.spaceInput input:focus{
+    outline:none;
+}
+
+.spaceInput i{
+    font-size:16px;
+    color:rgb(170,170,170);
+    margin-right:8px;
+}
+
+.spaceInput i:last-child{
+    cursor:pointer;
+}
+
+input:focus{
+    outline:none;
+}
+
+.checkbox{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-top:5px;
+}
+
+.checkbox input{
+    width:15px;
+    height:15px;
+}
+
+.btn{
+    width:100%;
+    height:42px;
+    border:0;
+    border-radius:6px;
+    background:rgb(52,133,90);
+    color:rgb(255, 255, 255);
+    margin-top:10px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.btn:hover{
+    background:rgb(40,110,72);
+}
+
+a{
+    font-size:13px;
+    text-align:center;
+    color:rgb(52,133,90);
+    text-decoration:none;
+}
+
+a:hover{
+    text-decoration:underline;
 }

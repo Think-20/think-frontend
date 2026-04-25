@@ -2,7 +2,7 @@
   [class.new]="printNew && userNotification.read == 0"
   class="notification-item-content">
   <button class="button-fixed" mat-button (click)="goTo(userNotification?.notification)">
-    <mat-icon>add</mat-icon>
+    <!-- <mat-icon>add</mat-icon> -->
   </button>
   <mat-card-header>
     <div mat-card-avatar class="mat-card-photo" [ngStyle]="{ 'background-image' : userNotification?.notification?.notifier?.image }"></div>

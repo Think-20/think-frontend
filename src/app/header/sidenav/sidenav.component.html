@@ -3,7 +3,7 @@
     <div id="logo-container" class="my-container">
       <div class="text-center">
         <a [routerLink]="['/home']">
-          <img src="{{ API }}/assets/images/logo/think-normal.png" alt="Think Ideias">
+          <img class="logoimg" src="../../../assets/images/login/carmel_logo.png" alt="Carmel">
         </a>
       </div>
       <button id="menu-sidenav" class="my-button" mat-button (click)="toggleMenu()">
@@ -17,27 +17,32 @@
             {{user.employee.name}}
           </div>
           <div class="user-photo">
-            <img width="55px" src="{{ API }}/assets/images/{{user.employee.image}}" alt="Photo">
+            <img src="{{ API }}/assets/images/{{user.employee.image}}" alt="Photo">
           </div>
         </div>
+        <mat-icon>arrow</mat-icon>
       </div>
       <nav class="nav-navbar">
         <div class="nav-item" *ngIf="user.employee.department_id == 2">
-          <a (click)="administradores = administradores === true ? false : true" mat-raised-button class="department-container">
-            <span class="department department-2"></span> Administradores
+            <a (click)="administradores = administradores === true ? false : true" mat-raised-button class="department-container">
+              <span class="label">Administradores</span> 
+              <span class="department department-2"></span>
+            </a>
+        </div>
+        <div class="nav-item">
+          <a (click)="adiministrativo = adiministrativo === true ? false : true" mat-raised-button class="department-container">
+            <span class="department department-7"></span> Administrativo
           </a>
-          <div [@rowAppeared]="state" *ngIf="administradores">
-            <div class="sub-navbar">
-              <a [routerLink]="['/displays']" mat-raised-button>Acesso das telas</a>
-              <a [routerLink]="['/functionalities']" mat-raised-button>Funcionalidades da API</a>
+          <div [@rowAppeared]="state" *ngIf="adiministrativo">
+            <div class="sub-nav-bar">
+              <a mat-raised-button [routerLink]="['/jobs']">Financeiro</a>
+              <a mat-raised-button [routerLink]="['/jobs']">Fundos-Novos Fundos</a>
+              <a mat-raised-button [routerLink]="['/jobs']">Fundos-Estruturação</a>
+              <a mat-raised-button [routerLink]="['/jobs']">Fundos-Transferências</a>
             </div>
           </div>
         </div>
-        <div class="nav-item">
-          <a mat-raised-button class="department-container">
-            <span class="department department-7"></span> Administrativo
-          </a>
-        </div>
+        <!-- Atendimento -->
         <div class="nav-item">
           <a (click)="atendimento = atendimento === true ? false : true" mat-raised-button class="department-container">
             <span class="department department-4"></span> Atendimento
@@ -59,26 +64,28 @@
             </div>
           </div>
         </div>
+        <!-- Cadastro -->
         <div class="nav-item">
           <a (click)="criacao = criacao === true ? false : true" mat-raised-button class="department-container">
-            <span class="department department-5"></span> Criação
+            <span class="department department-5"></span> Cadastro
           </a>
           <div [@rowAppeared]="state" *ngIf="criacao">
             <div class="sub-navbar">
-              <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Agenda</a>
-              <a (click)="events = !events" mat-raised-button>Eventos</a>
+              <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Cedentes</a>
+              <a mat-raised-button [routerLink]="['/schedule']">Cotistas</a>
+              <a mat-raised-button [routerLink]="['/schedule']">Sacados</a>
+              <a mat-raised-button [routerLink]="['/schedule']">Monitoramento</a>
+              <a mat-raised-button [routerLink]="['/schedule']">Relatórios</a>
               <div [@rowAppeared]="state" *ngIf="events">
                 <div class="sub-navbar">
                   <a mat-raised-button [routerLink]="['/events']" [disabled]="hasNoPermission(user, '/events/list')">Eventos</a>
                   <a mat-raised-button [routerLink]="['/places']" [disabled]="hasNoPermission(user, '/places/list')">Locais</a>
                 </div>
               </div>
-              <a mat-raised-button [routerLink]="['/jobs']" [disabled]="hasNoPermission(user, '/jobs/list')">Jobs</a>
-              <!-- <a mat-raised-button [routerLink]="['/service-report']" [disabled]="hasNoPermission(user, '/reports/service-report')">Relatório de jobs</a> -->
             </div>
           </div>
         </div>
-
+        <!-- Diretoria -->
         <div class="nav-item">
           <a *ngIf="!hasNoPermission(user, '/employees')" (click)="diretoria = !diretoria" mat-raised-button class="department-container">
             <span class="department department-1"></span> Diretoria
@@ -88,10 +95,10 @@
               <a mat-raised-button [routerLink]="['/employees']" [disabled]="hasNoPermission(user, '/employees/list')">Colaboradores</a>
             </div>
             <div class="sub-navbar">
-              <a (click)="reports = !reports" mat-raised-button>Relatórios</a>
+              <a (click)="reports = !reports" mat-raised-button>Eventos</a>
               <div [@rowAppeared]="state" *ngIf="reports">
                 <div class="sub-navbar">
-                  <a mat-raised-button [routerLink]="['/performance-lite']" [disabled]="hasNoPermission(user, '/performance-lite')">Performance (Lite)</a>
+                  <a mat-raised-button [routerLink]="['/performance-lite']" [disabled]="hasNoPermission(user, '/performance-lite')">Metas</a>
                 </div>
               </div>
             </div>
@@ -100,20 +107,15 @@
             </div>
           </div>
         </div>
-
+        <!-- Planejamento V -->
         <div class="nav-item">
           <a (click)="planejamento = planejamento === true ? false : true" mat-raised-button class="department-container">
             <span class="department department-6"></span> Planejamento
           </a>
           <div [@rowAppeared]="state" *ngIf="planejamento">
             <div class="sub-navbar">
-                <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Agenda</a>
+              <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Agenda</a>
               <a (click)="centroCusto = centroCusto === true ? false : true" mat-raised-button>Centro de custos</a>
-              <div [@rowAppeared]="state" *ngIf="centroCusto" class="sub-navbar">
-                <a mat-raised-button [routerLink]="['/cost-categories']" [disabled]="hasNoPermission(user, '/cost-categories/list')">Categorias de custo</a>
-                <a mat-raised-button [routerLink]="['/item-categories']" [disabled]="hasNoPermission(user, '/item-categories/list')">Categorias de item</a>
-                <a mat-raised-button [routerLink]="['/items']" [disabled]="hasNoPermission(user, '/items/list')">Itens</a>  
-              </div>
             </div>
             <div class="sub-navbar">
               <a (click)="events = !events" mat-raised-button>Eventos</a>
@@ -134,8 +136,12 @@
               </div>
               <!-- <a mat-raised-button [routerLink]="['/service-report']" [disabled]="hasNoPermission(user, '/reports/service-report')">Relatório de jobs</a>  -->
             </div>
+            <div class="sub-navbar">
+              <a mat-raised-button [routerLink]="['/goals']" [disabled]="hasNoPermission(user, '/goals')">Relatório dos Jobs</a>
+            </div>
           </div>
         </div>
+        <!-- Producao V -->
         <div class="nav-item">
           <a (click)="producao = producao === true ? false : true" mat-raised-button class="department-container">
             <span class="department department-3"></span> Produção
@@ -150,6 +156,22 @@
                 </div>
               </div>
               <a [routerLink]="['/providers']" [disabled]="hasNoPermission(user, '/providers/list')" mat-raised-button>Fornecedores</a>
+              <a [routerLink]="['/providers']" [disabled]="hasNoPermission(user, '/providers/list')" mat-raised-button>Organizadoras</a>
+            </div>
+          </div>
+        </div>
+        <!-- Configuracao V -->
+        <div class="nav-item">
+          <a (click)="configuracao = configuracao === true ? false : true" mat-raised-button class="department-container">
+            <span class="department department-3"></span>Configurações 
+          </a>
+          <div [@rowAppeared]="state" *ngIf="configuracao">
+            <div class="sub-navbar">
+              <a [routerLink]="['/providers']" [disabled]="hasNoPermission(user, '/providers/list')" mat-raised-button>Permissões</a>
+              <a [routerLink]="['/providers']" [disabled]="hasNoPermission(user, '/providers/list')" mat-raised-button>Administrativo</a>
+              <a [routerLink]="['/providers']" [disabled]="hasNoPermission(user, '/providers/list')" mat-raised-button>Atendimento</a>
+              <a [routerLink]="['/providers']" [disabled]="hasNoPermission(user, '/providers/list')" mat-raised-button>Cadastro</a>
+              <a [routerLink]="['/providers']" [disabled]="hasNoPermission(user, '/providers/list')" mat-raised-button>Compliance</a>
             </div>
           </div>
         </div>

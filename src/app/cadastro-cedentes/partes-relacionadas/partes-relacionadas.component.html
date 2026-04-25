@@ -1,0 +1,146 @@
+<div class="containerPrincipal">
+    <div class="headContainer">
+        <div class="btnTitle">
+            <mat-icon>expand_less</mat-icon>
+            <p>Parte Relacionada 1</p>
+        </div>
+        <button>Excluir</button>
+    </div>
+    <div class="containerForm">
+        <h3>Dados Gerais</h3>
+        <form [formGroup]="form">
+            <div class="form-group">
+                <label for="nameCompleto">Nome Completo*</label>
+                <input type="text" formControlName="nameCompleto" id="">
+            </div>
+            <div class="form-group">
+                <label for="parteRelacionada">Tipo de Parte Relacionada*</label>
+                <select formControlName="parteRelacionada" id="">
+                    <option value="socio">Socio</option>
+                    <option value="adm">Administrador</option>
+                    <option value="procurador">Procurador</option>
+                    <option value="representante">Representante Legal</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="nacionalidade">Nacionalidade</label>
+                <select formControlName="nacionalidade" id="">
+                    <option value="">Brasil</option>
+                    <option value="">Uruguai</option>
+                    <option value="">Chile</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" formControlName="email" id="">
+            </div>
+            <div class="form-group">
+                <label for="cpf">CPF*</label>
+                <input type="text" formControlName="cpf" id="">
+            </div>
+            <div class="form-group">
+                <label for="telCadastro">Telefone</label>
+                <input type="tel" formControlName="telCadastro" id="">
+            </div>
+        </form>
+        <div class="containerCheck">
+            <div class="areaCheck">
+                <input type="checkbox" formControlName="beneficiarioCedente" id="">
+                <label for="beneficiarioCedente">É um beneficiário final direto do cedente?</label>
+                <mat-icon></mat-icon>
+            </div>
+            <div class="areaCheck">
+                <input type="checkbox" formControlName="assinanteOperacao" id="">
+                <label for="assinanteOperacao">É um assinante da operação?</label>
+                <mat-icon></mat-icon>
+            </div>
+            <div class="areaCheck">
+                <input type="checkbox" formControlName="assinante" id="">
+                <label for="assinante">É um assinante obrigatório?</label>
+                <mat-icon></mat-icon>
+            </div>
+        </div>
+        <div class="containerDadosComplementares">
+            <div class="headDadosComplementares">
+                <h3>Dados Complementares</h3><p>(Opicional)</p>
+            </div>
+            <form [formGroup]="form">
+                <div class="estadoCivil form-group">
+                    <label for="estadoCivil">Estado Civil</label>
+                    <select formControlName="estadoCivil" id="">
+                        <option value="solteiro">Solteiro(a)</option>
+                        <option value="casado">Casado(a)</option>
+                        <option value="divorciado">Divorciado(a)</option>
+                        <option value="viuvo">Viúvo(a)</option>
+                        <option value="uniaoEstavel">União Estável</option>
+                    </select>
+                </div>
+                <div class="regimeCasamento form-group">
+                    <label for="regimeCasamento">Regime de Casamento</label>
+                    <select formControlName="regimeCasamento" id="">
+                        <option value="cParcial">Comunhão Parcial de Bens</option>
+                        <option value="cUniversal">Comunhão Universal de Bens</option>
+                        <option value="tBens">Separação Total de Bens</option>
+                        <option value="pAquestos">Participação Final nos Aquestos</option>
+                    </select>
+                </div>
+                <div class="proficao form-group">
+                    <label for="profissao">Profissão</label>
+                    <input type="text" formControlName="profissao" id="">
+                </div>
+            </form>
+        </div>
+        <div class="containerEndereco">
+            <div class="headEndereco">
+                <h3>Endereço</h3><p>(Opicional)</p>
+            </div>
+            <form [formGroup]="form">
+                <div class="form-group">
+                    <label for="cep">CEP</label>
+                    <input type="text" formControlName="cep" id="">
+                </div>
+                <div class="form-group">
+                    <label for="bairro">Bairro</label>
+                    <input type="text" formControlName="bairro" id="">
+                </div>
+                <div class="form-group">
+                    <label for="rua">Rua</label>
+                    <input type="text" formControlName="rua" id="">
+                </div>
+                <div class="form-group">
+                    <label for="uf">Estado(UF)</label>
+                    <select formControlName="uf" id="">
+                        <option value="">São Paulo</option>
+                        <option value="">Bahia</option>
+                        <option value="">Santa Catarina</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="localNumber">Número</label>
+                    <input type="text" formControlName="localNumber" id="">
+                </div>
+                <div class="form-group">
+                    <label for="city">Cidade</label>
+                    <input type="text" formControlName="city" id="">
+                </div>
+                <div class="form-group">
+                    <label for="complemento">Complemento</label>
+                    <input type="text" formControlName="complemento" id="">
+                </div>
+                <div class="form-group">
+                    <label for="">País</label>
+                    <select formControlName="pais" id="">
+                        <option value="">Brasil</option>
+                        <option value="">Chile</option>
+                        <option value="">EUA</option>
+                        <option value="">Canadar</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="btnDuplicar">
+            <mat-icon>content_copy</mat-icon>
+            <p>Duplicar Avalista</p>
+        </div>
+    </div>
+</div>

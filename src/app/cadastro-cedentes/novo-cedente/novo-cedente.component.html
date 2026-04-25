@@ -1,0 +1,202 @@
+<div class="containerPrincipal">
+    <div class="head">
+        <div class="headTitle">
+            <h3>Novo Cadastro de Cedente</h3>
+            <p>Fundo: Fundo de Crédito Privado Gamma</p>
+        </div>
+        <div class="buttoCancel" (click)="voltarCadastro()">
+            <mat-icon>close</mat-icon>
+            <button>Cancelar</button>
+        </div>
+    </div>
+    <div class="containerProcess">
+        <!-- passos processo -->
+        <div class="stepPross">
+            <div class="process">
+                <mat-icon>description</mat-icon>
+            </div>
+            <h5>Cadastro</h5>
+        </div>
+
+        <!-- line -->
+        <div class="line"></div>
+
+        <!-- passos processo -->
+        <div class="stepPross">
+            <div class="process">
+                <mat-icon>credit_card</mat-icon>
+            </div>
+            <h5>Documentação</h5>
+        </div>
+
+        <!-- line -->
+        <div class="line"></div>
+
+        <!-- passos processo -->
+        <div class="stepPross">
+            <div class="process">
+                <mat-icon>groups</mat-icon>
+            </div>
+            <h5>Contratos</h5>
+        </div>
+
+        <!-- line -->
+        <div class="line"></div>
+
+        <!-- passos processo -->
+        <div class="stepPross">
+            <div class="process">
+                <mat-icon>fact_check</mat-icon>
+            </div>
+            <h5>Revisão</h5>
+        </div>
+    </div>
+    <div class="condicao" *ngIf="mostrarCadastro">
+        <div class="informacao">
+            <div class="iconNotificacao">
+                <mat-icon>priority_high</mat-icon>
+            </div>
+            <p id="notificacaoTexto">
+                Para o cadastro de Pessoas Jurídicas, é exigido que sejam indicados como "Partes Relacionadas" quaisquer pessoas físicas que tenham uma participação de pelo menos 15%, 
+                caso seja uma informação evidente, tanto no cedente quanto participante INDIRETO da cadeia societária, até alcançar os BENEFICIÁRIOS FINAIS. Caso não consiga especificar a participação, 
+                ou haja poucas partes com participação relevante,é necessário identificar os menos 3 principais sócios, por mais que a participação seja inferior de 15% (caso haja mais de 3 sócios).
+            </p>
+        </div>
+        <!-- Container formulario Dados Cadastrais -->
+        <div class="containerDadosCadastrais">
+            <div class="headInfoGerais">
+                <mat-icon>list</mat-icon>
+                <h5>Dados Cadastrais</h5>
+            </div>
+            <form [formGroup]="form">
+                <div class="form-group">
+                    <label for="nome_razaoSocial">Nome/Razão Social*</label>
+                    <input type="text" formControlName="nome_razaoSocial">
+                </div>
+
+                <div class="form-group">
+                    <label for="cpf_cnpj">CPF/CNPJ*</label>
+                    <input type="text" formControlName="cpf_cnpj">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email*</label>
+                    <input type="text" formControlName="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="faturamento">Faturamento Anual*</label>
+                    <input type="text" formControlName="faturamento_anual">
+                </div>
+
+                <div class="form-group">
+                    <label for="assinantes">Mínimo de Assinantes</label>
+                    <input type="text" formControlName="assinantes">
+                </div>
+
+                <div class="form-group">
+                    <label for="cep">CEP*</label>
+                    <input type="text" formControlName="cep">
+                </div>
+
+                <div class="form-group">
+                    <label for="rua">Rua*</label>
+                    <input type="text" formControlName="rua">
+                </div>
+
+                <div class="form-group">
+                    <label for="number">Número*</label>
+                    <input type="text" formControlName="number_end">
+                </div>
+
+                <div class="form-group">
+                    <label for="complemento">Complemento</label>
+                    <input type="text" formControlName="complemento">
+                </div>
+
+                <div class="form-group">
+                    <label for="bairro">Bairro*</label>
+                    <input type="text" formControlName="bairro">
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" formControlName="check_financeiro_nacional" id="">
+                    <label for="check">Está no sistema financeiro nacional ?</label>
+                    <mat-icon>priority_high</mat-icon>
+                </div>
+            </form>
+        </div>
+
+        <!-- ContainerInfoGerais -->
+        <div class="containerInfoGerais">
+            <div class="headInfoGerais">
+                <mat-icon>maps</mat-icon>
+                <h5>Informações Gerais</h5>
+            </div>
+            <form [formGroup]="form">
+                <div class="form-group">
+                    <label for="optionEstado">Estado (UF)*</label>
+                    <select formControlName="optionEstado">
+                        <option value="">Estados</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tel">Telefone*</label>
+                    <input type="tel" formControlName="tel" id="">
+                </div>
+                <div class="form-group">
+                    <label for="city">Cidade*</label>
+                    <input type="text" formControlName="city">
+                </div>
+                <div class="form-group">
+                    <label for="pais">País*</label>
+                    <select formControlName="pais" id="">
+                        <option value="">Paises</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <!-- container Relacionadas -->
+        <div class="partesRelacionadas">
+            <div class="titleform">
+                <mat-icon>groups</mat-icon>
+                <h5>Partes Relacionadas</h5>
+            </div>
+            <div class="btnAdd" (click)="abrirPartesRelacionadas()">
+                <mat-icon>add</mat-icon>
+                <p>ADICIONAR</p>
+            </div>
+            <cb-partes-relacionadas *ngIf="mostrarFormPartesRelacionadas"></cb-partes-relacionadas>
+        </div>
+
+        <!-- container Desembolso -->
+        <div class="contasDesembolso">
+            <div class="titleform">
+                <mat-icon>credit_card</mat-icon>
+                <h5>Contas de Desembolso</h5>
+            </div>
+            <div class="btnAdd" (click)="abrirDesembolso()">
+                <mat-icon>add</mat-icon>
+                <p>ADICIONAR</p>
+            </div>
+            <cb-contas-desembolso *ngIf="mostrarDesembolso"></cb-contas-desembolso>
+        </div>
+
+        <!-- container avalista -->
+        <div class="avalista">
+            <div class="titleform">
+                <mat-icon>person</mat-icon>
+                <h5>avalistas</h5>
+            </div>
+            <div class="btnAdd">
+                <mat-icon>add</mat-icon>
+                <p>ADICIONAR</p>
+            </div>
+        </div>
+    </div>
+    <cb-documentacao-cedente *ngIf="mostrarDocumentacao"></cb-documentacao-cedente>
+    <div class="containerBTN">
+        <button (click)="voltarCadastro()">Voltar</button>
+        <button (click)="abrirCadastroDoc(); abrirContrato()">Próximo</button>
+    </div>
+</div>
+

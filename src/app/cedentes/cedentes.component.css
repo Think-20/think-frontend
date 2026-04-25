@@ -1,0 +1,105 @@
+*{
+    margin: 0;
+    border: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.titlePg{
+    padding: 10px;
+}
+
+.container{
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+h1{
+    font-size: 25px;
+    font-weight: 400;
+}
+
+h3{
+    font-size: 15px;
+    font-weight: 300;
+}
+
+.subTitle{
+    font-size: 15px;
+    font-weight: 300;
+}
+
+/* area_cedentes */
+.area_cedentes{
+    width: 100%;
+    max-height: 50%;
+    padding: 10px;
+    background-color: rgb(247, 251, 255);
+    border-radius: 10px;
+    box-shadow:  1px 1px 1px 1px rgb(218, 219, 219);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn_add_cedentes{
+    width: 18%;
+    height: 40px;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: lch(50.64% 32.75 152.7);
+    font-weight:500;
+    color: rgb( 250,253,254);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    cursor: pointer;
+    transition: 1s;
+ }
+
+ .btn_add_cedentes:hover{
+    color: rgb(45, 95, 63);
+    background-color: rgb(233, 238, 240);
+ }
+
+ .back_icon{
+    background-color: rgb(139, 214, 167);
+    border-radius: 100%;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+ }
+
+ #icon_wallet{
+    color: rgb(45, 95, 63);
+ }
+
+ .modal {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #333;
+  min-width: 320px;
+  position: fixed;
+  left: 50%;
+  padding: 24px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+}
+
+.overlay {
+  background: #000;
+  height: 100vh;
+  left: 0;
+  opacity: 0.5;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 10;
+}

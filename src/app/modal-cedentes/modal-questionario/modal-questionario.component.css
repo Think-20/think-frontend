@@ -1,0 +1,261 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 700px;
+    animation: scaleIn .25s ease;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.headModal {
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.groupTitles {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.titles {
+    font-size: 18px;
+    font-weight: 500;
+    color: #111827;
+}
+
+#subtitle {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.btnClose {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btnIconClose {
+    font-size: 22px;
+    color: #9ca3af;
+    transition: 0.2s;
+}
+
+.btnIconClose:hover {
+    color: #ef4444;
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.statusProcess {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.icon.active {
+    background: #10b981;
+    color: #fff;
+}
+
+.label {
+    font-size: 13px;
+    color: #9ca3af;
+    white-space: nowrap;
+}
+
+.label.active {
+    color: #111827;
+    font-weight: 500;
+}
+
+.line {
+    flex: 1;
+    height: 2px;
+    background: #e5e7eb;
+    margin: 0 12px;
+}
+
+.content {
+    padding: 20px;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+}
+
+.btn.cancel {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.btn.primary {
+    background: rgb(16, 185, 129);
+    color: #fff;
+}
+
+.headSecao {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 30px;
+}
+
+.typesQuestionario{
+    border-bottom: 1px solid #eee;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap:wrap;
+    gap: 10px;
+}
+
+.questionario{
+    width: 100%;
+    padding: 10px;
+    background: #fefeff;
+    border: 1px solid #cfcbcb;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+.questionario:hover{
+    border: 1px solid rgb(16, 185, 129);
+    background-color: #e7f0ed;
+}
+
+.questionario.active{
+    border: 1px solid rgb( 16,185, 129);
+    background-color: #e7f0ed;
+}
+
+.headCardQuestionario{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.titlesQuestionario{
+    font-size: 14px;
+}
+
+.infoQuestionario{
+    display: flex;
+    flex-direction:column;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.iconQuestionario{
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    background: #e5e7eb;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.btnAction{
+    width: 100%;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.next{
+    padding: 8px 16px;
+    border-radius: 6px;
+    background:rgb(16, 185, 129);
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+}
+
+.cancel{
+    padding: 8px 16px;
+    border-radius: 6px;
+    background-color: #dee4e2;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+    cursor: pointer;
+    border: none;
+}
+

@@ -222,6 +222,18 @@ import { RoundPipe } from './shared/round.pipe';
 import { GoalsComponent } from './goals/goals.component';
 import { GoalsService } from './goals/goals.service';
 import { ThousandsPipe } from './shared/thousands.pipe';
+import { ForgetPasswordComponent } from './forget-password/forget-password.component';
+import { AuthCodComponent } from './auth-cod/auth-cod.component';
+import { CedentesComponent } from './cedentes/cedentes.component';
+import { ModalCedentesComponent } from './modal-cedentes/modal-cedentes.component';
+import { ModalQuestionarioComponent } from './modal-cedentes/modal-questionario/modal-questionario.component';
+import { CadastroCedentesComponent } from './cadastro-cedentes/cadastro-cedentes.component';
+import { NovoCedenteComponent } from './cadastro-cedentes/novo-cedente/novo-cedente.component';
+import { DocumentacaoCedenteComponent } from './cadastro-cedentes/documentacao-cedente/documentacao-cedente.component';
+import { PartesRelacionadasComponent } from './cadastro-cedentes/partes-relacionadas/partes-relacionadas.component';
+import { ContasDesembolsoComponent } from './cadastro-cedentes/contas-desembolso/contas-desembolso.component';
+import { ContratosComponent } from './cadastro-cedentes/contratos/contratos.component';
+
 
 registerLocaleData(localePt);
 
@@ -347,7 +359,21 @@ registerLocaleData(localePt);
     ChartPreviewComponent,
     GoalsComponent,
     ThousandsPipe,
+    ForgetPasswordComponent,
+    AuthCodComponent,
+    CedentesComponent,
+    ModalCedentesComponent,
+    ModalQuestionarioComponent,
+    CadastroCedentesComponent,
+    NovoCedenteComponent,
+    DocumentacaoCedenteComponent,
+    PartesRelacionadasComponent,
+    ContasDesembolsoComponent,
+    ContratosComponent,
+
+
   ],
+
   imports: [
     CurrencyMaskModule,
     BrowserModule,
@@ -392,6 +418,7 @@ registerLocaleData(localePt);
     CommonModule,
     NgApexchartsModule
   ],
+
   providers: [
     ClientService,
     ProviderService,
@@ -461,6 +488,7 @@ registerLocaleData(localePt);
     {provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
     {provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true}
   ],
+
   bootstrap: [AppComponent],
   entryComponents: [
     ScheduleBottomSheet,
@@ -474,4 +502,5 @@ registerLocaleData(localePt);
     ChartPreviewComponent,
   ]
 })
+
 export class AppModule { }

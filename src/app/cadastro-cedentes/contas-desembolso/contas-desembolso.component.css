@@ -1,0 +1,129 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* CONTAINER */
+.containerPrincipal {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+}
+
+/* HEADER */
+.headContainer {
+    width: 100%;
+    margin-bottom: 24px;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(248, 250, 252);
+    border-bottom: 1px solid rgb(226, 232, 240);
+}
+
+.btnTitle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    color: rgb(17, 24, 39);
+}
+
+.headContainer button {
+    width: 80px;
+    padding: 6px;
+    border: 0;
+    border-radius: 6px;
+    background-color: rgb(254, 242, 242);
+    color: rgb(239, 68, 68);
+    font-size: 13px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.headContainer button:hover {
+    background-color: rgb(254, 226, 226);
+}
+
+/* CONTEÚDO INTERNO */
+.containerForm {
+    padding: 0 24px 24px 24px;
+}
+
+/* TITULOS */
+h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgb(17, 24, 39);
+    margin-bottom: 16px;
+}
+
+/* FORM GRID */
+form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+/* CAMPOS */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+label {
+    font-size: 12px;
+    color: rgb(107, 114, 128);
+}
+
+/* INPUT FIGMA STYLE */
+input,
+select {
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid rgb(226, 232, 240);
+    font-size: 13px;
+    color: rgb(17, 24, 39);
+    background: rgb(255, 255, 255);
+    transition: all 0.15s ease;
+}
+
+/* PLACEHOLDER */
+input::placeholder {
+    color: #9ca3af;
+}
+
+/* HOVER */
+input:hover,
+select:hover {
+    border-color: rgb(203, 213, 225);
+}
+
+/* FOCUS */
+input:focus,
+select:focus {
+    border-color: rgb(37, 99, 235);
+    box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.15);
+    outline: none;
+}
+
+/* GRID AJUSTE */
+form .form-group:first-child {
+    grid-column: span 2;
+}
+
+
+
+
+
+

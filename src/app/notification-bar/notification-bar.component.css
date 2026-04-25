@@ -7,6 +7,6 @@
 .scroll-notifications {
   height: calc(100% - 86px);
   overflow-y: scroll;
-  margin-right: -15px;
+  margin-right: 0;
   padding-right: 15px;
 }

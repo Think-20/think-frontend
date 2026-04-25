@@ -1,43 +1,3 @@
-<mat-menu #menu="matMenu">
-  <ng-template matMenuContent let-item="item" let-task="item.task" let-chrono="chrono">
-    <div *ngIf="jobDisplay(item).indexOf('Continuação de') == -1">
-      <a *ngIf="task.job.id == undefined" (click)="addTask(chrono.day)" mat-menu-item>
-        <mat-icon>add</mat-icon> Adicionar
-      </a>
-      <a [disabled]="!permissionVerify('show', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/show', task.job.id]" [queryParams]="getQueryParams(task)"
-        mat-menu-item>
-        <mat-icon>done</mat-icon> {{ task.done ? 'Tarefa realizada' : 'Realizar tarefa' }}
-      </a>
-      <a [disabled]="!permissionVerify('show', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/show', task.job.id]"
-        mat-menu-item>
-        <mat-icon>subject</mat-icon> Visualizar job
-      </a>
-      <a [disabled]="!permissionVerify('task.edit', task.job)" *ngIf="task.id != undefined" [routerLink]="['/schedule/edit', task.id]"
-        mat-menu-item>
-        <mat-icon>mode_edit</mat-icon> Editar agendamento
-      </a>
-      <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/edit', task.job.id]" [queryParams]="{ taskId: item.task.id, backscreen: 'agenda' }"
-        mat-menu-item>
-        <mat-icon>mode_edit</mat-icon> Editar job
-      </a>
-      <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined && (task.job.status?.id == 5 || task.job.status?.id == 1)"
-        (click)="signal(task)" mat-menu-item>
-        <span *ngIf="task.job.status?.id == 1">
-          <mat-icon>flag</mat-icon> Sinalizar
-        </span>
-        <span *ngIf="task.job.status?.id == 5">
-          <mat-icon>outlined_flag</mat-icon> Remover sinalização
-        </span>
-      </a>
-      <button [disabled]="!permissionVerify('delete', task.job)" *ngIf="task.job.id != undefined" (click)="deleteTask(item)" mat-menu-item>
-        <mat-icon>delete</mat-icon> Remover tarefa
-      </button>
-      <button [disabled]="!permissionVerify('delete', task.job)" *ngIf="task.job.id != undefined" (click)="deleteJob(item)" mat-menu-item>
-        <mat-icon>delete</mat-icon> Remover job
-      </button>
-    </div>
-  </ng-template>
-</mat-menu>
 
 <div class="container-schedule">
   <div class="my-container">
@@ -75,7 +35,6 @@
       <mat-card-title class="header-form">
         <div class="row search-bar-group">
           <div class="title">
-            Lista
           </div>
           <mat-form-field class="bar">
             <input #search matInput formControlName="search" placeholder="Qual job você procura?" autocomplete="off">

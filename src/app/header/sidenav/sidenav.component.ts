@@ -34,6 +34,7 @@ export class SidenavComponent implements OnInit {
   user: User
 
   administradores = false
+  adiministrativo = false
   diretoria = false
   producao = false
   orcamento = false
@@ -47,6 +48,7 @@ export class SidenavComponent implements OnInit {
   API = API
   FRONTEND_VERSION = FRONTEND_VERSION
   BACKEND_VERSION = BACKEND_VERSION
+  configuracao = false
 
   constructor(
     private auth: AuthService,

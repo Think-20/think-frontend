@@ -15,6 +15,7 @@ export class DataFieldComponent implements OnInit {
 
   simpleData: string;
 
+
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
   ) { }

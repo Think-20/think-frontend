@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login/login.component';
+import { AuthCodComponent } from './auth-cod/auth-cod.component';
+import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { LayoutComponent } from './layout/layout.component';
 
 import { ClientsComponent } from './clients/clients.component';
@@ -68,15 +70,31 @@ import { AlertsContainerComponent } from './alerts/components/alerts-container/a
 import { MemoriesContainerComponent } from './memories/components/memories-container/memories-container.component';
 import { HomeEmptyComponent } from './home-empty/home-empty.component';
 import { GoalsComponent } from './goals/goals.component';
+import { CedentesComponent } from './cedentes/cedentes.component';
+import { CadastroCedentesComponent } from './cadastro-cedentes/cadastro-cedentes.component';
+
+
 
 export const ROUTES: Routes = [
   {
     path: 'login', component: LoginComponent
   },
   {
+    path:'forget-password', component: ForgetPasswordComponent
+  },
+  {
+    path:'auth_cod', component:AuthCodComponent 
+  },
+  {
     path: '', component: LayoutComponent, children: [
       {
         path: '', redirectTo: 'home', pathMatch: 'full'
+      },
+      {
+        path:'cadastroCedentes', component: CadastroCedentesComponent  
+      },
+      {
+        path: 'cedente', component: CedentesComponent
       },
       {
         path: 'dashboard', component: HomeComponent, canActivate: [AuthGuard]

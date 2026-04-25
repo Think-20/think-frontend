@@ -1,0 +1,356 @@
+/* RESET BASE */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.containerPrincipal {
+    width: 100%;
+    padding: 20px 30px;
+    background-color: #f5f7fa;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ================= HEADER ================= */
+
+.head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.headTitle h3 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.headTitle p {
+    font-size: 14px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+.buttoCancel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+    padding: 5px ;
+    border-radius: 8px;
+    background-color: #f3f4f6;
+    border: 1px solid #d1d5db;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.buttoCancel {
+    display: inline-flex; 
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    padding: 6px 12px;
+    border-radius: 8px;
+
+    background-color: #f3f4f6;
+    border: 1px solid #d1d5db;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Ícone alinhado PERFEITO */
+.buttoCancel mat-icon {
+    font-size: 18px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Texto */
+.buttoCancel button {
+    border: none;
+    background: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+/* Hover */
+.buttoCancel:hover {
+    background-color: #e5e7eb;
+    border-color: #9ca3af;
+}
+
+/* ================= PROCESSO ================= */
+
+.containerProcess {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.stepPross {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.process {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stepPross h5 {
+    font-size: 12px;
+    color: #374151;
+}
+
+.line {
+    flex: 1;
+    height: 2px;
+    background-color: #e5e7eb;
+}
+
+/* ================= ALERTA ================= */
+
+/* NOTIFICAÇÃO */
+.informacao {
+    display: flex;
+    gap: 12px;
+    background-color: #f0f9ff; 
+    border: 1px solid #bae6fd;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.iconNotificacao {
+    color: #0284c7; 
+    display: flex;
+    align-items: flex-start;
+}
+
+#notificacaoTexto {
+    font-size: 13px;
+    color: #1e293b;
+    line-height: 1.5;
+}
+
+/* ================= CARDS FORM ================= */
+
+.containerDadosCadastrais,
+.containerInfoGerais {
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    border-bottom: 1px solid  rgba(0,0,0,0.05);
+}
+
+/* HEADER DOS CARDS */
+.headInfoGerais {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.headInfoGerais h5 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* ================= FORM GRID ================= */
+
+form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px 20px;
+}
+
+/* FULL WIDTH (quando precisar depois) */
+.form-group.full {
+    grid-column: span 2;
+}
+
+/* ================= INPUTS ================= */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-size: 13px;
+    color: #374151;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+    height: 38px;
+    padding: 0 10px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+/* HOVER + FOCUS PADRÃO FIGMA */
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #2563eb;
+    outline: none;
+}
+
+/* ================= CHECKBOX ================= */
+
+.form-group input[type="checkbox"] {
+    width: auto;
+    height: auto;
+}
+
+.form-group:has(input[type="checkbox"]) {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    grid-column: span 2;
+}
+
+/* ================= SEÇÕES DINÂMICAS ================= */
+
+.partesRelacionadas,
+.contasDesembolso,
+.avalista {
+    background-color: #ffffff;
+    padding: 20px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* HEADER dessas seções */
+.titleform {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.titleform h5 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.titleform mat-icon {
+    color: #6b7280;
+}
+
+/* BOTÃO ADICIONAR */
+.btnAdd {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background-color: rgb(236, 253, 245); 
+    border: 1px dashed rgb(134, 239, 172); 
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btnAdd mat-icon {
+    font-size: 18px;
+    color: rgb(22, 163, 74);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btnAdd p {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgb(25, 90, 50);
+}
+
+.btnAdd:hover {
+    background-color: rgba(44, 146, 83, 0.623);
+    border-color: rgb(25, 90, 50);
+}
+
+/* ================= BOTÕES FINAIS ================= */
+
+.containerBTN {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+/* Botão voltar */
+.containerBTN button:first-child {
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+
+    background-color: #ffffff;
+    color: #374151;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Hover voltar */
+.containerBTN button:first-child:hover {
+    background-color: #f9fafb;
+}
+
+/* Botão próximo (primário) */
+.containerBTN button:last-child {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+
+    background-color: rgb(25, 90, 50);
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Hover próximo */
+.containerBTN button:last-child:hover {
+    background-color: rgba(44, 146, 83, 0.623);
+}
+
+/* Clique efeito */
+.containerBTN button:active {
+    transform: scale(0.97);
+}
+

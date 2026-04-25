@@ -79,6 +79,7 @@ import { JobsKanbanComponent } from "./jobs/jobs-kanban/jobs-kanban.component";
 import { JobListComponent } from "./job-list/job-list.component";
 import { FinancialHomeComponent } from "./financial-home/financial-home.component";
 import { FinancialTransactionComponent } from "./financial-transaction/financial-transaction.component";
+import { GamificationComponent } from "./gamification/gamification.component";
 
 export const ROUTES: Routes = [
   {
@@ -610,6 +611,11 @@ export const ROUTES: Routes = [
       {
         path: "manage-client-types",
         component: CustomeNotificationInactivationComponente,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: "gamification",
+        component: GamificationComponent,
         canActivate: [AuthGuard]
       }
     ]

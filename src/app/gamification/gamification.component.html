@@ -1,1 +1,442 @@
-<p>gamification works!</p>
+<section class="gamification">
+  <h2 class="gamification__title">Metas e desempenho</h2>
+  <p class="gamification__lead">
+    Acompanhe metas do período em uma linha por indicador. Presença no escritório e demais indicadores vêm calculados pelo servidor.
+  </p>
+
+  <div
+    class="gamification__top-actions"
+    *ngIf="!missingEmployee"
+  >
+    <div class="gamification__top-actions__buttons">
+      <cb-button
+        type="button"
+        [disabled]="loading || missingCollaboratorSelection"
+        (click)="print()"
+      >
+        <cb-icon-print iconStart></cb-icon-print>
+        Imprimir
+      </cb-button>
+      <cb-button
+        type="button"
+        [disabled]="loading || missingCollaboratorSelection"
+        (click)="exportReportPdf()"
+      >
+        <cb-icon-download iconStart></cb-icon-download>
+        Exportar
+      </cb-button>
+    </div>
+  </div>
+
+  <div
+    class="gamification__toolbar"
+    *ngIf="!missingEmployee"
+  >
+    <div class="gamification__toolbar__row">
+      <div
+        class="gamification__toolbar__group"
+        *ngIf="isDiretoriaUser()"
+      >
+        <span class="gamification__toolbar__label">Colaborador</span>
+        <cb-select
+          class="gamification__toolbar__select gamification__toolbar__select--collab"
+          name="gamCollaborator"
+          [(ngModel)]="selectedCollaboratorOption"
+          (ngModelChange)="onCollaboratorOptionChange($event)"
+          [ngModelOptions]="{ standalone: true }"
+          [options]="collaboratorSelectOptions"
+          labelField="label"
+          placeholder="Selecione o colaborador"
+          [showFilter]="true"
+        ></cb-select>
+      </div>
+
+      <div class="gamification__toolbar__group">
+        <span class="gamification__toolbar__label">Período</span>
+        <cb-select
+          class="gamification__toolbar__select gamification__toolbar__select--mode"
+          name="gamPeriodMode"
+          [(ngModel)]="selectedPeriodModeOption"
+          (ngModelChange)="onPeriodModeOptionChange($event)"
+          [ngModelOptions]="{ standalone: true }"
+          [options]="periodModeSelectOptions"
+          labelField="label"
+          placeholder="Tipo"
+          [showFilter]="false"
+        ></cb-select>
+      </div>
+
+      <ng-container *ngIf="periodMode === 'month'">
+        <div class="gamification__toolbar__group">
+          <span class="gamification__toolbar__label">Ano</span>
+          <cb-select
+            class="gamification__toolbar__select"
+            name="gamYear"
+            [(ngModel)]="selectedYearOption"
+            (ngModelChange)="onYearOptionChange($event)"
+            [ngModelOptions]="{ standalone: true }"
+            [options]="yearSelectOptions"
+            labelField="label"
+            placeholder="Ano"
+            [showFilter]="false"
+          ></cb-select>
+        </div>
+        <div class="gamification__toolbar__group">
+          <span class="gamification__toolbar__label">Mês</span>
+          <cb-select
+            class="gamification__toolbar__select gamification__toolbar__select--wide"
+            name="gamMonth"
+            [(ngModel)]="selectedMonthOption"
+            (ngModelChange)="onMonthOptionChange($event)"
+            [ngModelOptions]="{ standalone: true }"
+            [options]="monthOptions"
+            labelField="label"
+            placeholder="Mês"
+            [showFilter]="false"
+          ></cb-select>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="periodMode === 'quarter'">
+        <div class="gamification__toolbar__group">
+          <span class="gamification__toolbar__label">Ano</span>
+          <cb-select
+            class="gamification__toolbar__select"
+            name="gamYearQ"
+            [(ngModel)]="selectedYearOption"
+            (ngModelChange)="onYearOptionChange($event)"
+            [ngModelOptions]="{ standalone: true }"
+            [options]="yearSelectOptions"
+            labelField="label"
+            placeholder="Ano"
+            [showFilter]="false"
+          ></cb-select>
+        </div>
+        <div class="gamification__toolbar__group">
+          <span class="gamification__toolbar__label">Trimestre</span>
+          <cb-select
+            class="gamification__toolbar__select gamification__toolbar__select--wide"
+            name="gamQuarterSel"
+            [(ngModel)]="selectedQuarterOption"
+            (ngModelChange)="onQuarterOptionChange($event)"
+            [ngModelOptions]="{ standalone: true }"
+            [options]="quarterOptions"
+            labelField="label"
+            placeholder="Trimestre"
+            [showFilter]="false"
+          ></cb-select>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="periodMode === 'custom'">
+        <div class="gamification__toolbar__group">
+          <span class="gamification__toolbar__label">Início</span>
+          <cb-input-datetime
+            class="gamification__toolbar__date"
+            name="gamDateStart"
+            [(ngModel)]="customStartStr"
+            [ngModelOptions]="{ standalone: true }"
+            mode="date"
+            placeholder="AAAA-MM-DD"
+          ></cb-input-datetime>
+        </div>
+        <div class="gamification__toolbar__group">
+          <span class="gamification__toolbar__label">Fim</span>
+          <cb-input-datetime
+            class="gamification__toolbar__date"
+            name="gamDateEnd"
+            [(ngModel)]="customEndStr"
+            [ngModelOptions]="{ standalone: true }"
+            mode="date"
+            placeholder="AAAA-MM-DD"
+          ></cb-input-datetime>
+        </div>
+      </ng-container>
+
+      <div class="gamification__toolbar__actions">
+        <cb-button
+          theme="info"
+          type="button"
+          [disabled]="loading"
+          (click)="applyPeriod()"
+        >
+          Atualizar
+        </cb-button>
+      </div>
+    </div>
+    <p
+      class="gamification__toolbar__hint"
+      *ngIf="lastRequest"
+    >
+      Consulta: {{ lastRequest.date_init | date : "dd/MM/yyyy" }} — {{ lastRequest.date_end | date : "dd/MM/yyyy" }}
+    </p>
+  </div>
+
+  <div
+    class="gamification__summary"
+    *ngIf="!loading && !missingEmployee && goals.length"
+  >
+    <div class="gamification__summary__cards">
+      <div class="gamification__summary__card">
+        <h3 class="gamification__summary__card__title">Metas no período</h3>
+        <p class="gamification__summary__card__value">{{ goalsTotalCount }}</p>
+      </div>
+      <div class="gamification__summary__card gamification__summary__card--success">
+        <h3 class="gamification__summary__card__title">Cumpridas</h3>
+        <p class="gamification__summary__card__value">{{ goalsMetCount }}</p>
+      </div>
+      <div class="gamification__summary__card">
+        <h3 class="gamification__summary__card__title">Taxa de cumprimento</h3>
+        <p class="gamification__summary__card__value">{{ goalsMetRatioRounded }}%</p>
+      </div>
+    </div>
+    <p
+      class="gamification__summary__meta"
+      *ngIf="rawResponse && rawResponse.period"
+    >
+      Escala no servidor: {{ rawResponse.period.months }}
+      {{ rawResponse.period.months === 1 ? "mês" : "meses" }}
+      · {{ rawResponse.period.quarters }}
+      {{ rawResponse.period.quarters === 1 ? "trimestre" : "trimestres" }}
+      <span *ngIf="rawResponse.jobs_count !== undefined && rawResponse.jobs_count !== null"> · {{ rawResponse.jobs_count }} jobs </span>
+    </p>
+  </div>
+
+  <div
+    class="gamification__legend"
+    *ngIf="!missingEmployee && !missingCollaboratorSelection && !loading"
+  >
+    <span class="gamification__legend__item"><span class="gamification__legend__dot gamification__legend__dot--met"></span> Cumprida</span>
+    <span class="gamification__legend__item"><span class="gamification__legend__dot gamification__legend__dot--close"></span> Quase</span>
+    <span class="gamification__legend__item"
+      ><span class="gamification__legend__dot gamification__legend__dot--progress"></span> Em andamento</span
+    >
+    <span class="gamification__legend__item"><span class="gamification__legend__dot gamification__legend__dot--far"></span> Abaixo</span>
+    <span class="gamification__legend__item"
+      ><span class="gamification__legend__dot gamification__legend__dot--neutral"></span> Não avaliada</span
+    >
+  </div>
+
+  <div
+    class="gamification__alert"
+    *ngIf="missingEmployee"
+  >
+    <mat-icon>warning</mat-icon>
+    <div>
+      <strong>Usuário sem vínculo de atendente</strong>
+      <p>É necessário um colaborador vinculado ao login para carregar metas.</p>
+    </div>
+  </div>
+
+  <div
+    class="gamification__alert gamification__alert--info"
+    *ngIf="!missingEmployee && missingCollaboratorSelection"
+  >
+    <mat-icon>info</mat-icon>
+    <div>
+      <strong>Selecione um colaborador</strong>
+      <p>Como usuário da diretoria, escolha na barra acima o colaborador cujas metas deseja visualizar ou exportar.</p>
+    </div>
+  </div>
+
+  <div
+    class="gamification__loading"
+    *ngIf="loading && !missingEmployee"
+  >
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <span>Carregando…</span>
+  </div>
+
+  <div
+    class="gamification__panel"
+    *ngIf="!loading && !missingEmployee && goals.length"
+  >
+    <table
+      class="gamification__table"
+      aria-label="Metas e progresso no período"
+    >
+      <colgroup>
+        <col class="gamification__col gamification__col--idx" />
+        <col class="gamification__col gamification__col--title" />
+        <col class="gamification__col gamification__col--vals" />
+        <col class="gamification__col gamification__col--bar" />
+        <col class="gamification__col gamification__col--pct" />
+        <col class="gamification__col gamification__col--stars" />
+        <col class="gamification__col gamification__col--status" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th
+            scope="col"
+            class="gamification__th gamification__th--idx"
+          >
+            #
+          </th>
+          <th
+            scope="col"
+            class="gamification__th gamification__th--title"
+          >
+            Meta
+          </th>
+          <th
+            scope="col"
+            class="gamification__th gamification__th--vals"
+          >
+            Resultado
+          </th>
+          <th
+            scope="col"
+            class="gamification__th gamification__th--bar"
+          >
+            Progresso
+          </th>
+          <th
+            scope="col"
+            class="gamification__th gamification__th--pct"
+          >
+            %
+          </th>
+          <th
+            scope="col"
+            class="gamification__th gamification__th--stars"
+          >
+            <span class="gamification__th__sr">Estrelas</span>
+          </th>
+          <th
+            scope="col"
+            class="gamification__th gamification__th--status"
+          >
+            Status
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let goal of goals; trackBy: trackGoal">
+          <tr
+            *ngIf="goal.kind === 'unevaluated'"
+            class="gamification__tr"
+            [ngClass]="rowStatusModifier(goal)"
+            [class.gamification__tr--unevaluated]="true"
+          >
+            <td class="gamification__td gamification__td--idx">{{ goal.order }}</td>
+            <td class="gamification__td gamification__td--title">
+              <span class="gamification__tr__name">{{ goal.title }}</span>
+              <span
+                class="gamification__tr__hint"
+                *ngIf="goal.hint"
+                >{{ goal.hint }}</span
+              >
+              <label
+                class="gamification__presencial-manual"
+                *ngIf="showPresencialManualCheckbox(goal)"
+              >
+                <input
+                  type="checkbox"
+                  [checked]="isPresencialManualMet()"
+                  (change)="onPresencialManualChange($event, goal)"
+                />
+                <span>Indiquei presença no escritório no período (memória local)</span>
+              </label>
+            </td>
+            <td
+              class="gamification__td gamification__td--message"
+              colspan="4"
+            >
+              <p
+                class="gamification__presencial-manual-msg"
+                *ngIf="presencialManualOverride(goal)"
+              >
+                Presença indicada pela diretoria (não altera o servidor).
+              </p>
+              <ng-container *ngIf="!presencialManualOverride(goal)">{{ goal.detailLine }}</ng-container>
+            </td>
+            <td class="gamification__td gamification__td--status">{{ displayStatusLabel(goal) }}</td>
+          </tr>
+
+          <tr
+            *ngIf="goal.kind !== 'unevaluated'"
+            class="gamification__tr"
+            [ngClass]="rowStatusModifier(goal)"
+          >
+            <td class="gamification__td gamification__td--idx">{{ goal.order }}</td>
+            <td class="gamification__td gamification__td--title">
+              <span class="gamification__tr__name">{{ goal.title }}</span>
+              <span
+                class="gamification__tr__hint"
+                *ngIf="goal.hint"
+                >{{ goal.hint }}</span
+              >
+              <label
+                class="gamification__presencial-manual"
+                *ngIf="showPresencialManualCheckbox(goal)"
+              >
+                <input
+                  type="checkbox"
+                  [checked]="isPresencialManualMet()"
+                  (change)="onPresencialManualChange($event, goal)"
+                />
+                <span>Indiquei presença no escritório no período (memória local)</span>
+              </label>
+            </td>
+            <td class="gamification__td gamification__td--vals">
+              <ng-container [ngSwitch]="goal.kind">
+                <ng-container *ngSwitchCase="'currency'">
+                  <span class="gamification__num">{{ goal.current | currency : "BRL" : "symbol" : "1.0-0" }}</span>
+                  <span class="gamification__sep">/</span>
+                  <span
+                    class="gamification__num gamification__num--muted"
+                    *ngIf="!goal.missingTarget && goal.target > 0"
+                    >{{ goal.target | currency : "BRL" : "symbol" : "1.0-0" }}</span
+                  >
+                  <span
+                    class="gamification__num gamification__num--muted"
+                    *ngIf="goal.missingTarget || goal.target <= 0"
+                    >—</span
+                  >
+                </ng-container>
+                <ng-container *ngSwitchCase="'percent'">
+                  <ng-container *ngIf="goal.useLabelsFromApi && goal.currentDisplay && goal.targetDisplay">
+                    <span class="gamification__num">{{ goal.currentDisplay }}</span>
+                    <span class="gamification__sep">/</span>
+                    <span class="gamification__num gamification__num--muted">{{ goal.targetDisplay }}</span>
+                  </ng-container>
+                  <ng-container *ngIf="!goal.useLabelsFromApi || !goal.currentDisplay || !goal.targetDisplay">
+                    <span class="gamification__num">{{ goal.current | number : "1.0-1" }}%</span>
+                    <span class="gamification__sep">/</span>
+                    <span class="gamification__num gamification__num--muted">{{ goal.target | number : "1.0-1" }}%</span>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                  <span class="gamification__num">{{ goal.current | number : "1.0-0" }}</span>
+                  <span class="gamification__sep">/</span>
+                  <span class="gamification__num gamification__num--muted">{{ goal.target | number : "1.0-0" }}</span>
+                </ng-container>
+              </ng-container>
+            </td>
+            <td class="gamification__td gamification__td--bar">
+              <mat-progress-bar
+                mode="determinate"
+                [value]="displayPercent(goal)"
+                [color]="progressColor(goal)"
+              ></mat-progress-bar>
+            </td>
+            <td class="gamification__td gamification__td--pct">{{ displayPercent(goal) | number : "1.0-0" }}</td>
+            <td
+              class="gamification__td gamification__td--stars"
+              aria-hidden="true"
+            >
+              <mat-icon
+                *ngFor="let on of starFilledArray(goal)"
+                [class.gamification__star--on]="on"
+                class="gamification__star"
+              >
+                {{ on ? "star" : "star_border" }}
+              </mat-icon>
+            </td>
+            <td class="gamification__td gamification__td--status">{{ displayStatusLabel(goal) }}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</section>

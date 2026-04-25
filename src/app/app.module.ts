@@ -221,6 +221,7 @@ import { HomeEmptyComponent } from "./home-empty/home-empty.component";
 import { RoundPipe } from "./shared/round.pipe";
 import { GoalsComponent } from "./goals/goals.component";
 import { GoalsService } from "./goals/goals.service";
+import { UserGoalService } from "./gamification/user-goal.service";
 import { ThousandsPipe } from "./shared/thousands.pipe";
 import { ConfirmDialogService } from "./confirm-dialog/confirm-dialog.service";
 import { ConfirmDialogComponent } from "./confirm-dialog/confirm-dialog.component";
@@ -700,6 +701,7 @@ registerLocaleData(localePt);
     JobEventsService,
     HomeService,
     GoalsService,
+    UserGoalService,
     Destroy,
     MatDialog,
     MatSnackBar,

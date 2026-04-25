@@ -2,7 +2,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule, LOCALE_ID, APP_INITIALIZER } from "@angular/core";
 import { registerLocaleData, DatePipe, CommonModule, CurrencyPipe } from "@angular/common";
 import { HttpModule } from "@angular/http";
-import { RouterModule } from "@angular/router";
+import { PreloadAllModules, RouterModule } from "@angular/router";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -34,8 +34,7 @@ import { ROUTES } from "./app.routes";
 import { HeaderModule } from "./header/header.module";
 import { LoginModule } from "./login/login.module";
 import { AppComponent } from "./app.component";
-import { MaskDirective } from "./shared/mask.directive";
-import { UcWordsDirective } from "./shared/uc-words.directive";
+import { FormDirectivesModule } from "./shared/form-directives.module";
 
 import { HomeComponent } from "./home/home.component";
 import { NotificationBarComponent } from "./notification-bar/notification-bar.component";
@@ -96,7 +95,7 @@ import { ItemShowComponent } from "./items/item-show/item-show.component";
 import { ItemsComponent } from "./items/items.component";
 import { ItemService } from "./items/item.service";
 
-import { StarsComponent } from "./shared/stars/stars.component";
+import { StarsModule } from "./shared/stars/stars.module";
 import { ProductionTimeComponent } from "./shared/production-time/production-time.component";
 import { UploadFileService } from "./shared/upload-file.service";
 import { ReadMoreComponent } from "./shared/text/read-more.component";
@@ -121,12 +120,9 @@ import { CURRENCY_MASK_CONFIG } from "ng2-currency-mask/src/currency-mask.config
 import { CustomCurrencyMaskConfig } from "app/shared/custom-currency-mask-config";
 import { JobStatusService } from "app/job-status/job-status.service";
 
-import { JobTabsComponent } from "./jobs/job-tabs/job-tabs.component";
 import { JobsComponent } from "./jobs/jobs.component";
-import { JobListComponent as JobListOldComponent } from "./jobs/job-list/job-list.component";
 import { JobService } from "./jobs/job.service";
 import { ReportService } from "./reports/service-report/report-list.service";
-import { JobFormComponent } from "./jobs/job-form/job-form.component";
 
 import { BriefingFormComponent } from "./briefings/briefing-form/briefing-form.component";
 import { BriefingsService } from "./briefings/briefings.service";
@@ -142,15 +138,12 @@ import { UserNotification } from "./notification-bar/user-notification/user-noti
 import { UserNotificationService } from "./notification-bar/user-notification/user-notification.service";
 import { NotificationItemComponent } from "./notification-bar/notification-item/notification-item.component";
 import { NotificationModule } from "./notification-bar/notification.module";
-import { ProjectsComponent } from "./projects/projects.component";
+import { ProjectsModule } from "./projects/projects.module";
 import { ProjectFileService } from "./projects/project-file.service";
 import { ScheduleLineComponent } from "./schedule/schedule-line/schedule-line.component";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
-import { ImageViewerComponent } from "./shared/image-viewer/image-viewer.component";
 import { ScheduleBlockService } from "./schedule/schedule-block/schedule-block.service";
-import { ProposalsComponent } from "./proposals/proposals.component";
-import { ProposalFormComponent } from "./proposals/proposal-form/proposal-form.component";
-import { ItemProposalFormComponent } from "./proposals/proposal-form/item-proposal-form/item-proposal-form.component";
+import { ProposalsModule } from "./proposals/proposals.module";
 import { BlockDialogComponent } from "./schedule/schedule-block/block-dialog/block-dialog.component";
 import { EmployeeFormComponent } from "./employees/employee-form/employee-form.component";
 import { EmployeeListComponent } from "./employees/employee-list/employee-list.component";
@@ -180,16 +173,12 @@ import { EventFormComponent } from "./events/event-form/event-form.component";
 import { EventListComponent } from "./events/event-list/event-list.component";
 import { EventsComponent } from "./events/events.component";
 import { EventService } from "./events/event.service";
-import { PerformanceReportLiteComponent } from "./reports/performance-report-lite/performance-report-lite.component";
 import { SafePipe } from "./shared/safe.pipe";
-import { NumberAbbreviationPipe } from "./shared/number-abbreviation.pipe";
-import { SpecificationComponent } from "./specification/specification.component";
-import { FileUploadComponent } from "./shared/file-upload/file-upload.component";
+import { FileUploadSharedModule } from "./shared/file-upload/file-upload-shared.module";
 import { FileUploadService } from "./shared/file-upload/file-upload.service";
 import { SpecificationFileService } from "./specification/specification-file.service";
 import { LoggerService } from "./shared/logger.service";
 import { RouterExtService } from "./shared/router-ext.service";
-import { MessageLoadingComponent } from "./shared/file-upload/message-loading/message-loading";
 import { MessageLoadingService } from "./shared/file-upload/message-loading/message-loading.service";
 import { ListDataComponent } from "./shared/list-data/list-data.component";
 import { ListDataService } from "./shared/list-data/list-data.service";
@@ -197,21 +186,17 @@ import { DataFieldComponent } from "./shared/list-data/data-field/data-field.com
 import { UpdatedInfoComponent } from "./shared/list-data/updated-info/updated-info.component";
 import { ScheduleDateComponent } from "./schedule/schedule-date/schedule-date.component";
 import { AddHeaderInterceptor } from "./shared/add-header-interceptor.config";
-import { ServiceReportComponent } from "./reports/service-report/report-list.component";
 import { ServiceListComponent } from "./reports/service-report/service-list/job-list.component";
 
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { MatBottomSheetModule } from "@angular/material/bottom-sheet";
 import { MatListModule } from "@angular/material/list";
 import { MatGridListModule } from "@angular/material";
-import { DecimalPipe } from "./shared/decimal.pipe";
-import { AlertsContainerComponent } from "./alerts/components/alerts-container/alerts-container.component";
 import { AlertService } from "./alerts/alerts.service";
-import { MemoriesContainerComponent } from "./memories/components/memories-container/memories-container.component";
 import { MemoriesService } from "./memories/memories.service";
 import { FormatMaskDirective } from "./shared/directives/format-mask.directive";
 import { JobEventsService } from "./job-events/job-events.service";
-import { SpecificationFormComponent } from "./specification/specification-form/specification-form.component";
+import { SpecificationModule } from "./specification/specification.module";
 import { HomeService } from "./home/home.service";
 import { NgApexchartsModule } from "ng-apexcharts";
 import { ChartPreviewComponent } from "./home/components/chart-preview.component";
@@ -219,14 +204,11 @@ import { CountAnimationPipe } from "./shared/count-animation.pipe";
 import { CountUpDirective } from "./shared/count-animation.directive";
 import { HomeEmptyComponent } from "./home-empty/home-empty.component";
 import { RoundPipe } from "./shared/round.pipe";
-import { GoalsComponent } from "./goals/goals.component";
 import { GoalsService } from "./goals/goals.service";
 import { UserGoalService } from "./gamification/user-goal.service";
 import { ThousandsPipe } from "./shared/thousands.pipe";
 import { ConfirmDialogService } from "./confirm-dialog/confirm-dialog.service";
 import { ConfirmDialogComponent } from "./confirm-dialog/confirm-dialog.component";
-import { CustomeNotificationInactivationComponente } from "./customer-notification-inactivation/customer-notification-inactivation.component";
-import { CustomeNotificationInactivationService } from "./customer-notification-inactivation/customer-notification-inactivation.service";
 import { CheckInComponent } from "./check-in/check-in.component";
 import { CheckInApprovalComponent } from "./check-in/components/check-in-approval/check-in-approval.component";
 import { CheckInContactInfoComponent } from "./check-in/components/check-in-contact-info/check-in-contact-info.component";
@@ -259,22 +241,12 @@ import { ExternalCheckInComponent } from "./external/external-check-in/external-
 import { ExternalExtrasRefuseComponent } from "./external/external-extras-refuse/external-extras-refuse.component";
 import { DevelopingModule } from "./shared/components/developing/developing.module";
 import { ExtraItemService } from "./extras/extra-item.service";
-import { BriefingComponent } from "./briefing/briefing.component";
+import { BriefingModule } from "./briefing/briefing.module";
 import { BriefingService } from "./briefing/briefing.service";
-import { JobTabComponent } from "./jobs/job-tab/job-tab.component";
-import { ContractNfComponent } from "./contract-nf/contract-nf.component";
 import { ContractNfService } from "./contract-nf/contract-nf.service";
-import { ProjectPhotosComponent } from "./project-photos/project-photos.component";
 import { ProjectPhotosService } from "./project-photos/project-photos.service";
 import { ExternalFeedbackComponent } from "./external/external-feedback/external-feedback.component";
-import { FeedbackComponent } from "./feedback/feedback.component";
-import { FeedbackFormComponent } from "./feedback-form/feedback-form.component";
-import { FeedbackFormCardComponent } from "./feedback-form/feedback-form-card/feedback-form-card.component";
-import { FeedbackFormRatingComponent } from "./feedback-form/feedback-form-rating/feedback-form-rating.component";
 import { LimitJobComponent } from "./limit-job/limit-job.component";
-import { JobsKanbanComponent } from "./jobs/jobs-kanban/jobs-kanban.component";
-import { JobsKanbanColumnComponent } from "./jobs/jobs-kanban/jobs-kanban-column/jobs-kanban-column.component";
-import { JobsKanbanCardComponent } from "./jobs/jobs-kanban/jobs-kanban-card/jobs-kanban-card.component";
 import { JobListComponent } from "./job-list/job-list.component";
 import { JobHeaderComponent } from "./job-list/job-header/job-header.component";
 import { IconButtonComponent } from "./components/icon-button/icon-button.component";
@@ -295,22 +267,16 @@ import { IconCheckCircleComponent } from "./components/icons/icon-check-circle/i
 import { IconTimeComponent } from "./components/icons/icon-time/icon-time.component";
 import { IconCloseCircleComponent } from "./components/icons/icon-close-circle/icon-close-circle.component";
 import { IconCloseComponent } from "./components/icons/icon-close/icon-close.component";
-import { FinancialComponent } from "./financial/financial.component";
 import { IconEyeComponent } from "./components/icons/icon-eye/icon-eye.component";
 import { IconExternalLinkComponent } from "./components/icons/icon-external-link/icon-external-link.component";
 import { IconNegativeComponent } from "./components/icons/icon-negative/icon-negative.component";
 import { CurrencyValueService } from "./shared/services/currency-value.service";
 import { CurrencyValueComponent } from "./components/currency-value/currency-value.component";
-import { FinancialHomeComponent } from "./financial-home/financial-home.component";
-import { FinancialTransactionComponent } from "./financial-transaction/financial-transaction.component";
+import { FinancialTabsModule } from "./financial/financial-tabs.module";
 import { IconEyeClosedComponent } from "./components/icons/icon-eye-closed/icon-eye-closed.component";
 import { ValueVisibilityControlComponent } from "./components/value-visibility-control/value-visibility-control.component";
-import { ButtonComponent } from "./components/button/button.component";
-import { IconDownloadComponent } from "./components/icons/icon-download/icon-download.component";
-import { IconPrintComponent } from "./components/icons/icon-print/icon-print.component";
 import { IconFilterComponent } from "./components/icons/icon-filter/icon-filter.component";
 import { IconMenuComponent } from "./components/icons/icon-menu/icon-menu.component";
-import { FinancialSummaryModalComponent } from "./financial-summary-modal/financial-summary-modal.component";
 import { IconPositiveGraphComponent } from "./components/icons/icon-positive-graph/icon-positive-graph.component";
 import { IconNegativeGraphComponent } from "./components/icons/icon-negative-graph/icon-negative-graph.component";
 import { CategoryTagComponent } from "./components/category-tag/category-tag.component";
@@ -324,8 +290,6 @@ import { InputTextComponent } from "./components/dumbs/input-text/input-text.com
 import { FormComponent } from "./components/dumbs/form/form.component";
 import { BankAccountModalComponent } from "./components/smart/bank-account-modal/bank-account-modal.component";
 import { BankImageComponent } from "./components/dumbs/bank-image/bank-image.component";
-import { SelectComponent } from "./components/dumbs/select/select.component";
-import { FinancialRevenuesModalComponent } from "./components/smart/financial-revenues-modal/financial-revenues-modal.component";
 import { FinancialStatusComponent } from "./components/dumbs/financial-status/financial-status.component";
 import { IconCheckedCircleComponent } from "./components/icons/icon-checked-circle/icon-checked-circle.component";
 import { IconFileComponent } from "./components/icons/icon-file/icon-file.component";
@@ -336,27 +300,34 @@ import { IconLucideRepeatComponent } from "./components/icons/icon-lucide-repeat
 import { IconPaperclipComponent } from "./components/icons/icon-paperclip/icon-paperclip.component";
 import { FinancialDetailsComponent } from "./components/smart/financial-details/financial-details.component";
 import { FinancialFormComponent } from "./components/smart/financial-form/financial-form.component";
-import { InputDatetimeComponent } from "./components/dumbs/input-datetime/input-datetime.component";
 import { FinancialTagsComponent } from "./components/smart/financial-tags/financial-tags.component";
 import { FinancialInstallmentsComponent } from "./components/smart/financial-installments/financial-installments.component";
 import { InputNumberComponent } from "./components/dumbs/input-number/input-number.component";
 import { InputPriceComponent } from "./components/dumbs/input-price/input-price.component";
 import { IconUploadComponent } from "./components/icons/icon-upload/icon-upload.component";
 import { FinancialFilterComponent } from "./components/smart/financial-filter/financial-filter.component";
-import { FinancialCreateComponent } from "./components/smart/financial-create/financial-create.component";
 import { FinancialDateFilterComponent } from "./components/dumbs/financial-date-filter/financial-date-filter.component";
 import { FinancialPeriodFilterComponent } from "./components/dumbs/financial-period-filter/financial-period-filter.component";
 import { BankAccountsComponent } from "./components/smart/bank-accounts/bank-accounts.component";
-import { GamificationComponent } from "./gamification/gamification.component";
+import { GamificationControlsModule } from "./shared/gamification-controls.module";
+import { JobsListSharedModule } from "./job-list/jobs-list-shared.module";
+import { JobsShellModule } from "./jobs/jobs-shell.module";
+import { JobFormModule } from "./jobs/job-form/job-form.module";
+import { JobTabsModule } from "./jobs/job-tabs/job-tabs.module";
+import { CheckInModule } from "./check-in/check-in.module";
+import { ExtrasModule } from "./extras/extras.module";
+import { BudgetModule } from "./budgets/budget.module";
+import { JobTabModule } from "./jobs/job-tab/job-tab.module";
+import { ContractNfModule } from "./contract-nf/contract-nf.module";
+import { ProjectPhotosModule } from "./project-photos/project-photos.module";
+import { FeedbackFormModule } from "./feedback-form/feedback-form.module";
+import { FeedbackModule } from "./feedback/feedback.module";
 
 registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
-    StarsComponent,
-    MaskDirective,
-    UcWordsDirective,
-    NumberAbbreviationPipe,
+    
     CountAnimationPipe,
     RoundPipe,
     CountUpDirective,
@@ -392,8 +363,6 @@ registerLocaleData(localePt);
     ItemCategoryListComponent,
     ItemCategoryShowComponent,
 
-    JobsComponent,
-    JobListOldComponent,
     ServiceListComponent,
 
     StandFormComponent,
@@ -415,21 +384,12 @@ registerLocaleData(localePt);
     TimecardApprovalsComponent,
     ScheduleComponent,
     ScheduleBottomSheet,
-    JobTabsComponent,
-    JobsComponent,
     BriefingFormComponent,
-    JobFormComponent,
-    BudgetFormComponent,
-    SpecificationFormComponent,
     ScheduleFormComponent,
     ReloadComponent,
-    ProjectsComponent,
     ScheduleLineComponent,
-    ImageViewerComponent,
-    ProposalsComponent,
     SafePipe,
-    ProposalFormComponent,
-    ItemProposalFormComponent,
+    
     BlockDialogComponent,
 
     EmployeeFormComponent,
@@ -458,47 +418,21 @@ registerLocaleData(localePt);
     EventFormComponent,
     EventListComponent,
     EventsComponent,
-    PerformanceReportLiteComponent,
-    SpecificationComponent,
-    FileUploadComponent,
-    MessageLoadingComponent,
+    
     ListDataComponent,
     DataFieldComponent,
     UpdatedInfoComponent,
     ScheduleDateComponent,
-    ServiceReportComponent,
     ConfirmDialogComponent,
-    DecimalPipe,
 
-    AlertsContainerComponent,
     AlertsCheckInComponent,
-    MemoriesContainerComponent,
     FormatMaskDirective,
     ChartPreviewComponent,
-    GoalsComponent,
-    CustomeNotificationInactivationComponente,
     ThousandsPipe,
-
-    CheckInComponent,
-    CheckInApprovalComponent,
-    CheckInContactInfoComponent,
-    CheckInBillingComponent,
-    CheckInBillingAmountComponent,
-    CheckInObsComponent,
-    CheckInComissionComponent,
-    CheckInPeopleComponent,
-    CheckInPaymentComponent,
-    CheckInPaymentFormComponent,
-    CheckInOtherCnpjsComponent,
-    CheckInOtherCnpjComponent,
 
     TimecardPlannerFormComponent,
 
     ContadorComponent,
-
-    ExtrasComponent,
-    ExtrasGridComponent,
-    ExtraFormComponent,
 
     ExternalComponent,
     ExternalExtrasComponent,
@@ -507,91 +441,48 @@ registerLocaleData(localePt);
     OrganizationFormComponent,
     ExternalCheckInComponent,
     ExternalExtrasRefuseComponent,
-    BriefingComponent,
-    ContractNfComponent,
-    ProjectPhotosComponent,
-    JobTabComponent,
+    
     ExternalFeedbackComponent,
-    FeedbackComponent,
-    FeedbackFormComponent,
-    FeedbackFormCardComponent,
-    FeedbackFormRatingComponent,
+    
     LimitJobComponent,
-    JobsKanbanComponent,
-    JobsKanbanColumnComponent,
-    JobsKanbanCardComponent,
-    JobListComponent,
-    JobHeaderComponent,
-    IconButtonComponent,
-    IconListComponent,
-    IconKanbanComponent,
-    IconSearchComponent,
-    IconArrowDownComponent,
-    IconMoreComponent,
-    SearchComponent,
-    IconArrowLeftComponent,
-    IconArrowRightComponent,
-    IconAddComponent,
     MenuComponent,
     HeaderComponent,
-    IconBagComponent,
-    IconCalendarComponent,
-    IconCheckCircleComponent,
-    IconTimeComponent,
-    IconCloseCircleComponent,
-    IconCloseComponent,
-    FinancialComponent,
-    IconEyeComponent,
-    IconExternalLinkComponent,
-    IconNegativeComponent,
-    CurrencyValueComponent,
-    FinancialHomeComponent,
-    FinancialTransactionComponent,
-    IconEyeClosedComponent,
-    ValueVisibilityControlComponent,
-    ButtonComponent,
-    IconDownloadComponent,
-    IconPrintComponent,
-    IconFilterComponent,
-    IconMenuComponent,
-    FinancialSummaryModalComponent,
-    IconPositiveGraphComponent,
-    IconNegativeGraphComponent,
-    CategoryTagComponent,
-    ModalComponent,
-    CategoryModalComponent,
-    FormCategoryColorComponent,
-    IconCheckComponent,
-    FormFieldComponent,
-    LabelComponent,
-    InputTextComponent,
-    FormComponent,
-    BankAccountModalComponent,
-    BankImageComponent,
-    SelectComponent,
-    FinancialRevenuesModalComponent,
-    FinancialStatusComponent,
-    IconCheckedCircleComponent,
-    IconFileComponent,
-    IconTagComponent,
-    IconCreditCardComponent,
-    IconLucideBuildingComponent,
-    IconLucideRepeatComponent,
-    IconPaperclipComponent,
-    FinancialDetailsComponent,
-    FinancialFormComponent,
-    InputDatetimeComponent,
-    FinancialTagsComponent,
-    FinancialInstallmentsComponent,
-    InputNumberComponent,
-    InputPriceComponent,
-    IconUploadComponent,
-    FinancialFilterComponent,
-    FinancialCreateComponent,
-    FinancialDateFilterComponent,
-    FinancialPeriodFilterComponent,
-    BankAccountsComponent,
-    GamificationComponent
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
   ],
   imports: [
     CurrencyMaskModule,
@@ -604,7 +495,7 @@ registerLocaleData(localePt);
     FormsModule,
     ReactiveFormsModule,
     NgxImageGalleryModule,
-    RouterModule.forRoot(ROUTES),
+    RouterModule.forRoot(ROUTES, { preloadingStrategy: PreloadAllModules }),
 
     MatListModule,
     MatBottomSheetModule,
@@ -636,7 +527,28 @@ registerLocaleData(localePt);
     MatCheckboxModule,
     CommonModule,
     NgApexchartsModule,
-    DevelopingModule
+    DevelopingModule,
+    StarsModule,
+    GamificationControlsModule,
+    JobsListSharedModule,
+    JobsShellModule,
+    CheckInModule,
+    ExtrasModule,
+    BudgetModule,
+    FileUploadSharedModule,
+    SpecificationModule,
+    JobTabModule,
+    ContractNfModule,
+    ProjectPhotosModule,
+    FeedbackFormModule,
+    FeedbackModule,
+    ProjectsModule,
+    BriefingModule,
+    FormDirectivesModule,
+    ProposalsModule,
+    JobFormModule,
+    JobTabsModule,
+    FinancialTabsModule
   ],
   providers: [
     CheckInService,
@@ -709,7 +621,6 @@ registerLocaleData(localePt);
     AlertService,
     MemoriesService,
     ConfirmDialogService,
-    CustomeNotificationInactivationService,
     DatePipe,
     CurrencyPipe,
     CurrencyValueService,
@@ -729,19 +640,13 @@ registerLocaleData(localePt);
   bootstrap: [AppComponent],
   entryComponents: [
     ScheduleBottomSheet,
-    StarsComponent,
     StandItemFormComponent,
     ReloadComponent,
-    ImageViewerComponent,
     BlockDialogComponent,
-    MessageLoadingComponent,
     UpdatedInfoComponent,
     ChartPreviewComponent,
     ConfirmDialogComponent,
     OrganizationFormComponent,
-    FinancialSummaryModalComponent,
-    FinancialCreateComponent,
-    FinancialRevenuesModalComponent,
     CategoryModalComponent,
     BankAccountModalComponent,
     LimitJobComponent,

@@ -30,8 +30,6 @@ import { ItemListComponent } from "./items/item-list/item-list.component";
 import { ItemShowComponent } from "./items/item-show/item-show.component";
 import { ItemsComponent } from "./items/items.component";
 
-import { JobListComponent as JobListOldComponent } from "./jobs/job-list/job-list.component";
-import { JobsComponent } from "./jobs/jobs.component";
 
 import { TimecardComponent } from "./timecard/timecard.component";
 
@@ -41,7 +39,6 @@ import { TimecardListComponent } from "./timecard/timecard-list/timecard-list.co
 import { TimecardApprovalsComponent } from "./timecard/timecard-approvals/timecard-approvals.component";
 
 import { ScheduleComponent } from "./schedule/schedule.component";
-import { JobTabsComponent } from "./jobs/job-tabs/job-tabs.component";
 import { ScheduleFormComponent } from "./schedule/schedule-form/schedule-form.component";
 import { EmployeesComponent } from "./employees/employees.component";
 import { EmployeeFormComponent } from "./employees/employee-form/employee-form.component";
@@ -62,24 +59,13 @@ import { PlaceListComponent } from "./places/place-list/place-list.component";
 import { EventsComponent } from "./events/events.component";
 import { EventListComponent } from "./events/event-list/event-list.component";
 import { EventFormComponent } from "./events/event-form/event-form.component";
-import { PerformanceReportLiteComponent } from "./reports/performance-report-lite/performance-report-lite.component";
-import { ServiceReportComponent } from "./reports/service-report/report-list.component";
-import { AlertsContainerComponent } from "./alerts/components/alerts-container/alerts-container.component";
-import { MemoriesContainerComponent } from "./memories/components/memories-container/memories-container.component";
 import { HomeEmptyComponent } from "./home-empty/home-empty.component";
-import { GoalsComponent } from "./goals/goals.component";
-import { CustomeNotificationInactivationComponente } from "./customer-notification-inactivation/customer-notification-inactivation.component";
 import { ExternalComponent } from "./external/external.component";
 import { ExternalExtrasComponent } from "./external/external-extras/external-extras.component";
 import { OrganizationComponent } from "./organization/organization.component";
 import { ExternalCheckInComponent } from "./external/external-check-in/external-check-in.component";
 import { ExternalExtrasRefuseComponent } from "./external/external-extras-refuse/external-extras-refuse.component";
 import { ExternalFeedbackComponent } from "./external/external-feedback/external-feedback.component";
-import { JobsKanbanComponent } from "./jobs/jobs-kanban/jobs-kanban.component";
-import { JobListComponent } from "./job-list/job-list.component";
-import { FinancialHomeComponent } from "./financial-home/financial-home.component";
-import { FinancialTransactionComponent } from "./financial-transaction/financial-transaction.component";
-import { GamificationComponent } from "./gamification/gamification.component";
 
 export const ROUTES: Routes = [
   {
@@ -129,12 +115,13 @@ export const ROUTES: Routes = [
       },
       {
         path: "performance-lite",
-        component: PerformanceReportLiteComponent,
+        loadChildren:
+          "app/reports/performance-report-lite/performance-report-lite.module#PerformanceReportLiteModule",
         canActivate: [AuthGuard]
       },
       {
         path: "service-report",
-        component: ServiceReportComponent,
+        loadChildren: "app/reports/service-report/service-report.module#ServiceReportModule",
         canActivate: [AuthGuard]
       },
       {
@@ -398,88 +385,13 @@ export const ROUTES: Routes = [
       },
       {
         path: "jobs",
-        component: JobsComponent,
-        children: [
-          {
-            path: "",
-            redirectTo: "list",
-            pathMatch: "full"
-          },
-          {
-            path: "new",
-            component: JobTabsComponent,
-            canActivate: [AuthGuard]
-          },
-          {
-            path: "new/:available_date",
-            component: JobTabsComponent,
-            canActivate: [AuthGuard]
-          },
-          {
-            path: "edit/:id",
-            component: JobTabsComponent,
-            canActivate: [AuthGuard]
-          },
-          {
-            path: "show/:id",
-            component: JobTabsComponent,
-            canActivate: [AuthGuard]
-          },
-          {
-            path: "list-old",
-            component: JobListOldComponent,
-            canActivate: [AuthGuard]
-          },
-          {
-            path: "list",
-            component: JobListComponent,
-            canActivate: [AuthGuard]
-          },
-          {
-            path: "kanban",
-            component: JobsKanbanComponent,
-            canActivate: [AuthGuard]
-          }
-        ]
+        loadChildren: "app/jobs/jobs.module#JobsModule",
+        canActivate: [AuthGuard]
       },
       {
         path: "financial",
-        component: JobsComponent,
-        children: [
-          {
-            path: "",
-            redirectTo: "list",
-            pathMatch: "full"
-          },
-          {
-            path: "new",
-            component: JobTabsComponent,
-            canActivate: [AuthGuard]
-          },
-          {
-            path: "new/:available_date",
-            component: JobTabsComponent,
-            canActivate: [AuthGuard]
-          },
-          {
-            path: "edit/:id",
-            component: JobTabsComponent,
-            canActivate: [AuthGuard]
-          },
-          {
-            path: "show/:id",
-            component: JobTabsComponent,
-            canActivate: [AuthGuard]
-          },
-          {
-            path: "list",
-            component: JobListComponent,
-            canActivate: [AuthGuard],
-            data: {
-              path: "financial"
-            }
-          }
-        ]
+        loadChildren: "app/financial/financial.module#FinancialModule",
+        canActivate: [AuthGuard]
       },
       {
         path: "organizations",
@@ -595,27 +507,28 @@ export const ROUTES: Routes = [
       },
       {
         path: "alerts",
-        component: AlertsContainerComponent,
+        loadChildren: "app/alerts/alerts.module#AlertsModule",
         canActivate: [AuthGuard]
       },
       {
         path: "memories",
-        component: MemoriesContainerComponent,
+        loadChildren: "app/memories/memories.module#MemoriesModule",
         canActivate: [AuthGuard]
       },
       {
         path: "goals",
-        component: GoalsComponent,
+        loadChildren: "app/goals/goals.module#GoalsModule",
         canActivate: [AuthGuard]
       },
       {
         path: "manage-client-types",
-        component: CustomeNotificationInactivationComponente,
+        loadChildren:
+          "app/customer-notification-inactivation/customer-notification-inactivation.module#CustomerNotificationInactivationModule",
         canActivate: [AuthGuard]
       },
       {
         path: "gamification",
-        component: GamificationComponent,
+        loadChildren: "app/gamification/gamification.module#GamificationModule",
         canActivate: [AuthGuard]
       }
     ]

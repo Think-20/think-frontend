@@ -53,6 +53,9 @@ import { GamificationControlsModule } from "../shared/gamification-controls.modu
 import { DecimalPipe } from "../shared/decimal.pipe";
 import { FormDirectivesModule } from "../shared/form-directives.module";
 import { FinancialComponent } from "./financial.component";
+import { BankAccountTypeService } from "app/bank-account-types/bank-account-type.service";
+import { BankService } from "app/banks/bank.service";
+import { BankAccountService } from "app/shared/services/bank-account.service";
 
 @NgModule({
   declarations: [
@@ -85,7 +88,7 @@ import { FinancialComponent } from "./financial.component";
     FinancialCreateComponent,
     FinancialRevenuesModalComponent,
     FinancialSummaryModalComponent,
-    DecimalPipe,
+    DecimalPipe
   ],
   imports: [
     CommonModule,
@@ -111,7 +114,7 @@ import { FinancialComponent } from "./financial.component";
     IconsModule,
     FormDirectivesModule,
     GamificationControlsModule,
-    JobsListSharedModule,
+    JobsListSharedModule
   ],
   exports: [
     FinancialComponent,
@@ -141,15 +144,16 @@ import { FinancialComponent } from "./financial.component";
     FinancialCreateComponent,
     FinancialRevenuesModalComponent,
     FinancialSummaryModalComponent,
-    DecimalPipe,
+    DecimalPipe
   ],
   entryComponents: [
     FinancialCreateComponent,
     FinancialRevenuesModalComponent,
     FinancialSummaryModalComponent,
     BankAccountModalComponent,
-    CategoryModalComponent,
+    CategoryModalComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
+  providers: [BankService, BankAccountTypeService, BankAccountService]
 })
 export class FinancialTabsModule {}

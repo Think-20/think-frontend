@@ -1,0 +1,253 @@
+import { Injectable } from "@angular/core";
+import { Headers, Http, RequestOptions } from "@angular/http";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Observable } from "rxjs/Observable";
+import "rxjs/add/operator/catch";
+import "rxjs/add/operator/map";
+
+import { API } from "app/app.api";
+import { ErrorHandler } from "app/shared/error-handler.service";
+import { FinancialTransaction, FinancialTransactionBankAccount } from "app/shared/models/financial-transaction.model";
+
+/** Resposta de GET financeiro/transacao/{jobId}/{contaBancariaId}?date= */
+export interface FinancialTransactionsByAccountResponse {
+  totalRealizado: number;
+  totalReceber: number;
+  totalPrevisto: number;
+  transacoes: any[];
+}
+
+@Injectable()
+export class FinancialService {
+  constructor(private http: Http, private snackBar: MatSnackBar) {}
+
+  /**
+   * Transações do job/conta na data de referência (receitas e despesas no mesmo payload).
+   */
+  transactionsByJobAndBankAccount(
+    jobId: number,
+    contaBancariaId: number,
+    dateIso: string
+  ): Observable<FinancialTransactionsByAccountResponse> {
+    const url = "financeiro/transacao/" + String(jobId) + "/" + String(contaBancariaId) + "?date=" + encodeURIComponent(dateIso);
+
+    return this.http
+      .get(API + "/" + url)
+      .map(function (response) {
+        const body = response.json();
+        if (!body) {
+          return {
+            totalRealizado: 0,
+            totalReceber: 0,
+            totalPrevisto: 0,
+            transacoes: []
+          };
+        }
+        return {
+          totalRealizado: typeof body.totalRealizado === "number" ? body.totalRealizado : 0,
+          totalReceber: typeof body.totalReceber === "number" ? body.totalReceber : 0,
+          totalPrevisto: typeof body.totalPrevisto === "number" ? body.totalPrevisto : 0,
+          transacoes: body.transacoes && body.transacoes.length ? body.transacoes : []
+        };
+      })
+      .catch(
+        function (err) {
+          this.snackBar.open(ErrorHandler.message(err), "", {
+            duration: 3000
+          });
+          return ErrorHandler.capture(err);
+        }.bind(this)
+      );
+  }
+
+  /**
+   * Total por job e tipo de transação (receita/despesa). `dateIso` em YYYY-MM-DD; se omitido, usa a data atual.
+   */
+  /**
+   * Cria transação (POST financeiro/transacao).
+   */
+  createTransaction(transaction: FinancialTransaction): Observable<FinancialTransaction> {
+    const body = this.serializeTransactionForApi(transaction);
+
+    delete body.idtransacao;
+
+    return this.http
+      .post(API + "/financeiro/transacao", JSON.stringify(body), new RequestOptions())
+      .map(function (response) {
+        return response.json() as FinancialTransaction;
+      })
+      .catch(
+        function (err) {
+          this.snackBar.open(ErrorHandler.message(err), "", {
+            duration: 3000
+          });
+          return ErrorHandler.capture(err);
+        }.bind(this)
+      );
+  }
+
+  /**
+   * Atualiza transação (PUT financeiro/transacao).
+   */
+  updateTransaction(transaction: FinancialTransaction): Observable<FinancialTransaction> {
+    const body = this.serializeTransactionForApi(transaction);
+    return this.http
+      .put(API + "/financeiro/transacao", JSON.stringify(body), new RequestOptions())
+      .map(function (response) {
+        return response.json() as FinancialTransaction;
+      })
+      .catch(
+        function (err) {
+          this.snackBar.open(ErrorHandler.message(err), "", {
+            duration: 3000
+          });
+          return ErrorHandler.capture(err);
+        }.bind(this)
+      );
+  }
+
+  transactionTotal(jobId: number, tipoTransacao: number, dateIso?: string): Observable<number> {
+    const resolvedDate = this.resolveDateQueryParam(dateIso);
+    const url = "financeiro/transacao/total/" + String(jobId) + "/" + String(tipoTransacao) + "?date=" + encodeURIComponent(resolvedDate);
+
+    return this.http
+      .get(API + "/" + url)
+      .map(function (response) {
+        const body = response.json();
+
+        if (!body) {
+          return 0;
+        }
+
+        if (typeof body.total === "number") {
+          return body.total;
+        }
+
+        return 0;
+      })
+      .catch(
+        function (err) {
+          this.snackBar.open(ErrorHandler.message(err), "", {
+            duration: 3000
+          });
+          return ErrorHandler.capture(err);
+        }.bind(this)
+      );
+  }
+
+  private jsonRequestOptions(): RequestOptions {
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    return new RequestOptions({ headers: headers });
+  }
+
+  /**
+   * Corpo JSON alinhado ao backend (conta bancária em formato API, não instância de classe).
+   */
+  private serializeTransactionForApi(t: FinancialTransaction): any {
+    const body: any = {
+      idtransacao: t.idtransacao,
+      idjob: t.idjob,
+      tipotransacao: t.tipotransacao,
+      descricao: t.descricao,
+      observacao: t.observacao,
+      status: t.status,
+      datacriacao: t.datacriacao,
+      datarecebimento: t.datarecebimento,
+      datavencimento: t.datavencimento,
+      datarealizado: t.datarealizado,
+      datacobranca: t.datacobranca,
+      idcategoria: t.idcategoria,
+      categoria: t.categoria,
+      idcontabancaria: t.idcontabancaria,
+      contabancaria: this.serializeContaBancariaForApi(t.contabancaria),
+      formapagamento: t.formapagamento,
+      numparcelas: t.numparcelas,
+      valortotal: t.valortotal,
+      periodo: t.periodo,
+      chavepix: t.chavepix,
+      banco: t.banco,
+      agencia: t.agencia,
+      contacorrente: t.contacorrente,
+      parcelas: t.parcelas && t.parcelas.length ? t.parcelas : [],
+      tags: t.tags && t.tags.length ? t.tags : []
+    };
+
+    if (t.idcontabancariacartaocredito !== undefined && t.idcontabancariacartaocredito !== null) {
+      body.idcontabancariacartaocredito = t.idcontabancariacartaocredito;
+    }
+    if (t.contabancariacartaocredito) {
+      body.contabancariacartaocredito = this.clonePlainBankAccountRef(t.contabancariacartaocredito);
+    }
+    if (t.arquivoboleto) {
+      body.arquivoboleto = t.arquivoboleto;
+    }
+    if (t.arquivos && t.arquivos.length) {
+      body.arquivos = t.arquivos;
+    }
+
+    return body;
+  }
+
+  private clonePlainBankAccountRef(ref: FinancialTransactionBankAccount): FinancialTransactionBankAccount {
+    return {
+      idcontabancaria: ref.idcontabancaria,
+      nome: ref.nome,
+      banco: ref.banco ? String(ref.banco) : "",
+      agencia: ref.agencia ? ref.agencia : "",
+      conta: ref.conta ? ref.conta : "",
+      datacadastro: ref.datacadastro
+    };
+  }
+
+  private serializeContaBancariaForApi(conta: any): FinancialTransactionBankAccount | null {
+    if (!conta) {
+      return null;
+    }
+    if (conta.bank) {
+      const idVal =
+        conta.id !== undefined && conta.id !== null
+          ? conta.id
+          : conta.idcontabancaria !== undefined && conta.idcontabancaria !== null
+          ? conta.idcontabancaria
+          : 0;
+      const bankCode = conta.bank && conta.bank.code !== undefined && conta.bank.code !== null ? String(conta.bank.code) : "";
+      return {
+        idcontabancaria: typeof idVal === "number" ? idVal : 0,
+        nome: conta.name ? String(conta.name) : "",
+        banco: bankCode,
+        agencia: conta.agency ? String(conta.agency) : "",
+        conta: conta.account_number ? String(conta.account_number) : "",
+        datacadastro: conta.datacadastro
+      };
+    }
+    return {
+      idcontabancaria: typeof conta.idcontabancaria === "number" ? conta.idcontabancaria : typeof conta.id === "number" ? conta.id : 0,
+      nome: conta.nome ? String(conta.nome) : "",
+      banco: conta.banco ? String(conta.banco) : "",
+      agencia: conta.agencia ? String(conta.agencia) : "",
+      conta: conta.conta ? String(conta.conta) : "",
+      datacadastro: conta.datacadastro
+    };
+  }
+
+  private resolveDateQueryParam(dateIso: string | undefined): string {
+    if (dateIso !== undefined && dateIso !== null && String(dateIso).trim()) {
+      const s = String(dateIso).trim();
+      if (s.indexOf("T") >= 0) {
+        return s.split("T")[0];
+      }
+      return s;
+    }
+    return this.formatDateIso(new Date());
+  }
+
+  private formatDateIso(date: Date): string {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const monthPadded = month < 10 ? "0" + String(month) : String(month);
+    const dayPadded = day < 10 ? "0" + String(day) : String(day);
+    return String(year) + "-" + monthPadded + "-" + dayPadded;
+  }
+}

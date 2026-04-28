@@ -273,6 +273,7 @@ import { IconNegativeComponent } from "./components/icons/icon-negative/icon-neg
 import { CurrencyValueService } from "./shared/services/currency-value.service";
 import { CurrencyValueComponent } from "./components/currency-value/currency-value.component";
 import { FinancialTabsModule } from "./financial/financial-tabs.module";
+import { FinancialService } from "./financial/financial.service";
 import { IconEyeClosedComponent } from "./components/icons/icon-eye-closed/icon-eye-closed.component";
 import { ValueVisibilityControlComponent } from "./components/value-visibility-control/value-visibility-control.component";
 import { IconFilterComponent } from "./components/icons/icon-filter/icon-filter.component";
@@ -322,12 +323,12 @@ import { ContractNfModule } from "./contract-nf/contract-nf.module";
 import { ProjectPhotosModule } from "./project-photos/project-photos.module";
 import { FeedbackFormModule } from "./feedback-form/feedback-form.module";
 import { FeedbackModule } from "./feedback/feedback.module";
+import { BankAccountService } from "./shared/services/bank-account.service";
 
 registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
-    
     CountAnimationPipe,
     RoundPipe,
     CountUpDirective,
@@ -389,7 +390,7 @@ registerLocaleData(localePt);
     ReloadComponent,
     ScheduleLineComponent,
     SafePipe,
-    
+
     BlockDialogComponent,
 
     EmployeeFormComponent,
@@ -418,7 +419,7 @@ registerLocaleData(localePt);
     EventFormComponent,
     EventListComponent,
     EventsComponent,
-    
+
     ListDataComponent,
     DataFieldComponent,
     UpdatedInfoComponent,
@@ -441,48 +442,12 @@ registerLocaleData(localePt);
     OrganizationFormComponent,
     ExternalCheckInComponent,
     ExternalExtrasRefuseComponent,
-    
+
     ExternalFeedbackComponent,
-    
+
     LimitJobComponent,
     MenuComponent,
-    HeaderComponent,
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    HeaderComponent
   ],
   imports: [
     CurrencyMaskModule,
@@ -574,6 +539,7 @@ registerLocaleData(localePt);
     ClientTypeService,
     EmployeeService,
     JobService,
+    FinancialService,
     JobActivityService,
     JobTypeService,
     JobCompetitionService,
@@ -624,6 +590,7 @@ registerLocaleData(localePt);
     DatePipe,
     CurrencyPipe,
     CurrencyValueService,
+    BankAccountService,
     { provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: "auto" } },
     { provide: LOCALE_ID, useValue: "pt-BR" },
     { provide: MAT_DATE_LOCALE, useValue: "pt-BR" },

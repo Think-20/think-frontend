@@ -1,3 +1,5 @@
+import { BankAccount } from "app/bank-accounts/bank-account.model";
+
 /**
  * Transação financeira (formato alinhado ao backend).
  */
@@ -26,7 +28,7 @@ export interface FinancialTransactionBankAccount {
   banco: string;
   agencia: string;
   conta: string;
-  datacadastro: string;
+  datacadastro?: string;
 }
 
 /** Metadados de um arquivo anexado (boleto ou anexos). */
@@ -52,7 +54,7 @@ export interface FinancialTransaction {
   idcategoria: number;
   categoria: FinancialTransactionCategory;
   idcontabancaria: number;
-  contabancaria: FinancialTransactionBankAccount;
+  contabancaria: BankAccount;
   idcontabancariacartaocredito?: number;
   contabancariacartaocredito?: FinancialTransactionBankAccount;
   formapagamento: number;

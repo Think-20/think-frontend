@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
-import { FormArray, FormControl, FormGroup } from "@angular/forms";
+import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
 import {
   FinancialTransaction,
   FinancialTransactionArquivo,
-  FinancialTransactionBankAccount,
   FinancialTransactionCategory,
   FinancialTransactionParcela,
   FinancialTransactionTag
@@ -13,6 +12,10 @@ import { CategoryModalComponent } from "../category-modal/category-modal.compone
 import { MatDialog } from "@angular/material/dialog";
 import { ETransactionPaymentMethod } from "app/shared/enums/transaction-payment-method.enum";
 import { EFinancialStep } from "app/shared/enums/financial-step.enum";
+import { BankAccountModalComponent, BankAccountModalResult } from "../bank-account-modal/bank-account-modal.component";
+import { MatSnackBar } from "@angular/material";
+import { BankAccount } from "app/bank-accounts/bank-account.model";
+import { FinancialService } from "app/financial/financial.service";
 
 @Component({
   selector: "cb-financial-form",
@@ -26,13 +29,18 @@ export class FinancialFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() transaction: FinancialTransaction;
   @Input() transactionType: EFinancialStep = EFinancialStep.revenues;
   @Input() categories: FinancialTransactionCategory[] = [];
-  @Input() accounts: FinancialTransactionBankAccount[] = [];
+  @Input() accounts: BankAccount[] = [];
   @Input() formasPagamento: Array<{ id: number; nome: string }> = [];
   @Input() periodos: Array<{ id: number; nome: string }> = [];
 
   @Output() saved = new EventEmitter<FinancialTransaction>();
 
   form: FormGroup;
+
+  submitted = false;
+
+  /** Evita envio duplicado enquanto POST/PUT está em andamento. */
+  loadingSubmit = false;
 
   /** Cópia editável das tags (commit envia isto no payload). */
   tagsDraft: FinancialTransactionTag[] = [];
@@ -55,7 +63,9 @@ export class FinancialFormComponent implements OnInit, OnChanges, OnDestroy {
 
   private periodoSub: Subscription | undefined;
 
-  constructor(private dialog: MatDialog) {}
+  private formaPagamentoSub: Subscription | undefined;
+
+  constructor(private dialog: MatDialog, private snackBar: MatSnackBar, private financialService: FinancialService) {}
 
   get isExpenseForm(): boolean {
     return this.transactionType === EFinancialStep.expenses;
@@ -75,10 +85,33 @@ export class FinancialFormComponent implements OnInit, OnChanges, OnDestroy {
     if (!this.form) {
       return;
     }
+    if (changes.formasPagamento && this.formasPagamento && this.formasPagamento.length) {
+      const formaCtrl = this.form.get("formapagamento");
+      const currentForma = formaCtrl ? formaCtrl.value : null;
+      if (!currentForma || currentForma.id === undefined || currentForma.id === null) {
+        const defaultForma = this.findOptionById(this.formasPagamento, ETransactionPaymentMethod.pix);
+        if (defaultForma && formaCtrl) {
+          formaCtrl.setValue(defaultForma, { emitEvent: false });
+          this.updatePaymentMethodValidators();
+        }
+      }
+    }
+    if (changes.periodos && this.periodos && this.periodos.length) {
+      const periodoCtrl = this.form.get("periodo");
+      const currentPeriodo = periodoCtrl ? periodoCtrl.value : null;
+      if (!currentPeriodo || currentPeriodo.id === undefined || currentPeriodo.id === null) {
+        const defaultPeriodo = this.findOptionById(this.periodos, this.PERIODO_VALOR_UNICO);
+        if (defaultPeriodo && periodoCtrl) {
+          periodoCtrl.setValue(defaultPeriodo, { emitEvent: false });
+          this.updatePeriodoValidators();
+        }
+      }
+    }
     if (changes.transaction && !changes.transaction.firstChange) {
       this.patchFormFromTransaction();
     }
     if (changes.transactionType && !changes.transactionType.firstChange) {
+      this.updateTransactionTypeValidators();
       this.patchFormFromTransaction();
     }
   }
@@ -90,10 +123,31 @@ export class FinancialFormComponent implements OnInit, OnChanges, OnDestroy {
     if (this.periodoSub) {
       this.periodoSub.unsubscribe();
     }
+    if (this.formaPagamentoSub) {
+      this.formaPagamentoSub.unsubscribe();
+    }
   }
 
   commit(): void {
+    this.submitted = true;
+
     if (!this.form || !this.transaction) {
+      return;
+    }
+
+    if (this.loadingSubmit) {
+      return;
+    }
+
+    this.form.updateValueAndValidity({ emitEvent: false });
+
+    if (this.form.invalid) {
+      this.snackBar.open("Por favor, preencha todos os campos obrigatórios.", "", {
+        duration: 3000
+      });
+
+      this.form.markAllAsTouched();
+
       return;
     }
 
@@ -107,7 +161,7 @@ export class FinancialFormComponent implements OnInit, OnChanges, OnDestroy {
     const formapagamentoId = formaCtrl && formaCtrl.id !== undefined && formaCtrl.id !== null ? formaCtrl.id : base.formapagamento;
     const periodoId = periodoCtrl && periodoCtrl.id !== undefined && periodoCtrl.id !== null ? periodoCtrl.id : base.periodo;
 
-    let contabancaria: FinancialTransactionBankAccount = base.contabancaria;
+    let contabancaria: BankAccount = base.contabancaria;
     let idcontabancaria = base.idcontabancaria;
     const selContaPrincipal = value.contabancaria;
     if (selContaPrincipal) {
@@ -205,31 +259,57 @@ export class FinancialFormComponent implements OnInit, OnChanges, OnDestroy {
       tags: this.cloneTagList(this.tagsDraft)
     });
 
-    this.saved.emit(payload);
+    const self = this;
+    this.loadingSubmit = true;
+    const saveRequest =
+      payload.idtransacao && payload.idtransacao > 0
+        ? this.financialService.updateTransaction(payload)
+        : this.financialService.createTransaction(payload);
+
+    saveRequest.subscribe(
+      function (saved) {
+        self.loadingSubmit = false;
+        self.submitted = false;
+        self.snackBar.open("Lançamento salvo com sucesso.", "", {
+          duration: 3000
+        });
+        self.saved.emit(saved);
+      },
+      function () {
+        self.loadingSubmit = false;
+        self.submitted = false;
+      }
+    );
   }
 
   private buildForm(): void {
+    const defaultFormaPagamento = this.findOptionById(this.formasPagamento, ETransactionPaymentMethod.pix);
+    const defaultPeriodo = this.findOptionById(this.periodos, this.PERIODO_VALOR_UNICO);
     this.form = new FormGroup({
-      descricao: new FormControl(""),
-      datarecebimento: new FormControl(""),
-      datavencimento: new FormControl(""),
-      datarealizado: new FormControl(""),
-      datacobranca: new FormControl(""),
-      categoria: new FormControl(null),
-      contabancaria: new FormControl(null),
+      descricao: new FormControl("", [Validators.required]),
+      datarecebimento: new FormControl("", [Validators.required]),
+      datavencimento: new FormControl("", [Validators.required]),
+      datarealizado: new FormControl("", [Validators.required]),
+      datacobranca: new FormControl("", [Validators.required]),
+      categoria: new FormControl(null, [Validators.required]),
+      contabancaria: new FormControl(null, [Validators.required]),
       contabancariacartaocredito: new FormControl(null),
-      formapagamento: new FormControl(null),
-      periodo: new FormControl(null),
-      valortotal: new FormControl(null),
-      numparcelas: new FormControl(1),
+      formapagamento: new FormControl(defaultFormaPagamento, [Validators.required]),
+      periodo: new FormControl(defaultPeriodo, [Validators.required]),
+      valortotal: new FormControl(null, [Validators.required, this.minCurrencyValidator(0.01)]),
+      numparcelas: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(60)]),
       parcelas: new FormArray([]),
       banco: new FormControl(""),
       agencia: new FormControl(""),
-      contacorrente: new FormControl(""),
-      chavepix: new FormControl(""),
+      contacorrente: new FormControl("", [Validators.required]),
+      chavepix: new FormControl("", [Validators.required]),
       boletoNomeArquivo: new FormControl(""),
       observacao: new FormControl("")
     });
+
+    this.updateTransactionTypeValidators();
+    this.updatePaymentMethodValidators();
+    this.updatePeriodoValidators();
   }
 
   private patchFormFromTransaction(): void {
@@ -251,7 +331,7 @@ export class FinancialFormComponent implements OnInit, OnChanges, OnDestroy {
         categoria: t.categoria,
         contabancaria: t.contabancaria,
         contabancariacartaocredito: t.contabancariacartaocredito ? t.contabancariacartaocredito : null,
-        formapagamento: this.findOptionById(this.formasPagamento, t.formapagamento),
+        formapagamento: this.findFormaPagamentoOption(t.formapagamento),
         periodo: this.findOptionById(this.periodos, t.periodo),
         valortotal: t.valortotal,
         numparcelas: parcelasCount,
@@ -265,6 +345,10 @@ export class FinancialFormComponent implements OnInit, OnChanges, OnDestroy {
       { emitEvent: false }
     );
 
+    this.updateTransactionTypeValidators();
+    this.updatePaymentMethodValidators();
+    this.updatePeriodoValidators();
+
     this.rebuildParcelasFromTransaction(t);
 
     this.tagsDraft = this.cloneTagList(t.tags);
@@ -275,6 +359,40 @@ export class FinancialFormComponent implements OnInit, OnChanges, OnDestroy {
 
   onTagsDraftChange(next: FinancialTransactionTag[]): void {
     this.tagsDraft = next;
+  }
+
+  hasControlError(controlName: string): boolean {
+    if (!this.form) {
+      return false;
+    }
+    const control = this.form.get(controlName);
+    if (!control) {
+      return false;
+    }
+    return !!(control.invalid && (control.touched || this.submitted));
+  }
+
+  getControlErrorMessage(controlName: string): string {
+    if (!this.form) {
+      return "";
+    }
+    const control = this.form.get(controlName);
+    if (!control || !control.errors) {
+      return "";
+    }
+    if (control.errors.required) {
+      return "Campo obrigatório.";
+    }
+    if (control.errors.minCurrency) {
+      return "Informe um valor.";
+    }
+    if (control.errors.min) {
+      return "Valor abaixo do mínimo permitido.";
+    }
+    if (control.errors.max) {
+      return "Valor acima do máximo permitido.";
+    }
+    return "Campo inválido.";
   }
 
   private cloneTagList(tags: FinancialTransactionTag[]): FinancialTransactionTag[] {
@@ -688,6 +806,13 @@ export class FinancialFormComponent implements OnInit, OnChanges, OnDestroy {
     if (perCtrl) {
       this.periodoSub = perCtrl.valueChanges.subscribe(() => {
         this.onPeriodoSelectionChanged();
+        this.updatePeriodoValidators();
+      });
+    }
+    const formaCtrl = this.form.get("formapagamento");
+    if (formaCtrl) {
+      this.formaPagamentoSub = formaCtrl.valueChanges.subscribe(() => {
+        this.updatePaymentMethodValidators();
       });
     }
   }
@@ -788,8 +913,8 @@ export class FinancialFormComponent implements OnInit, OnChanges, OnDestroy {
     return new FormGroup({
       idparcela: new FormControl(0),
       idtransacao: new FormControl(0),
-      valor: new FormControl(null),
-      data: new FormControl(""),
+      valor: new FormControl(0, [Validators.required, this.minCurrencyValidator(0.01)]),
+      data: new FormControl("", [Validators.required]),
       ordem: new FormControl(ordem)
     });
   }
@@ -798,10 +923,152 @@ export class FinancialFormComponent implements OnInit, OnChanges, OnDestroy {
     return new FormGroup({
       idparcela: new FormControl(p.idparcela),
       idtransacao: new FormControl(p.idtransacao),
-      valor: new FormControl(p.valor),
-      data: new FormControl(this.parcelaDateToFormValue(p.data)),
+      valor: new FormControl(p.valor, [Validators.required]),
+      data: new FormControl(this.parcelaDateToFormValue(p.data), [Validators.required]),
       ordem: new FormControl(p.ordem ? p.ordem : ordemFallback)
     });
+  }
+
+  private updateTransactionTypeValidators(): void {
+    if (!this.form) {
+      return;
+    }
+    const dataRecebimento = this.form.get("datarecebimento");
+    const dataVencimento = this.form.get("datavencimento");
+    const dataRealizado = this.form.get("datarealizado");
+    const dataCobranca = this.form.get("datacobranca");
+
+    if (dataCobranca) {
+      dataCobranca.setValidators([Validators.required]);
+      dataCobranca.updateValueAndValidity({ emitEvent: false });
+    }
+
+    if (this.isExpenseForm) {
+      if (dataVencimento) {
+        dataVencimento.setValidators([Validators.required]);
+        dataVencimento.updateValueAndValidity({ emitEvent: false });
+      }
+      if (dataRealizado) {
+        dataRealizado.setValidators([Validators.required]);
+        dataRealizado.updateValueAndValidity({ emitEvent: false });
+      }
+      if (dataRecebimento) {
+        dataRecebimento.clearValidators();
+        dataRecebimento.updateValueAndValidity({ emitEvent: false });
+      }
+      return;
+    }
+
+    if (dataRecebimento) {
+      dataRecebimento.setValidators([Validators.required]);
+      dataRecebimento.updateValueAndValidity({ emitEvent: false });
+    }
+    if (dataVencimento) {
+      dataVencimento.clearValidators();
+      dataVencimento.updateValueAndValidity({ emitEvent: false });
+    }
+    if (dataRealizado) {
+      dataRealizado.clearValidators();
+      dataRealizado.updateValueAndValidity({ emitEvent: false });
+    }
+  }
+
+  private updatePaymentMethodValidators(): void {
+    if (!this.form) {
+      return;
+    }
+
+    const formapagamentoId = this.getSelectedFormaPagamentoId();
+    const chavepix = this.form.get("chavepix");
+    const boletoNomeArquivo = this.form.get("boletoNomeArquivo");
+    const contabancariacartaocredito = this.form.get("contabancariacartaocredito");
+    const banco = this.form.get("banco");
+    const agencia = this.form.get("agencia");
+    const contacorrente = this.form.get("contacorrente");
+
+    if (chavepix) {
+      chavepix.setValidators(formapagamentoId === ETransactionPaymentMethod.pix ? [Validators.required] : []);
+      chavepix.updateValueAndValidity({ emitEvent: false });
+    }
+
+    if (boletoNomeArquivo) {
+      boletoNomeArquivo.setValidators(formapagamentoId === ETransactionPaymentMethod.bankSlip ? [Validators.required] : []);
+      boletoNomeArquivo.updateValueAndValidity({ emitEvent: false });
+    }
+
+    if (contabancariacartaocredito) {
+      contabancariacartaocredito.setValidators(formapagamentoId === ETransactionPaymentMethod.creditCard ? [Validators.required] : []);
+      contabancariacartaocredito.updateValueAndValidity({ emitEvent: false });
+    }
+
+    const isDeposit = formapagamentoId === ETransactionPaymentMethod.deposit;
+    if (banco) {
+      banco.setValidators(isDeposit ? [Validators.required] : []);
+      banco.updateValueAndValidity({ emitEvent: false });
+    }
+    if (agencia) {
+      agencia.setValidators(isDeposit ? [Validators.required] : []);
+      agencia.updateValueAndValidity({ emitEvent: false });
+    }
+    if (contacorrente) {
+      contacorrente.setValidators(isDeposit ? [Validators.required] : []);
+      contacorrente.updateValueAndValidity({ emitEvent: false });
+    }
+  }
+
+  private updatePeriodoValidators(): void {
+    if (!this.form) {
+      return;
+    }
+    const periodoId = this.getSelectedPeriodoId();
+    const valortotal = this.form.get("valortotal");
+    const numparcelas = this.form.get("numparcelas");
+    const parcelas = this.form.get("parcelas");
+    const isSingle = periodoId === this.PERIODO_VALOR_UNICO;
+    const isInstallment = periodoId === this.PERIODO_PARCELADO;
+
+    if (valortotal) {
+      valortotal.setValidators(isSingle ? [Validators.required, this.minCurrencyValidator(0.01)] : []);
+      valortotal.updateValueAndValidity({ emitEvent: false });
+    }
+
+    if (numparcelas) {
+      numparcelas.setValidators(isInstallment ? [Validators.required, Validators.min(1), Validators.max(60)] : []);
+      numparcelas.updateValueAndValidity({ emitEvent: false });
+    }
+
+    if (parcelas) {
+      parcelas.setValidators(isInstallment ? [Validators.required] : []);
+      parcelas.updateValueAndValidity({ emitEvent: false });
+    }
+  }
+
+  private minCurrencyValidator(min: number): ValidatorFn {
+    return function (control: AbstractControl): ValidationErrors | null {
+      const raw = control ? control.value : null;
+      if (raw === null || raw === undefined || raw === "") {
+        return null;
+      }
+      let parsed = 0;
+      if (typeof raw === "number") {
+        parsed = raw;
+      } else {
+        let s = String(raw)
+          .replace(/R\$\s*/g, "")
+          .trim();
+        if (!s.length) {
+          parsed = 0;
+        } else {
+          s = s.replace(/\./g, "").replace(",", ".");
+          const n = parseFloat(s);
+          parsed = isNaN(n) ? 0 : n;
+        }
+      }
+      if (parsed < min) {
+        return { minCurrency: { min: min, actual: parsed } };
+      }
+      return null;
+    };
   }
 
   private parcelaDateToFormValue(iso: string): string {
@@ -925,10 +1192,70 @@ export class FinancialFormComponent implements OnInit, OnChanges, OnDestroy {
     return options[0];
   }
 
+  private findFormaPagamentoOption(id: number): { id: number; nome: string } | null {
+    if (!this.formasPagamento || !this.formasPagamento.length) {
+      return null;
+    }
+    let i = 0;
+    for (i = 0; i < this.formasPagamento.length; i++) {
+      if (this.formasPagamento[i].id === id) {
+        return this.formasPagamento[i];
+      }
+    }
+    for (i = 0; i < this.formasPagamento.length; i++) {
+      if (this.formasPagamento[i].id === ETransactionPaymentMethod.pix) {
+        return this.formasPagamento[i];
+      }
+    }
+    return this.formasPagamento[0];
+  }
+
   openCategoryModal(): void {
     this.dialog.open(CategoryModalComponent, {
       width: "400px",
       panelClass: "beautiful-modal"
     });
+  }
+
+  openBankAccountModal(targetControlName: "contabancaria" | "contabancariacartaocredito"): void {
+    const dialogRef = this.dialog.open(BankAccountModalComponent, {
+      width: "490px",
+      panelClass: "beautiful-modal"
+    });
+
+    dialogRef.afterClosed().subscribe((result: BankAccountModalResult | undefined) => {
+      if (!result || !result.account) {
+        return;
+      }
+
+      const createdAccount = Object.assign({}, result.account, {
+        idcontabancaria: this.getNextBankAccountId(this.accounts)
+      });
+
+      this.accounts = (this.accounts || []).concat([createdAccount]);
+
+      if (this.form) {
+        const targetControl = this.form.get(targetControlName);
+        if (targetControl) {
+          targetControl.setValue(createdAccount);
+          targetControl.markAsTouched();
+          targetControl.updateValueAndValidity({ emitEvent: false });
+        }
+      }
+    });
+  }
+
+  private getNextBankAccountId(accounts: BankAccount[]): number {
+    if (!accounts || !accounts.length) {
+      return 1;
+    }
+    let max = accounts[0].id;
+    let i = 1;
+    for (i = 1; i < accounts.length; i++) {
+      if (accounts[i].id > max) {
+        max = accounts[i].id;
+      }
+    }
+    return max + 1;
   }
 }

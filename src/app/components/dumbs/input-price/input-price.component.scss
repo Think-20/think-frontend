@@ -31,11 +31,11 @@
 
   text-align: right;
 
-  &:focus {
-    box-shadow: 0 0 0 calc(2px) var(--color-blue-500);
-  }
-
   &--has-error {
     box-shadow: 0 0 0 calc(2px) var(--color-red-500) !important;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 calc(2px) var(--color-blue-500) !important;
   }
 }

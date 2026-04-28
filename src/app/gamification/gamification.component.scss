@@ -123,6 +123,7 @@
     }
 
     &__card {
+      animation: gamification-fade-up 320ms ease-out both;
       padding: 24px;
       border: 1px solid #ebe6e7;
       border-radius: 10px;
@@ -156,6 +157,14 @@
         .gamification__summary__card__value {
           color: #00a63e;
         }
+      }
+
+      &:nth-child(2) {
+        animation-delay: 70ms;
+      }
+
+      &:nth-child(3) {
+        animation-delay: 140ms;
       }
     }
 
@@ -231,6 +240,23 @@
     }
   }
 
+  &__congrats {
+    display: flex;
+    gap: 16px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    border: 1px solid #b9f8cf;
+    border-radius: 10px;
+    background: #f0fdf4;
+    color: #008235;
+    font-size: 13px;
+
+    p {
+      margin: 8px 0 0;
+      color: #067647;
+    }
+  }
+
   &__loading {
     display: flex;
     flex-direction: column;
@@ -254,6 +280,7 @@
     table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
+    overflow: hidden;
   }
 
   &__col {
@@ -344,10 +371,17 @@
   }
 
   &__tr {
+    animation: gamification-fade-up 260ms ease-out both;
     border-bottom: 1px solid #f6f3f4;
 
     &:last-child {
       border-bottom: none;
+    }
+
+    @for $i from 1 through 20 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{$i * 24}ms;
+      }
     }
 
     &:hover td {
@@ -360,6 +394,29 @@
 
     &.gamification-goal-card--met > td:first-child {
       border-left-color: #00c950;
+    }
+
+    &.gamification-goal-card--met {
+      .gamification__star--on {
+        animation: gamification-star-pop 2200ms ease-in-out infinite;
+        will-change: text-shadow, opacity;
+      }
+
+      .gamification__star--on:nth-child(2) {
+        animation-delay: 120ms;
+      }
+
+      .gamification__star--on:nth-child(3) {
+        animation-delay: 240ms;
+      }
+
+      .gamification__star--on:nth-child(4) {
+        animation-delay: 360ms;
+      }
+
+      .gamification__star--on:nth-child(5) {
+        animation-delay: 480ms;
+      }
     }
 
     &.gamification-goal-card--close > td:first-child {
@@ -402,12 +459,38 @@
     }
   }
 
+  @keyframes gamification-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes gamification-star-pop {
+    0%,
+    100% {
+      text-shadow: 0 0 0 rgba(240, 177, 0, 0);
+      opacity: 0.92;
+    }
+    50% {
+      text-shadow:
+        0 0 2px rgba(240, 177, 0, 0.65),
+        0 0 6px rgba(240, 177, 0, 0.45);
+      opacity: 1;
+    }
+  }
+
   &__td {
     padding: 14px 12px;
     font-size: 12px;
     min-width: 0;
     vertical-align: middle;
     word-wrap: break-word;
+    border-bottom: 1px solid #ebe6e7;
 
     &:first-child {
       padding-left: 20px;

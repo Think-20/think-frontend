@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { MatDialog } from "@angular/material";
 import { FinancialCreateComponent } from "app/components/smart/financial-create/financial-create.component";
 import {
@@ -13,6 +13,8 @@ import { ETransactionPaymentMethod, transactionPaymentMethods } from "app/shared
 import { ETransactionStatus, transactionStatuses } from "app/shared/enums/transaction-status.enum";
 import { FinancialTransaction } from "app/shared/models/financial-transaction.model";
 import { FinancialTransactionsPdfExportService } from "app/shared/services/financial-transactions-pdf-export.service";
+import { FinancialService } from "app/financial/financial.service";
+import { EBank } from "app/shared/enums/bank.enum";
 
 /** Campos usados na listagem / PDF; o restante da entidade vem da API em produção. */
 type FinancialTransactionRevenueListMock = Pick<
@@ -63,8 +65,7 @@ function asFinancialTransaction(row: FinancialTransactionRevenueListMock): Finan
   const categoria = base.categoria ? base.categoria : mockCategoria(1);
   const contabancaria = base.contabancaria ? base.contabancaria : mockConta("Banco Inter");
   const idcategoria = base.idcategoria !== undefined && base.idcategoria !== null ? base.idcategoria : categoria.idcategoria;
-  const idcontabancaria =
-    base.idcontabancaria !== undefined && base.idcontabancaria !== null ? base.idcontabancaria : contabancaria.idcontabancaria;
+  const idcontabancaria = base.idcontabancaria !== undefined && base.idcontabancaria !== null ? base.idcontabancaria : contabancaria.id;
   const numparcelas = base.numparcelas !== undefined && base.numparcelas !== null ? base.numparcelas : 1;
   const periodo = base.periodo !== undefined && base.periodo !== null ? base.periodo : 1;
   const valortotal = typeof base.valortotal === "number" ? base.valortotal : 0;
@@ -118,12 +119,15 @@ function mockCategoria(tema: number): FinancialTransaction["categoria"] {
 
 function mockConta(nome: string): FinancialTransaction["contabancaria"] {
   return {
-    idcontabancaria: nome === "Conta Inter" ? 2 : 1,
-    nome: nome,
-    banco: "",
-    agencia: "",
-    conta: "",
-    datacadastro: "2024-01-01"
+    id: nome === "Conta Inter" ? 2 : 1,
+    name: nome,
+    bank: {
+      id: nome === "Conta Inter" ? 2 : 1,
+      name: nome,
+      code: EBank.inter
+    },
+    agency: "",
+    account_number: ""
   };
 }
 
@@ -132,7 +136,7 @@ function mockConta(nome: string): FinancialTransaction["contabancaria"] {
   templateUrl: "./financial-transaction.component.html",
   styleUrls: ["./financial-transaction.component.scss"]
 })
-export class FinancialTransactionComponent implements OnDestroy {
+export class FinancialTransactionComponent implements OnInit, OnDestroy {
   /** Expõe o enum ao template (ex.: classes condicionais). */
   readonly financialStep = EFinancialStep;
 
@@ -387,11 +391,18 @@ export class FinancialTransactionComponent implements OnDestroy {
 
   private searchDebounceTimer: number | null = null;
 
+  private totalFromApi: number | null = null;
+
   constructor(
     private dialog: MatDialog,
     private jobService: JobService,
-    private financialTransactionsPdfExport: FinancialTransactionsPdfExportService
+    private financialTransactionsPdfExport: FinancialTransactionsPdfExportService,
+    private financialService: FinancialService
   ) {}
+
+  ngOnInit(): void {
+    this.loadTransactionTotal();
+  }
 
   ngOnDestroy(): void {
     this.clearSearchDebounceTimer();
@@ -414,9 +425,29 @@ export class FinancialTransactionComponent implements OnDestroy {
   }
 
   get revenuesTotal(): number {
+    if (this.totalFromApi !== null) {
+      return this.totalFromApi;
+    }
+
     return this.filteredTransactions.reduce(function (sum, t) {
       return sum + (typeof t.valortotal === "number" ? t.valortotal : 0);
     }, 0);
+  }
+
+  private loadTransactionTotal(): void {
+    if (!this.job || !this.job.id || this.transactionType === undefined || this.transactionType === null) {
+      this.totalFromApi = null;
+      return;
+    }
+
+    this.financialService.transactionTotal(this.job.id, this.transactionType).subscribe(
+      function (total) {
+        this.totalFromApi = typeof total === "number" ? total : 0;
+      }.bind(this),
+      function () {
+        this.totalFromApi = null;
+      }.bind(this)
+    );
   }
 
   statusLabel(status: number): string {

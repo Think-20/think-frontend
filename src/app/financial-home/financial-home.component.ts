@@ -1,105 +1,26 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { MatDialog } from "@angular/material";
+import { BankAccount } from "app/bank-accounts/bank-account.model";
+import { Bank } from "app/banks/bank.model";
 import { FinancialCreateComponent } from "app/components/smart/financial-create/financial-create.component";
-import { banks } from "app/shared/enums/bank.enum";
+import { FinancialService } from "app/financial/financial.service";
 import { Job } from "app/jobs/job.model";
 import { JobService } from "app/jobs/job.service";
+import { EBank, banks } from "app/shared/enums/bank.enum";
 import { EFinancialStep } from "app/shared/enums/financial-step.enum";
-import { ETransactionPaymentMethod } from "app/shared/enums/transaction-payment-method.enum";
-import { ETransactionStatus } from "app/shared/enums/transaction-status.enum";
 import { FinancialTransaction } from "app/shared/models/financial-transaction.model";
+import { BankAccountService } from "app/shared/services/bank-account.service";
 import { CurrencyValueService } from "app/shared/services/currency-value.service";
 import { FinancialTransactionsPdfExportService } from "app/shared/services/financial-transactions-pdf-export.service";
 
-const MOCK_CONTA: FinancialTransaction["contabancaria"] = {
-  idcontabancaria: 1,
-  nome: "Think PJ (Nubank)",
-  banco: "260",
-  agencia: "0001",
-  conta: "60190-1",
-  datacadastro: "2022-01-03T23:50:00"
-};
-
-function mockRevenue(
-  id: number,
-  descricao: string,
-  nomeCategoria: string,
-  idcategoria: number,
-  valortotal: number,
-  dataIso: string
-): FinancialTransaction {
-  return {
-    idtransacao: id,
-    idjob: 1,
-    tipotransacao: 1,
-    descricao: descricao,
-    observacao: "",
-    status: ETransactionStatus.confirmed,
-    datacriacao: dataIso + "T10:00:00",
-    datarecebimento: dataIso,
-    datavencimento: dataIso,
-    datarealizado: dataIso,
-    datacobranca: dataIso,
-    idcategoria: idcategoria,
-    categoria: { idcategoria: idcategoria, nome: nomeCategoria, tema: 4 },
-    idcontabancaria: MOCK_CONTA.idcontabancaria,
-    contabancaria: MOCK_CONTA,
-    formapagamento: ETransactionPaymentMethod.pix,
-    numparcelas: 1,
-    valortotal: valortotal,
-    periodo: 1,
-    chavepix: "",
-    banco: "",
-    agencia: "",
-    contacorrente: "",
-    parcelas: [],
-    tags: []
-  };
-}
-
-function mockExpense(
-  id: number,
-  descricao: string,
-  nomeCategoria: string,
-  idcategoria: number,
-  valortotal: number,
-  dataIso: string
-): FinancialTransaction {
-  return {
-    idtransacao: id,
-    idjob: 1,
-    tipotransacao: 2,
-    descricao: descricao,
-    observacao: "",
-    status: ETransactionStatus.pending,
-    datacriacao: dataIso + "T09:00:00",
-    datarecebimento: "",
-    datavencimento: dataIso,
-    datarealizado: "",
-    datacobranca: dataIso,
-    idcategoria: idcategoria,
-    categoria: { idcategoria: idcategoria, nome: nomeCategoria, tema: 8 },
-    idcontabancaria: MOCK_CONTA.idcontabancaria,
-    contabancaria: MOCK_CONTA,
-    formapagamento: ETransactionPaymentMethod.money,
-    numparcelas: 1,
-    valortotal: valortotal,
-    periodo: 1,
-    chavepix: "",
-    banco: "",
-    agencia: "",
-    contacorrente: "",
-    parcelas: [],
-    tags: []
-  };
-}
+const SELECTED_BANK_ACCOUNT_ID_STORAGE_KEY = "think.financialHome.selectedBankAccountId";
 
 @Component({
   selector: "cb-financial-home",
   templateUrl: "./financial-home.component.html",
   styleUrls: ["./financial-home.component.scss"]
 })
-export class FinancialHomeComponent {
+export class FinancialHomeComponent implements OnInit, OnChanges {
   @Input() job: Job;
 
   @Output() stepChange = new EventEmitter<EFinancialStep>();
@@ -114,42 +35,19 @@ export class FinancialHomeComponent {
 
   showBankAccountsSidebar = false;
 
-  bankAccounts: FinancialTransaction["contabancaria"][] = [
-    MOCK_CONTA,
-    {
-      idcontabancaria: 2,
-      nome: "Conta reserva (Itaú)",
-      banco: "341",
-      agencia: "4521",
-      conta: "130987-2",
-      datacadastro: "2023-06-01T10:15:00"
-    },
-    {
-      idcontabancaria: 3,
-      nome: "Conta operacional (Inter)",
-      banco: "077",
-      agencia: "0001",
-      conta: "987654-0",
-      datacadastro: "2024-03-18T09:00:00"
-    }
-  ];
+  selectedBankAccount: BankAccount | null = null;
 
-  selectedBankAccountId: number | null = MOCK_CONTA.idcontabancaria;
+  accounts: BankAccount[] = [];
 
-  revenues: FinancialTransaction[] = [
-    mockRevenue(101, "Serviço 1", "Venda", 1, 1200, "2026-06-19"),
-    mockRevenue(102, "Serviço 2", "Venda", 1, 2578, "2026-06-19"),
-    mockRevenue(103, "Serviço 3", "Venda", 1, 1987, "2026-06-19"),
-    mockRevenue(104, "Serviço 4", "Venda", 1, 3284, "2026-06-19"),
-    mockRevenue(105, "Serviço 5", "Venda", 1, 894, "2026-06-19"),
-    mockRevenue(106, "Serviço 6", "Venda", 1, 225000, "2026-06-19")
-  ];
+  revenues: FinancialTransaction[] = [];
 
-  expenses: FinancialTransaction[] = [
-    mockExpense(201, "Vidros", "Vidraçaria", 10, 20, "2026-06-19"),
-    mockExpense(202, "Placas Madeira", "Marcenaria", 11, 8, "2026-06-19"),
-    mockExpense(203, "Limpeza", "Assinaturas", 12, 4500, "2026-06-19")
-  ];
+  expenses: FinancialTransaction[] = [];
+
+  /** Total do card Receita (GET financeiro/transacao/total/...). */
+  revenueCardAmount = 0;
+
+  /** Total do card Despesa (GET financeiro/transacao/total/...). */
+  expenseCardAmount = 0;
 
   bankStatements = [
     {
@@ -207,16 +105,10 @@ export class FinancialHomeComponent {
     private currencyValueService: CurrencyValueService,
     private dialog: MatDialog,
     private jobService: JobService,
+    private bankAccountService: BankAccountService,
+    private financialService: FinancialService,
     private financialTransactionsPdfExport: FinancialTransactionsPdfExportService
   ) {}
-
-  get revenueCardAmount(): number {
-    return this.sumTransactionsByDate(this.revenues, this.selectedRevenueDate, true);
-  }
-
-  get expenseCardAmount(): number {
-    return this.sumTransactionsByDate(this.expenses, this.selectedExpenseDate, false);
-  }
 
   get filteredBankStatements(): { date: string; income: number; expense: number; result: number; balance: number }[] {
     const minDate = this.getMinDateByPeriod(this.selectedBankStatementPeriod);
@@ -238,22 +130,48 @@ export class FinancialHomeComponent {
     return list[list.length - 1].balance;
   }
 
-  get selectedBankAccount(): FinancialTransaction["contabancaria"] | null {
-    for (let i = 0; i < this.bankAccounts.length; i++) {
-      if (this.bankAccounts[i].idcontabancaria === this.selectedBankAccountId) {
-        return this.bankAccounts[i];
-      }
+  get selectedBank(): EBank | null {
+    const account = this.selectedBankAccount;
+
+    if (!account || !account.bank) {
+      return EBank.default;
     }
-    return null;
+
+    return account.bank.code;
   }
 
-  get selectedBankImage(): { code: string; name: string; image: string } | null {
-    const account = this.selectedBankAccount;
-    if (!account) {
-      return null;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes.job) {
+      return;
     }
-    const bankData = banks.get(account.banco as any);
-    return bankData ? bankData : null;
+    if (this.job && this.job.id) {
+      this.refreshFinancialHomeApi();
+    }
+  }
+
+  ngOnInit(): void {
+    const self = this;
+    this.bankAccountService.get().subscribe(function (response) {
+      self.accounts = response.pagination.data;
+
+      const storedId = self.readStoredBankAccountId();
+      if (storedId !== null) {
+        self.bankAccountService.getById(storedId).subscribe(function (detail: BankAccount | null) {
+          if (detail && detail.id) {
+            self.selectedBankAccount = detail;
+            self.mergeAccountIntoList(detail);
+          } else {
+            self.applyDefaultSelectionFromList();
+          }
+          self.persistCurrentSelection();
+          self.refreshFinancialHomeApi();
+        });
+      } else {
+        self.applyDefaultSelectionFromList();
+        self.persistCurrentSelection();
+        self.refreshFinancialHomeApi();
+      }
+    });
   }
 
   showCurrencyValue(event: PointerEvent): void {
@@ -268,10 +186,12 @@ export class FinancialHomeComponent {
 
   onRevenueDateChange(dateIso: string): void {
     this.selectedRevenueDate = dateIso;
+    this.refreshFinancialHomeApi();
   }
 
   onExpenseDateChange(dateIso: string): void {
     this.selectedExpenseDate = dateIso;
+    this.refreshFinancialHomeApi();
   }
 
   onBankStatementPeriodChange(days: number): void {
@@ -307,24 +227,24 @@ export class FinancialHomeComponent {
     this.showBankAccountsSidebar = open;
   }
 
-  onBankAccountsChange(accounts: FinancialTransaction["contabancaria"][]): void {
-    this.bankAccounts = accounts;
-    if (!accounts.length) {
-      this.selectedBankAccountId = null;
+  onSelectedBankAccountChange(account: BankAccount | null): void {
+    const self = this;
+    if (!account) {
+      this.selectedBankAccount = null;
+      this.persistSelectedBankAccountId(null);
+      this.refreshFinancialHomeApi();
       return;
     }
-    const selectedExists = accounts.some(
-      function (account) {
-        return account.idcontabancaria === this.selectedBankAccountId;
-      }.bind(this)
-    );
-    if (!selectedExists) {
-      this.selectedBankAccountId = accounts[0].idcontabancaria;
-    }
-  }
-
-  onSelectedBankAccountChange(account: FinancialTransaction["contabancaria"] | null): void {
-    this.selectedBankAccountId = account ? account.idcontabancaria : null;
+    this.bankAccountService.getById(account.id).subscribe(function (detail: BankAccount | null) {
+      if (detail && detail.id) {
+        self.selectedBankAccount = detail;
+        self.mergeAccountIntoList(detail);
+      } else {
+        self.selectedBankAccount = account;
+      }
+      self.persistSelectedBankAccountId(self.selectedBankAccount ? self.selectedBankAccount.id : null);
+      self.refreshFinancialHomeApi();
+    });
   }
 
   exportRevenuesPdf(): void {
@@ -349,36 +269,280 @@ export class FinancialHomeComponent {
     });
   }
 
+  private refreshFinancialHomeApi(): void {
+    this.loadTransactionsFromApi();
+    this.loadTransactionCardTotals();
+  }
+
+  private loadTransactionCardTotals(): void {
+    const self = this;
+    const jobId = this.job && this.job.id ? this.job.id : 0;
+    if (!jobId) {
+      this.revenueCardAmount = 0;
+      this.expenseCardAmount = 0;
+      return;
+    }
+    const revenueDateArg = this.normalizeToYyyyMmDd(this.selectedRevenueDate);
+    const expenseDateArg = this.normalizeToYyyyMmDd(this.selectedExpenseDate);
+    const revenueDateOpt = revenueDateArg ? revenueDateArg : undefined;
+    const expenseDateOpt = expenseDateArg ? expenseDateArg : undefined;
+    this.financialService.transactionTotal(jobId, this.financialStep.revenues, revenueDateOpt).subscribe(
+      function (n) {
+        self.revenueCardAmount = n;
+      },
+      function () {
+        self.revenueCardAmount = 0;
+      }
+    );
+    this.financialService.transactionTotal(jobId, this.financialStep.expenses, expenseDateOpt).subscribe(
+      function (n) {
+        self.expenseCardAmount = n;
+      },
+      function () {
+        self.expenseCardAmount = 0;
+      }
+    );
+  }
+
+  private loadTransactionsFromApi(): void {
+    const self = this;
+    const jobId = this.job && this.job.id ? this.job.id : 0;
+    const acc = this.selectedBankAccount;
+    if (!jobId || !acc || !acc.id) {
+      this.revenues = [];
+      this.expenses = [];
+      return;
+    }
+    const dateIso = this.resolveTransactionQueryDate();
+    this.financialService.transactionsByJobAndBankAccount(jobId, acc.id, dateIso).subscribe(
+      function (res) {
+        const list = self.normalizeTransactionsList(res.transacoes);
+        const rev: FinancialTransaction[] = [];
+        const exp: FinancialTransaction[] = [];
+        let i = 0;
+        for (i = 0; i < list.length; i++) {
+          const t = list[i];
+          if (t.tipotransacao === self.financialStep.revenues) {
+            rev.push(t);
+          } else if (t.tipotransacao === self.financialStep.expenses) {
+            exp.push(t);
+          }
+        }
+        self.revenues = rev;
+        self.expenses = exp;
+      },
+      function () {
+        self.revenues = [];
+        self.expenses = [];
+      }
+    );
+  }
+
+  private resolveTransactionQueryDate(): string {
+    const rev = this.normalizeToYyyyMmDd(this.selectedRevenueDate);
+    if (rev) {
+      return rev;
+    }
+    const exp = this.normalizeToYyyyMmDd(this.selectedExpenseDate);
+    if (exp) {
+      return exp;
+    }
+    return this.formatDateIsoYyyyMmDd(new Date());
+  }
+
+  private normalizeToYyyyMmDd(raw: string): string {
+    if (!raw || !String(raw).trim()) {
+      return "";
+    }
+    const s = String(raw).trim();
+    if (s.indexOf("T") >= 0) {
+      return s.split("T")[0];
+    }
+    return s;
+  }
+
+  private formatDateIsoYyyyMmDd(d: Date): string {
+    const y = d.getFullYear();
+    const m = d.getMonth() + 1;
+    const day = d.getDate();
+    const mm = m < 10 ? "0" + String(m) : String(m);
+    const dd = day < 10 ? "0" + String(day) : String(day);
+    return String(y) + "-" + mm + "-" + dd;
+  }
+
+  private normalizeTransactionsList(rawList: any[]): FinancialTransaction[] {
+    if (!rawList || !rawList.length) {
+      return [];
+    }
+    const out: FinancialTransaction[] = [];
+    let i = 0;
+    for (i = 0; i < rawList.length; i++) {
+      out.push(this.normalizeTransactionFromApi(rawList[i]));
+    }
+    return out;
+  }
+
+  private normalizeTransactionFromApi(raw: any): FinancialTransaction {
+    const cat = raw && raw.categoria ? raw.categoria : {};
+    const idcategoria =
+      typeof cat.idcategoria === "number"
+        ? cat.idcategoria
+        : typeof raw.idcategoria === "number"
+        ? raw.idcategoria
+        : 0;
+    const nomeCat = cat.nome ? String(cat.nome) : "";
+    const temaCat = typeof cat.tema === "number" ? cat.tema : 0;
+    const conta = this.normalizeContaFromApi(raw.contabancaria);
+    const idcb = typeof raw.idcontabancaria === "number" ? raw.idcontabancaria : conta.id;
+    const t: FinancialTransaction = {
+      idtransacao: typeof raw.idtransacao === "number" ? raw.idtransacao : 0,
+      idjob: typeof raw.idjob === "number" ? raw.idjob : 0,
+      tipotransacao: typeof raw.tipotransacao === "number" ? raw.tipotransacao : 0,
+      descricao: raw.descricao ? String(raw.descricao) : "",
+      observacao: raw.observacao !== undefined && raw.observacao !== null ? String(raw.observacao) : "",
+      status: typeof raw.status === "number" ? raw.status : 0,
+      datacriacao: raw.datacriacao ? String(raw.datacriacao) : "",
+      datarecebimento: raw.datarecebimento ? String(raw.datarecebimento) : "",
+      datavencimento: raw.datavencimento ? String(raw.datavencimento) : "",
+      datarealizado: raw.datarealizado ? String(raw.datarealizado) : "",
+      datacobranca: raw.datacobranca ? String(raw.datacobranca) : "",
+      idcategoria: idcategoria,
+      categoria: { idcategoria: idcategoria, nome: nomeCat, tema: temaCat },
+      idcontabancaria: idcb,
+      contabancaria: conta,
+      formapagamento: typeof raw.formapagamento === "number" ? raw.formapagamento : 0,
+      numparcelas: typeof raw.numparcelas === "number" ? raw.numparcelas : 0,
+      valortotal: typeof raw.valortotal === "number" ? raw.valortotal : 0,
+      periodo: typeof raw.periodo === "number" ? raw.periodo : 0,
+      chavepix: raw.chavepix ? String(raw.chavepix) : "",
+      banco: raw.banco ? String(raw.banco) : "",
+      agencia: raw.agencia ? String(raw.agencia) : "",
+      contacorrente: raw.contacorrente ? String(raw.contacorrente) : "",
+      parcelas: raw.parcelas && raw.parcelas.length ? raw.parcelas : [],
+      tags: raw.tags && raw.tags.length ? raw.tags : []
+    };
+    if (raw.arquivoboleto) {
+      t.arquivoboleto = raw.arquivoboleto;
+    }
+    if (raw.arquivos && raw.arquivos.length) {
+      t.arquivos = raw.arquivos;
+    }
+    return t;
+  }
+
+  private normalizeContaFromApi(api: any): BankAccount {
+    const account = new BankAccount();
+    if (!api) {
+      account.id = 0;
+      account.name = "";
+      account.agency = "";
+      account.account_number = "";
+      account.bank = new Bank();
+      account.bank.id = 0;
+      account.bank.name = "";
+      account.bank.code = EBank.default;
+      return account;
+    }
+    account.id =
+      typeof api.idcontabancaria === "number"
+        ? api.idcontabancaria
+        : typeof api.id === "number"
+        ? api.id
+        : 0;
+    account.name = api.nome ? String(api.nome) : "";
+    account.agency = api.agencia ? String(api.agencia) : "";
+    account.account_number = api.conta ? String(api.conta) : "";
+    account.bank = new Bank();
+    const codeEnum = this.resolveBankCodeFromString(api.banco ? String(api.banco) : "");
+    account.bank.code = codeEnum;
+    const meta = banks.get(codeEnum);
+    account.bank.name = meta && meta.name ? meta.name : "";
+    account.bank.id = account.id;
+    return account;
+  }
+
+  private resolveBankCodeFromString(codeStr: string): EBank {
+    const s = codeStr ? String(codeStr).trim() : "";
+    if (!s) {
+      return EBank.default;
+    }
+    let found = EBank.default;
+    banks.forEach(function (meta, key) {
+      if (meta.code === s) {
+        found = key;
+      }
+    });
+    return found;
+  }
+
+  private readStoredBankAccountId(): number | null {
+    try {
+      const raw = localStorage.getItem(SELECTED_BANK_ACCOUNT_ID_STORAGE_KEY);
+      if (raw === null || raw === "") {
+        return null;
+      }
+      const parsed = parseInt(raw, 10);
+      if (isNaN(parsed) || parsed < 1) {
+        return null;
+      }
+      return parsed;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  private persistSelectedBankAccountId(id: number | null): void {
+    try {
+      if (id === null) {
+        localStorage.removeItem(SELECTED_BANK_ACCOUNT_ID_STORAGE_KEY);
+      } else {
+        localStorage.setItem(SELECTED_BANK_ACCOUNT_ID_STORAGE_KEY, String(id));
+      }
+    } catch (e) {
+      // quota / private mode
+    }
+  }
+
+  private applyDefaultSelectionFromList(): void {
+    if (this.accounts.length > 0) {
+      this.selectedBankAccount = this.accounts[0];
+    } else {
+      this.selectedBankAccount = null;
+    }
+  }
+
+  private persistCurrentSelection(): void {
+    if (this.selectedBankAccount) {
+      this.persistSelectedBankAccountId(this.selectedBankAccount.id);
+    } else {
+      this.persistSelectedBankAccountId(null);
+    }
+  }
+
+  private mergeAccountIntoList(account: BankAccount): void {
+    if (!account) {
+      return;
+    }
+    if (!this.accounts || !this.accounts.length) {
+      this.accounts = [account];
+      return;
+    }
+    let i = 0;
+    for (i = 0; i < this.accounts.length; i++) {
+      if (this.accounts[i].id === account.id) {
+        this.accounts[i] = account;
+        return;
+      }
+    }
+    this.accounts = [account].concat(this.accounts);
+  }
+
   private resolveJobDisplayId(): string {
     if (this.job) {
       return this.jobService.showId(this.job);
     }
 
     return "0";
-  }
-
-  private sumTransactionsByDate(transactions: FinancialTransaction[], selectedDate: string, isRevenue: boolean): number {
-    let total = 0;
-    for (let i = 0; i < transactions.length; i++) {
-      const transaction = transactions[i];
-      const transactionDate = this.resolveTransactionDate(transaction, isRevenue);
-      if (selectedDate && transactionDate !== selectedDate) {
-        continue;
-      }
-      total += transaction.valortotal || 0;
-    }
-    return total;
-  }
-
-  private resolveTransactionDate(transaction: FinancialTransaction, isRevenue: boolean): string {
-    const iso = isRevenue ? transaction.datarecebimento : transaction.datavencimento;
-    if (!iso) {
-      return "";
-    }
-    if (iso.indexOf("T") >= 0) {
-      return iso.split("T")[0];
-    }
-    return iso;
   }
 
   private getMinDateByPeriod(days: number): Date | null {

@@ -222,6 +222,18 @@ export class SelectComponent<T> implements ControlValueAccessor {
     }
   }
 
+  @HostListener("focusout", ["$event"])
+  handleFocusOut(event: FocusEvent): void {
+    const nextFocused = event.relatedTarget as Node | null;
+    if (nextFocused && this.elementRef.nativeElement.contains(nextFocused)) {
+      return;
+    }
+    this.onTouched();
+    if (this.isOpen) {
+      this.closeDropdown();
+    }
+  }
+
   @HostListener("window:resize")
   handleWindowResize(): void {
     if (this.isOpen) {

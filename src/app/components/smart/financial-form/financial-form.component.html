@@ -4,7 +4,7 @@
 >
   <div class="financial-form__grid">
     <cb-form-field class="financial-form__field--description">
-      <cb-label>
+      <cb-label [required]="true">
         <cb-icon-file class="financial-form__icon"></cb-icon-file>
         DESCRIÇÃO
       </cb-label>
@@ -13,62 +13,101 @@
         input
         formControlName="descricao"
         [autoFocus]="true"
+        [hasError]="form.get('descricao').invalid && (submitted || form.get('descricao').touched)"
       ></cb-input-text>
+      <span
+        error
+        class="financial-form__error-message"
+        *ngIf="hasControlError('descricao')"
+        >{{ getControlErrorMessage("descricao") }}</span
+      >
     </cb-form-field>
 
     <ng-container *ngIf="!isExpenseForm">
       <cb-form-field>
-        <cb-label>
+        <cb-label [required]="true">
           <cb-icon-calendar class="financial-form__icon"></cb-icon-calendar>
           DATA DE RECEBIMENTO
         </cb-label>
+
         <cb-input-datetime
           input
           formControlName="datarecebimento"
           mode="date"
+          [hasError]="form.get('datarecebimento').invalid && (submitted || form.get('datarecebimento').touched)"
         ></cb-input-datetime>
+        <span
+          error
+          class="financial-form__error-message"
+          *ngIf="hasControlError('datarecebimento')"
+          >{{ getControlErrorMessage("datarecebimento") }}</span
+        >
       </cb-form-field>
 
       <cb-form-field>
-        <cb-label>
+        <cb-label [required]="true">
           <cb-icon-calendar class="financial-form__icon"></cb-icon-calendar>
           DATA DA COBRANÇA
         </cb-label>
+
         <cb-input-datetime
           input
           formControlName="datacobranca"
           mode="date"
+          [hasError]="form.get('datacobranca').invalid && (submitted || form.get('datacobranca').touched)"
         ></cb-input-datetime>
+        <span
+          error
+          class="financial-form__error-message"
+          *ngIf="hasControlError('datacobranca')"
+          >{{ getControlErrorMessage("datacobranca") }}</span
+        >
       </cb-form-field>
     </ng-container>
 
     <ng-container *ngIf="isExpenseForm">
       <cb-form-field>
-        <cb-label>
+        <cb-label [required]="true">
           <cb-icon-calendar class="financial-form__icon"></cb-icon-calendar>
           DATA DE VENCIMENTO
         </cb-label>
+
         <cb-input-datetime
           input
           formControlName="datavencimento"
           mode="date"
+          [hasError]="form.get('datavencimento').invalid && (submitted || form.get('datavencimento').touched)"
         ></cb-input-datetime>
+        <span
+          error
+          class="financial-form__error-message"
+          *ngIf="hasControlError('datavencimento')"
+          >{{ getControlErrorMessage("datavencimento") }}</span
+        >
       </cb-form-field>
 
       <cb-form-field>
-        <cb-label>
+        <cb-label [required]="true">
           <cb-icon-calendar class="financial-form__icon"></cb-icon-calendar>
           DATA REALIZADO
         </cb-label>
+
         <cb-input-datetime
           input
           formControlName="datarealizado"
           mode="date"
+          [hasError]="form.get('datarealizado').invalid && (submitted || form.get('datarealizado').touched)"
         ></cb-input-datetime>
+        <span
+          error
+          class="financial-form__error-message"
+          *ngIf="hasControlError('datarealizado')"
+          >{{ getControlErrorMessage("datarealizado") }}</span
+        >
       </cb-form-field>
 
       <cb-form-field>
-        <cb-label>
+        <cb-label [required]="true">
           <cb-icon-calendar class="financial-form__icon"></cb-icon-calendar>
           DATA DA COBRANÇA
         </cb-label>
@@ -76,12 +115,19 @@
           input
           formControlName="datacobranca"
           mode="date"
+          [hasError]="form.get('datacobranca').invalid && (submitted || form.get('datacobranca').touched)"
         ></cb-input-datetime>
+        <span
+          error
+          class="financial-form__error-message"
+          *ngIf="hasControlError('datacobranca')"
+          >{{ getControlErrorMessage("datacobranca") }}</span
+        >
       </cb-form-field>
     </ng-container>
 
     <cb-form-field>
-      <cb-label>
+      <cb-label [required]="true">
         <cb-icon-tag class="financial-form__icon"></cb-icon-tag>
         CATEGORIA
       </cb-label>
@@ -91,6 +137,7 @@
         formControlName="categoria"
         [options]="categories"
         labelField="nome"
+        [hasError]="form.get('categoria').invalid && (submitted || form.get('categoria').touched)"
       >
         <button
           select-action
@@ -103,10 +150,16 @@
           Nova categoria
         </button>
       </cb-select>
+      <span
+        error
+        class="financial-form__error-message"
+        *ngIf="hasControlError('categoria')"
+        >{{ getControlErrorMessage("categoria") }}</span
+      >
     </cb-form-field>
 
     <cb-form-field>
-      <cb-label>
+      <cb-label [required]="true">
         <cb-icon-lucide-building class="financial-form__icon"></cb-icon-lucide-building>
         CONTA
       </cb-label>
@@ -115,14 +168,31 @@
         formControlName="contabancaria"
         [options]="accounts"
         labelField="nome"
-      ></cb-select>
+        [hasError]="form.get('contabancaria').invalid && (submitted || form.get('contabancaria').touched)"
+      >
+        <button
+          select-action
+          type="button"
+          class="financial-form__action-button"
+          (click)="openBankAccountModal('contabancaria')"
+        >
+          <cb-icon-add></cb-icon-add>
+          Nova conta bancária
+        </button>
+      </cb-select>
+      <span
+        error
+        class="financial-form__error-message"
+        *ngIf="hasControlError('contabancaria')"
+        >{{ getControlErrorMessage("contabancaria") }}</span
+      >
     </cb-form-field>
 
     <cb-form-field
       class="financial-form__field--payment-method"
       [class.financial-form__field--revenue]="isRevenueForm"
     >
-      <cb-label>
+      <cb-label [required]="true">
         <cb-icon-credit-card class="financial-form__icon"></cb-icon-credit-card>
         FORMA DE PAGAMENTO
       </cb-label>
@@ -131,7 +201,14 @@
         formControlName="formapagamento"
         [options]="formasPagamento"
         labelField="nome"
+        [hasError]="form.get('formapagamento').invalid && (submitted || form.get('formapagamento').touched)"
       ></cb-select>
+      <span
+        error
+        class="financial-form__error-message"
+        *ngIf="hasControlError('formapagamento')"
+        >{{ getControlErrorMessage("formapagamento") }}</span
+      >
     </cb-form-field>
   </div>
 
@@ -143,27 +220,48 @@
 
     <div class="financial-form__bank-data-grid">
       <cb-form-field>
-        <cb-label>BANCO</cb-label>
+        <cb-label [required]="true">BANCO</cb-label>
         <cb-input-text
           input
           formControlName="banco"
+          [hasError]="form.get('banco').invalid && (submitted || form.get('banco').touched)"
         ></cb-input-text>
+        <span
+          error
+          class="financial-form__error-message"
+          *ngIf="hasControlError('banco')"
+          >{{ getControlErrorMessage("banco") }}</span
+        >
       </cb-form-field>
 
       <cb-form-field>
-        <cb-label>AGÊNCIA</cb-label>
+        <cb-label [required]="true">AGÊNCIA</cb-label>
         <cb-input-text
           input
           formControlName="agencia"
+          [hasError]="form.get('agencia').invalid && (submitted || form.get('agencia').touched)"
         ></cb-input-text>
+        <span
+          error
+          class="financial-form__error-message"
+          *ngIf="hasControlError('agencia')"
+          >{{ getControlErrorMessage("agencia") }}</span
+        >
       </cb-form-field>
 
       <cb-form-field>
-        <cb-label>CONTA CORRENTE</cb-label>
+        <cb-label [required]="true">CONTA CORRENTE</cb-label>
         <cb-input-text
           input
           formControlName="contacorrente"
+          [hasError]="form.get('contacorrente').invalid && (submitted || form.get('contacorrente').touched)"
         ></cb-input-text>
+        <span
+          error
+          class="financial-form__error-message"
+          *ngIf="hasControlError('contacorrente')"
+          >{{ getControlErrorMessage("contacorrente") }}</span
+        >
       </cb-form-field>
     </div>
   </div>
@@ -175,11 +273,18 @@
     <h2 class="financial-form__section-title">Pix</h2>
 
     <cb-form-field>
-      <cb-label>CHAVE PIX</cb-label>
+      <cb-label [required]="true">CHAVE PIX</cb-label>
       <cb-input-text
         input
         formControlName="chavepix"
+        [hasError]="form.get('chavepix').invalid && (submitted || form.get('chavepix').touched)"
       ></cb-input-text>
+      <span
+        error
+        class="financial-form__error-message"
+        *ngIf="hasControlError('chavepix')"
+        >{{ getControlErrorMessage("chavepix") }}</span
+      >
     </cb-form-field>
   </div>
 
@@ -190,7 +295,7 @@
     <h2 class="financial-form__section-title">Cartão de crédito</h2>
 
     <cb-form-field>
-      <cb-label>
+      <cb-label [required]="true">
         <cb-icon-lucide-building class="financial-form__icon"></cb-icon-lucide-building>
         CONTA PARA LIQUIDAÇÃO NO CARTÃO
       </cb-label>
@@ -199,7 +304,24 @@
         formControlName="contabancariacartaocredito"
         [options]="accounts"
         labelField="nome"
-      ></cb-select>
+        [hasError]="form.get('contabancariacartaocredito').invalid && (submitted || form.get('contabancariacartaocredito').touched)"
+      >
+        <button
+          select-action
+          type="button"
+          class="financial-form__action-button"
+          (click)="openBankAccountModal('contabancariacartaocredito')"
+        >
+          <cb-icon-add></cb-icon-add>
+          Nova conta bancária
+        </button>
+      </cb-select>
+      <span
+        error
+        class="financial-form__error-message"
+        *ngIf="hasControlError('contabancariacartaocredito')"
+        >{{ getControlErrorMessage("contabancariacartaocredito") }}</span
+      >
     </cb-form-field>
   </div>
 
@@ -207,11 +329,21 @@
     class="financial-form__bank-data"
     *ngIf="isBankSlipPayment()"
   >
-    <h2 class="financial-form__section-title">Arquivo Boleto</h2>
+    <h2 class="financial-form__section-title">
+      Arquivo Boleto
+
+      <span
+        error
+        class="financial-form__required"
+        title="Campo obrigatório"
+        >*</span
+      >
+    </h2>
 
     <div
       class="financial-form__boleto-dropzone"
       [class.financial-form__boleto-dropzone--active]="boletoDropzoneActive"
+      [class.financial-form__boleto-dropzone--error]="hasControlError('boletoNomeArquivo')"
       (dragover)="onBoletoDragOver($event)"
       (dragenter)="onBoletoDragEnter($event)"
       (dragleave)="onBoletoDragLeave($event)"
@@ -257,11 +389,17 @@
         </button>
       </span>
     </div>
+    <p
+      class="financial-form__error-message"
+      *ngIf="hasControlError('boletoNomeArquivo')"
+    >
+      {{ getControlErrorMessage("boletoNomeArquivo") }}
+    </p>
   </div>
 
   <div class="financial-form__launch-row">
     <cb-form-field class="financial-form__launch-row__type">
-      <cb-label>
+      <cb-label [required]="true">
         <cb-icon-lucide-repeat class="financial-form__icon"></cb-icon-lucide-repeat>
         TIPO DE LANÇAMENTO
       </cb-label>
@@ -271,7 +409,14 @@
         [options]="periodos"
         labelField="nome"
         [showFilter]="false"
+        [hasError]="form.get('periodo').invalid && (submitted || form.get('periodo').touched)"
       ></cb-select>
+      <span
+        error
+        class="financial-form__error-message"
+        *ngIf="hasControlError('periodo')"
+        >{{ getControlErrorMessage("periodo") }}</span
+      >
     </cb-form-field>
 
     <div class="financial-form__launch-row__companion">
@@ -279,24 +424,38 @@
         *ngIf="isSingleValueLaunch()"
         class="financial-form__launch-row__companion-field"
       >
-        <cb-label>VALOR TOTAL</cb-label>
+        <cb-label [required]="true">VALOR TOTAL</cb-label>
         <cb-input-price
           input
           formControlName="valortotal"
+          [hasError]="form.get('valortotal').invalid && (submitted || form.get('valortotal').touched)"
         ></cb-input-price>
+        <span
+          error
+          class="financial-form__error-message"
+          *ngIf="hasControlError('valortotal')"
+          >{{ getControlErrorMessage("valortotal") }}</span
+        >
       </cb-form-field>
 
       <cb-form-field
         *ngIf="isInstallmentLaunch()"
         class="financial-form__launch-row__companion-field financial-form__parcelas-count-field"
       >
-        <cb-label>NÚMERO DE PARCELAS</cb-label>
+        <cb-label [required]="true">NÚMERO DE PARCELAS</cb-label>
         <cb-input-number
           input
           formControlName="numparcelas"
           [min]="1"
           [max]="60"
+          [hasError]="form.get('numparcelas').invalid && (submitted || form.get('numparcelas').touched)"
         ></cb-input-number>
+        <span
+          error
+          class="financial-form__error-message"
+          *ngIf="hasControlError('numparcelas')"
+          >{{ getControlErrorMessage("numparcelas") }}</span
+        >
       </cb-form-field>
     </div>
   </div>
@@ -305,7 +464,10 @@
     *ngIf="isInstallmentLaunch()"
     class="financial-form__parcelas-block"
   >
-    <cb-financial-installments [form]="form"></cb-financial-installments>
+    <cb-financial-installments
+      [form]="form"
+      [submitted]="submitted"
+    ></cb-financial-installments>
   </div>
 
   <div

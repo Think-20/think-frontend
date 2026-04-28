@@ -1,85 +1,145 @@
-<cb-modal class="back-account-modal" (close)="close()">
-    <h1 header>
-        {{ modalTitle }}
-    </h1>
+<cb-modal
+  class="back-account-modal"
+  (close)="close()"
+>
+  <h1 header>
+    {{ modalTitle }}
+  </h1>
 
-    <div class="back-account-modal__preview">
-        <cb-bank-image [bank]="bank.value"></cb-bank-image>
+  <div class="back-account-modal__preview">
+    <cb-bank-image [bank]="bank.value ? bank.value.code : bankEnum.default"></cb-bank-image>
 
-        <div class="back-account-modal__preview__content">
-            <p class="back-account-modal__preview__content__bank">
-                {{ name.value || "Nome da conta" }}
-            </p>
+    <div class="back-account-modal__preview__content">
+      <p class="back-account-modal__preview__content__bank">
+        {{ name.value || "Nome da conta" }}
+      </p>
 
-            <div class="back-account-modal__preview__content__data">
-                <span class="back-account-modal__preview__content__data__agency">
-                    Agência: {{ agency.value || "0000" }}
-                </span>
-                
-                <span class="back-account-modal__preview__content__data__account">
-                    Conta: {{ account.value || "00000-0" }}
-                </span>
-            </div>
-        </div>
+      <div class="back-account-modal__preview__content__data">
+        <span class="back-account-modal__preview__content__data__agency"> Agência: {{ agency.value || "0000" }} </span>
+
+        <span class="back-account-modal__preview__content__data__account"> Conta: {{ accountNumber.value || "00000-0" }} </span>
+      </div>
     </div>
+  </div>
 
-    <cb-form [formGroup]="form">
-        <cb-form-field>
-            <cb-label>Instituição</cb-label>
+  <cb-form [formGroup]="form">
+    <cb-form-field>
+      <cb-label [required]="true">BANCO</cb-label>
 
-            <cb-select
-                input
-                formControlName="bank"
-                placeholder="Informe a instituição"
-                labelField="name"
-                [hasError]="bank.invalid && (submitted || bank.touched)"
-                [options]="banks">
-            </cb-select>
-        </cb-form-field>
+      <cb-select
+        input
+        formControlName="bank"
+        placeholder="Selecione o banco"
+        labelField="name"
+        [hasError]="hasControlError(bank)"
+        [options]="banks"
+      >
+      </cb-select>
+      <span
+        error
+        class="back-account-modal__error-message"
+        *ngIf="hasControlError(bank)"
+      >
+        {{ getControlErrorMessage(bank) }}
+      </span>
+    </cb-form-field>
 
-        <cb-form-field>
-            <cb-label>Nome</cb-label>
+    <cb-form-field>
+      <cb-label [required]="true">TIPO DE CONTA</cb-label>
 
-            <cb-input-text
-                input
-                formControlName="name"
-                placeholder="Escreva o nome da conta"
-                [hasError]="name.invalid && (submitted || name.touched)"
-            ></cb-input-text>
-        </cb-form-field>
+      <cb-select
+        input
+        formControlName="bank_account_type"
+        placeholder="Selecione o tipo de conta"
+        labelField="description"
+        [showFilter]="false"
+        [hasError]="hasControlError(bankAccountType)"
+        [options]="bankAccountTypes"
+      >
+      </cb-select>
+      <span
+        error
+        class="back-account-modal__error-message"
+        *ngIf="hasControlError(bankAccountType)"
+      >
+        {{ getControlErrorMessage(bankAccountType) }}
+      </span>
+    </cb-form-field>
 
-        <div class="back-account-modal__form-group">
-            <cb-form-field>
-                <cb-label>Agência</cb-label>
+    <cb-form-field>
+      <cb-label [required]="true">NOME</cb-label>
 
-                <cb-input-text
-                    input
-                    formControlName="agency"
-                    placeholder="0000"
-                    [hasError]="agency.invalid && (submitted || agency.touched)"
-                ></cb-input-text>
-            </cb-form-field>
+      <cb-input-text
+        input
+        formControlName="name"
+        placeholder="Escreva o nome da conta"
+        [hasError]="hasControlError(name)"
+      ></cb-input-text>
+      <span
+        error
+        class="back-account-modal__error-message"
+        *ngIf="hasControlError(name)"
+      >
+        {{ getControlErrorMessage(name) }}
+      </span>
+    </cb-form-field>
 
-            <cb-form-field>
-                <cb-label>Conta</cb-label>
+    <div class="back-account-modal__form-group">
+      <cb-form-field>
+        <cb-label [required]="true">AGÊNCIA</cb-label>
 
-                <cb-input-text
-                    input
-                    formControlName="account"
-                    placeholder="00000-0"
-                    [hasError]="account.invalid && (submitted || account.touched)"
-                ></cb-input-text>
-            </cb-form-field>
-        </div>
-    </cb-form>
+        <cb-input-text
+          input
+          formControlName="agency"
+          placeholder="0000"
+          [hasError]="hasControlError(agency)"
+        ></cb-input-text>
+        <span
+          error
+          class="back-account-modal__error-message"
+          *ngIf="hasControlError(agency)"
+        >
+          {{ getControlErrorMessage(agency) }}
+        </span>
+      </cb-form-field>
 
-    <div footer class="back-account-modal__footer">
-        <cb-button theme="error" (click)="close()">
-            Cancelar
-        </cb-button>
+      <cb-form-field>
+        <cb-label [required]="true">CONTA</cb-label>
 
-        <cb-button theme="success" (click)="save()">
-            Salvar
-        </cb-button>
+        <cb-input-text
+          input
+          formControlName="account_number"
+          placeholder="00000-0"
+          [hasError]="hasControlError(accountNumber)"
+        ></cb-input-text>
+        <span
+          error
+          class="back-account-modal__error-message"
+          *ngIf="hasControlError(accountNumber)"
+        >
+          {{ getControlErrorMessage(accountNumber) }}
+        </span>
+      </cb-form-field>
     </div>
+  </cb-form>
+
+  <div
+    footer
+    class="back-account-modal__footer"
+  >
+    <cb-button
+      theme="error"
+      (click)="close()"
+    >
+      Cancelar
+    </cb-button>
+
+    <cb-button
+      theme="success"
+      [disabled]="loading"
+      (click)="save()"
+    >
+      Salvar
+    </cb-button>
+  </div>
 </cb-modal>

@@ -4,10 +4,11 @@ import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/for
 @Component({
   selector: "cb-financial-installments",
   templateUrl: "./financial-installments.component.html",
-  styleUrls: ["./financial-installments.component.scss"],
+  styleUrls: ["./financial-installments.component.scss"]
 })
 export class FinancialInstallmentsComponent {
   @Input() form: FormGroup;
+  @Input() submitted = false;
 
   get parcelas(): FormArray {
     if (!this.form) {

@@ -33,20 +33,34 @@
         + Cadastrar conta bancária
       </button>
 
-      <div class="bank-accounts__list">
+      <cb-search
+        [formControl]="searchControl"
+        [autoFocus]="true"
+        placeholder="Pesquisar conta bancária"
+      ></cb-search>
+
+      <div
+        class="bank-accounts__list"
+        role="listbox"
+        aria-label="Lista de contas bancárias"
+      >
         <div
+          #accountRow
           class="bank-accounts__item"
-          *ngFor="let account of accounts; trackBy: trackByAccountId"
+          *ngFor="let account of accounts; let i = index; trackBy: trackByAccountId"
+          role="option"
+          [attr.aria-selected]="isSelected(account)"
           [class.bank-accounts__item--selected]="isSelected(account)"
+          [class.bank-accounts__item--keyboard-focus]="activeListIndex === i"
           (click)="selectAccount(account)"
         >
           <div class="bank-accounts__item__main">
-            <cb-bank-image [bank]="account && account.banco ? banks.get(account.banco) : null"></cb-bank-image>
+            <cb-bank-image [bank]="account.bank && account.bank.code ? account.bank.code : bankEnum.default"></cb-bank-image>
 
             <div class="bank-accounts__item__content">
-              <span class="bank-accounts__item__name">{{ account.nome }}</span>
-              <span class="bank-accounts__item__bank">{{ resolveBankName(account.banco) }}</span>
-              <span class="bank-accounts__item__account">Ag. {{ account.agencia }} • Conta {{ account.conta }}</span>
+              <span class="bank-accounts__item__name">{{ account.name }}</span>
+
+              <span class="bank-accounts__item__account">Ag. {{ account.agency }} - Conta {{ account.account_number }}</span>
             </div>
           </div>
 
@@ -61,6 +75,7 @@
             >
               Editar
             </button>
+
             <button
               type="button"
               class="bank-accounts__link bank-accounts__link--danger"
@@ -72,11 +87,38 @@
         </div>
 
         <p
-          *ngIf="!accounts.length"
+          *ngIf="!listLoading && !accounts.length"
           class="bank-accounts__empty"
         >
           Nenhuma conta bancária cadastrada.
         </p>
+
+        <p
+          *ngIf="listLoading"
+          class="bank-accounts__empty"
+        >
+          Carregando contas...
+        </p>
+      </div>
+
+      <div class="bank-accounts__pagination">
+        <span>{{ pagination.from }} - {{ pagination.to }} de {{ pagination.total }}</span>
+        <div>
+          <cb-icon-button
+            size="sm"
+            [disabled]="pagination.current_page <= 1 || listLoading"
+            (click)="previousPage()"
+          >
+            <cb-icon-arrow-left icon></cb-icon-arrow-left>
+          </cb-icon-button>
+          <cb-icon-button
+            size="sm"
+            [disabled]="!hasNextPage || listLoading"
+            (click)="nextPage()"
+          >
+            <cb-icon-arrow-right icon></cb-icon-arrow-right>
+          </cb-icon-button>
+        </div>
       </div>
     </div>
   </aside>

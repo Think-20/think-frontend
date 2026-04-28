@@ -73,15 +73,15 @@
       </div>
 
       <div class="financial__cards__my-account__body">
-        <cb-bank-image [bank]="selectedBankImage"></cb-bank-image>
+        <cb-bank-image [bank]="selectedBank"></cb-bank-image>
 
         <div class="financial__cards__my-account__body__content">
           <p class="financial__cards__my-account__body__content__bank">
-            {{ selectedBankAccount ? selectedBankAccount.nome : "Conta não selecionada" }}
+            {{ selectedBankAccount ? selectedBankAccount.name : "Conta não selecionada" }}
           </p>
 
           <span class="financial__cards__my-account__body__content__account">
-            {{ selectedBankAccount ? "Conta: " + selectedBankAccount.conta : "Conta: -" }}
+            {{ selectedBankAccount ? "Conta: " + selectedBankAccount.account_number : "Conta: -" }}
           </span>
         </div>
       </div>
@@ -240,12 +240,22 @@
                 <cb-currency-value [value]="bankStatement.expense"></cb-currency-value>
               </td>
 
-              <td [class.red]="bankStatement.result < 0" [class.green]="bankStatement.result >= 0">
-                <cb-currency-value [value]="bankStatement.result < 0 ? bankStatement.result * -1 : bankStatement.result"></cb-currency-value>
+              <td
+                [class.red]="bankStatement.result < 0"
+                [class.green]="bankStatement.result >= 0"
+              >
+                <cb-currency-value
+                  [value]="bankStatement.result < 0 ? bankStatement.result * -1 : bankStatement.result"
+                ></cb-currency-value>
               </td>
 
-              <td [class.red]="bankStatement.balance < 0" [class.green]="bankStatement.balance >= 0">
-                <cb-currency-value [value]="bankStatement.balance < 0 ? bankStatement.balance * -1 : bankStatement.balance"></cb-currency-value>
+              <td
+                [class.red]="bankStatement.balance < 0"
+                [class.green]="bankStatement.balance >= 0"
+              >
+                <cb-currency-value
+                  [value]="bankStatement.balance < 0 ? bankStatement.balance * -1 : bankStatement.balance"
+                ></cb-currency-value>
               </td>
             </tr>
           </tbody>
@@ -304,10 +314,9 @@
 
   <cb-bank-accounts
     [open]="showBankAccountsSidebar"
-    [accounts]="bankAccounts"
-    [selectedAccountId]="selectedBankAccountId"
+    [accounts]="accounts"
+    [selectedAccount]="selectedBankAccount"
     (openChange)="onBankAccountsPanelOpenChange($event)"
-    (accountsChange)="onBankAccountsChange($event)"
     (selectedAccountChange)="onSelectedBankAccountChange($event)"
   ></cb-bank-accounts>
 </section>

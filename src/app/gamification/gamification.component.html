@@ -1,7 +1,9 @@
 <section class="gamification">
   <h2 class="gamification__title">Metas e desempenho</h2>
+
   <p class="gamification__lead">
-    Acompanhe metas do período em uma linha por indicador. Presença no escritório e demais indicadores vêm calculados pelo servidor.
+    Acompanhe as metas do período, veja quais indicadores foram alcançados e identifique rapidamente os pontos que ainda precisam de
+    atenção.
   </p>
 
   <div
@@ -200,6 +202,19 @@
       {{ rawResponse.period.quarters === 1 ? "trimestre" : "trimestres" }}
       <span *ngIf="rawResponse.jobs_count !== undefined && rawResponse.jobs_count !== null"> · {{ rawResponse.jobs_count }} jobs </span>
     </p>
+  </div>
+
+  <div
+    class="gamification__congrats"
+    *ngIf="!loading && !missingEmployee && goalsTotalCount > 0 && goalsMetCount === goalsTotalCount"
+  >
+    <mat-icon>emoji_events</mat-icon>
+
+    <div>
+      <strong>Parabéns! Todas as metas foram cumpridas.</strong>
+
+      <p>Excelente resultado no período selecionado. Continue mantendo esse nível de desempenho.</p>
+    </div>
   </div>
 
   <div

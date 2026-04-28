@@ -14,6 +14,7 @@
       <cb-input-price
         input
         [formControl]="valorControlAt(i)"
+        [hasError]="valorControlAt(i).invalid && (submitted || valorControlAt(i).touched)"
       ></cb-input-price>
     </cb-form-field>
 
@@ -21,6 +22,7 @@
       <cb-input-datetime
         input
         [formControl]="dataControlAt(i)"
+        [hasError]="dataControlAt(i).invalid && (submitted || dataControlAt(i).touched)"
         mode="date"
         placeholder="DD/MM/AAAA"
       ></cb-input-datetime>

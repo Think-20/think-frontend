@@ -1,4 +1,5 @@
 export enum EBank {
+  default = "default",
   bancoDoBrasil = "001",
   bradesco = "237",
   itau = "341",

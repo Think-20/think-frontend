@@ -27,6 +27,8 @@ export class FinancialRevenuesModalComponent implements OnInit {
 
   isEditing = false;
 
+  submitted = false;
+
   /** Opções de categoria (mesmo contrato que a API de cadastros). */
   categories: FinancialTransactionCategory[] = [
     { idcategoria: 1, nome: "Revestimento e acabamento", tema: 4 },
@@ -104,14 +106,7 @@ export class FinancialRevenuesModalComponent implements OnInit {
       tema: 14
     },
     idcontabancaria: 1,
-    contabancaria: {
-      idcontabancaria: 1,
-      nome: "Think PJ (Nubank)",
-      banco: "260",
-      agencia: "0001",
-      conta: "60190-1",
-      datacadastro: "2022-01-03T23:50:00"
-    },
+    contabancaria: null,
     formapagamento: ETransactionPaymentMethod.bankSlip,
     numparcelas: 4,
     valortotal: 2820,
@@ -225,6 +220,8 @@ export class FinancialRevenuesModalComponent implements OnInit {
   }
 
   save(): void {
+    this.submitted = true;
+
     if (this.financialForm) {
       this.financialForm.commit();
     }
@@ -233,6 +230,7 @@ export class FinancialRevenuesModalComponent implements OnInit {
   onTransactionSaved(updated: FinancialTransaction): void {
     this.transaction = updated;
     this.isEditing = false;
+    this.submitted = false;
   }
 
   confirmDelete(): void {

@@ -8,4 +8,10 @@
   color: var(--color-gray-500);
 
   font-size: 12px;
+
+  &__required {
+    color: var(--color-red-500);
+
+    margin-left: calc(var(--spacing) * 1);
+  }
 }

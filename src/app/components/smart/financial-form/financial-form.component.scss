@@ -3,6 +3,12 @@
     display: block;
   }
 
+  &__required {
+    color: var(--color-red-500);
+
+    margin-left: calc(var(--spacing) * 1);
+  }
+
   &__grid {
     display: grid;
 
@@ -76,6 +82,8 @@
   }
 
   &__section-title {
+    display: flex;
+
     margin-bottom: calc(var(--spacing) * 3);
 
     padding-top: 0;
@@ -141,6 +149,10 @@
       border-color: var(--color-blue-500);
 
       background-color: var(--color-gray-100);
+    }
+
+    &--error {
+      border-color: var(--color-red-600);
     }
   }
 
@@ -355,6 +367,13 @@
 
   & .form-field {
     gap: calc(var(--spacing) * 1);
+  }
+
+  &__error-message {
+    margin: 0;
+    color: var(--color-red-600);
+    font-size: var(--text-xs);
+    line-height: 1.4;
   }
 
   & .label {

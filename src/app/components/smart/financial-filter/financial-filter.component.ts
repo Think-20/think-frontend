@@ -1,13 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  HostListener,
-  Input,
-  OnChanges,
-  OnDestroy,
-  Output,
-  SimpleChanges
-} from "@angular/core";
+import { Component, EventEmitter, HostListener, Input, OnChanges, OnDestroy, Output, SimpleChanges } from "@angular/core";
 import { transactionPaymentMethods } from "app/shared/enums/transaction-payment-method.enum";
 import { ETransactionStatus, transactionStatuses } from "app/shared/enums/transaction-status.enum";
 import { FinancialTransaction } from "app/shared/models/financial-transaction.model";
@@ -168,7 +159,7 @@ export class FinancialFilterComponent implements OnChanges, OnDestroy {
         categoryById.set(t.categoria.idcategoria, t.categoria.nome);
       }
       if (t.contabancaria) {
-        accountById.set(t.contabancaria.idcontabancaria, t.contabancaria.nome);
+        accountById.set(t.contabancaria.id, t.contabancaria.name);
       }
     }
     this.categoryFilterOptions = [{ id: allId, name: "Todas as categorias" }];
@@ -220,7 +211,7 @@ export class FinancialFilterComponent implements OnChanges, OnDestroy {
         }
       }
       if (self.appliedAccount.id !== FinancialFilterComponent.FILTER_ALL_ID) {
-        if (!t.contabancaria || t.contabancaria.idcontabancaria !== self.appliedAccount.id) {
+        if (!t.contabancaria || t.contabancaria.id !== self.appliedAccount.id) {
           return false;
         }
       }

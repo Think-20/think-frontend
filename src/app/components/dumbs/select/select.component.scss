@@ -2,12 +2,6 @@
   position: relative;
   width: 100%;
 
-  &:focus-within {
-    .select__trigger {
-      box-shadow: 0 0 0 calc(2px) var(--color-blue-500);
-    }
-  }
-
   &--empty {
     .select__value {
       color: var(--color-gray-400);
@@ -28,13 +22,19 @@
     }
   }
 
+  &:focus-within {
+    .select__trigger {
+      box-shadow: 0 0 0 calc(2px) var(--color-blue-500) !important;
+    }
+  }
+
   &:focus .select__trigger {
-    box-shadow: 0 0 0 calc(2px) var(--color-blue-500);
+    box-shadow: 0 0 0 calc(2px) var(--color-blue-500) !important;
   }
 
   &--open {
     .select__trigger {
-      box-shadow: 0 0 0 calc(2px) var(--color-blue-500);
+      box-shadow: 0 0 0 calc(2px) var(--color-blue-500) !important;
     }
 
     .select__arrow {

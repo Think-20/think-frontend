@@ -1,11 +1,11 @@
 <img
-    *ngIf="bank; else defaultImage"
-    class="bank-image"
-    [src]="bank.image"
-    [alt]="bank.name"
-    [matTooltip]="bank.name"
+  *ngIf="bank && bank !== bankEnum.default; else defaultImage"
+  class="bank-image"
+  [src]="data.image"
+  [alt]="data.name"
+  [matTooltip]="data.name"
 />
 
 <ng-template #defaultImage>
-    <div class="bank-image"></div>
+  <div class="bank-image"></div>
 </ng-template>

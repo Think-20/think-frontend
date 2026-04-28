@@ -31,7 +31,8 @@ export class FinancialTransactionsPdfExportService {
     const transactions = options.transactions ? options.transactions.slice() : [];
     const transactionType = options.transactionType;
     const reportTitleBase = options.reportTitle ? options.reportTitle : this.defaultReportTitle(transactionType);
-    const resolvedJobId = options.jobId !== undefined && options.jobId !== null ? options.jobId : this.extractJobIdFromTransactions(transactions);
+    const resolvedJobId =
+      options.jobId !== undefined && options.jobId !== null ? options.jobId : this.extractJobIdFromTransactions(transactions);
     const resolvedJobDisplayId = this.resolveJobDisplayId(options.jobDisplayId, resolvedJobId);
     const reportTitle = this.buildReportTitle(reportTitleBase, resolvedJobDisplayId);
     const fileNamePrefix = options.fileNamePrefix ? options.fileNamePrefix : this.defaultFileNamePrefix(transactionType);
@@ -61,7 +62,7 @@ export class FinancialTransactionsPdfExportService {
     const self = this;
     const body = transactions.map(function (t) {
       const categoryName = t.categoria && t.categoria.nome ? t.categoria.nome : "";
-      const contaNome = t.contabancaria && t.contabancaria.nome ? t.contabancaria.nome : "";
+      const contaNome = t.contabancaria && t.contabancaria.name ? t.contabancaria.name : "";
       const colA = isExpense ? self.formatDateIso(t.datavencimento) : self.formatDateIso(t.datarecebimento);
       const colB = isExpense ? self.formatDateIso(t.datarealizado) : self.formatDateIso(t.datacobranca);
       return [

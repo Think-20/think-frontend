@@ -91,4 +91,8 @@ export class InputNumberComponent implements ControlValueAccessor {
   handleBlur(): void {
     this.onTouched();
   }
+
+  preventWheelChange(event: WheelEvent): void {
+    event.preventDefault();
+  }
 }

@@ -4,6 +4,15 @@ export interface UserGoalProgressRequest {
   date_end: string;
 }
 
+/** Payload do `PUT user-goal/evaluation` (avaliação manual da diretoria, ex.: presença 2x na semana). */
+export interface UserGoalEvaluationRequest {
+  key: string;
+  date_init: string;
+  date_end: string;
+  evaluated: boolean;
+  employee_id: number;
+}
+
 /** Resposta do `GamifiedGoalsService::evaluateForPeriod` (Laravel). */
 export interface GamifiedGoalPeriodDto {
   date_init: string;

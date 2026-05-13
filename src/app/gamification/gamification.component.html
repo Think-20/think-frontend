@@ -347,10 +347,11 @@
               >
                 <input
                   type="checkbox"
-                  [checked]="isPresencialManualMet()"
+                  [checked]="isPresencialCheckboxChecked(goal)"
+                  [disabled]="savingPresencialEvaluation"
                   (change)="onPresencialManualChange($event, goal)"
                 />
-                <span>Indiquei presença no escritório no período (memória local)</span>
+                <span>Registrar presença no escritório no período</span>
               </label>
             </td>
             <td
@@ -359,11 +360,11 @@
             >
               <p
                 class="gamification__presencial-manual-msg"
-                *ngIf="presencialManualOverride(goal)"
+                *ngIf="showPresencialManualCheckbox(goal) && isGoalMet(goal)"
               >
-                Presença indicada pela diretoria (não altera o servidor).
+                Presença registrada para o período.
               </p>
-              <ng-container *ngIf="!presencialManualOverride(goal)">{{ goal.detailLine }}</ng-container>
+              <ng-container *ngIf="!(showPresencialManualCheckbox(goal) && isGoalMet(goal))">{{ goal.detailLine }}</ng-container>
             </td>
             <td class="gamification__td gamification__td--status">{{ displayStatusLabel(goal) }}</td>
           </tr>
@@ -387,10 +388,11 @@
               >
                 <input
                   type="checkbox"
-                  [checked]="isPresencialManualMet()"
+                  [checked]="isPresencialCheckboxChecked(goal)"
+                  [disabled]="savingPresencialEvaluation"
                   (change)="onPresencialManualChange($event, goal)"
                 />
-                <span>Indiquei presença no escritório no período (memória local)</span>
+                <span>Registrar presença no escritório no período</span>
               </label>
             </td>
             <td class="gamification__td gamification__td--vals">

@@ -4,8 +4,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { AuthService } from "../login/auth.service";
 import { UserGoalService } from "./user-goal.service";
-import { UserGoalProgressRequest } from "./user-goal-progress.model";
-import { GamificationGoalView } from "./user-goal-progress.model";
+import { UserGoalProgressRequest, UserGoalEvaluationRequest, GamificationGoalView } from "./user-goal-progress.model";
 import { mapUserGoalProgressToViews } from "./gamification-goals.mapper";
 import { GamificationPdfExportService } from "app/shared/services/gamification-pdf-export.service";
 import { EmployeeService } from "../employees/employee.service";
@@ -76,6 +75,9 @@ export class GamificationComponent implements OnInit {
   collaboratorEmployees: Employee[] = [];
   collaboratorSelectOptions: SelectOption<number>[] = [];
   selectedCollaboratorOption: SelectOption<number> | null = null;
+
+  /** Enquanto envia `PUT user-goal/evaluation` para presença (diretoria). */
+  savingPresencialEvaluation = false;
 
   constructor(
     private auth: AuthService,
@@ -171,9 +173,6 @@ export class GamificationComponent implements OnInit {
   }
 
   isGoalMet(goal: GamificationGoalView): boolean {
-    if (this.presencialManualOverride(goal)) {
-      return true;
-    }
     if (goal.kind === "unevaluated") {
       return false;
     }
@@ -352,9 +351,6 @@ export class GamificationComponent implements OnInit {
   }
 
   progressColor(goal: GamificationGoalView): "primary" | "accent" | "warn" {
-    if (this.presencialManualOverride(goal)) {
-      return "primary";
-    }
     if (goal.kind === "unevaluated" || goal.notEvaluated) {
       return "accent";
     }
@@ -371,9 +367,6 @@ export class GamificationComponent implements OnInit {
   }
 
   starFilledArray(goal: GamificationGoalView): boolean[] {
-    if (this.presencialManualOverride(goal)) {
-      return [true, true, true, true, true];
-    }
     if (goal.kind === "unevaluated") {
       return [false, false, false, false, false];
     }
@@ -486,8 +479,6 @@ export class GamificationComponent implements OnInit {
     return "";
   }
 
-  private static readonly PRESENCIAL_LS_PREFIX = "gamification_presencial_diretoria_v1:";
-
   isPresencialGoal(goal: GamificationGoalView): boolean {
     return !!(goal && goal.id === "presencial_2x_week");
   }
@@ -496,116 +487,54 @@ export class GamificationComponent implements OnInit {
     return this.isDiretoriaUser() && !this.missingCollaboratorSelection && !!this.lastRequest && this.isPresencialGoal(goal);
   }
 
-  presencialManualOverride(goal: GamificationGoalView): boolean {
-    return this.showPresencialManualCheckbox(goal) && this.isPresencialManualMet();
-  }
-
-  private presencialManualStorageKey(): string | null {
-    if (!this.lastRequest || !this.lastRequest.date_init || !this.lastRequest.date_end) {
-      return null;
-    }
-    var id = this.lastRequest.attendance_id;
-    if (id === undefined || id === null || isNaN(Number(id))) {
-      return null;
-    }
-    return (
-      GamificationComponent.PRESENCIAL_LS_PREFIX +
-      String(Math.floor(Number(id))) +
-      ":" +
-      this.lastRequest.date_init +
-      ":" +
-      this.lastRequest.date_end
-    );
-  }
-
-  isPresencialManualMet(): boolean {
-    var k = this.presencialManualStorageKey();
-    if (!k) {
-      return false;
-    }
-    try {
-      return window.localStorage.getItem(k) === "1";
-    } catch (_e) {
-      return false;
-    }
-  }
-
-  private setPresencialManualMet(val: boolean): void {
-    var k = this.presencialManualStorageKey();
-    if (!k) {
-      return;
-    }
-    try {
-      if (val) {
-        window.localStorage.setItem(k, "1");
-      } else {
-        window.localStorage.removeItem(k);
-      }
-    } catch (_e) {}
+  /** Estado do checkbox alinhado ao retorno da API após `applyPeriod`. */
+  isPresencialCheckboxChecked(goal: GamificationGoalView): boolean {
+    return this.isPresencialGoal(goal) && this.isGoalMet(goal);
   }
 
   onPresencialManualChange(ev: Event, goal: GamificationGoalView): void {
-    if (!this.isPresencialGoal(goal)) {
+    if (!this.isPresencialGoal(goal) || !this.lastRequest) {
       return;
     }
     var t = ev.target as HTMLInputElement;
-    this.setPresencialManualMet(!!(t && t.checked));
+    var evaluated = !!(t && t.checked);
+    var aid = this.lastRequest.attendance_id;
+    if (aid === undefined || aid === null || isNaN(Number(aid))) {
+      return;
+    }
+    var payload: UserGoalEvaluationRequest = {
+      key: "presencial_2x_week",
+      date_init: this.lastRequest.date_init,
+      date_end: this.lastRequest.date_end,
+      evaluated: evaluated,
+      employee_id: Math.floor(Number(aid))
+    };
+    this.savingPresencialEvaluation = true;
+    this.userGoalService.putEvaluation(payload).subscribe(
+      () => {
+        this.savingPresencialEvaluation = false;
+        this.applyPeriod();
+      },
+      () => {
+        this.savingPresencialEvaluation = false;
+      }
+    );
   }
 
   displayPercent(goal: GamificationGoalView): number {
-    if (this.presencialManualOverride(goal)) {
-      return 100;
-    }
     return goal.percent;
   }
 
   displayStatusLabel(goal: GamificationGoalView): string {
-    if (this.presencialManualOverride(goal)) {
-      return "Meta cumprida";
-    }
     return goal.statusLabel;
   }
 
   rowStatusModifier(goal: GamificationGoalView): string {
-    if (this.presencialManualOverride(goal)) {
-      return "gamification-goal-card--met";
-    }
     return goal.statusModifier;
   }
 
-  /**
-   * Cópia da meta para o PDF, aplicando registro local de presença (diretoria).
-   */
   cloneGoalForExport(goal: GamificationGoalView): GamificationGoalView {
-    if (!this.presencialManualOverride(goal)) {
-      return goal;
-    }
-    if (goal.kind === "unevaluated") {
-      var one = 1;
-      return Object.assign({}, goal, {
-        kind: "count" as GamificationGoalView["kind"],
-        current: one,
-        target: one,
-        percent: 100,
-        missingTarget: false,
-        notEvaluated: false,
-        detailLine: "Presença indicada pela diretoria (memória local).",
-        statusLabel: "Meta cumprida",
-        statusModifier: "gamification-goal-card--met",
-        achievedFromApi: true
-      });
-    }
-    var tgt = typeof goal.target === "number" && !isNaN(goal.target) && goal.target > 0 ? goal.target : 1;
-    var cur = typeof goal.current === "number" && !isNaN(goal.current) ? Math.max(goal.current, tgt) : tgt;
-    return Object.assign({}, goal, {
-      current: cur,
-      target: tgt,
-      percent: 100,
-      missingTarget: false,
-      statusLabel: "Meta cumprida",
-      statusModifier: "gamification-goal-card--met",
-      achievedFromApi: true
-    });
+    return goal;
   }
 
   /** Datas exibidas no relatório: última consulta aplicada ou intervalo atual do filtro. */

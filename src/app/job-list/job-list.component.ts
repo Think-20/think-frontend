@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, OnInit } from "@angular/core";
+import { AfterViewInit, Component, OnDestroy, OnInit } from "@angular/core";
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute } from "@angular/router";
 import { Job } from "app/jobs/job.model";
 import { JobService } from "app/jobs/job.service";
 import { AuthService } from "app/login/auth.service";
-import { Subject } from "rxjs";
+import { race, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
 @Component({
@@ -12,7 +12,7 @@ import { takeUntil } from "rxjs/operators";
   templateUrl: "./job-list.component.html",
   styleUrls: ["./job-list.component.scss"],
 })
-export class JobListComponent implements OnInit, AfterViewInit {
+export class JobListComponent implements OnInit, AfterViewInit, OnDestroy {
   jobs: Job[] = [];
 
   title = "Jobs";
@@ -30,6 +30,8 @@ export class JobListComponent implements OnInit, AfterViewInit {
   private isAdmin = false;
 
   private onDestroy$ = new Subject<void>();
+
+  private cancel$ = new Subject<{ canceled: boolean }>();
 
   get hasJobs() {
     return this.jobs && this.jobs.length > 0;
@@ -57,10 +59,14 @@ export class JobListComponent implements OnInit, AfterViewInit {
       .subscribe(() => this.loadJobs());
   }
 
+  ngOnDestroy(): void {
+    this.onDestroy$.next();
+    this.onDestroy$.complete();
+    this.cancel$.complete();
+  }
+
   private loadJobs(): void {
-    if (this.loading) {
-      return;
-    }
+    this.cancel$.next({ canceled: true });
 
     this.loading = true;
 
@@ -68,27 +74,38 @@ export class JobListComponent implements OnInit, AfterViewInit {
 
     let loader = this.matSnackBar.open("Carregando...");
 
-    this.jobService.jobs(params, this.page).subscribe({
-      next: (dataInfo) => {
-        this.jobs = dataInfo.pagination.data;
+    race([
+      this.jobService.jobs(params, this.page),
+      this.cancel$.asObservable(),
+    ])
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe({
+        next: (dataInfo: any) => {
+          if (dataInfo && dataInfo.canceled) {
+            this.loading = false;
+            loader.dismiss();
+            return;
+          }
 
-        this.from = dataInfo.pagination.from || 0;
-        this.to = dataInfo.pagination.to || 0;
-        this.total = dataInfo.pagination.total || 0;
-        this.totalPerPage = dataInfo.pagination.per_page || 0;
+          this.jobs = dataInfo.pagination.data;
 
-        this.hasNext = dataInfo.pagination.last_page > this.page;
+          this.from = dataInfo.pagination.from || 0;
+          this.to = dataInfo.pagination.to || 0;
+          this.total = dataInfo.pagination.total || 0;
+          this.totalPerPage = dataInfo.pagination.per_page || 0;
 
-        this.loading = false;
+          this.hasNext = dataInfo.pagination.last_page > this.page;
 
-        loader.dismiss();
-      },
-      error: () => {
-        this.loading = false;
+          this.loading = false;
 
-        loader.dismiss();
-      },
-    });
+          loader.dismiss();
+        },
+        error: () => {
+          this.loading = false;
+
+          loader.dismiss();
+        },
+      });
   }
 
   private getParams(searchValue) {
@@ -161,7 +178,7 @@ export class JobListComponent implements OnInit, AfterViewInit {
   }
 
   next(): void {
-    if (this.hasNext && !this.loading) {
+    if (this.hasNext) {
       this.page++;
 
       this.loadJobs();
@@ -169,7 +186,7 @@ export class JobListComponent implements OnInit, AfterViewInit {
   }
 
   previous(): void {
-    if (this.page > 1 && !this.loading) {
+    if (this.page > 1) {
       this.page--;
 
       this.loadJobs();

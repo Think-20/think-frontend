@@ -125,7 +125,7 @@ export class JobsKanbanColumnComponent implements OnInit, AfterViewInit, OnDestr
       final_date: searchValue.final_date,
       initial_date: searchValue.initial_date,
       clientName: clientName,
-      status: this.status.id,
+      status: [this.status.id],
       ...attendanceFilter,
     };
   }

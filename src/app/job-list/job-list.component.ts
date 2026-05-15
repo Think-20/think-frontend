@@ -109,7 +109,19 @@ export class JobListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private getParams(searchValue) {
-    let status = searchValue.status != undefined ? searchValue.status.id : null;
+    let status: any = null;
+
+    if (this.isFinancial) {
+      status = [3];
+    } else {
+      const st = searchValue.status;
+
+      if (Array.isArray(st) && st.length > 0) {
+        status = st;
+      } else if (st && typeof st === "object" && st.id !== undefined) {
+        status = [st.id];
+      }
+    }
 
     let clientName =
       searchValue.client != "" ? searchValue.client : searchValue.search;
@@ -119,7 +131,7 @@ export class JobListComponent implements OnInit, AfterViewInit, OnDestroy {
       : {};
 
     if (this.isFinancial) {
-      status = 3;
+      status = [3];
     }
 
     return {

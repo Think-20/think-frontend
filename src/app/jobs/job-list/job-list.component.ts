@@ -151,7 +151,7 @@ export class JobListComponent implements OnInit {
       final_date: searchValue.final_date,
       initial_date: searchValue.initial_date,
       clientName: clientName,
-      status: status,
+      status: [status],
       ...attendanceFilter
     }
   }
@@ -170,7 +170,7 @@ export class JobListComponent implements OnInit {
 
   loadInitialData() {
     if (JSON.stringify(this.jobService.searchValue$.value) === JSON.stringify(this.formCopy)) {
-      this.loadJobs(this.isFinancial ? { status: 3 } : {}, this.pageIndex + 1);
+      this.loadJobs(this.isFinancial ? { status: [3] } : {}, this.pageIndex + 1);
     } else {
       this.params = this.getParams(this.jobService.searchValue$.value)
       this.loadJobs(this.params, this.pageIndex + 1)

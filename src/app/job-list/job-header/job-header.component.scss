@@ -81,7 +81,7 @@
     &__fields {
       padding: 24px !important;
     }
-    
+
     &__dates {
       padding: 22px 9px;
 
@@ -109,4 +109,46 @@
       font-size: 12px;
     }
   }
+}
+
+/* Painel do mat-select fica no overlay (fora de .job-header): panelClass + :host ::ng-deep */
+:host ::ng-deep .job-header-status-panel {
+  margin-top: 6px;
+
+  .select-all {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    min-height: 48px;
+    margin: 0;
+    padding: 0 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    color: #6a7282;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .select-all .mat-checkbox-layout {
+    margin-bottom: 0;
+    align-items: center;
+  }
+
+  .select-all .mat-checkbox-inner-container {
+    width: 16px;
+    height: 16px;
+    margin: 0 12px 0 0;
+  }
+
+  .select-all .mat-checkbox-label {
+    line-height: 24px;
+  }
+}
+
+.select-all {
+  margin: 10px 4px 0px 15px;
+  color: rgba(0, 0, 0, 0.38) !important;
+}
+
+::ng-deep .mat-checkbox-frame {
+  border-color: rgba(0, 0, 0, 0.28);
 }

@@ -30,8 +30,6 @@ import { JobStatusService } from "app/job-status/job-status.service";
 import {
   distinctUntilChanged,
   debounceTime,
-  tap,
-  isEmpty,
   takeUntil,
 } from "rxjs/operators";
 import { Client } from "../../clients/client.model";
@@ -47,7 +45,7 @@ import { EventService } from "app/events/event.service";
 import { Event } from "app/events/event.model";
 import { JobEventsService } from "app/job-events/job-events.service";
 import { JobEvents } from "app/job-events/job-events-model";
-import { Observable, Subject } from "rxjs";
+import { Observable, race, Subject } from "rxjs";
 import { MatOption, MatSelect, MatSelectChange } from "@angular/material";
 import { JobActivity } from "app/job-activities/job-activity.model";
 import { JobActivityService } from "app/job-activities/job-activity.service";
@@ -143,6 +141,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
   outsider: any;
   attendanceFilterStatus: { attendance: any } | { attendance?: undefined };
   destroy$ = new Subject<void>();
+  private cancel$ = new Subject<{ canceled: boolean }>();
   lastValueAttendance: any;
   selectAllAttendance = false;
   selectAllCreation = false;
@@ -177,6 +176,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.cancel$.complete();
   }
 
   ngOnInit() {
@@ -270,9 +270,8 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
     this.searchForm.valueChanges
       .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe((searchValue) => {
-        this.destroy$.next();
         this.params = this.getParams(searchValue);
-        
+
         this.loadJobs(this.params, 1);
         
         this.pageIndex = 0;
@@ -394,32 +393,45 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
       this.setCurrentDateFilterByDate(filter.date_init, filter.date_end);
     }
 
-    // if(this.searching) return;
+    this.cancel$.next({ canceled: true });
 
     this.searching = true;
     let snackBar = this.snackBar.open("Carregando jobs...");
-    this.jobService
-      .jobs(params, page)
-      .pipe(
-        takeUntil(this.destroy$) // Cancela a solicitação anterior quando uma nova é acionada
-      )
-      .subscribe((dataInfo) => {
-        dataInfo.jobs ? (this.jobs = dataInfo.jobs.data) : (this.jobs = []);
 
-        this.jobs.forEach(
-          (x) =>
-            (x.deadline =
-              this.datePipe.transform(x.deadline, "yyyy-MM-dd") + "T00:00:00")
-        );
+    race([
+      this.jobService.jobs(params, page),
+      this.cancel$.asObservable(),
+    ])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (dataInfo: any) => {
+          if (dataInfo && dataInfo.canceled) {
+            this.searching = false;
+            snackBar.dismiss();
+            return;
+          }
 
-        if (configureDates && !hasDateFilter) {
-          this.setDataByParams();
-        }
+          dataInfo.jobs ? (this.jobs = dataInfo.jobs.data) : (this.jobs = []);
 
-        this.pagination = dataInfo.jobs;
-        this.reportData = dataInfo as unknown as ReportData;
-        this.searching = false;
-        snackBar.dismiss();
+          this.jobs.forEach(
+            (x) =>
+              (x.deadline =
+                this.datePipe.transform(x.deadline, "yyyy-MM-dd") + "T00:00:00")
+          );
+
+          if (configureDates && !hasDateFilter) {
+            this.setDataByParams();
+          }
+
+          this.pagination = dataInfo.jobs;
+          this.reportData = dataInfo as unknown as ReportData;
+          this.searching = false;
+          snackBar.dismiss();
+        },
+        error: () => {
+          this.searching = false;
+          snackBar.dismiss();
+        },
       });
   }
 
@@ -631,7 +643,6 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
   changeMonth() {
     //this.calculateNextMonth();
 
-    if (this.searching) return;
     let snackBar = this.snackBar.open("Carregando tarefas...");
 
     this.jobs = [];

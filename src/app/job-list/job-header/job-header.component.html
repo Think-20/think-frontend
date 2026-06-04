@@ -116,12 +116,25 @@
 
                     <mat-form-field *ngIf="!isFinancial" class="{{ isFinancial ? 'col-md-2-3' : 'col-md-2-4' }}">
                         <mat-select
+                            #selectStatus
                             placeholder="Status"
                             formControlName="status"
-                            [compareWith]="compareStatus">
-                            <mat-option></mat-option>
+                            panelClass="job-header-status-panel"
+                            multiple>
+                            <div class="select-all">
+                                <mat-checkbox
+                                    class="custom-checkbox"
+                                    [(ngModel)]="selectAllStatus"
+                                    [ngModelOptions]="{standalone: true}"
+                                    (change)="toggleAllSelectionAllStatus()">
+                                    Selecionar todos
+                                </mat-checkbox>
+                            </div>
 
-                            <mat-option *ngFor="let s of status" [value]="s">
+                            <mat-option
+                                (click)="optionClickAllStatus()"
+                                *ngFor="let s of status"
+                                [value]="s.id">
                                 {{ s.description }}
                             </mat-option>
                         </mat-select>

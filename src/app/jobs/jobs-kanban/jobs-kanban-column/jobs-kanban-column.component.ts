@@ -4,8 +4,8 @@ import { JobStatus } from "app/job-status/job-status.model";
 import { Job } from "app/jobs/job.model";
 import { AuthService } from "app/login/auth.service";
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { takeUntil, tap } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { race, Subject } from 'rxjs';
 
 @Component({
   selector: "cb-jobs-kanban-column",
@@ -25,6 +25,8 @@ export class JobsKanbanColumnComponent implements OnInit, AfterViewInit, OnDestr
   total: number = null;
 
   private onDestroy$ = new Subject<void>();
+
+  private cancel$ = new Subject<{ canceled: boolean }>();
 
   constructor(
     private jobService: JobService,
@@ -64,12 +66,10 @@ export class JobsKanbanColumnComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   private loadJobs(local: 'init' | 'search' | 'pagination'): void {
-    if (this.loading) {
-      return;
-    }
-    
+    this.cancel$.next({ canceled: true });
+
     this.loading = true;
-    
+
     if (['init', 'search'].includes(local)) {
       this.page = 1;
 
@@ -82,22 +82,32 @@ export class JobsKanbanColumnComponent implements OnInit, AfterViewInit, OnDestr
 
     const params = this.getParams(this.jobService.searchValueKanban$.value);
 
-    this.jobService.jobs(params, this.page).subscribe({
-      next: (dataInfo) => {
-        local === 'pagination'
-          ? this.jobs = [...this.jobs, ...dataInfo.pagination.data]
-          : this.jobs = dataInfo.pagination.data;
+    race([
+      this.jobService.jobs(params, this.page),
+      this.cancel$.asObservable(),
+    ])
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe({
+        next: (dataInfo: any) => {
+          if (dataInfo && dataInfo.canceled) {
+            this.loading = false;
+            return;
+          }
 
-        this.total = dataInfo.pagination.total;
+          local === 'pagination'
+            ? this.jobs = [...this.jobs, ...dataInfo.pagination.data]
+            : this.jobs = dataInfo.pagination.data;
 
-        this.hasNext = dataInfo.pagination.last_page > this.page;
+          this.total = dataInfo.pagination.total;
 
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-      },
-    });
+          this.hasNext = dataInfo.pagination.last_page > this.page;
+
+          this.loading = false;
+        },
+        error: () => {
+          this.loading = false;
+        },
+      });
   }
 
   private getParams(searchValue) {
@@ -115,7 +125,7 @@ export class JobsKanbanColumnComponent implements OnInit, AfterViewInit, OnDestr
       final_date: searchValue.final_date,
       initial_date: searchValue.initial_date,
       clientName: clientName,
-      status: this.status.id,
+      status: [this.status.id],
       ...attendanceFilter,
     };
   }
@@ -164,5 +174,6 @@ export class JobsKanbanColumnComponent implements OnInit, AfterViewInit, OnDestr
   ngOnDestroy(): void {
     this.onDestroy$.next();
     this.onDestroy$.complete();
+    this.cancel$.complete();
   }
 }

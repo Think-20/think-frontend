@@ -164,7 +164,7 @@
           </td>
 
           <td class="account">
-            {{ transaction.contabancaria.nome }}
+            {{ transaction.contabancaria.name }}
           </td>
 
           <td class="status">
@@ -192,7 +192,7 @@
         <span>{{ summaryRealizedLabel }}</span>
 
         <cb-currency-value
-          [value]="75500"
+          [value]="summaryTotalRealizado !== null ? summaryTotalRealizado : 0"
           [digitsInfo]="'1.2'"
         ></cb-currency-value>
       </div>
@@ -202,7 +202,7 @@
       <span>{{ summaryToPayLabel }}</span>
 
       <cb-currency-value
-        [value]="892450"
+        [value]="summaryTotalReceber !== null ? summaryTotalReceber : 0"
         [digitsInfo]="'1.2'"
       ></cb-currency-value>
     </div>
@@ -211,7 +211,7 @@
       <span>{{ summaryForecastLabel }}</span>
 
       <cb-currency-value
-        [value]="968000"
+        [value]="summaryTotalPrevisto !== null ? summaryTotalPrevisto : 0"
         [digitsInfo]="'1.2'"
       ></cb-currency-value>
     </div>

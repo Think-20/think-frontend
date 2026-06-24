@@ -1,19 +1,21 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { MatDialog } from "@angular/material";
 import { BankAccount } from "app/bank-accounts/bank-account.model";
-import { Bank } from "app/banks/bank.model";
 import { FinancialCreateComponent } from "app/components/smart/financial-create/financial-create.component";
 import { FinancialService } from "app/financial/financial.service";
 import { Job } from "app/jobs/job.model";
 import { JobService } from "app/jobs/job.service";
-import { EBank, banks } from "app/shared/enums/bank.enum";
+import { EBank } from "app/shared/enums/bank.enum";
 import { EFinancialStep } from "app/shared/enums/financial-step.enum";
 import { FinancialTransaction } from "app/shared/models/financial-transaction.model";
 import { BankAccountService } from "app/shared/services/bank-account.service";
 import { CurrencyValueService } from "app/shared/services/currency-value.service";
 import { FinancialTransactionsPdfExportService } from "app/shared/services/financial-transactions-pdf-export.service";
-
-const SELECTED_BANK_ACCOUNT_ID_STORAGE_KEY = "think.financialHome.selectedBankAccountId";
+import {
+  FINANCIAL_SELECTED_BANK_ACCOUNT_ID_STORAGE_KEY,
+  normalizeTransactionsList,
+  readStoredFinancialBankAccountId
+} from "app/shared/utils/financial-transaction-api.mapper";
 
 @Component({
   selector: "cb-financial-home",
@@ -313,41 +315,31 @@ export class FinancialHomeComponent implements OnInit, OnChanges {
       this.expenses = [];
       return;
     }
-    const dateIso = this.resolveTransactionQueryDate();
-    this.financialService.transactionsByJobAndBankAccount(jobId, acc.id, dateIso).subscribe(
-      function (res) {
-        const list = self.normalizeTransactionsList(res.transacoes);
-        const rev: FinancialTransaction[] = [];
-        const exp: FinancialTransaction[] = [];
-        let i = 0;
-        for (i = 0; i < list.length; i++) {
-          const t = list[i];
-          if (t.tipotransacao === self.financialStep.revenues) {
-            rev.push(t);
-          } else if (t.tipotransacao === self.financialStep.expenses) {
-            exp.push(t);
-          }
-        }
-        self.revenues = rev;
-        self.expenses = exp;
-      },
-      function () {
-        self.revenues = [];
-        self.expenses = [];
-      }
-    );
-  }
+    const revenueDateArg = this.normalizeToYyyyMmDd(this.selectedRevenueDate);
+    const expenseDateArg = this.normalizeToYyyyMmDd(this.selectedExpenseDate);
+    const revenueDateIso = revenueDateArg ? revenueDateArg : this.formatDateIsoYyyyMmDd(new Date());
+    const expenseDateIso = expenseDateArg ? expenseDateArg : this.formatDateIsoYyyyMmDd(new Date());
 
-  private resolveTransactionQueryDate(): string {
-    const rev = this.normalizeToYyyyMmDd(this.selectedRevenueDate);
-    if (rev) {
-      return rev;
-    }
-    const exp = this.normalizeToYyyyMmDd(this.selectedExpenseDate);
-    if (exp) {
-      return exp;
-    }
-    return this.formatDateIsoYyyyMmDd(new Date());
+    this.financialService
+      .transactionsByJobAndBankAccount(jobId, this.financialStep.revenues, acc.id, revenueDateIso)
+      .subscribe(
+        function (res) {
+          self.revenues = normalizeTransactionsList(res.transacoes);
+        },
+        function () {
+          self.revenues = [];
+        }
+      );
+    this.financialService
+      .transactionsByJobAndBankAccount(jobId, this.financialStep.expenses, acc.id, expenseDateIso)
+      .subscribe(
+        function (res) {
+          self.expenses = normalizeTransactionsList(res.transacoes);
+        },
+        function () {
+          self.expenses = [];
+        }
+      );
   }
 
   private normalizeToYyyyMmDd(raw: string): string {
@@ -370,133 +362,16 @@ export class FinancialHomeComponent implements OnInit, OnChanges {
     return String(y) + "-" + mm + "-" + dd;
   }
 
-  private normalizeTransactionsList(rawList: any[]): FinancialTransaction[] {
-    if (!rawList || !rawList.length) {
-      return [];
-    }
-    const out: FinancialTransaction[] = [];
-    let i = 0;
-    for (i = 0; i < rawList.length; i++) {
-      out.push(this.normalizeTransactionFromApi(rawList[i]));
-    }
-    return out;
-  }
-
-  private normalizeTransactionFromApi(raw: any): FinancialTransaction {
-    const cat = raw && raw.categoria ? raw.categoria : {};
-    const idcategoria =
-      typeof cat.idcategoria === "number"
-        ? cat.idcategoria
-        : typeof raw.idcategoria === "number"
-        ? raw.idcategoria
-        : 0;
-    const nomeCat = cat.nome ? String(cat.nome) : "";
-    const temaCat = typeof cat.tema === "number" ? cat.tema : 0;
-    const conta = this.normalizeContaFromApi(raw.contabancaria);
-    const idcb = typeof raw.idcontabancaria === "number" ? raw.idcontabancaria : conta.id;
-    const t: FinancialTransaction = {
-      idtransacao: typeof raw.idtransacao === "number" ? raw.idtransacao : 0,
-      idjob: typeof raw.idjob === "number" ? raw.idjob : 0,
-      tipotransacao: typeof raw.tipotransacao === "number" ? raw.tipotransacao : 0,
-      descricao: raw.descricao ? String(raw.descricao) : "",
-      observacao: raw.observacao !== undefined && raw.observacao !== null ? String(raw.observacao) : "",
-      status: typeof raw.status === "number" ? raw.status : 0,
-      datacriacao: raw.datacriacao ? String(raw.datacriacao) : "",
-      datarecebimento: raw.datarecebimento ? String(raw.datarecebimento) : "",
-      datavencimento: raw.datavencimento ? String(raw.datavencimento) : "",
-      datarealizado: raw.datarealizado ? String(raw.datarealizado) : "",
-      datacobranca: raw.datacobranca ? String(raw.datacobranca) : "",
-      idcategoria: idcategoria,
-      categoria: { idcategoria: idcategoria, nome: nomeCat, tema: temaCat },
-      idcontabancaria: idcb,
-      contabancaria: conta,
-      formapagamento: typeof raw.formapagamento === "number" ? raw.formapagamento : 0,
-      numparcelas: typeof raw.numparcelas === "number" ? raw.numparcelas : 0,
-      valortotal: typeof raw.valortotal === "number" ? raw.valortotal : 0,
-      periodo: typeof raw.periodo === "number" ? raw.periodo : 0,
-      chavepix: raw.chavepix ? String(raw.chavepix) : "",
-      banco: raw.banco ? String(raw.banco) : "",
-      agencia: raw.agencia ? String(raw.agencia) : "",
-      contacorrente: raw.contacorrente ? String(raw.contacorrente) : "",
-      parcelas: raw.parcelas && raw.parcelas.length ? raw.parcelas : [],
-      tags: raw.tags && raw.tags.length ? raw.tags : []
-    };
-    if (raw.arquivoboleto) {
-      t.arquivoboleto = raw.arquivoboleto;
-    }
-    if (raw.arquivos && raw.arquivos.length) {
-      t.arquivos = raw.arquivos;
-    }
-    return t;
-  }
-
-  private normalizeContaFromApi(api: any): BankAccount {
-    const account = new BankAccount();
-    if (!api) {
-      account.id = 0;
-      account.name = "";
-      account.agency = "";
-      account.account_number = "";
-      account.bank = new Bank();
-      account.bank.id = 0;
-      account.bank.name = "";
-      account.bank.code = EBank.default;
-      return account;
-    }
-    account.id =
-      typeof api.idcontabancaria === "number"
-        ? api.idcontabancaria
-        : typeof api.id === "number"
-        ? api.id
-        : 0;
-    account.name = api.nome ? String(api.nome) : "";
-    account.agency = api.agencia ? String(api.agencia) : "";
-    account.account_number = api.conta ? String(api.conta) : "";
-    account.bank = new Bank();
-    const codeEnum = this.resolveBankCodeFromString(api.banco ? String(api.banco) : "");
-    account.bank.code = codeEnum;
-    const meta = banks.get(codeEnum);
-    account.bank.name = meta && meta.name ? meta.name : "";
-    account.bank.id = account.id;
-    return account;
-  }
-
-  private resolveBankCodeFromString(codeStr: string): EBank {
-    const s = codeStr ? String(codeStr).trim() : "";
-    if (!s) {
-      return EBank.default;
-    }
-    let found = EBank.default;
-    banks.forEach(function (meta, key) {
-      if (meta.code === s) {
-        found = key;
-      }
-    });
-    return found;
-  }
-
   private readStoredBankAccountId(): number | null {
-    try {
-      const raw = localStorage.getItem(SELECTED_BANK_ACCOUNT_ID_STORAGE_KEY);
-      if (raw === null || raw === "") {
-        return null;
-      }
-      const parsed = parseInt(raw, 10);
-      if (isNaN(parsed) || parsed < 1) {
-        return null;
-      }
-      return parsed;
-    } catch (e) {
-      return null;
-    }
+    return readStoredFinancialBankAccountId();
   }
 
   private persistSelectedBankAccountId(id: number | null): void {
     try {
       if (id === null) {
-        localStorage.removeItem(SELECTED_BANK_ACCOUNT_ID_STORAGE_KEY);
+        localStorage.removeItem(FINANCIAL_SELECTED_BANK_ACCOUNT_ID_STORAGE_KEY);
       } else {
-        localStorage.setItem(SELECTED_BANK_ACCOUNT_ID_STORAGE_KEY, String(id));
+        localStorage.setItem(FINANCIAL_SELECTED_BANK_ACCOUNT_ID_STORAGE_KEY, String(id));
       }
     } catch (e) {
       // quota / private mode

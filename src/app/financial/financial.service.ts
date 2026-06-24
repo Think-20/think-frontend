@@ -13,7 +13,7 @@ import {
   FinancialTransactionTag
 } from "app/shared/models/financial-transaction.model";
 
-/** Resposta de GET financeiro/transacao/{jobId}/{contaBancariaId}?date= */
+/** Resposta de GET financeiro/transacao/{jobId}/{tipoTransacao}?contaBancariaId= (&date= opcional) */
 export interface FinancialTransactionsByAccountResponse {
   totalRealizado: number;
   totalReceber: number;
@@ -26,14 +26,19 @@ export class FinancialService {
   constructor(private http: Http, private snackBar: MatSnackBar) {}
 
   /**
-   * Transações do job/conta na data de referência (receitas e despesas no mesmo payload).
+   * Transações do job/tipo/conta. `dateIso` opcional (YYYY-MM-DD); omitido na listagem completa.
    */
   transactionsByJobAndBankAccount(
     jobId: number,
+    tipoTransacao: number,
     contaBancariaId: number,
-    dateIso: string
+    dateIso?: string
   ): Observable<FinancialTransactionsByAccountResponse> {
-    const url = "financeiro/transacao/" + String(jobId) + "/" + String(contaBancariaId) + "?date=" + encodeURIComponent(dateIso);
+    let query = "contaBancariaId=" + String(contaBancariaId);
+    if (dateIso !== undefined && dateIso !== null && String(dateIso).trim()) {
+      query = "date=" + encodeURIComponent(String(dateIso).trim()) + "&" + query;
+    }
+    const url = "financeiro/transacao/" + String(jobId) + "/" + String(tipoTransacao) + "?" + query;
 
     return this.http
       .get(API + "/" + url)

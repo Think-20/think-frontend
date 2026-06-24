@@ -23,6 +23,7 @@
                 type="button"
                 class="financial-tags__tag-add-btn"
                 (click)="openTagInput()"
+                [disabled]="loadingCatalog"
                 aria-label="Adicionar tag"
             >
                 <cb-icon-add></cb-icon-add>
@@ -36,6 +37,7 @@
                     class="financial-tags__tag-field"
                     [formControl]="novaTagCtrl"
                     [placeholder]="novaTagPlaceholder"
+                    [disabled]="savingTag"
                     aria-label="Texto da nova tag"
                     (keydown.enter)="onNovaTagEnter($event)"
                     (keydown.escape)="closeTagInput()"

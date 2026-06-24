@@ -7,7 +7,11 @@ import "rxjs/add/operator/map";
 
 import { API } from "app/app.api";
 import { ErrorHandler } from "app/shared/error-handler.service";
-import { FinancialTransaction, FinancialTransactionBankAccount } from "app/shared/models/financial-transaction.model";
+import {
+  FinancialTransaction,
+  FinancialTransactionBankAccount,
+  FinancialTransactionTag
+} from "app/shared/models/financial-transaction.model";
 
 /** Resposta de GET financeiro/transacao/{jobId}/{contaBancariaId}?date= */
 export interface FinancialTransactionsByAccountResponse {
@@ -104,6 +108,47 @@ export class FinancialService {
           return ErrorHandler.capture(err);
         }.bind(this)
       );
+  }
+
+  /**
+   * Lista todas as tags cadastradas (POST tags/all).
+   */
+  getAllTags(): Observable<FinancialTransactionTag[]> {
+    const self = this;
+    return this.http
+      .post(API + "/tags/all", JSON.stringify({}), new RequestOptions())
+      .map(function (response): FinancialTransactionTag[] {
+        return self.normalizeTagsList(response.json());
+      })
+      .catch(function (err): Observable<FinancialTransactionTag[]> {
+        self.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000
+        });
+        return ErrorHandler.capture(err);
+      });
+  }
+
+  /**
+   * Cadastra ou atualiza uma tag (POST tag/save).
+   */
+  saveTag(tag: FinancialTransactionTag): Observable<FinancialTransactionTag> {
+    const self = this;
+    const payload = {
+      idtag: tag && tag.idtag ? tag.idtag : 0,
+      descricao: tag && tag.descricao ? tag.descricao : ""
+    };
+
+    return this.http
+      .post(API + "/tag/save", JSON.stringify(payload), new RequestOptions())
+      .map(function (response): FinancialTransactionTag {
+        return self.normalizeTagFromApi(response.json());
+      })
+      .catch(function (err): Observable<FinancialTransactionTag> {
+        self.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000
+        });
+        return ErrorHandler.capture(err);
+      });
   }
 
   transactionTotal(jobId: number, tipoTransacao: number, dateIso?: string): Observable<number> {
@@ -229,6 +274,47 @@ export class FinancialService {
       conta: conta.conta ? String(conta.conta) : "",
       datacadastro: conta.datacadastro
     };
+  }
+
+  private normalizeTagsList(body: any): FinancialTransactionTag[] {
+    if (!body) {
+      return [];
+    }
+    if (body instanceof Array) {
+      return this.mapTagsArray(body);
+    }
+    if (body.pagination && body.pagination.data && body.pagination.data.length) {
+      return this.mapTagsArray(body.pagination.data);
+    }
+    if (body.data && body.data.length) {
+      return this.mapTagsArray(body.data);
+    }
+    if (body.tags && body.tags.length) {
+      return this.mapTagsArray(body.tags);
+    }
+    return [];
+  }
+
+  private mapTagsArray(rawList: any[]): FinancialTransactionTag[] {
+    const out: FinancialTransactionTag[] = [];
+    if (!rawList || !rawList.length) {
+      return out;
+    }
+    let i = 0;
+    for (i = 0; i < rawList.length; i++) {
+      out.push(this.normalizeTagFromApi(rawList[i]));
+    }
+    return out;
+  }
+
+  private normalizeTagFromApi(raw: any): FinancialTransactionTag {
+    if (!raw) {
+      return { idtag: 0, descricao: "" };
+    }
+    const idtag =
+      typeof raw.idtag === "number" ? raw.idtag : typeof raw.id === "number" ? raw.id : 0;
+    const descricao = raw.descricao ? String(raw.descricao) : raw.nome ? String(raw.nome) : "";
+    return { idtag: idtag, descricao: descricao };
   }
 
   private resolveDateQueryParam(dateIso: string | undefined): string {

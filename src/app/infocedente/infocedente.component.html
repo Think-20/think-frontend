@@ -1,0 +1,547 @@
+<div class="containerPrincipal">
+
+<div class="containerInfoCedente">
+
+    <!-- Cabeçalho -->
+  <div class="header">
+
+    <div class="header-info">
+            <h2>{{ razaoSocial }}</h2>
+
+      <div class="sub-info">
+                <span>ID: {{ codigoCedente }}</span>
+        <span>•</span>
+                <span>CNPJ: {{ documentoFormatado }}</span>
+        <span>•</span>
+                <span>Submetido em: {{ dataSubmissao }}</span>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button class="btn-edit" type="button" (click)="editar()">
+        Editar
+      </button>
+
+      <button class="btn-close" (click)="voltar()">
+        Fechar
+      </button>
+    </div>
+
+  </div>
+
+
+  <!-- Menu -->
+  <div class="tabs">
+        <div class="tab" [class.active]="isTabActive('informacoes')" (click)="selectTab('informacoes')">Informações</div>
+        <div class="tab" [class.active]="isTabActive('documentacao')" (click)="selectTab('documentacao')">Documentação</div>
+        <div class="tab" [class.active]="isTabActive('historico')" (click)="selectTab('historico')">Histórico</div>
+        <div class="tab" [class.active]="isTabActive('avaliacao')" (click)="selectTab('avaliacao')">Avaliação</div>
+  </div>
+
+    <ng-container [ngSwitch]="selectedTab">
+        <ng-container *ngSwitchCase="'informacoes'">
+
+    <!-- DADOS CADASTRAIS -->
+    <div class="cardInfo">
+
+        <div class="titleCard">
+            <div class="leftTitle">
+                <mat-icon>badge</mat-icon>
+                <h3>Dados Cadastrais</h3>
+            </div>
+
+            <div class="inconsistencia">
+                <mat-icon class="incosistenciaIcon">warning_amber</mat-icon>
+                <span>Inconsistência Detectada</span>
+            </div>
+        </div>
+
+        <div class="alerta">
+            <div class="alertaTitulo">
+                <mat-icon class="incosistenciaIcon">warning_amber</mat-icon>
+                Divergência na Razão Social
+            </div>
+
+            <p>
+                A Razão Social informada não coincide com o registro da Receita Federal para o CNPJ fornecido.
+            </p>
+
+            <div class="receitaFederal">
+                <label>Razão Social na Receita Federal:</label>
+                <strong>{{ razaoSocial }}</strong>
+            </div>
+        </div>
+
+        <div class="campo">
+            <label>Razão Social (Informada pelo Cedente)</label>
+            <div class="inputErro" [class.itemInconsistente]="isCampoInconsistente('nome')">
+                <input type="text" [value]="razaoSocial" readonly>
+            </div>
+            <div class="inconsistenciaLegenda" *ngIf="isCampoInconsistente('nome')">
+                <mat-icon class="iconInterrogacaoFora">help_outline</mat-icon>
+                <span class="msgErro">{{ getMensagemDivergencia('Nome', true) }}</span>
+            </div>
+        </div>
+        <div class="gridInfo">
+            <div class="item">
+                <label>CNPJ</label>
+                <h4>{{ documentoFormatado }}</h4>
+                <span class="success"></span>
+            </div>
+            <div class="itemGroup">
+                <div class="item" [class.itemInconsistente]="isCampoInconsistente('email')">
+                    <label>Email</label>
+                    <h4>{{ email }}</h4>
+                </div>
+                <div class="inconsistenciaLegenda" *ngIf="isCampoInconsistente('email')">
+                    <mat-icon class="iconInterrogacaoFora">help_outline</mat-icon>
+                    <span class="msgErro">{{ getMensagemDivergencia('Email') }}</span>
+                </div>
+            </div>
+            <div class="itemGroup">
+                <div class="item" [class.itemInconsistente]="isCampoInconsistente('telefone')">
+                    <label>Telefone</label>
+                    <h4>{{ telefone }}</h4>
+                </div>
+                <div class="inconsistenciaLegenda" *ngIf="isCampoInconsistente('telefone')">
+                    <mat-icon class="iconInterrogacaoFora">help_outline</mat-icon>
+                    <span class="msgErro">{{ getMensagemDivergencia('Telefone') }}</span>
+                </div>
+            </div>
+            <div class="item">
+                <label>Faturamento Anual</label>
+                <h4>{{ faturamentoAnual }}</h4>
+            </div>
+            <div class="item">
+                <label>Mínimo de Assinantes</label>
+                <h4>{{ minimoAssinantes }}</h4>
+            </div>
+        </div>
+    </div>
+    <!-- ENDEREÇO -->
+    <div class="cardInfo">
+        <div class="titleCard">
+            <div class="leftTitle">
+                <mat-icon>location_on</mat-icon>
+                <h3>Endereço</h3>
+            </div>
+            <div class="validado">
+                <mat-icon class="valido">check_circle</mat-icon>
+                Validado
+            </div>
+
+        </div>
+        <div class="gridInfo">
+            <div class="itemGroup">
+                <div class="item" [class.itemInconsistente]="isCampoInconsistente('endereco.cep')">
+                    <label>CEP</label>
+                    <h4>{{ endereco.cep || '-' }}</h4>
+                </div>
+                <div class="inconsistenciaLegenda" *ngIf="isCampoInconsistente('endereco.cep')">
+                    <mat-icon class="iconInterrogacaoFora">help_outline</mat-icon>
+                    <span class="msgErro">{{ getMensagemDivergencia('CEP') }}</span>
+                </div>
+            </div>
+            <div class="itemGroup">
+                <div class="item" [class.itemInconsistente]="isCampoInconsistente('endereco.logradouro')">
+                    <label>Rua</label>
+                    <h4>{{ endereco.rua || endereco.logradouro || '-' }}</h4>
+                </div>
+                <div class="inconsistenciaLegenda" *ngIf="isCampoInconsistente('endereco.logradouro')">
+                    <mat-icon class="iconInterrogacaoFora">help_outline</mat-icon>
+                    <span class="msgErro">{{ getMensagemDivergencia('Rua') }}</span>
+                </div>
+            </div>
+            <div class="itemGroup">
+                <div class="item" [class.itemInconsistente]="isCampoInconsistente('endereco.numero')">
+                    <label>Número</label>
+                    <h4>{{ endereco.numero || '-' }}</h4>
+                </div>
+                <div class="inconsistenciaLegenda" *ngIf="isCampoInconsistente('endereco.numero')">
+                    <mat-icon class="iconInterrogacaoFora">help_outline</mat-icon>
+                    <span class="msgErro">{{ getMensagemDivergencia('Número') }}</span>
+                </div>
+            </div>
+            <div class="itemGroup">
+                <div class="item" [class.itemInconsistente]="isCampoInconsistente('endereco.complemento')">
+                    <label>Complemento</label>
+                    <h4>{{ endereco.complemento || '-' }}</h4>
+                </div>
+                <div class="inconsistenciaLegenda" *ngIf="isCampoInconsistente('endereco.complemento')">
+                    <mat-icon class="iconInterrogacaoFora">help_outline</mat-icon>
+                    <span class="msgErro">{{ getMensagemDivergencia('Complemento') }}</span>
+                </div>
+            </div>
+            <div class="itemGroup">
+                <div class="item" [class.itemInconsistente]="isCampoInconsistente('endereco.bairro')">
+                    <label>Bairro</label>
+                    <h4>{{ endereco.bairro || '-' }}</h4>
+                </div>
+                <div class="inconsistenciaLegenda" *ngIf="isCampoInconsistente('endereco.bairro')">
+                    <mat-icon class="iconInterrogacaoFora">help_outline</mat-icon>
+                    <span class="msgErro">{{ getMensagemDivergencia('Bairro') }}</span>
+                </div>
+            </div>
+            <div class="itemGroup">
+                <div class="item" [class.itemInconsistente]="isCampoInconsistente('endereco.cidade') || isCampoInconsistente('endereco.estado')">
+                    <label>Cidade / Estado</label>
+                    <h4>{{ (endereco.cidade || '-') + ' / ' + (endereco.estado || endereco.uf || '-') }}</h4>
+                </div>
+                <div class="inconsistenciaLegenda" *ngIf="isCampoInconsistente('endereco.cidade') || isCampoInconsistente('endereco.estado')">
+                    <mat-icon class="iconInterrogacaoFora">help_outline</mat-icon>
+                    <span class="msgErro">{{ getMensagemDivergencia('Cidade / Estado') }}</span>
+                </div>
+            </div>
+            <div class="item">
+                <label>País</label>
+                <h4>{{ endereco.pais || 'Brasil' }}</h4>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- GESTÃO DO CADASTRO -->
+    <!-- <div class="cardInfo">
+        <div class="titleCard">
+            <div class="leftTitle">
+                <mat-icon>groups</mat-icon>
+                <h3>Gestão do Cadastro</h3>
+            </div>
+        </div>
+
+        <div class="gridInfo">
+            <div class="item">
+                <label>Consultoria</label>
+                <h4>{{ consultoria }}</h4>
+            </div>
+
+            <div class="item">
+                <label>Responsável</label>
+                <div class="responsavel">
+                    <div class="avatar">
+                        {{ (responsavel || '-').slice(0, 2).toUpperCase() }}
+                    </div>
+                    <span>{{ responsavel }}</span>
+                </div>
+            </div>
+            <div class="item">
+                <label>Data de Submissão</label>
+                <h4>{{ dataSubmissao }}</h4>
+            </div>
+            <div class="item">
+                <label>SLA de Vencimento</label>
+                <h4>{{ cedente?.sla ? (cedente?.sla | date:'dd/MM/yyyy') : '-' }}</h4>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- PARTES RELACIONADAS -->
+    <div class="cardInfo" *ngIf="partesRelacionadas.length">
+        <div class="titleCard">
+            <div class="leftTitle">
+                <mat-icon>groups</mat-icon>
+                <h3>Partes Relacionadas</h3>
+            </div>
+            <div class="validado">
+                <mat-icon class="valido">check_circle</mat-icon>
+                Validado
+            </div>
+            <div class="quantidade">
+                {{ partesRelacionadas.length }} cadastrada(s)
+            </div>
+        </div>
+
+        <div class="parteRelacionada" *ngFor="let pessoa of partesRelacionadas; let i = index">
+            <h4 [class.textoInconsistente]="isCampoInconsistente('partes_relacionadas[' + i + '].nome')">{{ pessoa?.nome || '-' }}</h4>
+            <div class="inconsistenciaLegenda" *ngIf="isCampoInconsistente('partes_relacionadas[' + i + '].nome')">
+                <mat-icon class="iconInterrogacaoFora">help_outline</mat-icon>
+                <span class="msgErro">{{ getMensagemDivergencia('Nome da Parte Relacionada') }}</span>
+            </div>
+            <span>CPF/CNPJ: {{ pessoa?.cpf || pessoa?.documento || '-' }}</span>
+            <hr>
+
+            <h5 class="sectionSubtitle">Dados Gerais</h5>
+            <div class="gridInfo">
+                <div class="item" *ngFor="let item of getDadosGeraisPessoa(pessoa)">
+                    <label>{{ item.label }}</label>
+                    <h4>{{ item.valor }}</h4>
+                </div>
+            </div>
+            <div class="sectionDivider"></div>
+
+            <h5 class="sectionSubtitle">Dados Complementares</h5>
+            <div class="gridInfo">
+                <div class="item" *ngFor="let item of getDadosComplementaresPessoa(pessoa)">
+                    <label>{{ item.label }}</label>
+                    <h4>{{ item.valor }}</h4>
+                </div>
+            </div>
+            <div class="sectionDivider"></div>
+
+            <h5 class="sectionSubtitle">Endereço</h5>
+            <div class="gridInfo">
+                <div class="item" *ngFor="let item of getEnderecoPessoa(pessoa)">
+                    <label>{{ item.label }}</label>
+                    <h4>{{ item.valor }}</h4>
+                </div>
+            </div>
+            <hr *ngIf="i < partesRelacionadas.length - 1">
+        </div>
+    </div>
+
+    <div class="cardInfo" *ngIf="contasDesembolso.length">
+
+    <div class="titleCard">
+        <div class="leftTitle">
+            <mat-icon>credit_card</mat-icon>
+            <h3>Contas de Desembolso</h3>
+        </div>
+        <div class="validado">
+            <mat-icon class="valido">check_circle</mat-icon>
+            <span>Validado</span>
+        </div>
+        <div class="quantidade">
+            {{ contasDesembolso.length }} cadastrada(s)
+        </div>
+    </div>
+
+    <div class="contaDesembolso" *ngFor="let conta of contasDesembolso; let i = index">
+        <div class="parteGrid">
+            <div class="item">
+                <label>Tipo de Conta</label>
+                <h4>{{ conta?.tipo_conta || conta?.tipo || conta?.type || '-' }}</h4>
+            </div>
+            <div class="item">
+                <label>Código do Banco</label>
+                <h4>{{ conta?.codigo_banco || conta?.banco || conta?.bank || '-' }}</h4>
+            </div>
+            <div class="item">
+                <label>Agência</label>
+                <h4>{{ conta?.agencia || conta?.agency || '-' }}</h4>
+            </div>
+            <div class="item">
+                <label>Número da Conta</label>
+                <h4>{{ conta?.numero_conta || conta?.conta || conta?.account || '-' }}</h4>
+            </div>
+            <div class="item">
+                <label>Dígito da Conta</label>
+                <h4>{{ conta?.digito_conta || conta?.digito || '-' }}</h4>
+            </div>
+            <div class="item">
+                <label>Descrição</label>
+                <h4>{{ conta?.descricao || '-' }}</h4>
+            </div>
+        </div>
+        <hr *ngIf="i < contasDesembolso.length - 1">
+    </div>
+
+</div>
+
+<div class="cardInfo" *ngIf="avalistas.length">
+    <div class="titleCard">
+        <div class="leftTitle">
+            <mat-icon>person</mat-icon>
+            <h3>Avalistas</h3>
+        </div>
+        <div class="validado">
+            <mat-icon class="valido">check_circle</mat-icon>
+            <span>Validado</span>
+        </div>
+        <div class="quantidade">
+            {{ avalistas.length }} cadastrada(s)
+        </div>
+    </div>
+
+    <div class="parteRelacionada" *ngFor="let pessoa of avalistas; let i = index">
+        <h4>{{ pessoa?.nome || '-' }}</h4>
+        <span>CPF/CNPJ: {{ pessoa?.cpf || pessoa?.documento || '-' }}</span>
+        <hr>
+
+        <h5 class="sectionSubtitle">Dados Gerais</h5>
+        <div class="gridInfo">
+            <div class="item" *ngFor="let item of getDadosGeraisPessoa(pessoa)">
+                <label>{{ item.label }}</label>
+                <h4>{{ item.valor }}</h4>
+            </div>
+        </div>
+        <div class="sectionDivider"></div>
+
+        <h5 class="sectionSubtitle">Dados Complementares</h5>
+        <div class="gridInfo">
+            <div class="item" *ngFor="let item of getDadosComplementaresPessoa(pessoa)">
+                <label>{{ item.label }}</label>
+                <h4>{{ item.valor }}</h4>
+            </div>
+        </div>
+        <div class="sectionDivider"></div>
+
+        <h5 class="sectionSubtitle">Endereço</h5>
+        <div class="gridInfo">
+            <div class="item" *ngFor="let item of getEnderecoPessoa(pessoa)">
+                <label>{{ item.label }}</label>
+                <h4>{{ item.valor }}</h4>
+            </div>
+        </div>
+        <hr *ngIf="i < avalistas.length - 1">
+    </div>
+</div>
+
+<!-- <div class="cardInfo"> -->
+    <!-- <div class="titleCard">
+
+        <div class="leftTitle">
+            <mat-icon>person</mat-icon>
+            <h3>Avalistas</h3>
+        </div>
+
+        <div class="restricao">
+            <mat-icon>cancel</mat-icon>
+            Restrição Detectada
+        </div>
+
+        <div class="quantidade">
+            {{ cedente?.avalistas?.length || 0 }} cadastrado(s)
+        </div>
+    </div> -->
+
+    <!-- ALERTA -->
+    <!-- <div class="restricaoContainer">
+        <div class="alertaRestricao">
+            <div class="alertaTituloVermelho">
+                <mat-icon>cancel</mat-icon>
+                <div>
+                    <h4>CPF com Restrição Judicial</h4>
+                    <span>
+                        A consulta à API do Tribunal de Justiça identificou restrições judiciais ativas para o CPF/CNPJ informado.
+                    </span>
+                </div>
+            </div>
+            <div class="dadosRestricao">
+                <div class="item">
+                    <label>Tipo de Restrição</label>
+                    <h4>Execução Fiscal</h4>
+                </div>
+
+                <div class="item">
+                    <label>Processo Nº</label>
+                    <h4>1234567-89.2024.8.26.0100</h4>
+                </div>
+
+                <div class="item">
+                    <label>Órgão Originário</label>
+                    <h4>Tribunal de Justiça de São Paulo</h4>
+                </div>
+
+                <div class="item">
+                    <label>Data da Restrição</label>
+                    <h4>15/01/2025</h4>
+                </div>
+
+                <div class="item">
+                    <label>Valor da Ação</label>
+                    <h3 class="valorRestricao">
+                        R$ 245.890,00
+                    </h3>
+                </div>
+            </div>
+            <div class="statusProcesso">
+                <span class="badgeAtivo">ATIVO</span>
+                <span> Última atualização: 28/02/2026</span>
+            </div>
+            <div class="avisoRestricao">
+                <mat-icon>warning</mat-icon>
+                <span>A presença de restrições judiciais pode impedir a aprovação do avalista.</span>
+            </div>
+        </div> -->
+
+        <!-- Card do avalista -->
+        <!-- <div class="cardAvalista">
+            <div class="topAvalista">
+                <h4>{{ (cedente?.avalistas && cedente.avalistas[0]?.nome) || '-' }}</h4>
+                <div class="badgeRestricao">
+                    RESTRIÇÃO
+                </div>
+            </div>
+
+            <span class="cpfAvalista">
+                CPF/CNPJ: {{ (cedente?.avalistas && (cedente.avalistas[0]?.cpf || cedente.avalistas[0]?.documento)) || '-' }}
+            </span>
+
+            <div class="msgRestricao">
+                <mat-icon id="atencao">warning</mat-icon>
+                Restrição judicial ativa detectada via API TJ-SP
+            </div>
+            <hr>
+            <div class="parteGrid">
+                <div class="item">
+                    <label>Email</label>
+                    <h4>{{ (cedente?.avalistas && cedente.avalistas[0]?.email) || '-' }}</h4>
+                </div>
+                <div class="item">
+                    <label>Telefone</label>
+                    <h4>{{ (cedente?.avalistas && cedente.avalistas[0]?.telefone) || '-' }}</h4>
+                </div>
+                <div class="item">
+                    <label>Profissão</label>
+                    <h4>{{ (cedente?.avalistas && cedente.avalistas[0]?.profissao) || '-' }}</h4>
+                </div>
+                <div class="item">
+                    <label>Nacionalidade</label>
+                    <h4>{{ (cedente?.avalistas && cedente.avalistas[0]?.nacionalidade) || '-' }}</h4>
+                </div>
+                <div class="item endereco">
+                    <label>Endereço</label>
+                    <h4>
+                        {{ (cedente?.avalistas && cedente.avalistas[0]?.endereco) || '-' }}
+                    </h4>
+                </div>
+            </div>
+        </div> -->
+    <!-- </div>-->
+<!-- </div>  -->
+
+    </ng-container>
+
+    <cb-doc-cedente-info *ngSwitchCase="'documentacao'" [cedente]="cedente"></cb-doc-cedente-info>
+    <cb-historico-cedente-info *ngSwitchCase="'historico'" [cedente]="cedente"></cb-historico-cedente-info>
+        <cb-avaliacao-cedente-info *ngSwitchCase="'avaliacao'" [cedente]="cedente"></cb-avaliacao-cedente-info>
+  </ng-container>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>

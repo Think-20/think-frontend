@@ -1,1 +1,161 @@
-<p>teste</p>
+<div class="containerPrincipal">
+    <div class="Headinfo">
+        <div class="icon">
+            <mat-icon></mat-icon>
+        </div>
+        <div class="title_menssagem">
+            <p>Geração de Contratos</p>
+            <p>
+                Após a conclusão do cadastro, os contratos serão gerados automaticamente com base nas informações 
+                fornecidas. Os contratos incluirão cláusulas padrão de cessão de crédito e obrigações do cedente.
+            </p>
+        </div>
+    </div>
+    <!-- <div class="contratos">
+        <div class="card">
+            <div class="titleCard">
+                <p>Contrato de Cessão de Crédito</p>
+                <span>OBRIGATÓRIO</span>
+            </div>
+            <p class="descricaoCard">Documento principal que formaliza a cessão de créditos do cedente para o fundo.</p>
+            <div class="containerIcons">
+                <div class="iconPessoa">
+                    <mat-icon>group</mat-icon>
+                    <p>1 assinante(s) necessário(s)</p>
+                </div>
+                <div class="iconPdf">
+                    <mat-icon>list</mat-icon>
+                    <p>PDF Assinatura Digital</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="titleCard">
+                <p>Termo de Adesão ao Regulamento do Fundo</p>
+                <span>OBRIGATÓRIO</span>
+            </div>
+            <p class="descricaoCard">Aceite formal do cedente às regras e regulamentos do fundo de investimento.</p>
+            <div class="containerIcons">
+                <div class="iconPessoa">
+                    <mat-icon>group</mat-icon>
+                    <p>1 assinante(s) necessário(s)</p>
+                </div>
+                <div class="iconPdf">
+                    <mat-icon>list</mat-icon>
+                    <p>PDF Assinatura Digital</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="titleCard">
+                <p>Instrumento Particular de Confissão de Dívida</p>
+                <span>OBRIGATÓRIO</span>
+            </div>
+            <p class="descricaoCard">Reconhecimento formal das obrigações financeiras do cedente.</p>
+            <div class="containerIcons">
+                <div class="iconPessoa">
+                    <mat-icon>group</mat-icon>
+                    <p>1 assinante(s) necessário(s)</p>
+                </div>
+                <div class="iconPdf">
+                    <mat-icon>list</mat-icon>
+                    <p>PDF Assinatura Digital</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="titleCard">
+                <p>Termo de Ciência e Anuência</p>
+                <span>OBRIGATÓRIO</span>
+            </div>
+            <p class="descricaoCard">Declaração de conhecimento dos termos da operação pelos assinantes.</p>
+            <div class="containerIcons">
+                <div class="iconPessoa">
+                    <mat-icon>group</mat-icon>
+                    <p>1 assinante(s) necessário(s)</p>
+                </div>
+                <div class="iconPdf">
+                    <mat-icon>list</mat-icon>
+                    <p>PDF Assinatura Digital</p>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <div class="containerAssinantes">
+        <div class="titleAssinantes">
+            <mat-icon>people</mat-icon>
+            <p class="titleContainer">Assinantes dos Contratos</p>
+            <span>{{ totalPartesRelacionadas }} pessoa(s)</span>
+        </div>
+        <div class="infoAssinante">
+            <mat-icon>info</mat-icon>
+            <div class="descricaoAssinantes">
+                <p>Nenhum assinante definido</p>
+                <p>
+                    É necessário definir pelo menos um assinante na seção de Partes 
+                    Relacionadas. Volte à etapa de Cadastro e marque quem será assinante da operação.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="contaProcesso">
+        <div class="titleProcesso">
+            <mat-icon>list</mat-icon>
+            <p>Processo de Assinatura</p>
+        </div>
+        <div class="process">
+            <div class="slepProcess">1</div>
+            <div class="descricaoProcess">
+                <p>Geração Automática</p>
+                <p>Após aprovação do cadastro, os contratos serão gerados automaticamente com as informações cadastradas.</p>
+            </div>
+        </div>
+
+        <div class="process">
+            <div class="slepProcess">2</div>
+            <div class="descricaoProcess">
+                <p>Revisão e Aprovação</p>
+                <p>A equipe jurídica fará a revisão dos contratos antes do envio para assinatura.</p>
+            </div>
+        </div>
+
+        <div class="process">
+            <div class="slepProcess">3</div>
+            <div class="descricaoProcess">
+                <p>Envio para Assinatura Digital</p>
+                <p>Os contratos serão enviados para os assinantes através de plataforma de assinatura eletrônica.</p>
+            </div>
+        </div>
+
+        <div class="process">
+            <div class="slepProcess">4</div>
+            <div class="descricaoProcess">
+                <p>Coleta de Assinaturas</p>
+                <p>Cada assinante receberá um link por email para assinar digitalmente os documentos.</p>
+            </div>
+        </div>
+
+        <div class="process">
+            <div class="slepProcess">5</div>
+            <div class="descricaoProcess">
+                <p>Validação e Arquivamento</p>
+                <p>Após todas as assinaturas, os contratos serão validados e arquivados no sistema.</p>
+            </div>
+        </div>
+    </div>
+    <div class="ContainerinfoAntecao">
+        <mat-icon>info</mat-icon>
+        <div class="listAtencao">
+            <p>Atenção</p>
+            <ul>
+                <li class="itemsList">Os contratos só serão gerados após a aprovação completa do cadastro</li>
+                <li class="itemsList">Todos os assinantes devem ter email válido cadastrado</li>
+                <li class="itemsList">O processo de assinatura deve ser concluído em até 15 dias corridos</li>
+                <li class="itemsList">Certifique-se de que todas as informações estão corretas antes de finalizar o cadastro</li>
+            </ul>
+        </div>
+    </div>
+</div>

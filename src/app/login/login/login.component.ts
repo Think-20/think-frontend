@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { state, style, trigger, animate, transition } from '@angular/animations';
 
@@ -45,11 +45,14 @@ export class LoginComponent implements OnInit {
 
   state: string = 'standard';
   message: string = 'VAMOS COMEÇAR';
-  loginForm: FormGroup;
+  showAlert: boolean = false;
+  loginForm!: FormGroup;
   API = API;
   readonly FRIDAY_DAY = 5;
 
-  returnUrl: string
+  showPassword: boolean = false;
+  redirectUrl: string = '/cedente'; // ajuste esta rota conforme necessário
+  returnUrl: string ='';
 
   constructor(
     private fb: FormBuilder,
@@ -61,7 +64,7 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
     
     this.auth.logout();
 
@@ -70,53 +73,67 @@ export class LoginComponent implements OnInit {
       password: this.fb.control('', [Validators.required])
     })
   }
+  
+  
+  login() {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      this.state = 'error';
+      this.message = 'Preencha usuário e senha corretamente.';
+      this.showAlert = true;
+      return;
+    }
 
-  login(data) {
-    this.message = 'AGUARDE...'
-    this.state = 'loading'
+    const payload = {
+      email: this.loginForm.value.email,
+      password: this.loginForm.value.password
+    };
 
-    this.auth.login(data).subscribe(data => {
-      if(data.user === null) {
-        this.state = 'error'
-        this.message = 'USUÁRIO OU SENHA INCORRETOS'
-        Observable.timer(3000).subscribe(timer => {
-          this.state = 'standard'
-          this.message = 'VAMOS COMEÇAR'
-        })
-        return true;
-      }
+    this.message = 'AGUARDE...';
+    this.state = 'loading';
 
-      this.auth.setValidToken(true)
-      this.state = 'success'
-      this.message = 'OK'
+    this.auth.login(payload).subscribe(
+      response => {
+        if (response && response.status === 200 && response.body && response.body.user) {
+          this.auth.setValidToken(true);
+          this.auth.setData(response.body);
 
-      Observable.timer(1500).subscribe(timer => {
-        this.auth.setData(data)
-        //this.router.navigate([this.returnUrl]);
+          this.state = 'success';
+          this.message = 'OK';
 
-        const today = new Date();
-        const isFriday = today.getDay() === this.FRIDAY_DAY;
-
-        /* this.alertService.hasAlerts().subscribe(hasAlerts => {
-          if (hasAlerts && isFriday) {
-            this.router.navigate(['/alerts']);
-          } else {
-            this.router.navigate([this.returnUrl]);
-          }
-        }); */
-
-        this.alertService.hasAlerts().subscribe(hasAlerts => {
-          this.memoryService.getMemories().subscribe(memories => {
-            if (hasAlerts && isFriday) {
-              this.router.navigate(['/alerts']);
-            } else if (memories[0].jobs.length > 0 || (memories[1].clients.length > 0 ) || (memories[2].jobs_approveds.length > 0 )) {
-              this.router.navigate(['/memories']);
+          Observable.timer(1000).subscribe(() => {
+            if (this.returnUrl && this.returnUrl !== '/login') {
+              this.router.navigateByUrl(this.returnUrl);
             } else {
-              this.router.navigate([this.returnUrl]);
+              this.router.navigateByUrl(this.redirectUrl);
             }
           });
+          return;
+        }
+
+        this.state = 'error';
+        this.message = 'Email ou senha incorretos. Verifique suas credenciais.';
+        this.showAlert = true;
+        Observable.timer(3000).subscribe(() => {
+          this.state = 'standard';
+          this.message = 'VAMOS COMEÇAR';
+          this.showAlert = false;
         });
-      })
-    })
+      },
+      () => {
+        this.state = 'error';
+        this.message = 'Erro na conexão. Tente novamente.';
+        this.showAlert = true;
+        Observable.timer(3000).subscribe(() => {
+          this.state = 'standard';
+          this.message = 'VAMOS COMEÇAR';
+          this.showAlert = false;
+        });
+      }
+    );
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 }

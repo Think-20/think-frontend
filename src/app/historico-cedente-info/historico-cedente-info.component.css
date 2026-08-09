@@ -1,0 +1,926 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+html,body{
+    width: 100%;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    color: #344054;
+    background: #F8FAFC;
+}
+
+/* Container do layout */
+.containerPrincipal{
+    max-width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+/* Container do head */
+.containerHead{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Titulo cabecalho */
+.headTitle{
+    width: 50%;
+}
+
+/* Titulo Pagina */
+.Title{
+    font-size: 25px;
+    font-weight: 400;
+    margin-bottom: 4px;
+}
+
+/* SubTitle Pagina */
+.SubTitle{  
+    font-size: 18px;
+    font-weight: 200;
+    color: #888585;
+}
+
+/* Div botões cabecalho */
+.headButtons{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    width: 45%;
+    padding: 4px;
+    gap: 10px;
+}
+
+/* Div mudança de layout */
+.choiceLayout{
+    border: 1px solid #ccc; 
+    border-radius: 7px;
+    padding: 5px;
+    min-width: 45%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Botão & icons */
+#kanban, #list {
+    flex: 1; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+#kanban.active, #list.active {
+    background-color: #48855e;
+    color: white;
+}
+
+#kanban.active mat-icon, #list.active mat-icon {
+    color: white;
+}
+
+#kanban.active p, #list.active p {
+    color: white;
+}
+
+/* BTN add Cedente */
+.btnAddCedente {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #48855e;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+mat-icon{
+    font-size: 20px;
+    font-weight: 500;
+    color:rgb(228, 228, 228);
+}
+
+.btnadd{
+    border: 0;
+    background-color: rgb(72, 133, 94);
+    color: rgb(251,252,255);
+    font-size: 15px;
+}
+
+/* Fundo Select vem do banco */
+.fundoSelect{
+    width: 100%;
+    padding: 13px 10px 13px 10px;
+    background-color: rgb(245, 245, 245);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.infoFundo{
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 17px;
+    /* background-color: bisque; */
+}
+
+.codTitle{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.areaIcon{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background-color: rgb(168, 221, 187);
+}
+
+.codTitle{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+#carteira{
+    color: rgb(25, 90, 50);
+}
+
+#titleFundo{
+    font-size: 14px;
+    font-weight: 300;
+    color: rgb(136, 133, 133);
+}
+
+#titleFundoPrincipal{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#BtntrocarFundo{
+    height: 40px;
+    width: 120px;
+    border: none;
+    border-radius: 10px;
+}
+
+#carteira{
+    color:black;
+}
+
+.descicaoFundo{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Container Status*/
+.containerStatus{
+    width: 100%;
+    display: flex;
+    gap: 15px;
+}
+
+.boxStatus{
+    flex: 1;
+    height: 100px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:12px;
+    border-radius: 15px;
+    background-color: rgb(245, 245, 245);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.infoStatus{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.titleStatus{
+    font-size: 15px;
+    font-weight: 200;
+    color: rgb(102, 102, 102);
+}
+
+.numberStatus{
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+/* icons Status */
+.iconStatus{
+    width: 28px;
+    height: 28px;
+    padding: 2px;
+    border-radius: 5px;
+    background-color: rgb(223, 215, 215);
+    text-align: center;
+    font-size: 23px;
+}
+
+#iconBusinessPedenete{
+    color: rgb(134, 134, 136);
+}
+#iconBusinessAvalia{
+    color: rgb(30, 79, 211);
+}
+#iconBusinessIconsiste{
+    color: rgb(235, 162, 28);
+}
+#iconBusinessAprovado{
+    color: rgb(18, 172, 18);
+}
+#iconBusinessVencido{
+    color: rgb(255, 0, 0);
+}
+#iconBusinessCancelado{
+    color: rgb(128, 128, 128);
+}
+
+/* FiltroSpecific */
+.containerFiltro{
+    width: 100%;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: rgb(247, 247, 247);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* Linha de busca */
+.searchButton{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Form ocupa tudo */
+#formSeach{
+    flex: 1;
+}
+
+/* Input */
+.inputDiv{
+    width: 100%;
+    position: relative; 
+}
+
+#inputSearch{
+    width: 100%;
+    padding: 10px 45px 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgb(221, 221, 221);
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+#inputSearch:focus{
+    outline: none;
+    border-color: rgb(76, 175, 80);
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.15);
+}
+
+/* Botão search dentro do input */
+#btnSearch{
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgb(119, 119, 119);
+}
+
+/* Botão Novo */
+.btnSearch{
+    border-radius: 10px;
+    padding: 8px 12px;
+    background-color: rgb(72, 133, 94);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btnSearch:hover{
+    background-color: #3a6d4d;
+}
+
+.btnadd{
+    border: none;
+    background: none;
+    color: rgb(255, 255, 255);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Filtros */
+.filtroEspecific{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Icone filtro */
+#iconFiltro{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* Selects */
+.fieldSelect{
+   flex: 1;
+   min-width: 180px;
+}
+
+select{
+    width: 100%;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background-color: white;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+select:focus{
+    outline: none;
+    border-color: #4caf50;
+}
+
+/* Checkbox */
+#checkBox{
+    width: 100%;
+    padding: 8px 15px;
+    border-radius: 10px;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    border: 1px solid #ddd;
+}
+
+label{
+    font-size: 14px;
+    color: #444;
+}
+
+#SLAVencido{
+    width: 16px;
+    height: 16px;
+}
+
+/* Quantidade */
+#qtdCadastro{
+    margin-left: auto;
+    font-weight: 500;
+    color: #555;
+}
+
+/* Status */
+.status{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.statusFilter{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+}
+
+/* Bolinhas */
+.spanStatus{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+/* Cores */
+#spanPedente{ background-color: #868688; }
+#spanAvaliacao{ background-color: #1e4fd3; }
+#spanInconsistencia{ background-color: #eba21c; }
+#spanAprovado{ background-color: #12ac12; }
+#spanVencidos{ background-color: #ff0000; }
+#spanCancelado{ background-color: #808080; }
+
+.containerInfoCedente{
+    width: 100%;
+}
+
+/* HEADER */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.header h2 {
+    margin-bottom: 8px;
+    color: #1f2937;
+}
+
+.sub-info {
+    display: flex;
+    gap: 12px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-edit {
+    border: none;
+    background: #0cc49b;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn-close {
+    border: 1px solid #d5d5d5;
+    background: white;
+    padding: 12px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+
+/* MENU */
+
+.tabs {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.tab {
+    padding-bottom: 15px;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+.tab.active {
+    color: #0cc49b;
+    border-bottom: 2px solid #0cc49b;
+}
+
+/* ===========================================================
+   CARDS
+=========================================================== */
+
+.cardInfo,
+.cardAvalista{
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+
+/* ===========================================================
+   CABEÇALHO DOS CARDS
+=========================================================== */
+
+.headDoc{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.headDoc mat-icon{
+    color: #0F9D8A;
+    font-size: 24px;
+}
+
+.headDoc h1,
+.headDoc p{
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.headDoc span{
+    margin-left: 10px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: #F1F5F9;
+    color: #64748B;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* ===========================================================
+   DADOS DA PESSOA
+=========================================================== */
+
+.pessoa{
+    margin-bottom: 18px;
+    padding-left: 4px;
+}
+
+.subDescription{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.subDescription p{
+    margin: 0;
+}
+
+.subDescription p:first-child{
+    font-size: 15px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.subDescription p:last-child{
+    font-size: 13px;
+    color: #9CA3AF;
+}
+
+
+/* ===========================================================
+   DOCUMENTO
+=========================================================== */
+
+.doc{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 16px 18px;
+
+    border: 1px solid #EEF2F7;
+    border-radius: 12px;
+
+    background: #FFFFFF;
+
+    transition: .25s;
+
+    margin-bottom: 12px;
+}
+
+.doc:hover{
+    border-color: #D6E4F0;
+    box-shadow: 0 3px 12px rgba(15,23,42,.05);
+}
+
+
+/* ===========================================================
+   LADO ESQUERDO
+=========================================================== */
+
+.docLeft{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+}
+
+
+/* ===========================================================
+   ÍCONE DO DOCUMENTO
+=========================================================== */
+
+.doc mat-icon{
+
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #EEF4FF;
+    color: #2563EB;
+
+    border-radius: 12px;
+
+    font-size: 22px;
+
+    flex-shrink: 0;
+}
+
+
+/* ===========================================================
+   DESCRIÇÃO
+=========================================================== */
+
+.description{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.description p{
+    margin: 0;
+}
+
+.description p:first-child{
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.description p:last-child{
+    font-size: 13px;
+    color: #6B7280;
+}
+
+
+/* ===========================================================
+   LADO DIREITO
+=========================================================== */
+
+.areaBtn{
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-left: 24px;
+}
+
+
+/* ===========================================================
+   STATUS
+=========================================================== */
+
+.status{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-width: 90px;
+    height: 30px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.aprovado{
+    background: #DCFCE7;
+    color: #16A34A;
+}
+
+.validar{
+    background: #DBEAFE;
+    color: #2563EB;
+}
+
+.pendente{
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+.reprovado{
+    background: #FEE2E2;
+    color: #DC2626;
+}
+
+
+/* ===========================================================
+   BOTÃO VISUALIZAR
+=========================================================== */
+
+.areaBtn button{
+
+    background: none;
+    border: none;
+
+    color: #0F9D8A;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.areaBtn button:hover{
+    color: #0B7F70;
+}
+
+
+/* ===========================================================
+   RESPONSIVO
+=========================================================== */
+
+@media(max-width:768px){
+
+    .doc{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+    }
+
+    .areaBtn{
+        width: 100%;
+        justify-content: space-between;
+        margin-left: 0;
+    }
+
+    .headDoc{
+        flex-wrap: wrap;
+    }
+
+    .headDoc h1,
+    .headDoc p{
+        font-size: 18px;
+    }
+
+}
+
+.containerHistorico{
+    background:#fff;
+    border:1px solid #E5E7EB;
+    border-radius:14px;
+    padding:25px 30px;
+}
+
+.head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:30px;
+}
+
+.head mat-icon{
+    color:#16B8A2;
+}
+
+.head p{
+    font-size:20px;
+    font-weight:600;
+}
+
+.timeline-empty{
+    font-size:14px;
+    color:#6B7280;
+    padding:8px 0;
+}
+
+.timeline{
+    position:relative;
+    margin-left:10px;
+}
+
+.timeline::before{
+    content: "";
+    position: absolute;
+    left: 19px;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    background: #D8DEE8;
+    z-index: 0;
+}
+
+.timeline-item{
+    display:flex;
+    align-items:flex-start;
+    position:relative;
+    margin-bottom:34px;
+}
+
+.timeline-icon{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#FFF;
+    flex-shrink:0;
+    position:relative;
+    z-index:2;
+
+    border:3px solid #FFF;
+    box-shadow:0 2px 6px rgba(0,0,0,.08);
+}
+
+.timeline-icon span{
+    font-size:12px;
+    font-weight:600;
+}
+
+.timeline-icon mat-icon{
+    font-size:18px;
+    width:18px;
+    height:18px;
+    line-height:18px;
+}
+
+.timeline-content{
+    flex:1;
+    margin-left:18px;
+}
+
+.timeline-date{
+    min-width:170px;
+    text-align:right;
+    font-size:13px;
+    color:#6B7280;
+    margin-left:20px;
+}
+
+.title{
+    font-size:16px;
+    font-weight:500;
+    color:#1F2937;
+    margin-bottom:4px;
+}
+
+.author{
+    font-size:13px;
+    color:#6B7280;
+    margin-bottom:8px;
+}
+
+.description{
+    font-size:14px;
+    color:#6B7280;
+    line-height:1.5;
+}
+
+/* Cores */
+
+.success .timeline-icon{
+    background:#14B8A6;
+}
+
+.info .timeline-icon{
+    background:#3B82F6;
+}
+
+.approved .timeline-icon{
+    background:#22C55E;
+}
+
+.warning .timeline-icon{
+    background:#F59E0B;
+}
+
+.danger .timeline-icon{
+    background:#EF4444;
+}

@@ -1,0 +1,32 @@
+<div class="containerHistorico">
+    <div class="head">
+        <mat-icon>calender</mat-icon>
+        <p>Histórico de Atividades</p>
+    </div>
+    <div class="timeline-empty" *ngIf="loading">Carregando histórico...</div>
+
+    <div class="timeline-empty" *ngIf="!loading && error">{{ error }}</div>
+
+    <div class="timeline" *ngIf="!loading && !error && historicoItems.length > 0">
+        <div
+            class="timeline-item"
+            *ngFor="let item of historicoItems; trackBy: trackByHistoricoId"
+            [ngClass]="getTimelineClass(item)">
+            <div class="timeline-icon">
+                <mat-icon>{{ getTimelineIcon(item) }}</mat-icon>
+            </div>
+
+            <div class="timeline-content">
+                <div class="title">{{ getTimelineTitle(item) }}</div>
+                <div class="author">{{ getAuthor(item) }}</div>
+                <div class="description">{{ getTimelineDescription(item) }}</div>
+            </div>
+
+            <div class="timeline-date">{{ formatDate(item.created_at) }}</div>
+        </div>
+    </div>
+
+    <div class="timeline-empty" *ngIf="!loading && !error && historicoItems.length === 0">
+        Nenhum histórico encontrado.
+    </div>
+</div>

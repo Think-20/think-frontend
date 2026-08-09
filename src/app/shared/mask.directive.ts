@@ -32,59 +32,75 @@ export class MaskDirective implements ControlValueAccessor {
   registerOnTouched(fn: any): void {
       this.onTouched = fn
   }
+
+  private getActiveMask(value: string): string {
+    if (this.mask === 'cpfcnpj') {
+      return value.length > 11 ? '99.999.999/9999-99' : '999.999.999-99'
+    }
+
+    return this.mask
+  }
     
   @HostListener('keyup', ['$event']) 
   onKeyup($event: any) {
-    var valor = $event.target.value.replace(/\D/g, '');
-    var pad = this.mask.replace(/\D/g, '').replace(/9/g, '_');
-    var valorMask = valor + pad.substring(0, pad.length - valor.length);
+    var rawValue = $event.target.value.replace(/\D/g, '');
+    var activeMask = this.getActiveMask(rawValue);
+    var maskDigits = activeMask.replace(/[^9]/g, '').length;
+    var valor = rawValue;
+
+    if (valor.length > maskDigits) {
+      valor = valor.substr(0, maskDigits);
+    }
+
+    var pad = activeMask.replace(/\D/g, '').replace(/9/g, '_');
+    var valorMask = valor
+    if (pad.length > valor.length) {
+      valorMask = valor + pad.substring(0, pad.length - valor.length);
+    }
  
-    // retorna caso pressionado backspace
     if ($event.keyCode === 8) {
       this.onChange(valor);
       return;
     }
  
-    if (valor.length <= pad.length) {
-      this.onChange(valor);
-    }
+    this.onChange(valor);
  
     var valorMaskPos = 0;
-    valor = '';
-    for (var i = 0; i < this.mask.length; i++) {
-      if(this.mask.charAt(i) === '?') { }
-      else if (isNaN(parseInt(this.mask.charAt(i)))) {
-        valor += this.mask.charAt(i);
+    var maskedValue = '';
+    for (var i = 0; i < activeMask.length; i++) {
+      if (activeMask.charAt(i) === '?') {
+        continue;
+      } else if (isNaN(parseInt(activeMask.charAt(i)))) {
+        maskedValue += activeMask.charAt(i);
       } else {
-        valor += valorMask[valorMaskPos++];
+        maskedValue += valorMask.charAt(valorMaskPos++) || '';
       }
     }
     
-    if (valor.indexOf('_') > -1) {
-      valor = valor.substr(0, valor.indexOf('_'));
+    if (maskedValue.indexOf('_') > -1) {
+      maskedValue = maskedValue.substr(0, maskedValue.indexOf('_'));
     }
  
-    $event.target.value = valor
-    this.onChange(valor)
+    $event.target.value = maskedValue;
   }
  
   @HostListener('blur', ['$event']) 
   onBlur($event: any) {
-    let charNumbers = this.mask.indexOf('?') > -1 
-      ? [(this.mask.length - 1), (this.mask.length - 2)] 
-      : [this.mask.length]
+    var rawValue = $event.target.value.replace(/\D/g, '');
+    var activeMask = this.getActiveMask(rawValue);
+    var maskDigits = activeMask.replace(/[^9]/g, '').length;
 
-    let value: number
-
-    charNumbers.forEach(val => {
-      if(val === $event.target.value.length)
-        value = val
-    })
-
-    if(value !== undefined) {
-      return
+    if (rawValue.length === 0) {
+      this.onChange('');
+      this.onTouched('');
+      $event.target.value = '';
+      return;
     }
-    
+
+    if (rawValue.length === maskDigits) {
+      return;
+    }
+
     this.onChange('');
     this.onTouched('');
     $event.target.value = '';

@@ -1,4 +1,15 @@
 <div class="containerPrincipal">
+    <div class="loading-overlay" *ngIf="isLoading">
+        <div class="loading-card">
+            <mat-icon>sync</mat-icon>
+            <span>Carregando...</span>
+        </div>
+    </div>
+
+<div class="sucesso" *ngIf="cadastroSucesso">
+  <mat-icon>check_circle</mat-icon>
+    Cadastro enviado com sucesso!
+</div>
 
     <!-- aqui é o começo do CONTAINERHEAD -->
     <div class="containerHead">
@@ -7,19 +18,19 @@
             <p class="SubTitle">Gerencie os cedentes cadastrados no sistema</p>
         </div>
         <div class="headButtons">
-            <div class="choiceLayout">
-                <div id="kanban">
+        <div class="choiceLayout">
+                <div id="kanban" [class.active]="layoutMode === 'kanban'" (click)="alternarLayout('kanban')">
                     <mat-icon>view_kanban</mat-icon>
                     <p>Kanban</p>
                 </div>
-                 <div id="list">
+                 <div id="list" [class.active]="layoutMode === 'list'" (click)="alternarLayout('list')">
                     <mat-icon>list</mat-icon>
                     <p>Lista</p>
                  </div>
             </div>
             <div class="btnAddCedente">
                 <mat-icon id="add">add</mat-icon>
-                <button class="btnadd">Novo Cedente</button>
+                <button class="btnadd" (click)="abrirNovoCedente()">Novo Cedente</button>
             </div>
         </div>
     </div>
@@ -32,14 +43,14 @@
             </div>
             <div class="descicaoFundo">
                 <p id="titleFundo">Fundo Selecionado</p>
-                <h4 id="titleFundoPrincipal">Fundo(vem banco)</h4>
+                <h4 id="titleFundoPrincipal">{{fundo?.name}}</h4>
                 <div class="codTitle">
-                    <p>Código:<span>(vem banco)</span></p>
-                    <span>Crédito Privado(vem banco)</span>
+                    <p>Código:<span>{{fundo?.code}}</span></p>
+                    <!-- <span>Crédito Privado(vem banco)</span> -->
                 </div>
             </div>
         </div>
-        <button id="BtntrocarFundo">Trocar Fundo</button>
+        <button id="BtntrocarFundo" (click)="trocarFundo()">Trocar Fundo</button>
     </div>
 
     <!--Div container status-->
@@ -48,54 +59,55 @@
             <mat-icon class="iconStatus" id="iconBusinessPedenete">business</mat-icon>
             <div class="infoStatus">
                 <p class="titleStatus">Pendentes</p>
-                <h4 class="numberStatus">1</h4>
+                <h4 class="numberStatus">{{ pendentes.length }}</h4>
             </div>
         </div>
         <div class="boxStatus">
             <mat-icon class="iconStatus" id="iconBusinessAvalia">business</mat-icon>
             <div class="infoStatus">
                 <p class="titleStatus">Em Avaliação</p>
-                <h4 class="numberStatus">4</h4>
+                <h4 class="numberStatus">{{ emAvaliacao.length }}</h4>
             </div>
         </div>
         <div class="boxStatus">
             <mat-icon class="iconStatus" id="iconBusinessIconsiste">business</mat-icon>
             <div class="infoStatus">
                 <p class="titleStatus">Inconsistência</p>
-                <h4 class="numberStatus">2</h4>
+                <h4 class="numberStatus">{{ inconsistente.length }}</h4>
             </div>
         </div>
         <div class="boxStatus">
             <mat-icon class="iconStatus" id="iconBusinessAprovado">business</mat-icon>
             <div class="infoStatus">
                 <p class="titleStatus">Aprovados</p>
-                <h4 class="numberStatus">5</h4>
+                <h4 class="numberStatus">{{ aprovados.length }}</h4>
             </div>
         </div>
         <div class="boxStatus">
             <mat-icon class="iconStatus" id="iconBusinessVencido">business</mat-icon>
             <div class="infoStatus">
                 <p class="titleStatus">Vencidos</p>
-                <h4 class="numberStatus">5</h4>
+                <h4 class="numberStatus">{{ vencidos.length }}</h4>
             </div>
         </div>
         <div class="boxStatus">
             <mat-icon class="iconStatus" id="iconBusinessCancelado">business</mat-icon>
             <div class="infoStatus">
                 <p class="titleStatus">Cancelados</p>
-                <h4 class="numberStatus">0</h4>
+                <h4 class="numberStatus">{{ cancelados.length }}</h4>
             </div>
         </div>
     </div>
+    <cb-list-cedentes *ngIf="layoutMode === 'list'"></cb-list-cedentes>
 
     <!-- Div Filtro -->
-    <div class="containerFiltro" *ngIf="mostrarKanban">
+    <div class="containerFiltro" *ngIf="mostrarKanban && layoutMode === 'kanban'">
     
         <!-- DIV Pesquisa e button +  -->
         <div class="searchButton">
-            <form [formGroup]="form" id="formSeach">
+            <form [formGroup]="formBusca" id="formSeach" (ngSubmit)="buscarCedentes()">
                 <div class="inputDiv">
-                    <input type="text"  formControlName="pesquisa" id="inputSearch" placeholder="Buscar por razão social, CNPJ ou ID">
+                    <input type="text" formControlName="pesquisa" id="inputSearch" placeholder="Buscar por razão social, CNPJ ou ID">
                     <button id="btnSearch" type="submit">
                         <mat-icon>search</mat-icon>
                     </button>
@@ -108,298 +120,126 @@
         </div>
     
         <!-- Div FiltroEspecific -->
-        <div class="filtroEspecific">
+        <div class="filtroEspecific" [formGroup]="formBusca">
             <div id="iconFiltro">
                 <mat-icon id="filter">filter_alt</mat-icon>
                 <p>Filtros:</p>
             </div>
             <div class="fieldSelect" id="selectConsultoria">
-                <select name="selectConsultoria" id="fieldConsultorias">
-                    <option value="consultoria" selected>Todas Consultorias</option>
+                <select formControlName="consultoria" id="fieldConsultorias">
+                    <option value="">Todas Consultorias</option>
                 </select>
             </div>
             <div class="fieldSelect" id="selectResponsavel">
-                <select name="selectResponsavel" id="fieldResponsaveis">
-                    <option value="responsavel" selected>Todos responsavéis</option>
+                <select formControlName="responsavel" id="fieldResponsaveis">
+                    <option value="">Todos responsáveis</option>
                 </select>
             </div>
-            <div class="fieldSelect" id="fieldCheck">
-                <form [formGroup]="form" formControlName="filtroSla" id="formSLA">
+            <div class="fieldSelect" id="fieldCheck" [formGroup]="formFiltroSla">
+                <div id="formSLA">
                     <div id="checkBox">
                         <label for="SLAVencido">Apenas SLA Vencido</label>
-                        <input type="checkbox" name="SLAVencido" id="SLAVencido">
+                        <input type="checkbox" formControlName="SLAVencido" id="SLAVencido">
                     </div>
-                </form>
+                </div>
             </div>
             <div id="qtdCadastro">
-                <p>8 Cadastro(s)</p>
+                <p>{{ totalCadastrosFiltrados }} Cadastro(s)</p>
             </div>
         </div>
         <!-- div status -->
         <div class="status">
             <div class="statusFilter">
                 <span class="spanStatus" id="spanPedente"></span>
-                <p>Pendentes:</p>
+                <p>Pendentes: {{ pendentes.length }}</p>
             </div>
             <div class="statusFilter">
                 <span class="spanStatus" id="spanAvaliacao"></span>
-                <p>Em Avaliação:</p>
+                <p>Em Avaliação: {{ emAvaliacao.length }}</p>
             </div>
             <div class="statusFilter">
                 <span class="spanStatus" id="spanInconsistencia"></span>
-                <p>Inconsistências</p>
+                <p>Inconsistências: {{ inconsistente.length }}</p>
             </div>
             <div class="statusFilter">
                 <span class="spanStatus" id="spanAprovado"></span>
-                <p>Aprovados:</p>
+                <p>Aprovados: {{ aprovados.length }}</p>
             </div>
             <div class="statusFilter">
                 <span class="spanStatus" id="spanVencidos"></span>
-                <p>Vencidos:</p>
+                <p>Vencidos: {{ vencidos.length }}</p>
             </div>
             <div class="statusFilter">
                 <span class="spanStatus" id="spanCancelado"></span>
-                <p>Cancelados:</p>
+                <p>Cancelados: {{ cancelados.length }}</p>
             </div>
         </div>
     </div>
 
     <!-- Div Kanban -->
-    <div class="containerKanban" *ngIf="mostrarKanban">
-        <div class="containerCards">
+    <div class="containerKanban" *ngIf="mostrarKanban && layoutMode === 'kanban'" cdkDropListGroup>
+        <div class="containerCards" *ngFor="let column of kanbanColumns">
             <div class="titleKanban">
-                <span class="kanbanStatus" id="spanPedente"></span>
-                <p>Pendente</p>
+                <span class="kanbanStatus" [id]="column.colorId"></span>
+                <p>{{ column.label }}</p>
+                <mat-icon *ngIf="column.status === 'rascunho'" class="lockKanbanIcon">lock</mat-icon>
+                <span style="margin-left: auto; font-size: 12px; color: #999; font-weight: normal;">{{ column.items.length }}</span>
             </div>
-            <div class="cardsKanban">
-                <div class="titleCards">
-                    <div class="areaIconKanban">
-                        <mat-icon class="kanbanCardIcon" id="carteira">business</mat-icon>
-                    </div>
-                    
-                    <div class="titleFundoCard">
-                        <p>Nome fundos</p>
-                        <p>CED</p>
-                    </div>
+            <div class="cardsKanban"
+                 cdkDropList
+                 [id]="column.status"
+                 [cdkDropListData]="column.items"
+                 [cdkDropListConnectedTo]="kanbanConnectedIds"
+                 cdkDropListOrientation="vertical"
+                 (cdkDropListDropped)="drop($event)">
+                <div *ngIf="column.items.length === 0" class="noCards">
+                    Nenhum cedente nesta fase
                 </div>
-                <div class="corpoKanban">
-                    <p class="cnpj"></p>
-                    <div class="nomeFundo">
-                        <mat-icon>person</mat-icon>
-                        <p>Consultoria: (vem do banco)</p>
+                <div class="cardKanban" *ngFor="let cedente of column.items" cdkDrag [cdkDragData]="cedente" [cdkDragDisabled]="isRascunhoStatus(cedente?.status)" (click)="abrirInfoCedente(cedente)">
+                    <div class="titleCards">
+                        <div class="areaIconKanban">
+                            <mat-icon class="kanbanCardIcon" id="carteira">business</mat-icon>
+                        </div>
+                        <div class="titleFundoCard">
+                            <p>{{ cedente?.nome || '---' }}</p>
+                            <p>CED-2026-{{ cedente?.id || '---' }}</p>
+                        </div>
                     </div>
-                    <div class="responsavel">
-                        <mat-icon>person</mat-icon>
-                        <p>Resp:  (vem banco)</p>
-                    </div>
-                    <div class="doc">
-                        <mat-icon>description</mat-icon>
-                        <p>(vem do banco)</p>
-                    </div>
-                    <hr>
-                    <div class="sla">
-                        <mat-icon>access_time</mat-icon>
-                        <p>Sla: 23/02/2026</p>
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-
-        <div class="containerCards">
-            <div class="titleKanban">
-                <span class="kanbanStatus" id="spanAvaliacao"></span>
-                <p>Em Avaliação</p>
-            </div>
-            <div class="cardsKanban">
-                <div class="titleCards">
-                    <div class="areaIconKanban">
-                        <mat-icon class="kanbanCardIcon" id="carteira">business</mat-icon>
-                    </div>
-                    <div class="titleFundoCard">
-                        <p>Nome fundos</p>
-                        <p>CED</p>
-                    </div>
-                </div>
-                <div class="corpoKanban">
-                    <p class="cnpj"></p>
-                    <div class="nomeFundo">
-                        <mat-icon>person</mat-icon>
-                        <p>Consultoria: (vem do banco)</p>
-                    </div>
-                    <div class="responsavel">
-                        <mat-icon>person</mat-icon>
-                        <p>Resp:  (vem banco)</p>
-                    </div>
-                    <div class="doc">
-                        <mat-icon>description</mat-icon>
-                        <p>(vem do banco)</p>
-                    </div>
-                    <hr>
-                    <div class="sla">
-                        <mat-icon>access_time</mat-icon>
-                        <p>Sla: 23/02/2026</p>
+                    <div class="corpoKanban">
+                        <p class="cnpj">CPF/CNPJ: {{ cedente?.documento || '---' }}</p>
+                        <div class="nomeFundo">
+                            <mat-icon>person</mat-icon>
+                            <p>Consultoria: {{ cedente?.nome || '---' }}</p>
+                        </div>
+                        <div class="responsavel">
+                            <mat-icon>person</mat-icon>
+                            <p>Resp: {{ cedente?.pessoas_vinculadas[0]?.nome || '-' }}</p>
+                        </div>
+                        <div class="doc">
+                            <mat-icon>description</mat-icon>
+                            <p>{{ cedente?.cedente_files?.length || 0 }}</p>
+                        </div>
+                        <hr>
+                        <div class="sla">
+                            <mat-icon>access_time</mat-icon>
+                            <p>Sla: {{ cedente?.sla ? (cedente?.sla | date:'dd/MM/yyyy') : '---' }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="containerCards">
-            <div class="titleKanban">
-                <span class="kanbanStatus" id="spanInconsistencia"></span>
-                <p>Inconsistências</p>
-            </div>
-            <div class="cardsKanban">
-                <div class="titleCards">
-                    <div class="areaIconKanban">
-                        <mat-icon class="kanbanCardIcon" id="carteira">business</mat-icon>
-                    </div>
-                    
-                    <div class="titleFundoCard">
-                        <p>Nome fundos</p>
-                        <p>CED</p>
-                    </div>
-                </div>
-                <div class="corpoKanban">
-                    <p class="cnpj"></p>
-                    <div class="nomeFundo">
-                        <mat-icon>person</mat-icon>
-                        <p>Consultoria: (vem do banco)</p>
-                    </div>
-                    <div class="responsavel">
-                        <mat-icon>person</mat-icon>
-                        <p>Resp:  (vem banco)</p>
-                    </div>
-                    <div class="doc">
-                        <mat-icon>description</mat-icon>
-                        <p>(vem do banco)</p>
-                    </div>
-                    <hr>
-                    <div class="sla">
-                        <mat-icon>access_time</mat-icon>
-                        <p>Sla: 23/02/2026</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="containerCards">
-            <div class="titleKanban">
-                <span class="kanbanStatus" id="spanAprovado"></span>
-                <p>Aprovados</p>
-            </div>
-            <div class="cardsKanban">
-                <div class="titleCards">
-                    <div class="areaIconKanban">
-                        <mat-icon class="kanbanCardIcon" id="carteira">business</mat-icon>
-                    </div>
-                    
-                    <div class="titleFundoCard">
-                        <p>Nome fundos</p>
-                        <p>CED</p>
-                    </div>
-                </div>
-                <div class="corpoKanban">
-                    <p class="cnpj"></p>
-                    <div class="nomeFundo">
-                        <mat-icon>person</mat-icon>
-                        <p>Consultoria: (vem do banco)</p>
-                    </div>
-                    <div class="responsavel">
-                        <mat-icon>person</mat-icon>
-                        <p>Resp:  (vem banco)</p>
-                    </div>
-                    <div class="doc">
-                        <mat-icon>description</mat-icon>
-                        <p>(vem do banco)</p>
-                    </div>
-                    <hr>
-                    <div class="sla">
-                        <mat-icon>access_time</mat-icon>
-                        <p>Sla: 23/02/2026</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="containerCards">
-            <div class="titleKanban">
-                <span  class="kanbanStatus" id="spanVencidos"></span>
-                <p>Vencidos</p>
-            </div>
-            <div class="cardsKanban">
-                <div class="titleCards">
-                    <div class="areaIconKanban">
-                        <mat-icon class="kanbanCardIcon" id="carteira">business</mat-icon>
-                    </div>
-                    
-                    <div class="titleFundoCard">
-                        <p>Nome fundos</p>
-                        <p>CED</p>
-                    </div>
-                </div>
-                <div class="corpoKanban">
-                    <p class="cnpj"></p>
-                    <div class="nomeFundo">
-                        <mat-icon>person</mat-icon>
-                        <p>Consultoria: (vem do banco)</p>
-                    </div>
-                    <div class="responsavel">
-                        <mat-icon>person</mat-icon>
-                        <p>Resp:  (vem banco)</p>
-                    </div>
-                    <div class="doc">
-                        <mat-icon>description</mat-icon>
-                        <p>(vem do banco)</p>
-                    </div>
-                    <hr>
-                    <div class="sla">
-                        <mat-icon>access_time</mat-icon>
-                        <p>Sla: 23/02/2026</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="containerCards">
-            <div class="titleKanban">
-                <span class="kanbanStatus" id="spanCancelado"></span>
-                <p>Cancelados</p>
-            </div>
-            <div class="cardsKanban">
-                <div class="titleCards">
-                    <div class="areaIconKanban">
-                        <mat-icon class="kanbanCardIcon" id="carteira">business</mat-icon>
-                    </div>
-                    
-                    <div class="titleFundoCard">
-                        <p>Nome fundos</p>
-                        <p>CED</p>
-                    </div>
-                </div>
-                <div class="corpoKanban">
-                    <p class="cnpj"></p>
-                    <div class="nomeFundo">
-                        <mat-icon>person</mat-icon>
-                        <p>Consultoria: (vem do banco)</p>
-                    </div>
-                    <div class="responsavel">
-                        <mat-icon>person</mat-icon>
-                        <p>Resp:  (vem banco)</p>
-                    </div>
-                    <div class="doc">
-                        <mat-icon>description</mat-icon>
-                        <p>(vem do banco)</p>
-                    </div>
-                    <hr>
-                    <div class="sla">
-                        <mat-icon>access_time</mat-icon>
-                        <p>Sla: 23/02/2026</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
-<cb-novo-cedente *ngIf="mostrarNovoCedente"></cb-novo-cedente>
+<cb-novo-cedente
+  *ngIf="mostrarNovoCedente"
+  (onSubmit)="cadastrarCedente($event)"
+  (onCancel)="voltarKanban()"
+    (onFinalizarCadastro)="finalizarCadastroComRefresh()">
+</cb-novo-cedente>
+
+<cb-infocedente
+    *ngIf="mostrarInfoCedente"
+    [cedente]="cedenteSelecionado"
+    (onVoltar)="voltarKanban()"
+    (onEditar)="editarCedenteSelecionado()">
+</cb-infocedente>

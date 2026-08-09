@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule, RequestOptions } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
@@ -32,12 +31,11 @@ import { RequestOptionsApiService } from './request-options-api.service';
     LoginComponent
   ],
   imports: [
-    BrowserAnimationsModule,
-    BrowserModule,
+    CommonModule,
     HttpModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(ROUTES),
+    RouterModule.forChild(ROUTES),
 
     MatTableModule,
     MatProgressBarModule,
@@ -55,7 +53,7 @@ import { RequestOptionsApiService } from './request-options-api.service';
     AuthService,
     {provide: RequestOptions, useClass: RequestOptionsApiService}
   ],
-  bootstrap: [LoginComponent]
+  
 })
 export class LoginModule { }
 

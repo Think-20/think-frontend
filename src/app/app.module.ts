@@ -233,6 +233,13 @@ import { DocumentacaoCedenteComponent } from './cadastro-cedentes/documentacao-c
 import { PartesRelacionadasComponent } from './cadastro-cedentes/partes-relacionadas/partes-relacionadas.component';
 import { ContasDesembolsoComponent } from './cadastro-cedentes/contas-desembolso/contas-desembolso.component';
 import { ContratosComponent } from './cadastro-cedentes/contratos/contratos.component';
+import { AvalistaComponent } from './cadastro-cedentes/avalista/avalista.component';
+import { RevicaoFinalComponent } from './cadastro-cedentes/revicao-final/revicao-final.component';
+import { ListCedentesComponent } from './cadastro-cedentes/list-cedentes/list-cedentes.component';
+import { InfocedenteComponent } from './infocedente/infocedente.component';
+import { DocCedenteInfoComponent } from './doc-cedente-info/doc-cedente-info.component';
+import { HistoricoCedenteInfoComponent } from './historico-cedente-info/historico-cedente-info.component';
+import { AvaliacaoCedenteInfoComponent } from './avaliacao-cedente-info/avaliacao-cedente-info.component';
 
 
 registerLocaleData(localePt);
@@ -370,6 +377,13 @@ registerLocaleData(localePt);
     PartesRelacionadasComponent,
     ContasDesembolsoComponent,
     ContratosComponent,
+    AvalistaComponent,
+    RevicaoFinalComponent,
+    ListCedentesComponent,
+    InfocedenteComponent,
+    DocCedenteInfoComponent,
+    HistoricoCedenteInfoComponent,
+    AvaliacaoCedenteInfoComponent,
 
 
   ],

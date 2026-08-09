@@ -21,8 +21,10 @@
     margin-bottom: 24px;
     padding: 16px 24px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
     background-color: rgb(248, 250, 252);
     border-bottom: 1px solid rgb(226, 232, 240);
 }
@@ -37,6 +39,7 @@
 }
 
 .headContainer button {
+    margin-left: auto;
     width: 80px;
     padding: 6px;
     border: 0;
@@ -47,6 +50,24 @@
     text-align: center;
     cursor: pointer;
     transition: all 0.15s ease;
+}
+
+.contentArea {
+    width: 100%;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.32s ease, opacity 0.22s ease;
+}
+
+.contentArea.open {
+    max-height: 2000px;
+    opacity: 1;
+}
+
+.containerForm {
+    padding: 0 24px 24px 24px;
+    width: 100%;
 }
 
 .headContainer button:hover {
@@ -154,6 +175,9 @@ form .form-group:first-child {
 
 }
 
+.containerEndereco{
+    border-top: 0;
+}
 /* HEAD SECTIONS */
 .headDadosComplementares,
 .headEndereco {
@@ -204,7 +228,58 @@ form .form-group:first-child {
     transition: all 0.15s ease;
 }
 
+.form-group.invalid input,
+.form-group.invalid select {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.15);
+}
+
+.error-message {
+    font-size: 12px;
+    color: #ef4444;
+    margin-top: 4px;
+}
+
 .btnDuplicar:hover {
     background: rgb(241, 245, 249);
     border-color: rgb(203, 213, 225);
+}
+
+/* Ações (salvar / duplicar) alinhadas horizontalmente */
+.actionsRow {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 24px;
+    justify-content: space-between; /* salva à esquerda, duplicar à direita */
+    width: 100%;
+}
+
+.btnSalvar {
+    margin-top: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border: none;
+    box-shadow: 0 6px 12px rgba(16,185,129,0.14);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s;
+}
+
+.btnSalvar mat-icon {
+    color: #ffffff;
+}
+
+.btnSalvar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(16,185,129,0.14);
+}
+
+.btnSalvar:active {
+    transform: translateY(0);
 }

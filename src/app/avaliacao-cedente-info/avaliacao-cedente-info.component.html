@@ -1,0 +1,283 @@
+<div class="containerPrincipal">
+    <!-- 1. Ações de Avaliação -->
+    <div class="card-section containerAcao">
+        <div class="headContainer">
+            <mat-icon>person</mat-icon>
+            <p>Ações de Avaliação</p>
+        </div>
+        <div class="botoesAcaoGrid">
+            <div class="btnAction aprovarCadastro" [class.active]="isAcaoSelecionada('aprovar')" (click)="selecionarAcao('aprovar')">
+                <mat-icon>check_circle</mat-icon>
+                <p>Aprovar Cadastro</p>
+            </div>
+            <div class="btnAction solicitarCorrecao" [class.active]="isAcaoSelecionada('corrigir')" (click)="selecionarAcao('corrigir')">
+                <mat-icon>error_outline</mat-icon>
+                <p>Solicitar Correções</p>
+            </div>
+            <div class="btnAction rejeitarCadastro" [class.active]="isAcaoSelecionada('rejeitar')" (click)="selecionarAcao('rejeitar')">
+                <mat-icon>cancel</mat-icon>
+                <p>Rejeitar Cadastro</p>
+            </div>
+        </div>
+
+        <div class="containerFormAcao">
+            <div class="formAprovarCadastro" *ngIf="isAcaoSelecionada('aprovar')">
+                <div class="head">
+                    <mat-icon>check</mat-icon>
+                    <p>Informações da Aprovação</p>
+                </div>
+                <div class="containerForumlarioAprovado">
+                    <form [formGroup]="formAprovacao">
+                        <div class="formGroup">
+                            <label for="limiteAprovado">Limite Aprovado*</label>
+                            <input type="text" formControlName="limiteAprovado" name="limiteAprovado" id="limiteAprovado" placeholder="R$0,00" currencyMask>
+                        </div>
+                        <div class="formGroup">
+                            <label for="prazoAtualizacao">Prazo de Atualização Cadastral *</label>
+                            <select name="prazoAtualizacao" id="prazoAtualizacao">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option value="6">6 meses</option>
+                                <option value="12">12 meses</option>
+                                <option value="24">24 meses</option>
+                            </select>
+                        </div>
+                        <div class="formGroup">
+                            <label for="observacao">observações (opcional)</label>
+                            <textarea name="observacao" id="observacao" placeholder="Digite aqui as observações sobre a aprovação do cadastro..."></textarea>
+                        </div>
+                        <div class="containerBtns">
+                            <div id="btnEnviar">
+                                <mat-icon>check</mat-icon>
+                                <button class="btn">Enviar</button>
+                            </div>
+                            <div id="btnCancelar">
+                                
+                                <button class="btn">Cancelar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="formSolicitarCorrecao" *ngIf="isAcaoSelecionada('corrigir')">
+                <div class="head">
+                    <mat-icon>warning</mat-icon>
+                    <p>Descreva as correções necessárias</p>
+                </div>
+                <div class="containerForumlarioCorrecao">
+                    <form [formGroup]="formCorrecao">
+                        <div class="formGroup">
+                            <textarea name="observacao" id="observacao" placeholder="Digite aqui as correções que devem seremrealizadas pelo cedente..."></textarea>
+                        </div>
+                        <div class="containerBtns">
+                            <div id="btnEnviar">
+                                <mat-icon>check</mat-icon>
+                                <button class="btn">Enviar</button>
+                            </div>
+                            <div id="btnCancelar">
+                                <button class="btn">Cancelar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="containerForumlarioRejeicao" *ngIf="isAcaoSelecionada('rejeitar')">
+                <div class="head">
+                    <mat-icon>cancel</mat-icon>
+                    <p>Descreva os motivos da reprovação</p>
+                </div>
+                <form [formGroup]="formRejeicao">
+                    <div class="formGroup">
+                        <textarea name="observacao" id="observacao" placeholder="Digite aqui os motivos que levaram à reprovação do cadastro..."></textarea>
+                    </div>
+                    <div class="containerBtns">
+                        <div id="btnEnviar">
+                            <mat-icon>check</mat-icon>
+                            <button class="btn">Enviar</button>
+                        </div>
+                        <div id="btnCancelar">
+                            <button class="btn">Cancelar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- 2. Checklist de Avaliação -->
+    <div class="card-section checkList">
+        <div class="headContainer">
+            <mat-icon>assignment_turned_in</mat-icon>
+            <p>Checklist de Avaliação</p>
+        </div>
+        <div class="checkBox">
+            <form >
+                <div class="formgroup">
+                    <input type="checkbox" name="dadosCompletos" id="dadosCompletos" checked>
+                    <label for="dadosCompletos">Dados cadastrais completos e corretos</label>
+                </div>
+
+                <div class="formgroup">
+                    <input type="checkbox" name="CNPJVALIDO" id="CNPJVALIDO" checked>
+                    <label for="CNPJVALIDO">CNPJ válido e ativo na Receita Federal</label>
+                </div>
+
+                <div class="formgroup">
+                    <input type="checkbox" name="docObrigatorios" id="docObrigatorios" checked>
+                    <label for="docObrigatorios">Documentos obrigatórios anexados</label>
+                </div>
+
+                <div class="formgroup">
+                    <input type="checkbox" name="partesRealacionadasIdentificada" id="partesRealacionadasIdentificada" checked>
+                    <label for="partesRealacionadasIdentificada">Partes relacionadas identificadas</label>
+                </div>
+
+                <div class="formgroup">
+                    <input type="checkbox" name="contasBancarias" id="contasBancarias" checked>
+                    <label for="contasBancarias">Contas bancárias validadas</label>
+                </div>
+
+                <div class="formgroup">
+                    <input type="checkbox" name="faturamentoAnual" id="faturamentoAnual" checked>
+                    <label for="faturamentoAnual">Faturamento anual compatível com operação</label>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. Resumo da Avaliação Automática -->
+    <div class="card-section resumoAutomatica">
+        <div class="headContainer">
+            <mat-icon class="info-icon">info_outline</mat-icon>
+            <p>Resumo da Avaliação Automática</p>
+        </div>
+
+        <!-- Indicadores Superiores -->
+        <div class="cardsResumoGrid">
+            <div class="cardMetrica totalValidacoes">
+                <div class="metricaHeader">
+                    <span>Total de Validações</span>
+                    <mat-icon>cloud_queue</mat-icon>
+                </div>
+                <h3>6</h3>
+                <span class="subtext">APIs consultadas</span>
+            </div>
+            <div class="cardMetrica validacoesAprovadas">
+                <div class="metricaHeader">
+                    <span>Validações Aprovadas</span>
+                    <mat-icon>check_circle_outline</mat-icon>
+                </div>
+                <h3>4</h3>
+                <span class="subtext">66,7% de aprovação</span>
+            </div>
+            <div class="cardMetrica inconsistencias">
+                <div class="metricaHeader">
+                    <span>Inconsistências</span>
+                    <mat-icon>highlight_off</mat-icon>
+                </div>
+                <h3>2</h3>
+                <span class="subtext">Requerem atenção</span>
+            </div>
+        </div>
+
+        <!-- Seção interna de Inconsistências Detectadas -->
+        <div class="inconsistenciasHeader">
+            <h4>Inconsistências Detectadas</h4>
+            <span class="badgeProblemas">2 Problemas</span>
+        </div>
+
+        <!-- Card Inconsistência 1: Média Criticidade -->
+        <!-- <div class="cardAlerta mediaCriticidade">
+            <div class="alertaHeader">
+                <div class="tituloAlerta">
+                    <mat-icon class="icon-alert">error</mat-icon>
+                    <h5>Divergência na Razão Social</h5>
+                </div>
+                <span class="badgeCriticidade yellow">MÉDIA CRITICIDADE</span>
+            </div>
+            <p class="alertaDescricao">A Razão Social informada não coincide com o registro da Receita Federal.</p>
+            
+            <div class="gridCamposAlerta">
+                <div class="campoAlerta">
+                    <span class="labelCampos">Fonte da Validação:</span>
+                    <p class="valorCampos">API Receita Federal</p>
+                </div>
+                <div class="campoAlerta">
+                    <span class="labelCampos">Seção Afetada:</span>
+                    <p class="valorCampos">Dados Cadastrais</p>
+                </div>
+            </div>
+
+            <div class="containerRecomendacao yellow">
+                <p><strong>Ação Recomendada:</strong> Solicitar atualização da Razão Social ou verificar se há alteração contratual pendente.</p>
+            </div>
+
+            <button class="btnAutorizar"><mat-icon>check</mat-icon> Autorizar</button>
+        </div> -->
+
+        <!-- Card Inconsistência 2: Alta Criticidade -->
+        <!-- <div class="cardAlerta altaCriticidade">
+            <div class="alertaHeader">
+                <div class="tituloAlerta">
+                    <mat-icon class="icon-alert">cancel</mat-icon>
+                    <h5>CPF com Restrição Judicial</h5>
+                </div>
+                <span class="badgeCriticidade red">ALTA CRITICIDADE</span>
+            </div>
+            <p class="alertaDescricao redText">Restrição judicial ativa detectada no CPF do avalista Carlos Eduardo Ferreira.</p>
+            
+            <div class="gridCamposAlerta deQuatro">
+                <div class="campoAlerta">
+                    <span class="labelCampos">Fonte da Validação:</span>
+                    <p class="valorCampos">API Tribunal de Justiça - SP</p>
+                </div>
+                <div class="campoAlerta">
+                    <span class="labelCampos">Seção Afetada:</span>
+                    <p class="valorCampos">Avalistas</p>
+                </div>
+                <div class="campoAlerta">
+                    <span class="labelCampos">Tipo de Restrição:</span>
+                    <p class="valorCampos">Execução Fiscal</p>
+                </div>
+                <div class="campoAlerta">
+                    <span class="labelCampos">Valor da Ação:</span>
+                    <p class="valorCampos redText fontBold">R$ 245.890,00</p>
+                </div>
+            </div>
+
+            <div class="containerRecomendacao red">
+                <p><strong>Ação Recomendada:</strong> Avalista não pode ser aprovado com restrição judicial ativa. Solicitar substituição ou aguardar quitação do processo.</p>
+            </div>
+
+            <button class="btnAutorizar"><mat-icon>check</mat-icon> Autorizar</button>
+        </div> -->
+
+        <!-- Lista de Validações Sucesso no rodapé do bloco -->
+        <div class="containerSucessos">
+            <div class="sucessoHeader">
+                <mat-icon>check_circle_outline</mat-icon>
+                <span>Validações Aprovadas</span>
+            </div>
+            <div class="gridSucessos">
+                <div class="itemSucesso"><mat-icon>check</mat-icon> CNPJ Ativo (Receita Federal)</div>
+                <div class="itemSucesso"><mat-icon>check</mat-icon> Endereço Validado (ViaCEP)</div>
+                <div class="itemSucesso"><mat-icon>check</mat-icon> CPFs Partes Relacionadas (Receita Federal)</div>
+                <div class="itemSucesso"><mat-icon>check</mat-icon> Contas Bancárias (Banco Central - SPI)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Seção Comentário -->
+    <div class="card-section containerComentario">
+        <div class="headContainer">
+            <mat-icon>description</mat-icon>
+            <p>Adicionar Comentário</p>
+        </div>
+        <div class="comentarioBody">
+            <textarea placeholder="Digite suas observações sobre a avaliação deste cadastro..."></textarea>
+            <div class="containerBtnComentario">
+                <button class="btnEnviarComentario">Adicionar Comentário</button>
+            </div>
+        </div>
+    </div>
+</div>

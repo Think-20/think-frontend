@@ -1,0 +1,1306 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+html,body{
+    width: 100%;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    color: #344054;
+    background: #F8FAFC;
+}
+
+/* Container do layout */
+.containerPrincipal{
+    max-width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+/* Container do head */
+.containerHead{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Titulo cabecalho */
+.headTitle{
+    width: 50%;
+}
+
+/* Titulo Pagina */
+.Title{
+    font-size: 25px;
+    font-weight: 400;
+    margin-bottom: 4px;
+}
+
+/* SubTitle Pagina */
+.SubTitle{  
+    font-size: 18px;
+    font-weight: 200;
+    color: #888585;
+}
+
+/* Div botões cabecalho */
+.headButtons{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    width: 45%;
+    padding: 4px;
+    gap: 10px;
+}
+
+/* Div mudança de layout */
+.choiceLayout{
+    border: 1px solid #ccc; 
+    border-radius: 7px;
+    padding: 5px;
+    min-width: 45%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Botão & icons */
+#kanban, #list {
+    flex: 1; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+#kanban.active, #list.active {
+    background-color: #48855e;
+    color: white;
+}
+
+#kanban.active mat-icon, #list.active mat-icon {
+    color: white;
+}
+
+#kanban.active p, #list.active p {
+    color: white;
+}
+
+/* BTN add Cedente */
+.btnAddCedente {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #48855e;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+mat-icon{
+    font-size: 20px;
+    font-weight: 500;
+    color:rgb(228, 228, 228);
+}
+
+.btnadd{
+    border: 0;
+    background-color: rgb(72, 133, 94);
+    color: rgb(251,252,255);
+    font-size: 15px;
+}
+
+/* Fundo Select vem do banco */
+.fundoSelect{
+    width: 100%;
+    padding: 13px 10px 13px 10px;
+    background-color: rgb(245, 245, 245);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.infoFundo{
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 17px;
+    /* background-color: bisque; */
+}
+
+.codTitle{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.areaIcon{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background-color: rgb(168, 221, 187);
+}
+
+.codTitle{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+#carteira{
+    color: rgb(25, 90, 50);
+}
+
+#titleFundo{
+    font-size: 14px;
+    font-weight: 300;
+    color: rgb(136, 133, 133);
+}
+
+#titleFundoPrincipal{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#BtntrocarFundo{
+    height: 40px;
+    width: 120px;
+    border: none;
+    border-radius: 10px;
+}
+
+#carteira{
+    color:black;
+}
+
+.descicaoFundo{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Container Status*/
+.containerStatus{
+    width: 100%;
+    display: flex;
+    gap: 15px;
+}
+
+.boxStatus{
+    flex: 1;
+    height: 100px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:12px;
+    border-radius: 15px;
+    background-color: rgb(245, 245, 245);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.infoStatus{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.titleStatus{
+    font-size: 15px;
+    font-weight: 200;
+    color: rgb(102, 102, 102);
+}
+
+.numberStatus{
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+/* icons Status */
+.iconStatus{
+    width: 28px;
+    height: 28px;
+    padding: 2px;
+    border-radius: 5px;
+    background-color: rgb(223, 215, 215);
+    text-align: center;
+    font-size: 23px;
+}
+
+#iconBusinessPedenete{
+    color: rgb(134, 134, 136);
+}
+#iconBusinessAvalia{
+    color: rgb(30, 79, 211);
+}
+#iconBusinessIconsiste{
+    color: rgb(235, 162, 28);
+}
+#iconBusinessAprovado{
+    color: rgb(18, 172, 18);
+}
+#iconBusinessVencido{
+    color: rgb(255, 0, 0);
+}
+#iconBusinessCancelado{
+    color: rgb(128, 128, 128);
+}
+
+/* FiltroSpecific */
+.containerFiltro{
+    width: 100%;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: rgb(247, 247, 247);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* Linha de busca */
+.searchButton{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Form ocupa tudo */
+#formSeach{
+    flex: 1;
+}
+
+/* Input */
+.inputDiv{
+    width: 100%;
+    position: relative; 
+}
+
+#inputSearch{
+    width: 100%;
+    padding: 10px 45px 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgb(221, 221, 221);
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+#inputSearch:focus{
+    outline: none;
+    border-color: rgb(76, 175, 80);
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.15);
+}
+
+/* Botão search dentro do input */
+#btnSearch{
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgb(119, 119, 119);
+}
+
+/* Botão Novo */
+.btnSearch{
+    border-radius: 10px;
+    padding: 8px 12px;
+    background-color: rgb(72, 133, 94);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btnSearch:hover{
+    background-color: #3a6d4d;
+}
+
+.btnadd{
+    border: none;
+    background: none;
+    color: rgb(255, 255, 255);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Filtros */
+.filtroEspecific{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Icone filtro */
+#iconFiltro{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* Selects */
+.fieldSelect{
+   flex: 1;
+   min-width: 180px;
+}
+
+select{
+    width: 100%;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background-color: white;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+select:focus{
+    outline: none;
+    border-color: #4caf50;
+}
+
+/* Checkbox */
+#checkBox{
+    width: 100%;
+    padding: 8px 15px;
+    border-radius: 10px;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    border: 1px solid #ddd;
+}
+
+label{
+    font-size: 14px;
+    color: #444;
+}
+
+#SLAVencido{
+    width: 16px;
+    height: 16px;
+}
+
+/* Quantidade */
+#qtdCadastro{
+    margin-left: auto;
+    font-weight: 500;
+    color: #555;
+}
+
+/* Status */
+.status{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.statusFilter{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+}
+
+/* Bolinhas */
+.spanStatus{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+/* Cores */
+#spanPedente{ background-color: #868688; }
+#spanAvaliacao{ background-color: #1e4fd3; }
+#spanInconsistencia{ background-color: #eba21c; }
+#spanAprovado{ background-color: #12ac12; }
+#spanVencidos{ background-color: #ff0000; }
+#spanCancelado{ background-color: #808080; }
+
+/* Container Kanban */
+.containerKanban {
+    max-width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 15px;
+    overflow-x: auto; 
+    overflow-y: hidden;
+}
+
+/* Coluna */
+.containerCards {
+    min-width: 340px; 
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: linear-gradient(to bottom, #f9f9f9, #f5f5f5);
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid #e8e8e8;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Header da coluna */
+.titleKanban {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    color: #333;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+/* Bolinha de status */
+.kanbanStatus {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+/* Área dos cards */
+.cardsKanban {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 150px;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+.cardsKanban.cdk-drop-list-dragging .cardKanban:not(.cdk-drag-animating) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.noCards {
+    text-align: center;
+    padding: 40px 10px;
+    color: #aaa;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+/* Card Kanban */
+.cardKanban {
+    background: white;
+    border-radius: 10px;
+    padding: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    cursor: grab;
+    transition: all 0.2s ease;
+    border-left: 4px solid #48855e;
+}
+
+.cardKanban:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+.cardKanban.cdk-drag-preview {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    border-radius: 10px;
+}
+
+.cardKanban.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* Topo do card */
+
+.titleFundoCard {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.titleFundoCard p:first-child {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+}
+
+.titleFundoCard p:last-child {
+    font-size: 12px;
+    color: #999;
+}
+
+/* Corpo */
+.corpoKanban {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 12px;
+    color: #555;
+}
+
+.cnpj {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #263238;
+    margin-bottom: 4px;
+    padding: 4px 8px;
+    border-radius: 10px;
+    letter-spacing: 0.01em;
+}
+
+/* Linhas internas */
+.nomeFundo,
+.responsavel,
+.doc,
+.sla {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.nomeFundo mat-icon,
+.responsavel mat-icon,
+.doc mat-icon,
+.sla mat-icon {
+    font-size: 14px;
+    color: #48855e;
+}
+
+.sla {
+    flex-direction: row;
+    gap: 6px;
+    color: #d9534f;
+    font-weight: 500;
+}
+
+/* Linha separadora */
+hr {
+    border: none;
+    border-top: 1px solid #f0f0f0;
+    margin: 4px 0;
+}
+
+.areaIconKanban {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #a8ddbb 0%, #7ec495 100%);
+    flex-shrink: 0;
+}
+
+.kanbanCardIcon {
+    font-size: 18px;
+    color: white !important;
+    font-weight: 500;
+}
+.sucesso {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  color: #166534;
+
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-weight: 600;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.containerInfoCedente{
+    width: 100%;
+}
+
+/* HEADER */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.header h2 {
+    margin-bottom: 8px;
+    color: #1f2937;
+}
+
+.sub-info {
+    display: flex;
+    gap: 12px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-edit {
+    border: none;
+    background: #0cc49b;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn-close {
+    border: 1px solid #d5d5d5;
+    background: white;
+    padding: 12px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+
+/* MENU */
+
+.tabs {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.tab {
+    padding-bottom: 15px;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+.tab.active {
+    color: #0cc49b;
+    border-bottom: 2px solid #0cc49b;
+}
+
+
+.cardInfo{
+    background: #fff;
+    border: 1px solid #EEF2F6;
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 24px;
+
+    box-shadow:
+    0 1px 2px rgba(16,24,40,.03),
+    0 8px 20px rgba(16,24,40,.04);
+
+    transition: .25s;
+}
+
+.cardInfo:hover{
+    box-shadow:
+    0 2px 8px rgba(16,24,40,.06),
+    0 15px 35px rgba(16,24,40,.08);
+}
+
+.titleCard{
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.leftTitle{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.leftTitle mat-icon{
+    color: #14b8a6;
+    transform: scale(.9);
+}
+
+.leftTitle h3{
+    font-size: 20px;
+    font-weight: 500;
+    color: #101828;
+    letter-spacing: -.3px;
+}
+
+.inconsistencia{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #F79009;
+    margin-left: 20px;
+}
+.incosistenciaIcon{
+    color: #F79009;
+}
+
+.validado{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #12B76A;
+    margin-left: 20px;
+}
+
+
+.valido{
+    color: #12B76A;
+}
+
+.quantidade{
+    margin-left: auto;
+    background: #F2F4F7;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #667085;
+}
+
+.alerta{
+    background: #FFFAEB;
+    border: 1px solid #FEDF89;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.alertaTitulo{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #B54708;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.receitaFederal{
+    background: white;
+    border: 1px solid #FEDF89;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.receitaFederal label{
+    display: block;
+    margin-bottom: 10px;
+    color: #667085;
+}
+
+.campo{
+   
+    margin-bottom: 30px;
+}
+
+.campo label{
+    display: block;
+    margin-bottom: 10px;
+}
+
+.inputErro{
+    display: flex;
+    gap: 10px;
+}
+
+.inputErro input{
+    flex: 1;
+    height: 52px;
+    border: 1px solid #E4E7EC;
+    border-radius: 14px;
+    padding: 0 18px;
+    font-size: 14px;
+
+    transition: .2s;
+}
+
+.inputErro input:focus{
+    outline:none;
+    border-color:#14b8a6;
+
+    box-shadow:
+    0 0 0 4px rgba(20,184,166,.15);
+}
+
+.inputErro button{
+    width: 50px;
+    border-radius: 10px;
+    border: 1px solid #FEC84B;
+    background: #FFFBEF;
+}
+
+.msgErro{
+    color: #F79009;
+    font-size: 13px;
+}
+
+.inconsistenciaLegenda{
+    margin-top: 8px;
+    display: block;
+}
+
+.iconInterrogacaoFora{
+    display: none;
+}
+
+.gridInfo{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 30px;
+}
+
+.item label{
+    display: block;
+    font-size: 13px;
+    color: #98A2B3;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.item h4{
+    margin:0;
+    color: #101828;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+.itemInconsistente{
+    position: relative;
+    background: #FFFAEB;
+    border: 1px solid #FEC84B;
+    border-radius: 10px;
+    padding: 12px 52px 12px 12px;
+}
+
+.itemInconsistente::after{
+    content: '!';
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: #FFFBEF;
+    color: #B54708;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.textoInconsistente{
+    color: #B54708;
+}
+
+.serproHint{
+    display: block;
+    margin-top: 6px;
+    color: #B54708;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.success{
+    color: #12B76A;
+    font-size: 13px;
+}
+
+.responsavel{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar{
+    width: 35px;
+    height: 35px;
+    background: #14b8a6;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.parteRelacionada{
+    background: #F9FAFB;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.badges{
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.badge{
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.purple{
+    background: #F4EBFF;
+    color: #6941C6;
+}
+
+.blue{
+    background: #EEF4FF;
+    color: #3538CD;
+}
+
+.green{
+    background: #ECFDF3;
+    color: #027A48;
+}
+.parteRelacionada{
+    background: #F9FAFB;
+    border-radius: 12px;
+    padding: 20px 18px;
+}
+
+.sectionSubtitle{
+    margin: 18px 0 12px;
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #667085;
+}
+
+.sectionDivider{
+    width: 100%;
+    height: 1px;
+    margin: 16px 0 4px;
+    background: linear-gradient(90deg, rgba(152,162,179,.4) 0%, rgba(234,236,240,.9) 100%);
+}
+
+.parteHeader h4{
+    margin: 0;
+    color: #101828;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.cpf{
+    display: block;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #667085;
+}
+
+.badges{
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+    margin-bottom: 18px;
+}
+
+.badge{
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.socio{
+    background: #EEF4FF;
+    color: #3538CD;
+}
+
+.beneficiario{
+    background: #F4EBFF;
+    color: #7A2EBC;
+}
+
+.assinante{
+    background: #ECFDF3;
+    color: #027A48;
+}
+
+.parteRelacionada hr{
+    border: none;
+    border-top: 1px solid #EAECF0;
+    margin-bottom: 18px;
+}
+
+.parteGrid{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 20px 80px;
+}
+
+.parteGrid .item label{
+    display: block;
+    font-size: 13px;
+    color: #667085;
+    margin-bottom: 8px;
+}
+
+.parteGrid .item h4{
+    margin: 0;
+    font-size: 14px;
+    color: #101828;
+    font-weight: 500;
+}
+
+.endereco{
+    grid-column: span 2;
+}
+
+.quantidade{
+    margin-left: auto;
+    background: #F2F4F7;
+    color: #344054;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+@media(max-width:768px){
+
+    .parteGrid{
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .endereco{
+        grid-column: span 1;
+    }
+
+}
+
+.contaDesembolso{
+    background: #F9FAFB;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.restricao{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #F04438;
+    margin-left: 20px;
+}
+
+.restricaoContainer{
+    background: #FFF5F5;
+    border: 1px solid #FDA29B;
+    border-radius: 10px;
+    padding: 14px;
+}
+
+.alertaRestricao{
+    background:#fff;
+    border:1px solid #FECACA;
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:12px;
+}
+
+.alertaTituloVermelho{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    margin-bottom:18px;
+}
+
+.alertaTituloVermelho mat-icon{
+    font-size:18px;
+    color:#EF4444;
+}
+
+.alertaTituloVermelho h4{
+    margin:0;
+    font-size:18px;
+    font-weight:600;
+    color:#DC2626;
+}
+
+.alertaTituloVermelho span{
+    display:block;
+    margin-top:3px;
+    font-size:13px;
+    color:#DC2626;
+    font-weight:400;
+}
+
+.dadosRestricao{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    column-gap:50px;
+    row-gap:14px;
+    margin-top:10px;
+}
+
+.dadosRestricao label{
+    font-size:11px;
+    color:#98A2B3;
+    margin-bottom:4px;
+    display:block;
+}
+
+.dadosRestricao h4{
+    margin:0;
+    font-size:15px;
+    font-weight:500;
+    color:#111827;
+}
+
+.valorRestricao{
+    color:#DC2626;
+    font-size:17px;
+    font-weight:700;
+}
+
+.avisoRestricao{
+    margin-top:10px;
+    background:#FEE2E2;
+    border-radius:5px;
+    padding:8px 12px;
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    color:#B42318;
+    font-size:12px;
+}
+
+.avisoRestricao, mat-icon, #atencao{
+    color:#EF4444;
+    font-size:16px;
+}
+
+.statusProcesso{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:20px;
+}
+
+.badgeAtivo{
+    background:#FEE2E2;
+    color:#DC2626;
+    padding:3px 10px;
+    border-radius:999px;
+    font-size:10px;
+    font-weight:600;
+}
+
+.cardAvalista{
+    background:#FFF;
+    border:1px solid #FDA29B;
+    border-radius:8px;
+    padding:16px 18px;
+}
+.cardAvalista hr{
+    margin:14px 0;
+    border:none;
+    border-top:1px solid #E5E7EB;
+}
+
+.topAvalista{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.topAvalista h4{
+    font-size:18px;
+    font-weight:500;
+    color:#111827;
+}
+
+.restricao mat-icon{
+    color: #EF4444;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+}
+
+.badgeRestricao{
+    background:#FEE2E2;
+    color:#DC2626;
+    border:1px solid #FCA5A5;
+    font-size:10px;
+    font-weight:600;
+    border-radius:999px;
+    padding:4px 10px;
+}
+
+.cpfAvalista{
+    display: block;
+    margin-top: 10px;
+    color: #667085;
+}
+
+.msgRestricao{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #D92D20;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 13px;
+}

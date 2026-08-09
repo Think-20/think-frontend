@@ -171,7 +171,7 @@
                   {{ task.job_activity?.description === 'Projeto externo' ? 'Externa' : task.responsible?.name }}
                 </div>
                 <div class="mat-cell mat-column-date">
-                  {{ task.job.created_at | date:'dd/MM/yy' }}
+                  {{ task.job.created_at | date:'dd/MM/yyyy' }}
                 </div>
                 <div class="mat-cell mat-column-status">
                   {{ task.job.status.description }}

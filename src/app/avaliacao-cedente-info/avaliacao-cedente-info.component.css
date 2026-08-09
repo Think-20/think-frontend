@@ -1,0 +1,1649 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+html,body{
+    width: 100%;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    color: #344054;
+    background: #F8FAFC;
+}
+
+/* Container do layout */
+.containerPrincipal{
+    max-width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+/* Container do head */
+.containerHead{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Titulo cabecalho */
+.headTitle{
+    width: 50%;
+}
+
+/* Titulo Pagina */
+.Title{
+    font-size: 25px;
+    font-weight: 400;
+    margin-bottom: 4px;
+}
+
+/* SubTitle Pagina */
+.SubTitle{  
+    font-size: 18px;
+    font-weight: 200;
+    color: #888585;
+}
+
+/* Div botões cabecalho */
+.headButtons{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    width: 45%;
+    padding: 4px;
+    gap: 10px;
+}
+
+/* Div mudança de layout */
+.choiceLayout{
+    border: 1px solid #ccc; 
+    border-radius: 7px;
+    padding: 5px;
+    min-width: 45%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Botão & icons */
+#kanban, #list {
+    flex: 1; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+#kanban.active, #list.active {
+    background-color: #48855e;
+    color: white;
+}
+
+#kanban.active mat-icon, #list.active mat-icon {
+    color: white;
+}
+
+#kanban.active p, #list.active p {
+    color: white;
+}
+
+/* BTN add Cedente */
+.btnAddCedente {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #48855e;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+mat-icon{
+    font-size: 20px;
+    font-weight: 500;
+    color:rgb(228, 228, 228);
+}
+
+.btnadd{
+    border: 0;
+    background-color: rgb(72, 133, 94);
+    color: rgb(251,252,255);
+    font-size: 15px;
+}
+
+/* Fundo Select vem do banco */
+.fundoSelect{
+    width: 100%;
+    padding: 13px 10px 13px 10px;
+    background-color: rgb(245, 245, 245);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.infoFundo{
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 17px;
+    /* background-color: bisque; */
+}
+
+.codTitle{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.areaIcon{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background-color: rgb(168, 221, 187);
+}
+
+.codTitle{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+#carteira{
+    color: rgb(25, 90, 50);
+}
+
+#titleFundo{
+    font-size: 14px;
+    font-weight: 300;
+    color: rgb(136, 133, 133);
+}
+
+#titleFundoPrincipal{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#BtntrocarFundo{
+    height: 40px;
+    width: 120px;
+    border: none;
+    border-radius: 10px;
+}
+
+#carteira{
+    color:black;
+}
+
+.descicaoFundo{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Container Status*/
+.containerStatus{
+    width: 100%;
+    display: flex;
+    gap: 15px;
+}
+
+.boxStatus{
+    flex: 1;
+    height: 100px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:12px;
+    border-radius: 15px;
+    background-color: rgb(245, 245, 245);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.infoStatus{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.titleStatus{
+    font-size: 15px;
+    font-weight: 200;
+    color: rgb(102, 102, 102);
+}
+
+.numberStatus{
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+/* icons Status */
+.iconStatus{
+    width: 28px;
+    height: 28px;
+    padding: 2px;
+    border-radius: 5px;
+    background-color: rgb(223, 215, 215);
+    text-align: center;
+    font-size: 23px;
+}
+
+#iconBusinessPedenete{
+    color: rgb(134, 134, 136);
+}
+#iconBusinessAvalia{
+    color: rgb(30, 79, 211);
+}
+#iconBusinessIconsiste{
+    color: rgb(235, 162, 28);
+}
+#iconBusinessAprovado{
+    color: rgb(18, 172, 18);
+}
+#iconBusinessVencido{
+    color: rgb(255, 0, 0);
+}
+#iconBusinessCancelado{
+    color: rgb(128, 128, 128);
+}
+
+/* FiltroSpecific */
+.containerFiltro{
+    width: 100%;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: rgb(247, 247, 247);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* Linha de busca */
+.searchButton{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Form ocupa tudo */
+#formSeach{
+    flex: 1;
+}
+
+/* Input */
+.inputDiv{
+    width: 100%;
+    position: relative; 
+}
+
+#inputSearch{
+    width: 100%;
+    padding: 10px 45px 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgb(221, 221, 221);
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+#inputSearch:focus{
+    outline: none;
+    border-color: rgb(76, 175, 80);
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.15);
+}
+
+/* Botão search dentro do input */
+#btnSearch{
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgb(119, 119, 119);
+}
+
+/* Botão Novo */
+.btnSearch{
+    border-radius: 10px;
+    padding: 8px 12px;
+    background-color: rgb(72, 133, 94);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btnSearch:hover{
+    background-color: #3a6d4d;
+}
+
+.btnadd{
+    border: none;
+    background: none;
+    color: rgb(255, 255, 255);
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Filtros */
+.filtroEspecific{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Icone filtro */
+#iconFiltro{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* Selects */
+.fieldSelect{
+   flex: 1;
+   min-width: 180px;
+}
+
+select{
+    width: 100%;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background-color: white;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+select:focus{
+    outline: none;
+    border-color: #4caf50;
+}
+
+/* Checkbox */
+#checkBox{
+    width: 100%;
+    padding: 8px 15px;
+    border-radius: 10px;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    border: 1px solid #ddd;
+}
+
+label{
+    font-size: 14px;
+    color: #444;
+}
+
+#SLAVencido{
+    width: 16px;
+    height: 16px;
+}
+
+/* Quantidade */
+#qtdCadastro{
+    margin-left: auto;
+    font-weight: 500;
+    color: #555;
+}
+
+/* Status */
+.status{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.statusFilter{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+}
+
+/* Bolinhas */
+.spanStatus{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+/* Cores */
+#spanPedente{ background-color: #868688; }
+#spanAvaliacao{ background-color: #1e4fd3; }
+#spanInconsistencia{ background-color: #eba21c; }
+#spanAprovado{ background-color: #12ac12; }
+#spanVencidos{ background-color: #ff0000; }
+#spanCancelado{ background-color: #808080; }
+
+.containerInfoCedente{
+    width: 100%;
+}
+
+/* HEADER */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.header h2 {
+    margin-bottom: 8px;
+    color: #1f2937;
+}
+
+.sub-info {
+    display: flex;
+    gap: 12px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-edit {
+    border: none;
+    background: #0cc49b;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn-close {
+    border: 1px solid #d5d5d5;
+    background: white;
+    padding: 12px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+
+/* MENU */
+
+.tabs {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.tab {
+    padding-bottom: 15px;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+.tab.active {
+    color: #0cc49b;
+    border-bottom: 2px solid #0cc49b;
+}
+
+/* ===========================================================
+   CARDS
+=========================================================== */
+
+.cardInfo,
+.cardAvalista{
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+
+/* ===========================================================
+   CABEÇALHO DOS CARDS
+=========================================================== */
+
+.headDoc{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.headDoc mat-icon{
+    color: #0F9D8A;
+    font-size: 24px;
+}
+
+.headDoc h1,
+.headDoc p{
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.headDoc span{
+    margin-left: 10px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: #F1F5F9;
+    color: #64748B;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* ===========================================================
+   DADOS DA PESSOA
+=========================================================== */
+
+.pessoa{
+    margin-bottom: 18px;
+    padding-left: 4px;
+}
+
+.subDescription{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.subDescription p{
+    margin: 0;
+}
+
+.subDescription p:first-child{
+    font-size: 15px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.subDescription p:last-child{
+    font-size: 13px;
+    color: #9CA3AF;
+}
+
+
+/* ===========================================================
+   DOCUMENTO
+=========================================================== */
+
+.doc{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 16px 18px;
+
+    border: 1px solid #EEF2F7;
+    border-radius: 12px;
+
+    background: #FFFFFF;
+
+    transition: .25s;
+
+    margin-bottom: 12px;
+}
+
+.doc:hover{
+    border-color: #D6E4F0;
+    box-shadow: 0 3px 12px rgba(15,23,42,.05);
+}
+
+
+/* ===========================================================
+   LADO ESQUERDO
+=========================================================== */
+
+.docLeft{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+}
+
+
+/* ===========================================================
+   ÍCONE DO DOCUMENTO
+=========================================================== */
+
+.doc mat-icon{
+
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #EEF4FF;
+    color: #2563EB;
+
+    border-radius: 12px;
+
+    font-size: 22px;
+
+    flex-shrink: 0;
+}
+
+
+/* ===========================================================
+   DESCRIÇÃO
+=========================================================== */
+
+.description{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.description p{
+    margin: 0;
+}
+
+.description p:first-child{
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.description p:last-child{
+    font-size: 13px;
+    color: #6B7280;
+}
+
+
+/* ===========================================================
+   LADO DIREITO
+=========================================================== */
+
+.areaBtn{
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-left: 24px;
+}
+
+
+/* ===========================================================
+   STATUS
+=========================================================== */
+
+.status{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-width: 90px;
+    height: 30px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.aprovado{
+    background: #DCFCE7;
+    color: #16A34A;
+}
+
+.validar{
+    background: #DBEAFE;
+    color: #2563EB;
+}
+
+.pendente{
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+.reprovado{
+    background: #FEE2E2;
+    color: #DC2626;
+}
+
+
+/* ===========================================================
+   BOTÃO VISUALIZAR
+=========================================================== */
+
+.areaBtn button{
+
+    background: none;
+    border: none;
+
+    color: #0F9D8A;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.areaBtn button:hover{
+    color: #0B7F70;
+}
+
+
+/* ===========================================================
+   RESPONSIVO
+=========================================================== */
+
+@media(max-width:768px){
+
+    .doc{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+    }
+
+    .areaBtn{
+        width: 100%;
+        justify-content: space-between;
+        margin-left: 0;
+    }
+
+    .headDoc{
+        flex-wrap: wrap;
+    }
+
+    .headDoc h1,
+    .headDoc p{
+        font-size: 18px;
+    }
+
+}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary-color: #0c4a6e;
+  --text-dark: #334155;
+  --text-light: #64748b;
+  --bg-main: #f8fafc;
+  --border-color: #e2e8f0;
+  
+  --green-main: #10b981;
+  --green-bg: #f0fdf4;
+  --green-border: #bbf7d0;
+
+  --yellow-main: #d97706;
+  --yellow-bg: #fffbeb;
+  --yellow-border: #fef3c7;
+
+  --red-main: #ef4444;
+  --red-bg: #fef2f2;
+  --red-border: #fee2e2;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-info h2 {
+  margin: 0 0 4px 0;
+  color: var(--primary-color);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.sub-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-light);
+  font-size: 13px;
+}
+
+.buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.buttons button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-edit {
+  background: white;
+  border: 1px solid var(--border-color);
+  color: var(--text-dark);
+}
+
+.btn-close {
+  background: #0ea5e9;
+  border: none;
+  color: white;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  gap: 24px;
+}
+
+.tab {
+  padding: 10px 4px;
+  color: var(--text-light);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 15px;
+  position: relative;
+}
+
+.tab.active {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary-color);
+}
+
+
+
+
+
+
+/* --- CARDS PADRÃO DA PÁGINA --- */
+.card-section {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.headContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.headContainer mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+/* --- SEÇÃO: AÇÕES DE AVALIAÇÃO --- */
+.botoesAcaoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.containerFormAcao {
+  margin-top: 16px;
+}
+
+.btnAction{
+  height:128px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  border-radius:10px;
+  border:1px solid;
+  cursor:pointer;
+  transition:.2s ease;
+  box-sizing:border-box;
+}
+
+.btnAction:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+
+.btnAction.active{
+  box-shadow:0 8px 18px rgba(0,0,0,.12);
+}
+
+.btnAction p{
+  margin:0;
+  font-size:14px;
+  font-weight:600;
+}
+
+.btnAction mat-icon{
+  width:34px;
+  height:34px;
+  font-size:34px;
+  line-height:34px;
+}
+
+.aprovarCadastro{
+  background:#E9FAF2;
+  border-color:#00C853;
+  color:#00A651;
+}
+
+.aprovarCadastro mat-icon{
+  color:#00B34A;
+}
+
+.aprovarCadastro:hover {
+  background-color: #d1fae5;
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.15);
+}
+
+.solicitarCorrecao{
+  background:#FFFBEA;
+  border-color:#FFD54F;
+  color:#D98200;
+}
+
+.solicitarCorrecao mat-icon{
+  color:#D98200;
+}
+
+.rejeitarCadastro{
+  background:#FFF5F5;
+  border-color:#FFB4B4;
+  color:#E53935;
+}
+
+.rejeitarCadastro mat-icon{
+  color:#FF1E1E;
+}
+
+/* --- SEÇÃO: CHECKLIST --- */
+.checkBox form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.formgroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 6px;
+}
+
+.formgroup input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary-color);
+  cursor: pointer;
+  order: -1; /* Força o checkbox a ficar na esquerda */
+}
+
+.formgroup label {
+  font-size: 14px;
+  color: #334155;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* --- SEÇÃO: RESUMO DA AVALIAÇÃO AUTOMÁTICA --- */
+.cardsResumoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.cardMetrica {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid;
+  min-height: 88px;
+}
+
+.metricaHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.cardMetrica h3 {
+  margin: 8px 0 2px 0;
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.cardMetrica .subtext {
+  font-size: 11px;
+}
+
+.totalValidacoes {
+  background-color: #f3f8ff;
+  border-color: #b8d4ff;
+  color: #1f58c7;
+}
+
+.validacoesAprovadas {
+  background-color: #f2fbf5;
+  border-color: #a7e3b3;
+  color: #14964a;
+}
+
+.inconsistencias {
+  background-color: #fff5f5;
+  border-color: #f1b3b3;
+  color: #d61f1f;
+}
+
+.cardMetrica .metricaHeader mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Cabeçalho Inconsistências */
+.inconsistenciasHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+
+.inconsistenciasHeader h4 {
+  margin: 0;
+  font-size: 20px;
+  color: #111827;
+  font-weight: 400;
+}
+
+.badgeProblemas {
+  background-color: #ffe8e8;
+  color: #d61f1f;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Cards de Inconsistências (Alertas) */
+.cardAlerta {
+  border-radius: 10px;
+  border: 1px solid;
+  border-left-width: 4px;
+  padding: 14px 14px 12px;
+  margin-bottom: 10px;
+}
+
+.mediaCriticidade {
+  background-color: #fffdf3;
+  border-color: #f2d97b;
+  border-left-color: #e0a300;
+}
+
+.altaCriticidade {
+  background-color: #fff7f7;
+  border-color: #f1b9b9;
+  border-left-color: #ff2d2d;
+}
+
+.alertaHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.tituloAlerta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tituloAlerta h5 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.1;
+  font-weight: 400;
+  color: #222;
+}
+
+.icon-alert {
+  font-size: 14px;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff !important;
+}
+
+.mediaCriticidade .icon-alert { background: #f0af00; }
+.altaCriticidade .icon-alert { background: #ff2d2d; }
+
+.badgeCriticidade {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 6px;
+}
+
+.badgeCriticidade.yellow {
+  background-color: #ffecad;
+  color: #9a6a00;
+}
+
+.badgeCriticidade.red {
+  background-color: #ffd4d4;
+  color: #d61f1f;
+}
+
+.alertaDescricao {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0 0 10px 0;
+}
+
+.alertaDescricao.redText {
+  color: #cb2020;
+}
+
+/* Grid de campos internos da validação */
+.gridCamposAlerta {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.gridCamposAlerta.deQuatro {
+  grid-template-columns: repeat(2, 1fr); /* Mantém duas colunas que quebram em linha */
+}
+
+.campoAlerta {
+  background: white;
+  border: 1px solid #e4e7ec;
+  border-radius: 4px;
+  padding: 7px 10px;
+}
+
+.mediaCriticidade .campoAlerta {
+  border-color: #f2d97b;
+}
+
+.altaCriticidade .campoAlerta {
+  border-color: #efb3b3;
+}
+
+.labelCampos {
+  font-size: 10px;
+  color: #9ca3af;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.valorCampos {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  color: #111827;
+}
+
+.redText { color: var(--red-main) !important; }
+.fontBold { font-size: 14px; font-weight: 700; }
+
+/* Container Caixa de Recomendação */
+.containerRecomendacao {
+  padding: 10px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.containerRecomendacao p {
+  margin: 0;
+}
+
+.containerRecomendacao.yellow {
+  background-color: #fff1be;
+  color: #9a6a00;
+}
+
+.containerRecomendacao.red {
+  background-color: #ffdede;
+  color: #d61f1f;
+}
+
+/* Botão Autorizar Interno */
+.btnAutorizar {
+  background-color: #00b386;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.btnAutorizar mat-icon {
+  font-size: 17px;
+  width: 17px;
+  height: 17px;
+}
+
+/* Bloco Verde de Sucessos no Final da Avaliação */
+.containerSucessos {
+  background-color: #ecf9f1;
+  border: 1px solid #9edcb7;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 16px;
+}
+
+.sucessoHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #0b8a46;
+  font-weight: 500;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.sucessoHeader mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.gridSucessos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.itemSucesso {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #0b8a46;
+}
+
+.itemSucesso mat-icon {
+  font-size: 15px;
+  width: 15px;
+  height: 15px;
+  color: #0b8a46;
+}
+
+/* --- SEÇÃO: COMENTÁRIOS --- */
+.containerComentario {
+  background: #f3f5f7;
+  border: 1px solid #d6dce3;
+  border-radius: 8px;
+  padding: 16px 18px 18px;
+}
+
+.containerComentario .headContainer {
+  margin-bottom: 12px;
+  color: #0f172a;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.containerComentario .headContainer mat-icon {
+  color: #00b386;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.comentarioBody {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.comentarioBody textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 84px;
+  border: 1px solid #b8c2ce;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  color: #334155;
+  background: #ffffff;
+  resize: none;
+}
+
+.comentarioBody textarea::placeholder {
+  color: #758397;
+}
+
+.comentarioBody textarea:focus {
+  outline: none;
+  border-color: #9fb0c3;
+}
+
+.containerBtnComentario {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btnEnviarComentario {
+  background-color: #00b386;
+  color: white;
+  border: none;
+  border-radius: 9px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.header-info h2 {
+  font-family: inherit;
+}
+
+.buttons button,
+.formgroup label,
+.cardMetrica h3,
+.tituloAlerta h5,
+.btnAutorizar,
+.btnEnviarComentario,
+textarea {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* ===========================
+   CARD DOS FORMULÁRIOS
+=========================== */
+
+.formAprovarCadastro,
+.formSolicitarCorrecao,
+.containerForumlarioRejeicao{
+    width: 100%;
+    margin-top: 18px;
+    padding: 18px 20px;
+    border-radius: 12px;
+    border: 1px solid;
+    box-sizing: border-box;
+}
+
+/* Aprovação */
+
+.formAprovarCadastro{
+    background: #F2FCF6;
+    border-color: #A7E6BF;
+}
+
+/* Correção */
+
+.formSolicitarCorrecao{
+    background: #FFFCEF;
+    border-color: #F2D46D;
+}
+
+/* Reprovação */
+
+.containerForumlarioRejeicao{
+    background: #FFF4F4;
+    border-color: #F3B0B0;
+}
+
+/* ===========================
+      CABEÇALHO
+=========================== */
+
+.head{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:20px;
+    font-weight:600;
+    font-size:15px;
+}
+
+/* cores */
+
+.head mat-icon{
+    font-size:20px;
+    width:20px;
+    height:20px;
+}
+
+
+.formAprovarCadastro .head,
+.formAprovarCadastro .head p,
+.formAprovarCadastro .head mat-icon{
+    color:#15803D;
+}
+
+.formSolicitarCorrecao .head,
+.formSolicitarCorrecao .head p,
+.formSolicitarCorrecao .head mat-icon{
+    color:#B7791F;
+}
+
+.containerForumlarioRejeicao .head,
+.containerForumlarioRejeicao .head p,
+.containerForumlarioRejeicao .head mat-icon{
+    color:#DC2626;
+}
+
+/* ===========================
+        FORMULÁRIO
+=========================== */
+
+form{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.formGroup{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.formGroup label{
+    font-size:13px;
+    font-weight:600;
+    color:#374151;
+}
+
+/* ===========================
+      INPUTS
+=========================== */
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea{
+
+    width:100%;
+    box-sizing:border-box;
+
+    background:white;
+
+    border-radius:10px;
+
+    border:1px solid #D1D5DB;
+
+    padding:12px 14px;
+
+    font-size:14px;
+
+    outline:none;
+
+    transition:.25s;
+}
+
+/* borda conforme a cor do formulário */
+
+.formAprovarCadastro input,
+.formAprovarCadastro select,
+.formAprovarCadastro textarea{
+    border-color:#7CE6A2;
+}
+
+.formSolicitarCorrecao textarea{
+    border-color:#F2C94C;
+}
+
+.containerForumlarioRejeicao textarea{
+    border-color:#F59A9A;
+}
+
+.formGroup textarea{
+    resize:vertical;
+    min-height:110px;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus{
+    box-shadow:0 0 0 3px rgba(59,130,246,.12);
+}
+
+/* ===========================================================
+      BOTÕES (IDÊNTICOS AO LAYOUT DA IMAGEM)
+=========================================================== */
+
+.containerBtns {
+    display: flex;
+    justify-content: flex-start;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+/* Base unificada para os botões estruturais */
+#btnEnviar,
+#btnCancelar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: 9px; /* Arredondado sutil idêntico à imagem */
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Forçando o texto interno (<button class="btn">) a herdar as propriedades do container */
+#btnEnviar .btn,
+#btnCancelar .btn {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Ajuste dos ícones internos */
+#btnEnviar mat-icon,
+#btnCancelar mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- ESTILIZAÇÃO DO BOTÃO ENVIAR (Verde Corporativo Viva) --- */
+#btnEnviar {
+    background-color: #00b386; /* Verde exato do botão "Adicionar Comentário" do print */
+    color: #ffffff;
+}
+
+#btnEnviar .btn {
+    color: #ffffff;
+}
+
+#btnEnviar mat-icon {
+    color: #ffffff;
+}
+
+#btnEnviar:hover {
+    background-color: #009972;
+}
+
+/* --- ESTILIZAÇÃO DO BOTÃO CANCELAR (Cinza Neutro Limpo) --- */
+#btnCancelar {
+    background-color: #e4e7ec; /* Cinza claro suave da paleta UI */
+    color: #475569;
+}
+
+#btnCancelar .btn {
+    color: #475569;
+}
+
+#btnCancelar mat-icon {
+    color: #475569;
+}
+
+#btnCancelar:hover {
+    background-color: #d1d5db;
+}

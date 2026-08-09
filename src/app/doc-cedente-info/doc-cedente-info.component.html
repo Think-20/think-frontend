@@ -1,0 +1,134 @@
+<div class="cardInfo">
+    <div class="headDoc">
+        <mat-icon>description</mat-icon>
+        <h1>Documentos do Cedente</h1>
+        <span>{{ totalDocumentos }} {{ totalDocumentos === 1 ? 'documento' : 'documentos' }}</span>
+    </div>
+
+    <div class="emptyState" *ngIf="!documentosCedente.length">
+        <mat-icon>description</mat-icon>
+        <p>Nenhum documento anexado para este cedente.</p>
+    </div>
+
+    <div class="doc" *ngFor="let documento of documentosCedente">
+        <div class="docHeader">
+            <div class="docLeft">
+                <div class="docIcon">
+                    <mat-icon>description</mat-icon>
+                </div>
+                <div class="description">
+                    <p class="tituloDoc">{{ documento.titulo }}</p>
+                    <p class="metaDoc">{{ documento.tamanhoLabel }} • Enviado em {{ documento.dataEnvioLabel }}</p>
+                </div>
+            </div>
+
+            <div class="areaBtn">
+                <span class="status" [ngClass]="documento.status">
+                    {{ getStatusLabel(documento.status) }}
+                </span>
+                <button type="button" class="btnVisualizar" (click)="toggleVisualizacao(documento)">
+                    {{ documento.aberto ? 'Fechar' : 'Visualizar' }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="dropdownOverlay" *ngIf="documentoAberto as documento" (click)="fecharVisualizacao()">
+        <div class="dropdownDoc" (click)="$event.stopPropagation()">
+            <div class="dropdownTopBar">
+                <div class="topTitleWrap">
+                    <mat-icon>description</mat-icon>
+                    <div>
+                        <h3>{{ documento.titulo }}</h3>
+                        <p>{{ documento.tamanhoLabel }} • Enviado em {{ documento.dataEnvioLabel }}</p>
+                    </div>
+                </div>
+                <button type="button" class="btnCloseTop" (click)="fecharVisualizacao()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+
+            <div class="dropdownActions">
+                <span class="statusChip" [ngClass]="documento.status">
+                    <mat-icon>check</mat-icon>
+                    {{ getStatusLabel(documento.status) }}
+                </span>
+
+                <div class="actionsRight">
+                    <button
+                        type="button"
+                        class="btnAction btnUpload"
+                        *ngIf="documento.status === 'pendente'"
+                        (click)="uploadDocumento(documento)">
+                        <mat-icon>upload_file</mat-icon>
+                        Upload
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btnAction btnDownload"
+                        *ngIf="documento.status === 'validar' || documento.status === 'aprovado'"
+                        (click)="baixarDocumento(documento)">
+                        <mat-icon>description</mat-icon>
+                        Baixar
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btnAction btnReject"
+                        *ngIf="documento.status === 'validar'"
+                        (click)="recusarDocumento(documento)">
+                        <mat-icon>cancel</mat-icon>
+                        Recusar
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btnAction btnApprove"
+                        *ngIf="documento.status === 'validar'"
+                        (click)="aprovarDocumento(documento)">
+                        <mat-icon>check_circle</mat-icon>
+                        Aprovar
+                    </button>
+                </div>
+            </div>
+
+            <div class="documentPreviewWrap">
+                <div class="documentPreview">
+                    <h3>{{ documento.titulo }}</h3>
+                    <p>Documento enviado em {{ documento.dataEnvioLabel }}</p>
+
+                    <div class="linha"></div>
+
+                    <h4>Informações do Documento</h4>
+                    <div class="infoGrid">
+                        <p><strong>Razão Social:</strong> {{ extrairRazaoSocial(documento) }}</p>
+                        <p><strong>CNPJ:</strong> {{ extrairCnpj(documento) }}</p>
+                        <p><strong>Data de Emissão:</strong> {{ extrairDataEmissao(documento) }}</p>
+                        <p><strong>Validade:</strong> {{ extrairValidade(documento) }}</p>
+                    </div>
+
+                    <div class="linha"></div>
+
+                    <h4>Descrição</h4>
+                    <p>{{ extrairDescricao(documento) }}</p>
+
+                    <div class="linha"></div>
+
+                    <h4>Dados Complementares</h4>
+                    <div class="extraInfoBox">
+                        <p><strong>Categoria:</strong> {{ extrairCategoria(documento) }}</p>
+                        <p><strong>Responsável:</strong> {{ extrairNomeResponsavel(documento) }}</p>
+                        <p><strong>Contato:</strong> {{ extrairContato(documento) }}</p>
+                    </div>
+                </div>
+
+                <div class="dropdownFooter">
+                    <button type="button" class="btnCloseBottom" (click)="fecharVisualizacao()">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

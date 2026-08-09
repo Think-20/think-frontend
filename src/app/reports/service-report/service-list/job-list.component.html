@@ -232,8 +232,8 @@
                   {{ job?.production_responsible?.name ? job?.production_responsible?.name : '-' }}
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-date">
-                    <div>{{ job.created_at | date : "dd/MM/yy" }} </div>
-                    <div>{{ job.project_conclusion ? (job.project_conclusion | date : "dd/MM/yy") : '-' }}</div>
+                    <div>{{ job.created_at | date : "dd/MM/yyyy" }} </div>
+                    <div>{{ job.project_conclusion ? (job.project_conclusion | date : "dd/MM/yyyy") : '-' }}</div>
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-client">
                   
@@ -255,7 +255,7 @@
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-status">
                   <span class="d-block">{{ job.status.description }}</span>
-                  <span class="d-block">{{ job.status_updated_at | date : "dd/MM/yy" }}</span>
+                  <span class="d-block">{{ job.status_updated_at | date : "dd/MM/yyyy" }}</span>
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-fatured">
                   -

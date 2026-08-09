@@ -1,0 +1,247 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.containerPrincipal {
+    width: 100%;
+    padding: 20px;
+    background: #f5f7fb;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ================= HEADER INFO ================= */
+.Headinfo {
+    display: flex;
+    gap: 15px;
+    background: #eaf2ff;
+    border: 1px solid #c7dbff;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.title_menssagem p:first-child {
+    font-weight: 600;
+    color: #1d4ed8;
+    margin-bottom: 5px;
+}
+
+.title_menssagem p:last-child {
+    font-size: 14px;
+    color: #334155;
+}
+
+/* ================= CONTRATOS ================= */
+.contratos {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    margin-bottom: 25px;
+
+    background: #fff; /* igual assinantes */
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+}
+
+.card {
+    background: #f1f5f9; /* cinza leve igual ao print */
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px;
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    background: #eef2f7;
+    border-color: #cbd5f5;
+}
+
+.titleCard {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.titleCard p {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.titleCard span {
+    background: #fee2e2;
+    color: #dc2626;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 999px; /* pill */
+    font-weight: 600;
+}
+
+.descricaoCard {
+    font-size: 13px;
+    color: #475569;
+    margin-bottom: 10px;
+}
+
+.containerIcons {
+    display: flex;
+    gap: 20px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.containerIcons div {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.containerIcons mat-icon {
+    font-size: 16px;
+}
+
+/* ================= ASSINANTES ================= */
+.containerAssinantes {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 25px;
+}
+
+.titleAssinantes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.titleContainer {
+    font-weight: 600;
+}
+
+.titleAssinantes span {
+    background: #e2e8f0;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 8px;
+}
+
+.infoAssinante {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    background: #fefce8; /* amarelo bem claro */
+    border: 1px solid #fde68a;
+    border-radius: 10px;
+
+    padding: 14px 16px;
+}
+
+/* Ícone */
+.infoAssinante mat-icon {
+    color: rgb(245, 158, 11);
+    font-size: 20px;
+    margin-top: 2px;
+}
+
+/* Textos */
+.descricaoAssinantes p:first-child {
+    font-weight: 600;
+    color: rgb(146, 64, 14); 
+    margin-bottom: 4px;
+}
+
+.descricaoAssinantes p:last-child {
+    font-size: 13px;
+    color: rgb(180, 83, 9);
+    line-height: 1.4;
+}
+
+/* ================= PROCESSO ================= */
+.contaProcesso {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 25px;
+}
+
+.titleProcesso {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.process {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.slepProcess {
+    min-width: 28px;
+    height: 28px;
+    background: #2563eb;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.descricaoProcess p:first-child {
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+.descricaoProcess p:last-child {
+    font-size: 13px;
+    color: #64748b;
+}
+
+/* ================= ATENÇÃO ================= */
+.ContainerinfoAntecao {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    background: #fefce8; 
+    border: 1px solid #fde68a;
+    border-radius: 10px;
+
+    padding: 16px;
+}
+
+/* Ícone */
+.ContainerinfoAntecao mat-icon {
+    color: #f59e0b;
+    font-size: 20px;
+    margin-top: 2px;
+}
+
+/* Título */
+.listAtencao p {
+    font-weight: 600;
+    color: #92400e;
+    margin-bottom: 8px;
+}
+
+/* Lista */
+.listAtencao ul {
+    padding-left: 18px;
+}
+
+.itemsList {
+    font-size: 13px;
+    color: #b45309;
+    margin-bottom: 4px;
+}

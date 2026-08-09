@@ -72,8 +72,11 @@ import { HomeEmptyComponent } from './home-empty/home-empty.component';
 import { GoalsComponent } from './goals/goals.component';
 import { CedentesComponent } from './cedentes/cedentes.component';
 import { CadastroCedentesComponent } from './cadastro-cedentes/cadastro-cedentes.component';
-
-
+import { ListCedentesComponent } from './cadastro-cedentes/list-cedentes/list-cedentes.component';
+import { InfocedenteComponent } from './infocedente/infocedente.component';
+import { DocCedenteInfoComponent } from './doc-cedente-info/doc-cedente-info.component';
+import { HistoricoCedenteInfoComponent } from './historico-cedente-info/historico-cedente-info.component';
+import { AvaliacaoCedenteInfoComponent } from './avaliacao-cedente-info/avaliacao-cedente-info.component';
 
 export const ROUTES: Routes = [
   {
@@ -88,13 +91,28 @@ export const ROUTES: Routes = [
   {
     path: '', component: LayoutComponent, children: [
       {
-        path: '', redirectTo: 'home', pathMatch: 'full'
+        path:'', redirectTo: 'cadastroCedentes', pathMatch: 'full',  
       },
       {
-        path:'cadastroCedentes', component: CadastroCedentesComponent  
+        path: 'cadastroCedentes/:id', component: CadastroCedentesComponent, pathMatch: 'full'
+      },
+      {
+        path:'infoCedente', component: InfocedenteComponent
+      },
+      {
+        path:'documentacaoCedente', component: DocCedenteInfoComponent
+      },
+      {
+        path:'historicoCedente', component: HistoricoCedenteInfoComponent
+      },
+      {
+        path: 'avaliacao', component: AvaliacaoCedenteInfoComponent
       },
       {
         path: 'cedente', component: CedentesComponent
+      },
+      {
+        path:'list', component: ListCedentesComponent
       },
       {
         path: 'dashboard', component: HomeComponent, canActivate: [AuthGuard]

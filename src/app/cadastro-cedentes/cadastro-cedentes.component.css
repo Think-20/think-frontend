@@ -17,6 +17,39 @@ html,body{
     display: flex;
     flex-direction: column;
     gap: 35px;
+    position: relative;
+}
+
+.loading-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-card{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    border-radius: 999px;
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    color: #48855e;
+    font-weight: 600;
+}
+
+.loading-card mat-icon{
+    color: #48855e;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 /* Container do head */
@@ -76,6 +109,23 @@ html,body{
     justify-content: center;
     align-items: center;
     gap: 4px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+#kanban.active, #list.active {
+    background-color: #48855e;
+    color: white;
+}
+
+#kanban.active mat-icon, #list.active mat-icon {
+    color: white;
+}
+
+#kanban.active p, #list.active p {
+    color: white;
 }
 
 /* BTN add Cedente */
@@ -434,23 +484,24 @@ label{
     height: 100%;
     display: flex;
     flex-direction: row;
-    gap: 16px;
-    padding: 10px;
+    gap: 20px;
+    padding: 15px;
     overflow-x: auto; 
     overflow-y: hidden;
 }
 
 /* Coluna */
 .containerCards {
-    min-width: 320px; 
-    max-width: 320px;
-    height: 100%;
+    min-width: 340px; 
+    max-width: 340px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    background-color: #f4f5f7;
-    border-radius: 8px;
-    padding: 10px;
+    gap: 14px;
+    background: linear-gradient(to bottom, #f9f9f9, #f5f5f5);
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid #e8e8e8;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 /* Header da coluna */
@@ -459,12 +510,28 @@ label{
     align-items: center;
     gap: 8px;
     font-weight: 600;
+    font-size: 15px;
+    color: #333;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.lockKanbanIcon {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    line-height: 20px;
+    border-radius: 999px;
+    text-align: center;
+    color: #2563eb;
+    background-color: #dbeafe;
+    border: 1px solid #bfdbfe;
 }
 
 /* Bolinha de status */
 .kanbanStatus {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
 }
 
@@ -472,34 +539,95 @@ label{
 .cardsKanban {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+    min-height: 150px;
+    padding: 6px;
+    border-radius: 6px;
 }
 
-/* Card */
-.cardsKanban {
+.cardsKanban.cdk-drop-list-dragging .cardKanban:not(.cdk-drag-animating) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.noCards {
+    text-align: center;
+    padding: 40px 10px;
+    color: #aaa;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+/* Card Kanban */
+.cardKanban {
     background: white;
-    border-radius: 8px;
-    padding: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    border-radius: 10px;
+    padding: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
+    cursor: grab;
+    transition: all 0.2s ease;
+    border-left: 4px solid #48855e;
+}
+
+.cardKanban:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+.cardKanban.cdk-drag-preview {
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    border-radius: 10px;
+}
+
+.cardKanban.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
 /* Topo do card */
 .titleCards {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.titleFundoCard {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.titleFundoCard p:first-child {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+}
+
+.titleFundoCard p:last-child {
+    font-size: 12px;
+    color: #999;
 }
 
 /* Corpo */
 .corpoKanban {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    font-size: 13px;
+    gap: 8px;
+    font-size: 12px;
+    color: #555;
+}
+
+.cnpj {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #263238;
+    margin-bottom: 4px;
+    padding: 4px 8px;
+    border-radius: 10px;
+    letter-spacing: 0.01em;
 }
 
 /* Linhas internas */
@@ -509,30 +637,61 @@ label{
 .sla {
     display: flex;
     align-items: center;
+    gap: 8px;
+    font-size: 12px;
 }
 
-.sla{
+.nomeFundo mat-icon,
+.responsavel mat-icon,
+.doc mat-icon,
+.sla mat-icon {
+    font-size: 14px;
+    color: #48855e;
+}
+
+.sla {
     flex-direction: row;
-    gap:5px;
+    gap: 6px;
+    color: #d9534f;
+    font-weight: 500;
 }
 
 /* Linha separadora */
 hr {
     border: none;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #f0f0f0;
+    margin: 4px 0;
 }
 
-.areaIconKanban{
-    width: 30px;
-    height: 30px;
+.areaIconKanban {
+    width: 36px;
+    height: 36px;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     border-radius: 8px;
-    background-color: rgb(168, 221, 187);
+    background: linear-gradient(135deg, #a8ddbb 0%, #7ec495 100%);
+    flex-shrink: 0;
 }
 
-.kanbanCardIcon{
-    font-size: 20px;
+.kanbanCardIcon {
+    font-size: 18px;
+    color: white !important;
+    font-weight: 500;
+}
+.sucesso {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  color: #166534;
+
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-weight: 600;
 }

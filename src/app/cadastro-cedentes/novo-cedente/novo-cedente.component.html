@@ -4,54 +4,58 @@
             <h3>Novo Cadastro de Cedente</h3>
             <p>Fundo: Fundo de Crédito Privado Gamma</p>
         </div>
-        <div class="buttoCancel" (click)="voltarCadastro()">
+        <div class="buttoCancel" (click)="cancelarCadastro()">
             <mat-icon>close</mat-icon>
             <button>Cancelar</button>
         </div>
     </div>
     <div class="containerProcess">
         <!-- passos processo -->
-        <div class="stepPross">
-            <div class="process">
-                <mat-icon>description</mat-icon>
+        <div class="stepPross" [ngClass]="stepsStatus[1]">
+            <div class="process" [ngClass]="stepsStatus[1]">
+                <mat-icon *ngIf="stepsStatus[1] !== 'completed'">description</mat-icon>
+                <mat-icon *ngIf="stepsStatus[1] === 'completed'">check</mat-icon>
             </div>
             <h5>Cadastro</h5>
         </div>
 
         <!-- line -->
-        <div class="line"></div>
+        <div class="line" [ngClass]="{ 'completed': stepsStatus[1] === 'completed' }"></div>
 
         <!-- passos processo -->
-        <div class="stepPross">
-            <div class="process">
-                <mat-icon>credit_card</mat-icon>
+        <div class="stepPross" [ngClass]="stepsStatus[2]">
+            <div class="process" [ngClass]="stepsStatus[2]">
+                <mat-icon *ngIf="stepsStatus[2] !== 'completed'">credit_card</mat-icon>
+                <mat-icon *ngIf="stepsStatus[2] === 'completed'">check</mat-icon>
             </div>
             <h5>Documentação</h5>
         </div>
 
         <!-- line -->
-        <div class="line"></div>
+        <div class="line" [ngClass]="{ 'completed': stepsStatus[2] === 'completed' }"></div>
 
         <!-- passos processo -->
-        <div class="stepPross">
-            <div class="process">
-                <mat-icon>groups</mat-icon>
+        <div class="stepPross" [ngClass]="stepsStatus[3]">
+            <div class="process" [ngClass]="stepsStatus[3]">
+                <mat-icon *ngIf="stepsStatus[3] !== 'completed'">groups</mat-icon>
+                <mat-icon *ngIf="stepsStatus[3] === 'completed'">check</mat-icon>
             </div>
             <h5>Contratos</h5>
         </div>
 
         <!-- line -->
-        <div class="line"></div>
+        <div class="line" [ngClass]="{ 'completed': stepsStatus[3] === 'completed' }"></div>
 
         <!-- passos processo -->
-        <div class="stepPross">
-            <div class="process">
-                <mat-icon>fact_check</mat-icon>
+        <div class="stepPross" [ngClass]="stepsStatus[4]">
+            <div class="process" [ngClass]="stepsStatus[4]">
+                <mat-icon *ngIf="stepsStatus[4] !== 'completed'">fact_check</mat-icon>
+                <mat-icon *ngIf="stepsStatus[4] === 'completed'">check</mat-icon>
             </div>
             <h5>Revisão</h5>
         </div>
     </div>
-    <div class="condicao" *ngIf="mostrarCadastro">
+    <div class="condicao" *ngIf="stepAtual === 1">
         <div class="informacao">
             <div class="iconNotificacao">
                 <mat-icon>priority_high</mat-icon>
@@ -63,50 +67,65 @@
             </p>
         </div>
         <!-- Container formulario Dados Cadastrais -->
-        <div class="containerDadosCadastrais">
+        <div class="containerDadosCadastrais" #dadosCadastraisSection>
             <div class="headInfoGerais">
                 <mat-icon>list</mat-icon>
                 <h5>Dados Cadastrais</h5>
             </div>
-            <form [formGroup]="form">
+            <form [formGroup]="formDadosCadastrais">
                 <div class="form-group">
-                    <label for="nome_razaoSocial">Nome/Razão Social*</label>
-                    <input type="text" formControlName="nome_razaoSocial">
+                    <label for="nome">Nome/Razão Social*</label>
+                    <input type="text" formControlName="nome">
                 </div>
 
-                <div class="form-group">
-                    <label for="cpf_cnpj">CPF/CNPJ*</label>
-                    <input type="text" formControlName="cpf_cnpj">
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'documento')">
+                    <label for="documento">CPF/CNPJ*</label>
+                    <input type="text" formControlName="documento" [mask]="documentoMask">
+                    <div class="error-message" *ngIf="isControlInvalid(formDadosCadastrais, 'documento')">
+                        {{ getControlErrorMessage(formDadosCadastrais, 'documento') }}
+                    </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'email')">
                     <label for="email">Email*</label>
                     <input type="text" formControlName="email">
+                    <div class="error-message" *ngIf="isControlInvalid(formDadosCadastrais, 'email')">
+                        {{ getControlErrorMessage(formDadosCadastrais, 'email') }}
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="faturamento">Faturamento Anual*</label>
-                    <input type="text" formControlName="faturamento_anual">
+                    <label for="faturamento_anual">Faturamento Anual*</label>
+                    <input type="text" formControlName="faturamento_anual" currencyMask>
                 </div>
 
                 <div class="form-group">
-                    <label for="assinantes">Mínimo de Assinantes</label>
-                    <input type="text" formControlName="assinantes">
+                    <label for="minimo_assinantes">Mínimo de Assinantes</label>
+                    <input type="number" formControlName="minimo_assinantes">
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'cep')">
                     <label for="cep">CEP*</label>
-                    <input type="text" formControlName="cep">
+                    <input type="text" formControlName="cep" [mask]="cepMask" (blur)="buscarCep()">
+                    <div class="error-message" *ngIf="isControlInvalid(formDadosCadastrais, 'cep')">
+                        {{ getControlErrorMessage(formDadosCadastrais, 'cep') }}
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="rua">Rua*</label>
-                    <input type="text" formControlName="rua">
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'logradouro')">
+                    <label for="logradouro">Rua*</label>
+                    <input type="text" formControlName="logradouro">
+                    <div class="error-message" *ngIf="isControlInvalid(formDadosCadastrais, 'logradouro')">
+                        {{ getControlErrorMessage(formDadosCadastrais, 'logradouro') }}
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="number">Número*</label>
-                    <input type="text" formControlName="number_end">
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'numero')">
+                    <label for="numero">Número*</label>
+                    <input type="text" formControlName="numero">
+                    <div class="error-message" *ngIf="isControlInvalid(formDadosCadastrais, 'numero')">
+                        {{ getControlErrorMessage(formDadosCadastrais, 'numero') }}
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -114,14 +133,17 @@
                     <input type="text" formControlName="complemento">
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'bairro')">
                     <label for="bairro">Bairro*</label>
                     <input type="text" formControlName="bairro">
+                    <div class="error-message" *ngIf="isControlInvalid(formDadosCadastrais, 'bairro')">
+                        {{ getControlErrorMessage(formDadosCadastrais, 'bairro') }}
+                    </div>
                 </div>
                 <div class="form-group">
-                    <input type="checkbox" formControlName="check_financeiro_nacional" id="">
+                    <input type="checkbox" formControlName="sistema_financeiro_nacional" id="">
                     <label for="check">Está no sistema financeiro nacional ?</label>
-                    <mat-icon>priority_high</mat-icon>
+                    
                 </div>
             </form>
         </div>
@@ -132,31 +154,50 @@
                 <mat-icon>maps</mat-icon>
                 <h5>Informações Gerais</h5>
             </div>
-            <form [formGroup]="form">
-                <div class="form-group">
-                    <label for="optionEstado">Estado (UF)*</label>
-                    <select formControlName="optionEstado">
-                        <option value="">Estados</option>
+            <form [formGroup]="formInfoGeral">
+                <div class="form-group" [class.invalid]="isControlInvalid(formInfoGeral, 'estado')">
+                    <label for="estado">Estado (UF)*</label>
+                    <select formControlName="estado">
+                        <option value="">Selecione um Estado</option> 
+                        <option *ngFor="let estado of estados" [value]="estado.sigla">
+                            {{ estado.nome }}
+                        </option>
                     </select>
+                    <div class="error-message" *ngIf="isControlInvalid(formInfoGeral, 'estado')">
+                        {{ getControlErrorMessage(formInfoGeral, 'estado') }}
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="tel">Telefone*</label>
-                    <input type="tel" formControlName="tel" id="">
+                <div class="form-group" [class.invalid]="isControlInvalid(formInfoGeral, 'telefone')">
+                    <label for="telefone">Telefone*</label>
+                    <input type="tel" formControlName="telefone" [mask]="telefoneMask" id="">
+                    <div class="error-message" *ngIf="isControlInvalid(formInfoGeral, 'telefone')">
+                        {{ getControlErrorMessage(formInfoGeral, 'telefone') }}
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="city">Cidade*</label>
-                    <input type="text" formControlName="city">
+                <div class="form-group" [class.invalid]="isControlInvalid(formInfoGeral, 'cidade')">
+                    <label for="cidade">Cidade*</label>
+                    <input type="text" formControlName="cidade">
+                    <div class="error-message" *ngIf="isControlInvalid(formInfoGeral, 'cidade')">
+                        {{ getControlErrorMessage(formInfoGeral, 'cidade') }}
+                    </div>
                 </div>
-                <div class="form-group">
+               <div class="form-group" [class.invalid]="isControlInvalid(formInfoGeral, 'pais')">
                     <label for="pais">País*</label>
-                    <select formControlName="pais" id="">
-                        <option value="">Paises</option>
+                    <select formControlName="pais">
+                      <option value="">Selecione um país</option>                   
+                      <option *ngFor="let pais of paises" [value]="pais.nome">
+                        {{ pais.nome }}
+                      </option>
                     </select>
+                    <div class="error-message" *ngIf="isControlInvalid(formInfoGeral, 'pais')">
+                        {{ getControlErrorMessage(formInfoGeral, 'pais') }}
+                    </div>
                 </div>
             </form>
         </div>
+
         <!-- container Relacionadas -->
-        <div class="partesRelacionadas">
+        <div class="partesRelacionadas" #partesRelacionadasSection>
             <div class="titleform">
                 <mat-icon>groups</mat-icon>
                 <h5>Partes Relacionadas</h5>
@@ -165,11 +206,18 @@
                 <mat-icon>add</mat-icon>
                 <p>ADICIONAR</p>
             </div>
-            <cb-partes-relacionadas *ngIf="mostrarFormPartesRelacionadas"></cb-partes-relacionadas>
+            <cb-partes-relacionadas *ngFor="let form of partesRelacionadasForms; let i = index"
+                [index]="i"
+                [itemId]="form.id"
+                [data]="form.data"
+                (onAdd)="adicionarParteRelacionada($event, i)"
+                (onRemove)="removerParteRelacionada(i)"
+                (onDuplicate)="duplicarAvalista($event)">
+            </cb-partes-relacionadas>
         </div>
 
         <!-- container Desembolso -->
-        <div class="contasDesembolso">
+        <div class="contasDesembolso" #contasDesembolsoSection>
             <div class="titleform">
                 <mat-icon>credit_card</mat-icon>
                 <h5>Contas de Desembolso</h5>
@@ -178,25 +226,54 @@
                 <mat-icon>add</mat-icon>
                 <p>ADICIONAR</p>
             </div>
-            <cb-contas-desembolso *ngIf="mostrarDesembolso"></cb-contas-desembolso>
+            <cb-contas-desembolso *ngFor="let form of contasDesembolsoForms; let i = index"
+                [index]="i"
+                [itemId]="form.id"
+                [data]="form.data"
+                (onAdd)="adicionarContaDesembolso($event, i)"
+                (onRemove)="removerContaDesembolso(i)">
+            </cb-contas-desembolso>
         </div>
 
         <!-- container avalista -->
-        <div class="avalista">
+        <div class="avalista" #avalistasSection>
             <div class="titleform">
                 <mat-icon>person</mat-icon>
-                <h5>avalistas</h5>
+                <h5>Avalistas</h5>
             </div>
-            <div class="btnAdd">
+            <div class="btnAdd" (click)="abrirAvalista()">
                 <mat-icon>add</mat-icon>
                 <p>ADICIONAR</p>
             </div>
+            <cb-avalista 
+                *ngFor="let form of avalistaForms; let i = index; trackBy: trackById"
+                [index]="i"
+                [itemId]="form.id"
+                [data]="form.data"
+                (onAdd)="adicionarAvalista($event, i)"
+                (onRemove)="removerAvalista(i)"
+                (onDuplicate)="duplicarAvalista(i)">
+            </cb-avalista>
         </div>
     </div>
-    <cb-documentacao-cedente *ngIf="mostrarDocumentacao"></cb-documentacao-cedente>
+
+    <!-- troca layout -->
+    <cb-documentacao-cedente *ngIf="stepAtual === 2"></cb-documentacao-cedente>
+    <cb-contratos *ngIf="stepAtual === 3"></cb-contratos>
+    <cb-revicao-final *ngIf="stepAtual === 4" (submitConcluido)="finalizarFluxoCadastro()" (editarEtapaSelecionada)="irParaEtapa($event)"></cb-revicao-final> 
+
     <div class="containerBTN">
-        <button (click)="voltarCadastro()">Voltar</button>
-        <button (click)="abrirCadastroDoc(); abrirContrato()">Próximo</button>
+        <button class="btnVoltar" *ngIf="stepAtual > 1" (click)="voltarStep()">
+            Voltar
+        </button>
+
+        <button class="btnSalvarRascunho" *ngIf="stepAtual !== totalSteps" (click)="salvarCadastro()" [disabled]="salvandoCadastro">
+            {{ isCadastroCompletoParaPendente() ? 'Salvar cadastro' : 'Salvar rascunho' }}
+        </button>
+
+        <button class="btnProximo" *ngIf="stepAtual !== totalSteps" (click)="proximoStep()">
+            Próximo
+        </button>
     </div>
 </div>
 

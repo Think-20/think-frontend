@@ -36,7 +36,10 @@ export class AuthService {
 
         return this.http
             .post(url, JSON.stringify(data))
-            .map(response => response.json())
+            .map(response => ({
+                status: response.status,
+                body: response.json()
+            }))
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000

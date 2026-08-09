@@ -965,8 +965,8 @@ export class ScheduleBottomSheet {
 
   getDescription(ti: TaskItem) {
     return ti.id == null
-      ? '[' + this.datePipe.transform(ti.date, 'dd/MM/yy') + ']'
-      : '[' + this.datePipe.transform(ti.date, 'dd/MM/yy') + ']'
+      ? '[' + this.datePipe.transform(ti.date, 'dd/MM/yyyy') + ']'
+      : '[' + this.datePipe.transform(ti.date, 'dd/MM/yyyy') + ']'
       + ' ' + ti.task.responsible.name
       + ' ' + this.taskService.jobDisplay(ti.task).toLowerCase()
       + ' ' + ti.task.job.job_type.description.toLowerCase()

@@ -12,8 +12,19 @@
         <h2>Selecione um Fundo</h2>
         <h3 class="subTitle">Para visualizar e gerenciar os cedentes, primeiro selecione o fundo que deseja consultar</h3>
         <div class="cards_fundos">
-            <p>aqui é um JS DO BANCO</p>
+        <div class="card_fundo" *ngFor="let fundo of fundosExistem" (click)="selecionarFundo(fundo)">
+            <div class="card_header">
+                <mat-icon>account_balance</mat-icon>
+            </div>
+            <div class="card_body">
+                <h4>{{ fundo.name }}</h4>
+                <p>Código: {{ fundo.code }}</p>
+            </div>
         </div>
+        <div class="sem_fundos" *ngIf="fundosExistem.length === 0">
+            <p>Nenhum fundo encontrado</p>
+        </div>
+    </div>
         <button class="btn_add_cedentes" type="button"  (click)="openModal()">
             <mat-icon>add</mat-icon>
             <p>Ativar Novo Fundo</p>

@@ -7,10 +7,13 @@
             <h4>Bem-Vindo</h4>
             <p id="subtitulo">Faça login para acessar o sistema</p>
         </div>
-        <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+            <div class="alert-message" *ngIf="showAlert" [@alert-message]="state">
+                {{ message }}
+            </div>
             <label>Usuário:</label>
             <div class="spaceInput">
-                <mat-icon matSuffix>person</mat-icon>
+                <mat-icon>person</mat-icon>
                 <input 
                     formControlName="email"
                     type="text"
@@ -21,9 +24,11 @@
                 <mat-icon>lock</mat-icon>
                 <input 
                     formControlName="password"
-                    type="password"
+                    [type]="showPassword ? 'text' : 'password'"
                     placeholder="Digite sua senha">
-                <mat-icon>visibility</mat-icon>
+                    <button type="button" class="eye-toggle" (click)="togglePasswordVisibility()" [attr.aria-label]="showPassword ? 'Ocultar senha' : 'Mostrar senha'">
+                    <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
             </div>
             <div class="checkbox">
                 <input type="checkbox">

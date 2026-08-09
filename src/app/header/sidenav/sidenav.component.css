@@ -142,9 +142,29 @@
 .department-container {
   display: flex !important;
   align-items: center;
-  justify-content: flex-start; /* esquerda */
+  justify-content: flex-start !important;
   gap: 10px;
   text-align: left !important;
+  width: 100%;
+}
+
+.department-container .mat-button-wrapper,
+.department-container .mat-button-wrapper > .department,
+.department-container .mat-button-wrapper > .nav-label {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  width: 100%;
+  text-align: left !important;
+}
+
+.department-container .mat-button-wrapper {
+  padding-left: 0 !important;
+}
+
+.department-container .nav-label {
+  display: inline-block;
 }
 
 #menu-sidenav {

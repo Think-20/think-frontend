@@ -1,0 +1,258 @@
+<div class="containerPrincipal">
+
+  <!-- HEADER -->
+  <div class="containerRevicaoFinal">
+    <div class="checkVerificacao">
+      <mat-icon>check_circle</mat-icon>
+      <span>Revisão Final do Cadastro</span>
+    </div>
+
+    <p>
+      Revise todas as informações antes de submeter o cadastro para aprovação.
+      Você ainda poderá editar voltando às etapas anteriores.
+    </p>
+  </div>
+
+  <!-- STATUS -->
+  <div class="containerStatus">
+
+    <div class="status">
+      <mat-icon>content_copy</mat-icon>
+      <div class="title">
+        <p>Cadastro</p>
+        <p>Completo</p>
+      </div>
+    </div>
+
+    <div class="status">
+      <mat-icon>groups</mat-icon>
+      <div class="title">
+        <p>Partes Relacionadas</p>
+        <p>{{ partesRelacionadas?.length || 0 }}</p>
+      </div>
+    </div>
+
+    <div class="status">
+      <mat-icon>description</mat-icon>
+      <div class="title">
+        <p>Contratos</p>
+        <p>{{ contratos.length || 0 }}</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DADOS CADASTRAIS -->
+  <div class="containerDadosCadastrais">
+
+    <div class="title">
+      <mat-icon>assignment</mat-icon>
+      <p>Dados Cadastrais</p>
+      <button (click)="editarEtapa(1, 'dados-cadastrais')">Editar</button>
+    </div>
+
+    <div class="conteudo">
+
+      <div class="infos">
+        <p>Nome/Razão Social</p>
+        <p>{{ dados.nome || '-' }}</p>
+      </div>
+
+      <div class="infos">
+        <p>CPF/CNPJ</p>
+        <p>{{ dados.documento || '-' }}</p>
+      </div>
+
+      <div class="infos">
+        <p>Email</p>
+        <p>{{ dados.email || '-' }}</p>
+      </div>
+
+      <div class="infos">
+        <p>Telefone</p>
+        <p>{{ dados.telefone || '-' }}</p>
+      </div>
+
+      <div class="infos">
+        <p>Faturamento Anual</p>
+        <p>{{ dados.faturamento_anual || '-' }}</p>
+      </div>
+
+      <div class="infos">
+        <p>Mínimo de Assinantes</p>
+        <p>{{ dados.minimo_assinantes || '-' }}</p>
+      </div>
+
+      <div class="infos">
+        <p>Sistema Financeiro Nacional</p>
+        <p>{{ dados.sistema_financeiro_nacional ? 'Faz parte' : 'Não faz parte' }}</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ENDEREÇO -->
+  <div class="containerEnderecos">
+
+    <div class="title">
+      <mat-icon>place</mat-icon>
+      <p>Endereço</p>
+      <button (click)="editarEtapa(1, 'dados-cadastrais')">Editar</button>
+    </div>
+
+    <div class="conteudo">
+
+      <div class="infos">
+        <p>CEP</p>
+        <p>{{ endereco.cep || '-' }}</p>
+      </div>
+
+      <div class="infos">
+        <p>Rua</p>
+        <p>{{ endereco.logradouro || endereco.rua || '-' }}</p>
+      </div>
+
+      <div class="infos">
+        <p>Número</p>
+        <p>{{ endereco.numero || '-' }}</p>
+      </div>
+
+      <div class="infos">
+        <p>Complemento</p>
+        <p>{{ endereco.complemento || '-' }}</p>
+      </div>
+
+      <div class="infos">
+        <p>Bairro</p>
+        <p>{{ endereco.bairro || '-' }}</p>
+      </div>
+
+      <div class="infos">
+        <p>Cidade / Estado</p>
+        <p>{{ endereco.cidade || '-' }}</p>
+      </div>
+
+      <div class="infos">
+        <p>País</p>
+        <p>{{ endereco.pais || 'Brasil' }}</p>
+      </div>
+
+    </div>
+  </div>
+    <!-- PARTES RELACIONADAS -->
+    <div class="containerSecoes" *ngIf="partesRelacionadas?.length">
+      <div class="title">
+        <mat-icon>groups</mat-icon>
+        <p>Partes Relacionadas</p>
+        <button (click)="editarEtapa(1, 'partes-relacionadas')">Editar</button>
+      </div>
+      <div class="item-card" *ngFor="let parte of partesRelacionadas; let i = index">
+        <div class="item-header">
+          <div class="item-index">{{ i + 1 }}</div>
+          <h4>Parte Relacionada {{ i + 1 }}</h4>
+        </div>
+        <div class="item-details">
+          <p><strong>Nome:</strong> {{ parte.nome || '-' }}</p>
+          <p><strong>CPF:</strong> {{ parte.cpf || '-' }}</p>
+          <p><strong>Email:</strong> {{ parte.email || '-' }}</p>
+          <p><strong>Telefone:</strong> {{ parte.telefone || '-' }}</p>
+          <p><strong>Tipo:</strong> {{ parte.tipo_parte_relacionada || '-' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTAS DE DESEMBOLSO -->
+    <div class="containerSecoes" *ngIf="contratos?.length">
+      <div class="title">
+        <mat-icon>account_balance</mat-icon>
+        <p>Contas de Desembolso</p>
+        <button (click)="editarEtapa(1, 'contas-desembolso')">Editar</button>
+      </div>
+      <div class="item-card" *ngFor="let conta of contratos; let i = index">
+        <div class="item-header">
+          <div class="item-index">{{ i + 1 }}</div>
+          <h4>Conta {{ i + 1 }}</h4>
+        </div>
+        <div class="item-details">
+          <p><strong>Banco:</strong> {{ conta.codigo_banco || '-' }}</p>
+          <p><strong>Agência:</strong> {{ conta.agencia || '-' }}</p>
+          <p><strong>Conta:</strong> {{ conta.numero_conta || '-' }}</p>
+          <p><strong>Tipo:</strong> {{ conta.tipo_conta || '-' }}</p>
+        </div>
+      </div>
+    </div>
+
+  <!-- AVALISTAS -->
+  <div class="containerSecoes" *ngIf="avalistas?.length">
+    <div class="title">
+      <mat-icon>person_add</mat-icon>
+      <p>Avalistas</p>
+      
+      <button (click)="editarEtapa(1, 'avalistas')">Editar</button>
+    </div>
+    <div class="item-card" *ngFor="let avalista of avalistas; let i = index">
+      <div class="item-header">
+        <div class="item-index">{{ i + 1 }}</div>
+        <h4>Avalista {{ i + 1 }}</h4>
+      </div>
+      <div class="item-details">
+        <p><strong>Nome:</strong> {{ avalista.nome || '-' }}</p>
+        <p><strong>CPF/CNPJ:</strong> {{ avalista.cpf || avalista.documento || 'Não informado' }}</p>
+        <p><strong>Email:</strong> {{ avalista.email || '-' }}</p>
+        <p><strong>Telefone:</strong> {{ avalista.telefone || '-' }}</p>
+        <p><strong>Profissão:</strong> {{ avalista.profissao || '-' }}</p>
+        <p><strong>Nacionalidade:</strong> {{ avalista.nacionalidade || 'Brasil' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCUMENTAÇÃO -->
+  <div class="containerDocumentacao">
+
+    <div class="title">
+      <mat-icon>description</mat-icon>
+      <p>Documentação</p>
+      <button (click)="editarEtapa(2, 'documentacao')">Editar</button>
+    </div>
+
+    <p>Documentos do Cedente</p>
+    <span>{{ documentosCedente.length || 0 }} documentos obrigatórios devem ser anexados</span>
+
+    <br /><br />
+
+    <p>Documentos dos Avalistas</p>
+    <span>
+      {{ documentosAvalistas.length || 0 }}
+      documentos obrigatórios por avalista
+      ({{ avalistas.length || 0 }} avalista)
+    </span>
+
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submeter">
+
+    <div id="iconContainer">
+      <mat-icon>check</mat-icon>
+    </div>
+
+    <div class="descricao">
+      <p>
+        Ao clicar em "Submeter Cadastro", todas as informações serão enviadas
+        para análise da equipe de compliance. O cadastro entrará em estado
+        "Pendente" e você receberá atualizações por email.
+      </p>
+
+      <button
+        id="enviar"
+        [disabled]="submitting"
+        (click)="submeterCadastro()"
+      >
+        <mat-icon>check_circle</mat-icon>
+        Submeter Cadastro para Aprovação
+      </button>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,133 @@
+<div class="container">
+
+    <!-- TABELA -->
+    <div class="tableWrapper">
+        <!-- Pesquisa -->
+        <div class="searchButton">
+            <form [formGroup]="formBusca" id="formSeach">
+                <div class="inputDiv">
+                    <input
+                        type="text"
+                        formControlName="pesquisa"
+                        id="inputSearch"
+                        placeholder="Buscar por razão social, CNPJ ou ID">
+
+                    <button type="submit" id="btnSearch">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="tableScrollWrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cedente</th>
+                        <th>CNPJ</th>
+                        <th>Contato</th>
+                        <th>Localização</th>
+                        <th>Responsável</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let cedente of cedentes.data">
+
+                    <!-- Cedente -->
+                    <td>
+                        <div class="cedenteInfo">
+                            <div class="avatar">
+                                <mat-icon>business</mat-icon>
+                            </div>
+                            <div>
+                                <p class="nome">
+                                    {{ cedente.nome || 'Sem nome' }}
+                                </p>
+                                <span>
+                                    ID:
+                                    {{ cedente.id }}
+                                </span>
+                            </div>
+                        </div>
+                    </td>
+
+                    <!-- Documento -->
+                    <td>
+                        {{ cedente.documento || '-' }}
+                    </td>
+
+                    <!-- Contato -->
+                    <td>
+                        <div class="contato">
+                            <mat-icon>call</mat-icon>
+                            <div>
+                                <p>
+                                    {{ cedente.telefone || '-' }}
+                                </p>
+                                <span>
+                                    {{ cedente.email || '-' }}
+                                </span>
+                            </div>
+                        </div>
+                    </td>
+
+                    <!-- Local -->
+                    <td>
+                        <div class="localizacao">
+                            <mat-icon>location_on</mat-icon>
+                            <span>
+                                {{ cedente.cidade || '-' }}
+                            </span>
+                        </div>
+                    </td>
+
+                    <!-- Responsável -->
+                    <td>
+                        {{
+                             cedente?.pessoas_vinculadas &&
+                             cedente.pessoas_vinculadas.length > 0
+                             ? cedente.pessoas_vinculadas[0].nome
+                             : '-'
+                            }}
+                    </td>
+
+                    <!-- Status -->
+                    <td>
+                        <span
+                            class="badgeStatus"
+                            [ngClass]="formatarStatus(cedente?.status)">
+                            {{ cedente.status || '-' }}
+                        </span>
+                    </td>
+
+                    <!-- Ações -->
+                    <td>
+                        <div class="acoes">
+                            <button type="button" class="action-button action-edit" aria-label="Editar cedente">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button type="button" class="action-button action-delete" aria-label="Excluir cedente">
+                                <mat-icon>delete_outline</mat-icon>
+                            </button>
+                            <button type="button" class="action-button action-more" aria-label="Mais opções">
+                                <mat-icon>more_horiz</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <!-- Estado vazio -->
+                <tr *ngIf="!cedentes.data.length">
+                    <td colspan="7">
+                        <div class="empty">
+                            <mat-icon>inventory_2</mat-icon>
+                            <p>Nenhum cedente encontrado</p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>

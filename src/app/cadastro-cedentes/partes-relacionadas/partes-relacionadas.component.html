@@ -1,146 +1,150 @@
 <div class="containerPrincipal">
     <div class="headContainer">
-        <div class="btnTitle">
-            <mat-icon>expand_less</mat-icon>
-            <p>Parte Relacionada 1</p>
+        <div class="btnTitle" (click)="toggleContainer()">
+            <mat-icon>{{ aberto ? 'expand_less' : 'expand_more' }}</mat-icon>
+            <p>Parte Relacionada {{ index + 1 }}</p>
         </div>
-        <button>Excluir</button>
+        <button type="button" (click)="remover()">Excluir</button>
     </div>
-    <div class="containerForm">
-        <h3>Dados Gerais</h3>
-        <form [formGroup]="form">
-            <div class="form-group">
-                <label for="nameCompleto">Nome Completo*</label>
-                <input type="text" formControlName="nameCompleto" id="">
-            </div>
-            <div class="form-group">
-                <label for="parteRelacionada">Tipo de Parte Relacionada*</label>
-                <select formControlName="parteRelacionada" id="">
-                    <option value="socio">Socio</option>
-                    <option value="adm">Administrador</option>
-                    <option value="procurador">Procurador</option>
-                    <option value="representante">Representante Legal</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="nacionalidade">Nacionalidade</label>
-                <select formControlName="nacionalidade" id="">
-                    <option value="">Brasil</option>
-                    <option value="">Uruguai</option>
-                    <option value="">Chile</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="text" formControlName="email" id="">
-            </div>
-            <div class="form-group">
-                <label for="cpf">CPF*</label>
-                <input type="text" formControlName="cpf" id="">
-            </div>
-            <div class="form-group">
-                <label for="telCadastro">Telefone</label>
-                <input type="tel" formControlName="telCadastro" id="">
-            </div>
-        </form>
-        <div class="containerCheck">
-            <div class="areaCheck">
-                <input type="checkbox" formControlName="beneficiarioCedente" id="">
-                <label for="beneficiarioCedente">É um beneficiário final direto do cedente?</label>
-                <mat-icon></mat-icon>
-            </div>
-            <div class="areaCheck">
-                <input type="checkbox" formControlName="assinanteOperacao" id="">
-                <label for="assinanteOperacao">É um assinante da operação?</label>
-                <mat-icon></mat-icon>
-            </div>
-            <div class="areaCheck">
-                <input type="checkbox" formControlName="assinante" id="">
-                <label for="assinante">É um assinante obrigatório?</label>
-                <mat-icon></mat-icon>
-            </div>
-        </div>
-        <div class="containerDadosComplementares">
-            <div class="headDadosComplementares">
-                <h3>Dados Complementares</h3><p>(Opicional)</p>
-            </div>
-            <form [formGroup]="form">
-                <div class="estadoCivil form-group">
-                    <label for="estadoCivil">Estado Civil</label>
-                    <select formControlName="estadoCivil" id="">
-                        <option value="solteiro">Solteiro(a)</option>
-                        <option value="casado">Casado(a)</option>
-                        <option value="divorciado">Divorciado(a)</option>
-                        <option value="viuvo">Viúvo(a)</option>
-                        <option value="uniaoEstavel">União Estável</option>
+    <div class="contentArea" [class.open]="aberto" [attr.aria-hidden]="!aberto">
+        <div class="containerForm">
+            <h3>Dados Gerais</h3>
+            <form [formGroup]="formParteRelacionadas">
+                <div class="form-group">
+                    <label for="nome">Nome Completo*</label>
+                    <input type="text" formControlName="nome" id="">
+                </div>
+                <div class="form-group">
+                    <label for="tipo_parte_relacionada">Tipo de Parte Relacionada*</label>
+                    <select formControlName="tipo_parte_relacionada" id="">
+                        <option value="1">Socio</option>
+                        <option value="2">Administrador</option>
+                        <option value="3">Procurador</option>
+                        <option value="4">Representante Legal</option>
                     </select>
                 </div>
-                <div class="regimeCasamento form-group">
-                    <label for="regimeCasamento">Regime de Casamento</label>
-                    <select formControlName="regimeCasamento" id="">
-                        <option value="cParcial">Comunhão Parcial de Bens</option>
-                        <option value="cUniversal">Comunhão Universal de Bens</option>
-                        <option value="tBens">Separação Total de Bens</option>
-                        <option value="pAquestos">Participação Final nos Aquestos</option>
-                    </select>
+                <div class="form-group">
+                    <label for="nacionalidade">Nacionalidade</label>
+                    <input type="text" formControlName="nacionalidade" id="">
                 </div>
-                <div class="proficao form-group">
-                    <label for="profissao">Profissão</label>
-                    <input type="text" formControlName="profissao" id="">
+                <div class="form-group" [class.invalid]="isControlInvalid(formParteRelacionadas, 'email')">
+                    <label for="email">Email</label>
+                    <input type="text" formControlName="email" id="">
+                    <div class="error-message" *ngIf="isControlInvalid(formParteRelacionadas, 'email')">
+                        {{ getControlErrorMessage(formParteRelacionadas, 'email') }}
+                    </div>
+                </div>
+                <div class="form-group" [class.invalid]="isControlInvalid(formParteRelacionadas, 'cpf')">
+                    <label for="cpf">CPF/CNPJ*</label>
+                    <input type="text" formControlName="cpf" [mask]="cpfMask" id="">
+                    <div class="error-message" *ngIf="isControlInvalid(formParteRelacionadas, 'cpf')">
+                        {{ getControlErrorMessage(formParteRelacionadas, 'cpf') }}
+                    </div>
+                </div>
+                <div class="form-group" [class.invalid]="isControlInvalid(formParteRelacionadas, 'telefone')">
+                    <label for="telefone">Telefone</label>
+                    <input type="tel" formControlName="telefone" [mask]="telefoneMask" id="">
+                    <div class="error-message" *ngIf="isControlInvalid(formParteRelacionadas, 'telefone')">
+                        {{ getControlErrorMessage(formParteRelacionadas, 'telefone') }}
+                    </div>
                 </div>
             </form>
-        </div>
-        <div class="containerEndereco">
-            <div class="headEndereco">
-                <h3>Endereço</h3><p>(Opicional)</p>
+            <div class="containerCheck">
+                <form  [formGroup]="formCheck">
+                    <div class="areaCheck">
+                        <input type="checkbox" formControlName="beneficiario_final" id="">
+                        <label for="beneficiario_final">É um beneficiário final direto do cedente?</label>
+                        <mat-icon></mat-icon>
+                    </div>
+                    <div class="areaCheck">
+                        <input type="checkbox" formControlName="assinante_operacao" id="">
+                        <label for="assinante_operacao">É um assinante da operação?</label>
+                        <mat-icon></mat-icon>
+                    </div>
+                    <div class="areaCheck">
+                        <input type="checkbox" formControlName="assinante_obrigatorio" id="">
+                        <label for="assinante_obrigatorio">É um assinante obrigatório?</label>
+                    </div>
+                </form>
             </div>
-            <form [formGroup]="form">
-                <div class="form-group">
-                    <label for="cep">CEP</label>
-                    <input type="text" formControlName="cep" id="">
+            <div class="containerDadosComplementares">
+                <div class="headDadosComplementares">
+                    <h3>Dados Complementares</h3><p>(Opcional)</p>
                 </div>
-                <div class="form-group">
-                    <label for="bairro">Bairro</label>
-                    <input type="text" formControlName="bairro" id="">
+                <form [formGroup]="formDadosComplementares">
+                    <div class="estadoCivil form-group">
+                        <label for="estado_civil">Estado Civil</label>
+                        <select formControlName="estado_civil" id="">
+                            <option value="Solteiro(a)">Solteiro(a)</option>
+                            <option value="Casado(a)">Casado(a)</option>
+                            <option value="Divorciado(a)">Divorciado(a)</option>
+                            <option value="Viúvo(a)">Viúvo(a)</option>
+                            <option value="União Estável">União Estável</option>
+                        </select>
+                    </div>
+                    <div class="regimeCasamento form-group">
+                        <label for="regime_casamento">Regime de Casamento</label>
+                        <select formControlName="regime_casamento" id="">
+                            <option value="Comunhão Parcial de Bens">Comunhão Parcial de Bens</option>
+                            <option value="Comunhão Universal de Bens">Comunhão Universal de Bens</option>
+                            <option value="Separação Total de Bens">Separação Total de Bens</option>
+                            <option value="Participação Final nos Aquestos">Participação Final nos Aquestos</option>
+                        </select>
+                    </div>
+                    <div class="proficao form-group">
+                        <label for="profissao">Profissão</label>
+                        <input type="text" formControlName="profissao" id="">
+                    </div>
+                </form>
+            </div>
+            <div class="containerEndereco">
+                <div class="headEndereco">
+                    <h3>Endereço</h3><p>(Opcional)</p>
                 </div>
-                <div class="form-group">
-                    <label for="rua">Rua</label>
-                    <input type="text" formControlName="rua" id="">
+                <form [formGroup]="formEndereco">
+                    <div class="form-group" [class.invalid]="isControlInvalid(formEndereco, 'cep')">
+                        <label for="cep">CEP</label>
+                        <input type="text" formControlName="cep" [mask]="cepMask" id="">
+                        <div class="error-message" *ngIf="isControlInvalid(formEndereco, 'cep')">
+                            {{ getControlErrorMessage(formEndereco, 'cep') }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="logradouro">Rua</label>
+                        <input type="text" formControlName="logradouro" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="numero">Número</label>
+                        <input type="text" formControlName="numero" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="bairro">Bairro</label>
+                        <input type="text" formControlName="bairro" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado(UF)</label>
+                        <input type="text" formControlName="estado" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="cidade">Cidade</label>
+                        <input type="text" formControlName="cidade" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="complemento">Complemento</label>
+                        <input type="text" formControlName="complemento" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="pais">País</label>
+                        <input type="text" formControlName="pais" id="">
+                    </div>
+                </form>
+            </div>
+            <div class="actionsRow">
+                <div class="btnDuplicar" (click)="duplicar()">
+                    <mat-icon>content_copy</mat-icon>
+                    <p>Duplicar Avalista</p>
                 </div>
-                <div class="form-group">
-                    <label for="uf">Estado(UF)</label>
-                    <select formControlName="uf" id="">
-                        <option value="">São Paulo</option>
-                        <option value="">Bahia</option>
-                        <option value="">Santa Catarina</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="localNumber">Número</label>
-                    <input type="text" formControlName="localNumber" id="">
-                </div>
-                <div class="form-group">
-                    <label for="city">Cidade</label>
-                    <input type="text" formControlName="city" id="">
-                </div>
-                <div class="form-group">
-                    <label for="complemento">Complemento</label>
-                    <input type="text" formControlName="complemento" id="">
-                </div>
-                <div class="form-group">
-                    <label for="">País</label>
-                    <select formControlName="pais" id="">
-                        <option value="">Brasil</option>
-                        <option value="">Chile</option>
-                        <option value="">EUA</option>
-                        <option value="">Canadar</option>
-                    </select>
-                </div>
-            </form>
-        </div>
-        <div class="btnDuplicar">
-            <mat-icon>content_copy</mat-icon>
-            <p>Duplicar Avalista</p>
+            </div>
         </div>
     </div>
 </div>

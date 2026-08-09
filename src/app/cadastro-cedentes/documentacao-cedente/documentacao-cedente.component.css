@@ -1,85 +1,219 @@
-/* Container principal */
+/* ===== CONTAINER PRINCIPAL ===== */
 .containerPrincipal {
     width: 100%;
     padding: 20px;
-    background-color: #f5f6f8;
+    background: linear-gradient(135deg, #f5f6f8 0%, #eef1f4 100%);
     display: flex;
     flex-direction: column;
     gap: 20px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
 }
 
-/* Sub container (box branca) */
+/* ===== SUB CONTAINER ===== */
 .subContainer {
     background-color: #fff;
-    border-radius: 10px;
-    padding: 20px;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Header */
+/* ===== NOTIFICAÇÃO SIMPLES ===== */
+.notificacaoPendencia {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    border-left: 4px solid #f59e0b;
+    border-radius: 10px;
+    margin-top: 16px;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+    color: #9a5b00;
+    font-size: 13px;
+}
+
+.notificacaoPendencia mat-icon {
+    color: #d97706;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+/* ===== HEADER ===== */
 .head {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #f0f0f0;
 }
 
 .head mat-icon {
     color: #00a884;
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
 }
 
 .head h5 {
     margin: 0;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
 }
 
 .head .destaque {
-    margin-left: 10px;
+    margin-left: 12px;
     font-size: 12px;
-    background-color: #eef1f4;
-    padding: 4px 10px;
-    border-radius: 12px;
+    background: linear-gradient(135deg, #eef1f4 0%, #e2e6ea 100%);
+    padding: 6px 12px;
+    border-radius: 16px;
     color: #555;
+    font-weight: 500;
 }
 
-/* Área de upload (cards) */
+/* ===== LISTA DE DOCUMENTOS ===== */
+.documentosList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sectionHint {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #ecfeff 0%, #f0fdf4 100%);
+    border: 1px solid #a7f3d0;
+    color: #0f766e;
+    font-size: 13px;
+}
+
+.sectionHint mat-icon {
+    color: #0d9488;
+}
+
+.blocoPessoas {
+    margin-top: 24px;
+}
+
+.headSecundario {
+    margin-bottom: 18px;
+}
+
+.grupoPessoa {
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 18px;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.grupoPessoa + .grupoPessoa {
+    margin-top: 16px;
+}
+
+.grupoPessoaHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.grupoPessoaHeader h6 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.grupoPessoaHeader p {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: #64748b;
+}
+
+/* ===== ÁREA DE UPLOAD ===== */
 .areaUpLoad {
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: #f9fafb;
-    border: 1px solid #e2e6ea;
-    border-radius: 10px;
-    padding: 12px 15px;
-    margin-bottom: 12px;
-    transition: 0.2s;
+    border: 1.5px solid #e2e6ea;
+    border-radius: 12px;
+    padding: 14px 16px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    gap: 12px;
 }
 
 .areaUpLoad:hover {
-    background-color: #f1f3f5;
+    background-color: #f5f7fa;
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 8px rgba(0, 168, 132, 0.08);
 }
 
-/* Ícone do documento */
-.areaUpLoad mat-icon {
+.areaUpLoad.comArquivo {
+    background: linear-gradient(135deg, #f0fdf4 0%, #f1f5f9 100%);
+    border-color: #86efac;
+}
+
+.areaUpLoad.comArquivo:hover {
+    border-color: #4ade80;
+    box-shadow: 0 4px 12px rgba(74, 222, 128, 0.15);
+}
+
+/* ===== ÍCONE DO DOCUMENTO ===== */
+.iconeDocumento {
     background-color: #e8f0fe;
     color: #3b82f6;
-    border-radius: 8px;
-    padding: 8px;
-    font-size: 20px;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 24px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
 }
 
-/* Tipo do documento */
+.iconeDocumento.iconeArquivo {
+    animation: slideInScale 0.4s ease-out;
+}
+
+@keyframes slideInScale {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ===== TIPO DO DOCUMENTO ===== */
 .typeDoc {
     flex: 1;
-    margin-left: 12px;
+    min-width: 200px;
 }
 
 .typeDoc h6 {
     margin: 0;
     font-size: 14px;
     font-weight: 600;
-    color: #333;
+    color: #1a1a1a;
 }
 
 .typeDoc .subTitle {
@@ -88,46 +222,210 @@
     color: #888;
 }
 
-/* Input file (escondido) */
+/* ===== INPUT FILE ===== */
 .areaUpLoad input[type="file"] {
     display: none;
 }
 
 .btnUpload {
-    background-color: #00a884;
+    background: linear-gradient(135deg, #00a884 0%, #008b6f 100%);
     color: #fff;
     font-size: 13px;
-    padding: 6px 14px;
+    font-weight: 600;
+    padding: 8px 16px;
     border-radius: 8px;
     cursor: pointer;
     white-space: nowrap;
+    transition: all 0.3s ease;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
 }
 
-.btnUpload input {
-    display: none;
+.btnUpload:hover {
+    background: linear-gradient(135deg, #008b6f 0%, #006b56 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 168, 132, 0.3);
 }
 
-/* Instrução upload */
+.btnUpload:active {
+    transform: translateY(0);
+}
+
+/* ===== INFORMAÇÃO DO ARQUIVO ===== */
+.infoArquivo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 200px;
+}
+
+.nomeArquivo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.iconeCheck {
+    color: #4ade80;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.nome {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+    word-break: break-word;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.metadados {
+    margin: 0;
+    font-size: 11px;
+    color: #888;
+}
+
+/* ===== AÇÕES ===== */
+.acoes {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.btnTrocar,
+.btnRemover {
+    background-color: #f0f0f0;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btnTrocar:hover {
+    background-color: #e3f2fd;
+    border-color: #2196f3;
+    color: #2196f3;
+}
+
+.btnRemover:hover {
+    background-color: #ffebee;
+    border-color: #f44336;
+    color: #f44336;
+}
+
+.btnTrocar mat-icon,
+.btnRemover mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* ===== MENSAGEM DE ERRO ===== */
+.mensagemErro {
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    right: 0;
+    background-color: #fee;
+    border: 1px solid #fcc;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #c33;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.mensagemErro mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+/* ===== INSTRUÇÃO DE UPLOAD ===== */
 .instrucaoUpload {
     display: flex;
     gap: 12px;
-    background-color: #f0f9ff; 
-    border: 1px solid #bae6fd;
+    background: linear-gradient(135deg, #f0f9ff 0%, #f0fdfa 100%);
+    border: 1.5px solid #bae6fd;
     padding: 16px;
-    border-radius: 8px;
-    margin-top: 10px;
+    border-radius: 10px;
+    margin-top: 20px;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .iconNotificacao {
     color: #0284c7;
     display: flex;
     align-items: flex-start;
+    flex-shrink: 0;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
 }
 
 #notificacaoTexto {
     font-size: 13px;
     color: #1e293b;
-    line-height: 1.5;
+    line-height: 1.6;
+    margin: 0;
+}
+
+#notificacaoTexto strong {
+    color: #0284c7;
+    display: block;
+    margin-bottom: 8px;
 }
 
 #notificacaoTexto ul {
@@ -137,4 +435,114 @@
 
 #notificacaoTexto li {
     margin-bottom: 5px;
+    color: #475569;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+    .containerPrincipal {
+        padding: 12px;
+    }
+
+    .subContainer {
+        padding: 16px;
+    }
+
+    .areaUpLoad {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .areaUpLoad:not(.comArquivo) {
+        flex-wrap: wrap;
+    }
+
+    .typeDoc {
+        flex: 1;
+        width: 100%;
+    }
+
+    .btnUpload {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .infoArquivo {
+        width: 100%;
+    }
+
+    .acoes {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .head .destaque {
+        margin-left: 0;
+    }
+
+    .nome {
+        max-width: 100%;
+    }
+
+    .instrucaoUpload {
+        flex-direction: column;
+    }
+
+    .grupoPessoa {
+        padding: 14px;
+    }
+
+    .grupoPessoaHeader {
+        align-items: flex-start;
+    }
+
+    .iconNotificacao {
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .containerPrincipal {
+        padding: 8px;
+    }
+
+    .subContainer {
+        padding: 12px;
+    }
+
+    .areaUpLoad {
+        padding: 12px;
+    }
+
+    .head h5 {
+        font-size: 16px;
+    }
+
+    .typeDoc h6 {
+        font-size: 13px;
+    }
+
+    .typeDoc .subTitle {
+        font-size: 11px;
+    }
+
+    .btnUpload {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    #notificacaoTexto {
+        font-size: 12px;
+    }
+
+    #notificacaoTexto ul {
+        padding-left: 16px;
+    }
 }

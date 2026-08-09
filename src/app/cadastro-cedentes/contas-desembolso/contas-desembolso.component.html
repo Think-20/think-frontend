@@ -1,37 +1,56 @@
 <div class="containerPrincipal">
     <div class="headContainer">
-        <div class="btnTitle">
-            <mat-icon>expand_less</mat-icon>
-            <p>Opção de Conta 1</p>
+        <div class="btnTitle" (click)="toggleContainer()">
+            <mat-icon>{{ aberto ? 'expand_less' : 'expand_more' }}</mat-icon>
+            <p>Conta de Desembolso {{ index + 1 }}</p>
         </div>
-        <button>Excluir</button>
+        <button type="button" (click)="remover()">Excluir</button>
     </div>
-    <div class="containerForm">
-        <form [formGroup]="form">
-            <div class="form-group">
-                <label for="tiposConta">Tipo de Conta*</label>
-                <select formControlName="tiposConta" id="">
-                    <option value="contaC">Conta Corrente</option>
-                    <option value="contaP">Conta Poupança</option>
-                    <option value="contaS">Conta Salário</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="codBanco">Código do Banco*</label>
-                <input type="text" formControlName="codBanco" id="">
-            </div>
-            <div class="form-group">
-                <label for="agenciaBanco">Agencia*</label>
-                <input type="text" formControlName="agenciaBanco" id="">
-            </div>
-            <div class="form-group">
-                <label for="numConta">Número e Dígito da Conta*</label>
-                <input type="text" formControlName="numConta" id="">
-            </div>
-            <div class="form-group">
-                <label for="description">Descrição</label>
-                <input type="text" formControlName="description" id="">
-            </div>
-        </form>
+    <div class="contentArea" [class.open]="aberto" [attr.aria-hidden]="!aberto">
+        <div class="containerForm">
+            <form [formGroup]="formularioDesembolso">
+                <div class="form-group">
+                    <label for="tipo_conta">Tipo de Conta*</label>
+                    <select formControlName="tipo_conta" id="">
+                        <option value="conta_corrente">Conta Corrente</option>
+                        <option value="conta_poupanca">Conta Poupança</option>
+                    </select>
+                </div>
+                <div class="form-group" [class.invalid]="formularioDesembolso.controls.codigo_banco.invalid && (formularioDesembolso.controls.codigo_banco.dirty || formularioDesembolso.controls.codigo_banco.touched)">
+                    <label for="codigo_banco">Código do Banco*</label>
+                    <input type="text" formControlName="codigo_banco" id="">
+                    <div class="error-message" *ngIf="formularioDesembolso.controls.codigo_banco.invalid && (formularioDesembolso.controls.codigo_banco.dirty || formularioDesembolso.controls.codigo_banco.touched)">
+                        Código do banco é obrigatório.
+                    </div>
+                </div>
+                <div class="form-group" [class.invalid]="formularioDesembolso.controls.agencia.invalid && (formularioDesembolso.controls.agencia.dirty || formularioDesembolso.controls.agencia.touched)">
+                    <label for="agencia">Agencia*</label>
+                    <input type="text" formControlName="agencia" id="">
+                    <div class="error-message" *ngIf="formularioDesembolso.controls.agencia.invalid && (formularioDesembolso.controls.agencia.dirty || formularioDesembolso.controls.agencia.touched)">
+                        Agência é obrigatória.
+                    </div>
+                </div>
+                <div class="form-group" [class.invalid]="formularioDesembolso.controls.numero_conta.invalid && (formularioDesembolso.controls.numero_conta.dirty || formularioDesembolso.controls.numero_conta.touched)">
+                    <label for="numero_conta">Número da Conta*</label>
+                    <input type="text" formControlName="numero_conta" maxlength="20" id="">
+                    <div class="error-message" *ngIf="formularioDesembolso.controls.numero_conta.invalid && (formularioDesembolso.controls.numero_conta.dirty || formularioDesembolso.controls.numero_conta.touched)">
+                        <span *ngIf="formularioDesembolso.controls.numero_conta.errors && formularioDesembolso.controls.numero_conta.errors.required">Número da conta é obrigatório.</span>
+                        <span *ngIf="formularioDesembolso.controls.numero_conta.errors && formularioDesembolso.controls.numero_conta.errors.validBankAccount">Número da conta inválido.</span>
+                    </div>
+                </div>
+                <div class="form-group" [class.invalid]="formularioDesembolso.controls.digito_conta.invalid && (formularioDesembolso.controls.digito_conta.dirty || formularioDesembolso.controls.digito_conta.touched)">
+                    <label for="digito_conta">Dígito da Conta*</label>
+                    <input type="text" formControlName="digito_conta" [mask]="'99'" id="">
+                    <div class="error-message" *ngIf="formularioDesembolso.controls.digito_conta.invalid && (formularioDesembolso.controls.digito_conta.dirty || formularioDesembolso.controls.digito_conta.touched)">
+                        <span *ngIf="formularioDesembolso.controls.digito_conta.errors && formularioDesembolso.controls.digito_conta.errors.required">Dígito da conta é obrigatório.</span>
+                        <span *ngIf="formularioDesembolso.controls.digito_conta.errors && formularioDesembolso.controls.digito_conta.errors.validBankAccountDigit">Dígito da conta inválido.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <input type="text" formControlName="descricao" id="">
+                </div>
+            </form>
+        </div>
     </div>
 </div>

@@ -1,0 +1,147 @@
+<div class="containerPrincipal">
+    <div class="headContainer">
+        <div class="btnTitle" (click)="toggleContainer()">
+            <mat-icon>
+                {{ aberto ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
+            <p>Avalista {{ index + 1 }}</p>
+        </div>
+        <div class="headActions">
+            <button type="button" class="removeButton" (click)="remover()">Excluir</button>
+        </div>
+    </div>
+    <div class="contentArea" [class.open]="aberto" [attr.aria-hidden]="!aberto">
+        <div class="containerForm">
+            <h3>Dados Cadastrais</h3>
+            <form [formGroup]="formDadosCadastraisAvalista">
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastraisAvalista, 'cpf')">
+                    <label for="cpf">CPF/CNPJ*</label>
+                    <input type="text" formControlName="cpf" [mask]="cpfMask" id="">
+                    <div class="error-message" *ngIf="isControlInvalid(formDadosCadastraisAvalista, 'cpf')">
+                        {{ getControlErrorMessage(formDadosCadastraisAvalista, 'cpf') }}
+                    </div>
+                </div>
+
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastraisAvalista, 'nome')">
+                    <label for="nome">Nome Completo*</label>
+                    <input type="text" formControlName="nome" id="">
+                    <div class="error-message" *ngIf="isControlInvalid(formDadosCadastraisAvalista, 'nome')">
+                        {{ getControlErrorMessage(formDadosCadastraisAvalista, 'nome') }}
+                    </div>
+                </div>
+
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastraisAvalista, 'telefone')">
+                    <label for="telefone">Telefone</label>
+                    <input type="tel" formControlName="telefone" [mask]="telefoneMask" id="">
+                    <div class="error-message" *ngIf="isControlInvalid(formDadosCadastraisAvalista, 'telefone')">
+                        {{ getControlErrorMessage(formDadosCadastraisAvalista, 'telefone') }}
+                    </div>
+                </div>
+
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastraisAvalista, 'email')">
+                    <label for="email">Email</label>
+                    <input type="text" formControlName="email" id="">
+                    <div class="error-message" *ngIf="isControlInvalid(formDadosCadastraisAvalista, 'email')">
+                        {{ getControlErrorMessage(formDadosCadastraisAvalista, 'email') }}
+                    </div>
+                </div>
+            </form>
+        
+            <div class="containerDadosComplementares">
+                <div class="headDadosComplementaresAvalista">
+                    <h3>Dados Complementares</h3><p>(Opcional)</p>
+                </div>
+
+                <form [formGroup]="formDadosComplementaresAvalista">
+                    <div class="form-group">
+                        <label for="nacionalidade">Nacionalidade</label>
+                        <input type="text" formControlName="nacionalidade" id="">
+                    </div>
+                     <div class="estadoCivil form-group">
+                        <label for="estado_civil">Estado Civil</label>
+                        <select formControlName="estado_civil" id="">
+                            <option value="Solteiro(a)">Solteiro(a)</option>
+                            <option value="Casado(a)">Casado(a)</option>
+                            <option value="Divorciado(a)">Divorciado(a)</option>
+                            <option value="Viúvo(a)">Viúvo(a)</option>
+                            <option value="União Estável">União Estável</option>
+                        </select>
+                    </div>
+                    <div class="regimeCasamento form-group">
+                        <label for="regime_casamento">Regime de Casamento</label>
+                        <select formControlName="regime_casamento" id="">
+                            <option value="Comunhão Parcial de Bens">Comunhão Parcial de Bens</option>
+                            <option value="Comunhão Universal de Bens">Comunhão Universal de Bens</option>
+                            <option value="Separação Total de Bens">Separação Total de Bens</option>
+                            <option value="Participação Final nos Aquestos">Participação Final nos Aquestos</option>
+                        </select>
+                    </div>
+                    <div class="proficao form-group">
+                        <label for="profissao">Profissão</label>
+                        <input type="text" formControlName="profissao" id="">
+                    </div>
+                </form>
+            </div>
+
+            <div class="containerCheck">
+                <form [formGroup]="formCheck">
+                    <div class="areaCheck">
+                        <input type="checkbox" formControlName="beneficiario_final" id="">
+                        <label for="beneficiario_final">É um beneficiário final?</label>
+                    </div>
+                    <div class="areaCheck">
+                        <input type="checkbox" formControlName="assinante_operacao" id="">
+                        <label for="assinante_operacao">É um assinante da operação?</label>
+                    </div>
+                    <div class="areaCheck">
+                        <input type="checkbox" formControlName="assinante_obrigatorio" id="">
+                        <label for="assinante_obrigatorio">É um assinante obrigatório?</label>
+                    </div>
+                </form>
+            </div>
+
+            <div class="containerEndereco">
+                <div class="headEndereco">
+                    <h3>Endereço</h3><p>(Opcional)</p>
+                </div>
+                <form [formGroup]="formEnderecoAvalista">
+                    <div class="form-group" [class.invalid]="isControlInvalid(formEnderecoAvalista, 'cep')">
+                        <label for="cep">CEP</label>
+                        <input type="text" formControlName="cep" [mask]="cepMask" (blur)="buscarCep()">
+                        <div class="error-message" *ngIf="isControlInvalid(formEnderecoAvalista, 'cep')">
+                            {{ getControlErrorMessage(formEnderecoAvalista, 'cep') }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="logradouro">Rua</label>
+                        <input type="text" formControlName="logradouro" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="numero">Número</label>
+                        <input type="text" formControlName="numero" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="bairro">Bairro</label>
+                        <input type="text" formControlName="bairro" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado(UF)</label>
+                        <input type="text" formControlName="estado" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="cidade">Cidade</label>
+                        <input type="text" formControlName="cidade" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="complemento">Complemento</label>
+                        <input type="text" formControlName="complemento" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="pais">País</label>
+                        <input type="text" formControlName="pais" id="">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1647,3 +1647,14 @@ form{
 #btnCancelar:hover {
     background-color: #d1d5db;
 }
+
+.avisoSemPermissaoAvaliacao {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #fedf89;
+  background: #fff9e8;
+  color: #b54708;
+  font-size: 13px;
+  font-weight: 500;
+}

@@ -128,11 +128,18 @@
             <div class="fieldSelect" id="selectConsultoria">
                 <select formControlName="consultoria" id="fieldConsultorias">
                     <option value="">Todas Consultorias</option>
+                    <option *ngFor="let consultoria of consultoriasDisponiveis" [value]="consultoria">
+                        {{ consultoria }}
+                    </option>
                 </select>
             </div>
             <div class="fieldSelect" id="selectResponsavel">
                 <select formControlName="responsavel" id="fieldResponsaveis">
                     <option value="">Todos responsáveis</option>
+                    <option *ngIf="exibirOpcaoSemResponsavel" [value]="filtroSemResponsavelValor">Sem responsável</option>
+                    <option *ngFor="let responsavel of responsaveisDisponiveis" [value]="responsavel">
+                        {{ responsavel }}
+                    </option>
                 </select>
             </div>
             <div class="fieldSelect" id="fieldCheck" [formGroup]="formFiltroSla">
@@ -146,6 +153,11 @@
             <div id="qtdCadastro">
                 <p>{{ totalCadastrosFiltrados }} Cadastro(s)</p>
             </div>
+        </div>
+
+        <div class="filtroAviso" *ngIf="mensagemFiltroRelacionamento">
+            <mat-icon>info</mat-icon>
+            <p>{{ mensagemFiltroRelacionamento }}</p>
         </div>
         <!-- div status -->
         <div class="status">

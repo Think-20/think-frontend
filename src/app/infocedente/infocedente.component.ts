@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { AuthService } from '../login/auth.service';
 
 type InfoCedenteTab = 'informacoes' | 'documentacao' | 'historico' | 'avaliacao';
 
@@ -16,12 +17,51 @@ export class InfocedenteComponent {
 
   selectedTab: InfoCedenteTab = 'informacoes';
 
+  constructor(private auth: AuthService) {}
+
+  get podeEditarCedente(): boolean {
+    const roleId = this.obterCedenteRoleIdUsuarioLogado();
+    return roleId === null || roleId === 2 || roleId === 3;
+  }
+
   voltar() {
     this.onVoltar.emit();
   }
 
   editar() {
     this.onEditar.emit();
+  }
+
+  private obterCedenteRoleIdUsuarioLogado(): number | null {
+    const usuario: any = this.auth.currentUser();
+
+    const roleTopLevel = this.normalizarRoleId(
+      usuario && usuario.cedente_role
+    );
+    const roleEmployee = this.normalizarRoleId(
+      usuario && usuario.employee && usuario.employee.cedente_role
+    );
+    const roleRaw = roleTopLevel != null ? roleTopLevel : roleEmployee;
+
+    if (roleRaw === null || roleRaw === undefined) {
+      return null;
+    }
+
+    const roleId = Number(roleRaw);
+    return Number.isNaN(roleId) ? null : roleId;
+  }
+
+  private normalizarRoleId(role: any): number | null {
+    if (role === null || role === undefined || role === '') {
+      return null;
+    }
+
+    const valorBruto = role && typeof role === 'object' && role.id !== undefined
+      ? role.id
+      : role;
+
+    const roleId = Number(valorBruto);
+    return Number.isNaN(roleId) ? null : roleId;
   }
 
   selectTab(tab: InfoCedenteTab) {
@@ -148,6 +188,41 @@ export class InfocedenteComponent {
 
   get inconsistencias(): any[] {
     return this.obterLista(this.cedente && this.cedente.inconsistencias);
+  }
+
+  get inconsistenciasComSerpro(): any[] {
+    return this.inconsistencias.filter((item: any) => {
+      const valor = item && item.valor_serpro;
+      return valor !== null && valor !== undefined && String(valor).trim() !== '';
+    });
+  }
+
+  getRotuloInconsistencia(campo: string): string {
+    const valor = String(campo || '').trim().toLowerCase();
+
+    const rotulos: { [key: string]: string } = {
+      'nome': 'Razão Social na Receita Federal',
+      'email': 'Email na Base Oficial',
+      'telefone': 'Telefone na Base Oficial',
+      'endereco.logradouro': 'Logradouro na Base Oficial',
+      'endereco.numero': 'Número na Base Oficial',
+      'endereco.complemento': 'Complemento na Base Oficial',
+      'endereco.bairro': 'Bairro na Base Oficial',
+      'endereco.cidade': 'Cidade na Base Oficial',
+      'endereco.estado': 'Estado na Base Oficial',
+      'partes_relacionadas[0].nome': 'Parte Relacionada (Nome) na Base Oficial',
+      'socios[0].nome': 'Sócio (Nome) na Base Oficial'
+    };
+
+    if (rotulos[valor]) {
+      return rotulos[valor];
+    }
+
+    return `Valor oficial para ${campo}`;
+  }
+
+  getValorSerproInconsistencia(item: any): string {
+    return this.formatarValor(item && item.valor_serpro);
   }
 
   isCampoInconsistente(campo: string): boolean {

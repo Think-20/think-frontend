@@ -257,6 +257,25 @@ export class DocCedenteInfoComponent implements OnInit {
     anchor.click();
   }
 
+  baixarTodosDocumentos(): void {
+    const cedenteId = this.obterCedenteId();
+    const fundId = this.obterFundId();
+
+    if (!cedenteId) {
+      console.warn('ID do cedente não encontrado para download de todos os documentos.');
+      return;
+    }
+
+    if (!fundId) {
+      console.warn('fund_id não encontrado para download de todos os documentos.');
+      return;
+    }
+
+    const queryAccess = this.auth.queryAccess();
+    const downloadAllUrl = `${environment.api}/cedentes/arquivos/download-all/${cedenteId}?${queryAccess}&fund_id=${encodeURIComponent(fundId)}`;
+    window.open(downloadAllUrl, '_blank');
+  }
+
   uploadDocumento(documento: DocumentoCedenteView): void {
     console.info('Upload pendente de implementação para o documento:', documento);
   }
@@ -290,6 +309,20 @@ export class DocCedenteInfoComponent implements OnInit {
       ...item,
       aberto: item.id === documento.id
     }));
+  }
+
+  private obterCedenteId(): string | null {
+    const id = this.cedente && (
+      this.cedente.id ||
+      this.cedente.cedente_id ||
+      this.cedente.cedenteId
+    );
+
+    if (id === null || id === undefined || id === '') {
+      return null;
+    }
+
+    return String(id);
   }
 
   private obterFundId(documento?: DocumentoCedenteView): string | null {

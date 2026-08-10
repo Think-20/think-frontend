@@ -388,6 +388,30 @@ mat-icon{
     flex-wrap: wrap;
 }
 
+.filtroAviso {
+    margin-top: 8px;
+    padding: 10px 12px;
+    border: 1px solid #f6d68a;
+    background: #fff8e7;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #8a5a00;
+}
+
+.filtroAviso mat-icon {
+    color: #c07a00;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+.filtroAviso p {
+    font-size: 13px;
+    margin: 0;
+}
+
 /* Icone filtro */
 #iconFiltro{
     display: flex;

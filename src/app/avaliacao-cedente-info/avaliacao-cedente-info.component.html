@@ -5,7 +5,7 @@
             <mat-icon>person</mat-icon>
             <p>Ações de Avaliação</p>
         </div>
-        <div class="botoesAcaoGrid">
+        <div class="botoesAcaoGrid" *ngIf="podeVerAcoesAvaliacao; else semPermissaoAvaliacao">
             <div class="btnAction aprovarCadastro" [class.active]="isAcaoSelecionada('aprovar')" (click)="selecionarAcao('aprovar')">
                 <mat-icon>check_circle</mat-icon>
                 <p>Aprovar Cadastro</p>
@@ -20,21 +20,27 @@
             </div>
         </div>
 
-        <div class="containerFormAcao">
+        <ng-template #semPermissaoAvaliacao>
+            <div class="avisoSemPermissaoAvaliacao">
+                Este usuário não possui permissão para Aprovar Cadastro, Solicitar Correções e Rejeitar Cadastro.
+            </div>
+        </ng-template>
+
+        <div class="containerFormAcao" *ngIf="podeVerAcoesAvaliacao">
             <div class="formAprovarCadastro" *ngIf="isAcaoSelecionada('aprovar')">
                 <div class="head">
                     <mat-icon>check</mat-icon>
                     <p>Informações da Aprovação</p>
                 </div>
                 <div class="containerForumlarioAprovado">
-                    <form [formGroup]="formAprovacao">
+                    <form [formGroup]="formAprovacao" (ngSubmit)="enviarAprovacao()">
                         <div class="formGroup">
                             <label for="limiteAprovado">Limite Aprovado*</label>
                             <input type="text" formControlName="limiteAprovado" name="limiteAprovado" id="limiteAprovado" placeholder="R$0,00" currencyMask>
                         </div>
                         <div class="formGroup">
                             <label for="prazoAtualizacao">Prazo de Atualização Cadastral *</label>
-                            <select name="prazoAtualizacao" id="prazoAtualizacao">
+                            <select formControlName="prazoAtualizacao" name="prazoAtualizacao" id="prazoAtualizacao">
                                 <option value="" selected disabled>Selecione...</option>
                                 <option value="6">6 meses</option>
                                 <option value="12">12 meses</option>
@@ -43,16 +49,16 @@
                         </div>
                         <div class="formGroup">
                             <label for="observacao">observações (opcional)</label>
-                            <textarea name="observacao" id="observacao" placeholder="Digite aqui as observações sobre a aprovação do cadastro..."></textarea>
+                            <textarea formControlName="observacao" name="observacao" id="observacao" placeholder="Digite aqui as observações sobre a aprovação do cadastro..."></textarea>
                         </div>
                         <div class="containerBtns">
                             <div id="btnEnviar">
                                 <mat-icon>check</mat-icon>
-                                <button class="btn">Enviar</button>
+                                <button class="btn" type="submit" [disabled]="submitting">Enviar</button>
                             </div>
                             <div id="btnCancelar">
-                                
-                                <button class="btn">Cancelar</button>
+
+                                <button class="btn" type="button" (click)="selecionarAcao(null)">Cancelar</button>
                             </div>
                         </div>
                     </form>
@@ -65,17 +71,17 @@
                     <p>Descreva as correções necessárias</p>
                 </div>
                 <div class="containerForumlarioCorrecao">
-                    <form [formGroup]="formCorrecao">
+                    <form [formGroup]="formCorrecao" (ngSubmit)="enviarCorrecao()">
                         <div class="formGroup">
-                            <textarea name="observacao" id="observacao" placeholder="Digite aqui as correções que devem seremrealizadas pelo cedente..."></textarea>
+                            <textarea formControlName="observacao" name="observacao" id="observacao" placeholder="Digite aqui as correções que devem seremrealizadas pelo cedente..."></textarea>
                         </div>
                         <div class="containerBtns">
                             <div id="btnEnviar">
                                 <mat-icon>check</mat-icon>
-                                <button class="btn">Enviar</button>
+                                <button class="btn" type="submit" [disabled]="submitting">Enviar</button>
                             </div>
                             <div id="btnCancelar">
-                                <button class="btn">Cancelar</button>
+                                <button class="btn" type="button" (click)="selecionarAcao(null)">Cancelar</button>
                             </div>
                         </div>
                     </form>
@@ -87,17 +93,17 @@
                     <mat-icon>cancel</mat-icon>
                     <p>Descreva os motivos da reprovação</p>
                 </div>
-                <form [formGroup]="formRejeicao">
+                <form [formGroup]="formRejeicao" (ngSubmit)="enviarRejeicao()">
                     <div class="formGroup">
-                        <textarea name="observacao" id="observacao" placeholder="Digite aqui os motivos que levaram à reprovação do cadastro..."></textarea>
+                        <textarea formControlName="observacao" name="observacao" id="observacao" placeholder="Digite aqui os motivos que levaram à reprovação do cadastro..."></textarea>
                     </div>
                     <div class="containerBtns">
-                        <div id="btnEnviar">
+                        <div id="btnEnviar" (click)="enviarRejeicao()">
                             <mat-icon>check</mat-icon>
-                            <button class="btn">Enviar</button>
+                            <button class="btn" type="button" [disabled]="submitting">Enviar</button>
                         </div>
                         <div id="btnCancelar">
-                            <button class="btn">Cancelar</button>
+                            <button class="btn" type="button" (click)="selecionarAcao(null)">Cancelar</button>
                         </div>
                     </div>
                 </form>
@@ -195,7 +201,7 @@
                 </div>
                 <span class="badgeCriticidade yellow">MÉDIA CRITICIDADE</span>
             </div>
-            <p class="alertaDescricao">A Razão Social informada não coincide com o registro da Receita Federal.</p>
+            
             
             <div class="gridCamposAlerta">
                 <div class="campoAlerta">

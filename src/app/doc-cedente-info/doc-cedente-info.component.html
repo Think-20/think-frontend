@@ -1,8 +1,15 @@
 <div class="cardInfo">
     <div class="headDoc">
-        <mat-icon>description</mat-icon>
-        <h1>Documentos do Cedente</h1>
-        <span>{{ totalDocumentos }} {{ totalDocumentos === 1 ? 'documento' : 'documentos' }}</span>
+        <div class="headDocLeft">
+            <mat-icon>description</mat-icon>
+            <span class="headDocTitle">Documentos do Cedente</span>
+            <span class="headDocCount">{{ totalDocumentos }} {{ totalDocumentos === 1 ? 'documento' : 'documentos' }}</span>
+        </div>
+
+        <button type="button" class="btnAction btnDownload headDocDownloadBtn" (click)="baixarTodosDocumentos()">
+            <mat-icon>description</mat-icon>
+            Baixar
+        </button>
     </div>
 
     <div class="emptyState" *ngIf="!documentosCedente.length">
@@ -28,9 +35,6 @@
                 </span>
                 <button type="button" class="btnVisualizar" (click)="visualizarDocumento(documento)">
                     Visualizar
-                </button>
-                <button type="button" class="btnVisualizar" (click)="baixarDocumento(documento)">
-                    Baixar
                 </button>
             </div>
         </div>

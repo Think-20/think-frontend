@@ -18,7 +18,7 @@
     </div>
 
     <div class="buttons">
-      <button class="btn-edit" type="button" (click)="editar()">
+            <button class="btn-edit" type="button" *ngIf="podeEditarCedente" (click)="editar()">
         Editar
       </button>
 
@@ -50,25 +50,21 @@
                 <h3>Dados Cadastrais</h3>
             </div>
 
-            <div class="inconsistencia">
+            <div class="inconsistencia" *ngIf="inconsistenciasComSerpro.length">
                 <mat-icon class="incosistenciaIcon">warning_amber</mat-icon>
                 <span>Inconsistência Detectada</span>
             </div>
         </div>
 
-        <div class="alerta">
+        <div class="alerta" *ngIf="inconsistenciasComSerpro.length">
             <div class="alertaTitulo">
                 <mat-icon class="incosistenciaIcon">warning_amber</mat-icon>
-                Divergência na Razão Social
+                Inconsistências encontradas na validação oficial
             </div>
 
-            <p>
-                A Razão Social informada não coincide com o registro da Receita Federal para o CNPJ fornecido.
-            </p>
-
-            <div class="receitaFederal">
-                <label>Razão Social na Receita Federal:</label>
-                <strong>{{ razaoSocial }}</strong>
+            <div class="receitaFederal" *ngFor="let item of inconsistenciasComSerpro">
+                <label>{{ getRotuloInconsistencia(item?.campo_inconsistente) }}:</label>
+                <strong>{{ getValorSerproInconsistencia(item) }}</strong>
             </div>
         </div>
 

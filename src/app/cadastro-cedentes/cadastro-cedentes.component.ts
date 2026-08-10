@@ -16,6 +16,8 @@ import { ListCedentesComponent } from './list-cedentes/list-cedentes.component';
   styleUrls: ['./cadastro-cedentes.component.css']
 })
 export class CadastroCedentesComponent implements OnInit {
+  readonly filtroSemResponsavelValor = '__SEM_RESPONSAVEL__';
+
   fundo: any;
   cedentes: any;
   fund_id: string | null = null;
@@ -32,6 +34,10 @@ export class CadastroCedentesComponent implements OnInit {
   vencidos: any[] = [];
   cancelados: any[] = [];
   totalCadastrosFiltrados = 0;
+  consultoriasDisponiveis: string[] = [];
+  responsaveisDisponiveis: string[] = [];
+  exibirOpcaoSemResponsavel = false;
+  mensagemFiltroRelacionamento = '';
 
   // formulario
   formBusca!: FormGroup;
@@ -402,8 +408,10 @@ export class CadastroCedentesComponent implements OnInit {
     this.cancelados = [];
 
     const cedentesBase = this.obterCedentesBase();
+    this.atualizarOpcoesFiltros(cedentesBase);
     const cedentesFiltrados = this.aplicarFiltros(cedentesBase);
     this.totalCadastrosFiltrados = cedentesFiltrados.length;
+    this.atualizarMensagemFiltroRelacionamento();
 
     cedentesFiltrados.forEach((cedente: any) => {
       const normalizedStatus = String(cedente.status || '')
@@ -441,6 +449,30 @@ export class CadastroCedentesComponent implements OnInit {
     this.updateKanbanColumns();
   }
 
+  private atualizarOpcoesFiltros(cedentesBase: any[]): void {
+    const consultorias = new Map<string, string>();
+    const responsaveis = new Map<string, string>();
+    this.exibirOpcaoSemResponsavel = false;
+
+    cedentesBase.forEach((cedente: any) => {
+      const consultoria = this.extrairConsultoriaCedente(cedente);
+      const responsaveisCedente = this.extrairResponsaveisCedente(cedente);
+
+      this.adicionarOpcaoUnica(consultorias, consultoria);
+
+      responsaveisCedente.forEach((nome: string) => {
+        this.adicionarOpcaoUnica(responsaveis, nome);
+      });
+
+      if (!responsaveisCedente.length) {
+        this.exibirOpcaoSemResponsavel = true;
+      }
+    });
+
+    this.consultoriasDisponiveis = Array.from(consultorias.values()).sort((a: string, b: string) => a.localeCompare(b, 'pt-BR'));
+    this.responsaveisDisponiveis = Array.from(responsaveis.values()).sort((a: string, b: string) => a.localeCompare(b, 'pt-BR'));
+  }
+
   private obterCedentesBase(): any[] {
     if (this.cedentes && Array.isArray(this.cedentes.data)) {
       return this.cedentes.data;
@@ -454,9 +486,11 @@ export class CadastroCedentesComponent implements OnInit {
   }
 
   private aplicarFiltros(cedentesBase: any[]): any[] {
-    const pesquisa = this.getValorCampo('pesquisa').toLowerCase();
-    const consultoria = this.getValorCampo('consultoria').toLowerCase();
-    const responsavel = this.getValorCampo('responsavel').toLowerCase();
+    const pesquisa = this.normalizarTextoFiltro(this.getValorCampo('pesquisa'));
+    const consultoria = this.normalizarTextoFiltro(this.getValorCampo('consultoria'));
+    const responsavelSelecionado = this.getValorCampo('responsavel');
+    const responsavel = this.normalizarTextoFiltro(responsavelSelecionado);
+    const filtrarSemResponsavel = responsavelSelecionado === this.filtroSemResponsavelValor;
     const slaVencido = this.getValorSlaVencido();
 
     return cedentesBase.filter((cedente: any) => {
@@ -466,24 +500,134 @@ export class CadastroCedentesComponent implements OnInit {
         cedente && cedente.documento,
         cedente && cedente.cnpj,
         cedente && cedente.id
-      ].filter((valor: any) => valor != null && valor !== '').join(' ').toLowerCase();
+      ].filter((valor: any) => valor != null && valor !== '').join(' ');
+      const textoPesquisaNormalizado = this.normalizarTextoFiltro(textoPesquisa);
 
-      const atendePesquisa = !pesquisa || textoPesquisa.includes(pesquisa);
+      const atendePesquisa = !pesquisa || textoPesquisaNormalizado.includes(pesquisa);
 
-      const consultoriaCedente = String(
-        (cedente && (cedente.consultoria || cedente.consultoria_nome)) || ''
-      ).toLowerCase();
+      const consultoriaCedente = this.normalizarTextoFiltro(this.extrairConsultoriaCedente(cedente));
       const atendeConsultoria = !consultoria || consultoriaCedente.includes(consultoria);
 
-      const responsavelCedente = String(
-        (cedente && (cedente.responsavel_nome || cedente.responsavel || (cedente.pessoas_vinculadas && cedente.pessoas_vinculadas[0] && cedente.pessoas_vinculadas[0].nome) || '')) || ''
-      ).toLowerCase();
-      const atendeResponsavel = !responsavel || responsavelCedente.includes(responsavel);
+      const responsaveisCedente = this.extrairResponsaveisCedente(cedente)
+        .map((nome: string) => this.normalizarTextoFiltro(nome))
+        .filter((nome: string) => !!nome);
+
+      let atendeResponsavel = true;
+      if (filtrarSemResponsavel) {
+        atendeResponsavel = responsaveisCedente.length === 0;
+      } else if (responsavel) {
+        atendeResponsavel = responsaveisCedente.some((nome: string) => (
+          nome.includes(responsavel) || responsavel.includes(nome)
+        ));
+      }
 
       const atendeSla = !slaVencido || this.isSlaVencido(cedente);
 
       return atendePesquisa && atendeConsultoria && atendeResponsavel && atendeSla;
     });
+  }
+
+  private atualizarMensagemFiltroRelacionamento(): void {
+    const consultoriaSelecionada = this.getValorCampo('consultoria');
+    const responsavelSelecionado = this.getValorCampo('responsavel');
+    const temFiltroRelacionamento = !!consultoriaSelecionada || !!responsavelSelecionado;
+
+    if (temFiltroRelacionamento && this.totalCadastrosFiltrados === 0) {
+      this.mensagemFiltroRelacionamento = 'A consultoria ou o responsável informado não se condiz com os cedentes cadastrados.';
+      return;
+    }
+
+    this.mensagemFiltroRelacionamento = '';
+  }
+
+  private extrairConsultoriaCedente(cedente: any): string {
+    const consultoria =
+      (cedente && (
+        cedente.consultoria_nome ||
+        cedente.nome_consultoria ||
+        cedente.nomeConsultoria ||
+        (cedente.consultoria && (cedente.consultoria.nome || cedente.consultoria.name || cedente.consultoria.descricao)) ||
+        cedente.consultoria ||
+        cedente.nome
+      )) || '';
+
+    return this.normalizarOpcaoFiltro(consultoria);
+  }
+
+  private extrairResponsavelCedente(cedente: any): string {
+    const responsaveis = this.extrairResponsaveisCedente(cedente);
+    return responsaveis.length ? responsaveis[0] : '';
+  }
+
+  private extrairResponsaveisCedente(cedente: any): string[] {
+    const candidatos: any[] = [];
+
+    if (cedente) {
+      candidatos.push(cedente.responsavel_nome);
+      candidatos.push(cedente.responsavel && (cedente.responsavel.nome || cedente.responsavel.name));
+
+      // Só usa "responsavel" textual (evita IDs numéricos que derrubam o filtro por nome).
+      if (typeof cedente.responsavel === 'string' && !/^\d+$/.test(cedente.responsavel.trim())) {
+        candidatos.push(cedente.responsavel);
+      }
+
+      if (Array.isArray(cedente.pessoas_vinculadas)) {
+        cedente.pessoas_vinculadas.forEach((p: any) => {
+          candidatos.push(p && (p.nome || p.name));
+        });
+      }
+
+      if (Array.isArray(cedente.responsaveis)) {
+        cedente.responsaveis.forEach((r: any) => {
+          candidatos.push(r && (r.nome || r.name));
+        });
+      }
+    }
+
+    const unicos = new Map<string, string>();
+    candidatos.forEach((valor: any) => {
+      const nome = this.normalizarOpcaoFiltro(valor);
+      if (!nome) {
+        return;
+      }
+
+      const chave = nome.toLowerCase();
+      if (!unicos.has(chave)) {
+        unicos.set(chave, nome);
+      }
+    });
+
+    return Array.from(unicos.values());
+  }
+
+  private adicionarOpcaoUnica(mapa: Map<string, string>, valor: string): void {
+    const normalizado = this.normalizarOpcaoFiltro(valor);
+    if (!normalizado) {
+      return;
+    }
+
+    const chave = normalizado.toLowerCase();
+    if (!mapa.has(chave)) {
+      mapa.set(chave, normalizado);
+    }
+  }
+
+  private normalizarOpcaoFiltro(valor: any): string {
+    const texto = String(valor || '').trim();
+    if (!texto) {
+      return '';
+    }
+
+    const invalidos = ['-', '---', 'não informado', 'nao informado', 'null', 'undefined'];
+    return invalidos.includes(texto.toLowerCase()) ? '' : texto;
+  }
+
+  private normalizarTextoFiltro(valor: any): string {
+    return String(valor || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim()
+      .toLowerCase();
   }
 
   private getValorCampo(controlName: string): string {
@@ -564,7 +708,12 @@ export class CadastroCedentesComponent implements OnInit {
   atualizarStatusCedente(id: number, status: string, rollbackData?: any) {
     const url = `${environment.api}/cedente/patch`;
     const backendStatus = this.normalizeBackendStatus(status);
-    const payload = { id, status: backendStatus };
+    const payload = {
+      id,
+      status: backendStatus,
+      fund_id: this.fund_id,
+      fundo_id: this.fund_id
+    };
 
     this.http.patch(url, payload).subscribe({
       next: (res: any) => {

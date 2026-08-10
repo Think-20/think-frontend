@@ -54,7 +54,7 @@ export class DocumentacaoCedenteComponent implements OnInit {
 
   // Tipos de arquivo aceitos
   tiposPermitidos = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.jpg', '.jpeg', '.png', '.zip', '.rar'];
-  tamanhoMaximo = 10 * 1024 * 1024; // 10MB
+  tamanhoMaximo = 700 * 1024 * 1024; // 700MB
 
   constructor(private cedenteDataService: CedenteDataService) { }
 

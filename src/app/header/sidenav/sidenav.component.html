@@ -23,165 +23,180 @@
         <mat-icon>arrow</mat-icon>
       </div>
       <nav class="nav-navbar">
-        <div class="nav-item" *ngIf="user.employee.department_id == 2">
+        <ng-container *ngIf="exibeSomenteCadastro; else menuCompleto">
+          <!-- Cadastro (somente para perfis 1 e 2) -->
+          <div class="nav-item">
+            <a (click)="criacao = criacao === true ? false : true" mat-raised-button class="department-container">
+              <span class="department department-5"></span>
+              <span class="nav-label">Cadastro</span>
+            </a>
+            <div [@rowAppeared]="state" *ngIf="criacao">
+              <div class="sub-navbar">
+                <a mat-raised-button [routerLink]="['/cedente']">Cedentes</a>
+                <a mat-raised-button [routerLink]="['/cedente']">Cotistas</a>
+                <a mat-raised-button [routerLink]="['/cedente']">Sacados</a>
+                <a mat-raised-button [routerLink]="['/cedente']">Monitoramento</a>
+                <a mat-raised-button [routerLink]="['/cedente']">Relatórios</a>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #menuCompleto>
+          <div class="nav-item" *ngIf="user.employee.department_id == 2">
             <a (click)="administradores = administradores === true ? false : true" mat-raised-button class="department-container">
               <span class="department department-2"></span>
               <span class="nav-label">Administradores</span>
             </a>
-        </div>
-        <div class="nav-item">
-          <a (click)="adiministrativo = adiministrativo === true ? false : true" mat-raised-button class="department-container">
-            <span class="department department-7"></span>
-            <span class="nav-label">Administrativo</span>
-          </a>
-          <div [@rowAppeared]="state" *ngIf="adiministrativo">
-            <div class="sub-nav-bar">
-              <a mat-raised-button [routerLink]="['/cedente']">Financeiro</a>
-              <a mat-raised-button [routerLink]="['/cedente']">Fundos-Novos Fundos</a>
-              <a mat-raised-button [routerLink]="['/cedente']">Fundos-Estruturação</a>
-              <a mat-raised-button [routerLink]="['/cedente']">Fundos-Transferências</a>
+          </div>
+
+          <div class="nav-item">
+            <a (click)="adiministrativo = adiministrativo === true ? false : true" mat-raised-button class="department-container">
+              <span class="department department-7"></span>
+              <span class="nav-label">Administrativo</span>
+            </a>
+            <div [@rowAppeared]="state" *ngIf="adiministrativo">
+              <div class="sub-nav-bar">
+                <a mat-raised-button [routerLink]="['/cedente']">Financeiro</a>
+                <a mat-raised-button [routerLink]="['/cedente']">Fundos-Novos Fundos</a>
+                <a mat-raised-button [routerLink]="['/cedente']">Fundos-Estruturação</a>
+                <a mat-raised-button [routerLink]="['/cedente']">Fundos-Transferências</a>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Atendimento -->
-        <div class="nav-item">
-          <a (click)="atendimento = atendimento === true ? false : true" mat-raised-button class="department-container">
-            <span class="department department-4"></span>
-            <span class="nav-label">Atendimento</span>
-          </a>
-          <div [@rowAppeared]="state" *ngIf="atendimento">
-            <div class="sub-navbar">
-              <a mat-raised-button [routerLink]="['/cedente']">Agenda</a>
-              <a [routerLink]="['/cedente']" mat-raised-button>Clientes</a>
-              <a (click)="events = !events" mat-raised-button>Eventos</a>
-              <div [@rowAppeared]="state" *ngIf="events">
-                <div class="sub-navbar">
-                  <a mat-raised-button [routerLink]="['/cedente']">Eventos</a>
-                  <a mat-raised-button [routerLink]="['/cedente']">Locais</a>
+
+          <div class="nav-item">
+            <a (click)="atendimento = atendimento === true ? false : true" mat-raised-button class="department-container">
+              <span class="department department-4"></span>
+              <span class="nav-label">Atendimento</span>
+            </a>
+            <div [@rowAppeared]="state" *ngIf="atendimento">
+              <div class="sub-navbar">
+                <a mat-raised-button [routerLink]="['/cedente']">Agenda</a>
+                <a [routerLink]="['/cedente']" mat-raised-button>Clientes</a>
+                <a (click)="events = !events" mat-raised-button>Eventos</a>
+                <div [@rowAppeared]="state" *ngIf="events">
+                  <div class="sub-navbar">
+                    <a mat-raised-button [routerLink]="['/cedente']">Eventos</a>
+                    <a mat-raised-button [routerLink]="['/cedente']">Locais</a>
+                  </div>
+                </div>
+                <a mat-raised-button [routerLink]="['/cedente']">Jobs</a>
+                <a mat-raised-button [routerLink]="['/cedente']">Relatórios</a>
+                <a mat-raised-button [routerLink]="['/cedente']">Dashboards</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-item">
+            <a (click)="criacao = criacao === true ? false : true" mat-raised-button class="department-container">
+              <span class="department department-5"></span>
+              <span class="nav-label">Cadastro</span>
+            </a>
+            <div [@rowAppeared]="state" *ngIf="criacao">
+              <div class="sub-navbar">
+                <a mat-raised-button [routerLink]="['/cedente']">Cedentes</a>
+                <a mat-raised-button [routerLink]="['/cedente']">Cotistas</a>
+                <a mat-raised-button [routerLink]="['/cedente']">Sacados</a>
+                <a mat-raised-button [routerLink]="['/cedente']">Monitoramento</a>
+                <a mat-raised-button [routerLink]="['/cedente']">Relatórios</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-item">
+            <a *ngIf="!hasNoPermission(user, '/employees')" (click)="diretoria = !diretoria" mat-raised-button class="department-container">
+              <span class="department department-1"></span>
+              <span class="nav-label">Diretoria</span>
+            </a>
+            <div [@rowAppeared]="state" *ngIf="diretoria">
+              <div class="sub-navbar">
+                <a mat-raised-button [routerLink]="['/cedente']">Colaboradores</a>
+              </div>
+              <div class="sub-navbar">
+                <a (click)="reports = !reports" mat-raised-button>Eventos</a>
+                <div [@rowAppeared]="state" *ngIf="reports">
+                  <div class="sub-navbar">
+                    <a mat-raised-button [routerLink]="['/cedente']">Metas</a>
+                  </div>
                 </div>
               </div>
-              <a mat-raised-button [routerLink]="['/cedente']">Jobs</a>
-              <a mat-raised-button [routerLink]="['/cedente']">Relatórios</a>
-              <a mat-raised-button [routerLink]="['/cedente']">Dashboards</a>
+              <div class="sub-navbar">
+                <a mat-raised-button [routerLink]="['/cedente']">Metas</a>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Cadastro -->
-        <div class="nav-item">
-          <a (click)="criacao = criacao === true ? false : true" mat-raised-button class="department-container">
-            <span class="department department-5"></span>
-            <span class="nav-label">Cadastro</span>
-          </a>
-          <div [@rowAppeared]="state" *ngIf="criacao">
-            <div class="sub-navbar">
-              <a mat-raised-button [routerLink]="['/cedente']">Cedentes</a>
-              <a mat-raised-button [routerLink]="['/cedente']">Cotistas</a>
-              <a mat-raised-button [routerLink]="['/cedente']">Sacados</a>
-              <a mat-raised-button [routerLink]="['/cedente']">Monitoramento</a>
-              <a mat-raised-button [routerLink]="['/cedente']">Relatórios</a>
-              <div [@rowAppeared]="state" *ngIf="events">
-                <div class="sub-navbar">
-                  <a mat-raised-button [routerLink]="['/cedente']">Eventos</a>
-                  <a mat-raised-button [routerLink]="['/cedente']">Locais</a>
+
+          <div class="nav-item">
+            <a (click)="planejamento = planejamento === true ? false : true" mat-raised-button class="department-container">
+              <span class="department department-6"></span>
+              <span class="nav-label">Planejamento</span>
+            </a>
+            <div [@rowAppeared]="state" *ngIf="planejamento">
+              <div class="sub-navbar">
+                <a mat-raised-button [routerLink]="['/cedente']">Agenda</a>
+                <a (click)="centroCusto = centroCusto === true ? false : true" mat-raised-button>Centro de custos</a>
+              </div>
+              <div class="sub-navbar">
+                <a (click)="events = !events" mat-raised-button>Eventos</a>
+                <div [@rowAppeared]="state" *ngIf="events">
+                  <div class="sub-navbar">
+                    <a mat-raised-button [routerLink]="['/cedente']">Eventos</a>
+                    <a mat-raised-button [routerLink]="['/cedente']">Locais</a>
+                  </div>
+                </div>
+                <a disabled [routerLink]="['/cedente']" mat-raised-button>Ficha de custos</a>
+                <a mat-raised-button [routerLink]="['/cedente']">Jobs</a>
+              </div>
+              <div class="sub-navbar">
+                <a (click)="orcamento = orcamento === true ? false : true" mat-raised-button>Orçamento</a>
+                <div [@rowAppeared]="state" *ngIf="orcamento" class="sub-navbar">
+                  <a disabled mat-raised-button [routerLink]="['/cedente']">Planilha de custos</a>
+                  <a disabled mat-raised-button [routerLink]="['/cedente']">Memorial descritivo</a>
                 </div>
               </div>
+              <div class="sub-navbar">
+                <a mat-raised-button [routerLink]="['/cedente']">Relatório dos Jobs</a>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Diretoria -->
-        <div class="nav-item">
-          <a *ngIf="!hasNoPermission(user, '/employees')" (click)="diretoria = !diretoria" mat-raised-button class="department-container">
-            <span class="department department-1"></span>
-            <span class="nav-label">Diretoria</span>
-          </a>
-          <div [@rowAppeared]="state" *ngIf="diretoria">
-            <div class="sub-navbar">
-              <a mat-raised-button [routerLink]="['/cedente']">Colaboradores</a>
-            </div>
-            <div class="sub-navbar">
-              <a (click)="reports = !reports" mat-raised-button>Eventos</a>
-              <div [@rowAppeared]="state" *ngIf="reports">
-                <div class="sub-navbar">
-                  <a mat-raised-button [routerLink]="['/cedente']">Metas</a>
+
+          <div class="nav-item">
+            <a (click)="producao = producao === true ? false : true" mat-raised-button class="department-container">
+              <span class="department department-3"></span>
+              <span class="nav-label">Produção</span>
+            </a>
+            <div [@rowAppeared]="state" *ngIf="producao">
+              <div class="sub-navbar">
+                <a (click)="events = !events" mat-raised-button>Eventos</a>
+                <div [@rowAppeared]="state" *ngIf="events">
+                  <div class="sub-navbar">
+                    <a mat-raised-button [routerLink]="['/cedente']">Eventos</a>
+                    <a mat-raised-button [routerLink]="['/cedente']">Locais</a>
+                  </div>
                 </div>
+                <a [routerLink]="['/cedente']" mat-raised-button>Fornecedores</a>
+                <a [routerLink]="['/cedente']" mat-raised-button>Organizadoras</a>
               </div>
             </div>
-            <div class="sub-navbar">
-              <a mat-raised-button [routerLink]="['/cedente']">Metas</a>
-            </div>
           </div>
-        </div>
-        <!-- Planejamento V -->
-        <div class="nav-item">
-          <a (click)="planejamento = planejamento === true ? false : true" mat-raised-button class="department-container">
-            <span class="department department-6"></span>
-            <span class="nav-label">Planejamento</span>
-          </a>
-          <div [@rowAppeared]="state" *ngIf="planejamento">
-            <div class="sub-navbar">
-              <a mat-raised-button [routerLink]="['/cedente']">Agenda</a>
-              <a (click)="centroCusto = centroCusto === true ? false : true" mat-raised-button>Centro de custos</a>
-            </div>
-            <div class="sub-navbar">
-              <a (click)="events = !events" mat-raised-button>Eventos</a>
-              <div [@rowAppeared]="state" *ngIf="events">
-                <div class="sub-navbar">
-                  <a mat-raised-button [routerLink]="['/cedente']">Eventos</a>
-                  <a mat-raised-button [routerLink]="['/cedente']">Locais</a>
-                </div>
+
+          <div class="nav-item">
+            <a (click)="configuracao = configuracao === true ? false : true" mat-raised-button class="department-container">
+              <span class="department department-3"></span>
+              <span class="nav-label">Configurações</span>
+            </a>
+            <div [@rowAppeared]="state" *ngIf="configuracao">
+              <div class="sub-navbar">
+                <a [routerLink]="['/cedente']" mat-raised-button>Permissões</a>
+                <a [routerLink]="['/cedente']" mat-raised-button>Administrativo</a>
+                <a [routerLink]="['/cedente']" mat-raised-button>Atendimento</a>
+                <a [routerLink]="['/cedente']" mat-raised-button>Cadastro</a>
+                <a [routerLink]="['/cedente']" mat-raised-button>Compliance</a>
               </div>
-              <a disabled [routerLink]="['/cedente']" mat-raised-button>Ficha de custos</a>
-              <a mat-raised-button [routerLink]="['/cedente']">Jobs</a>
-            </div>
-            <div class="sub-navbar">
-              <a (click)="orcamento = orcamento === true ? false : true" mat-raised-button>Orçamento</a>
-              <div [@rowAppeared]="state" *ngIf="orcamento" class="sub-navbar">
-                <a disabled mat-raised-button [routerLink]="['/cedente']" >Planilha de custos</a>
-                <a disabled mat-raised-button [routerLink]="['/cedente']" >Memorial descritivo</a>
-              </div>
-              <!-- <a mat-raised-button [routerLink]="['/service-report']" [disabled]="hasNoPermission(user, '/reports/service-report')">Relatório de jobs</a>  -->
-            </div>
-            <div class="sub-navbar">
-              <a mat-raised-button [routerLink]="['/cedente']">Relatório dos Jobs</a>
             </div>
           </div>
-        </div>
-        <!-- Producao V -->
-        <div class="nav-item">
-          <a (click)="producao = producao === true ? false : true" mat-raised-button class="department-container">
-            <span class="department department-3"></span>
-            <span class="nav-label">Produção</span>
-          </a>
-          <div [@rowAppeared]="state" *ngIf="producao">
-            <div class="sub-navbar">
-              <a (click)="events = !events" mat-raised-button>Eventos</a>
-              <div [@rowAppeared]="state" *ngIf="events">
-                <div class="sub-navbar">
-                  <a mat-raised-button [routerLink]="['/cedente']">Eventos</a>
-                  <a mat-raised-button [routerLink]="['/cedente']">Locais</a>
-                </div>
-              </div>
-              <a [routerLink]="['/cedente']" mat-raised-button>Fornecedores</a>
-              <a [routerLink]="['/cedente']" mat-raised-button>Organizadoras</a>
-            </div>
-          </div>
-        </div>
-        <!-- Configuracao V -->
-        <div class="nav-item">
-          <a (click)="configuracao = configuracao === true ? false : true" mat-raised-button class="department-container">
-            <span class="department department-3"></span>
-            <span class="nav-label">Configurações</span>
-          </a>
-          <div [@rowAppeared]="state" *ngIf="configuracao">
-            <div class="sub-navbar">
-              <a [routerLink]="['/cedente']" mat-raised-button>Permissões</a>
-              <a [routerLink]="['/cedente']" mat-raised-button>Administrativo</a>
-              <a [routerLink]="['/cedente']" mat-raised-button>Atendimento</a>
-              <a [routerLink]="['/cedente']" mat-raised-button>Cadastro</a>
-              <a [routerLink]="['/cedente']" mat-raised-button>Compliance</a>
-            </div>
-          </div>
-        </div>
+        </ng-template>
       </nav>
     </div>
     <p class="cb-version">Versão da aplicação {{ FRONTEND_VERSION }} | API {{ BACKEND_VERSION }}</p>

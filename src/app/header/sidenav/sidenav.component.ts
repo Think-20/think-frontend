@@ -49,6 +49,7 @@ export class SidenavComponent implements OnInit {
   FRONTEND_VERSION = FRONTEND_VERSION
   BACKEND_VERSION = BACKEND_VERSION
   configuracao = false
+  exibeSomenteCadastro = false
 
   constructor(
     private auth: AuthService,
@@ -63,6 +64,23 @@ export class SidenavComponent implements OnInit {
   }
   ngOnInit() {
     this.user = this.auth.currentUser()
+
+    const roleTopLevel = this.user && (this.user as any).cedente_role && (this.user as any).cedente_role.id;
+    const roleEmployee = this.user && this.user.employee && (this.user.employee as any).cedente_role && (this.user.employee as any).cedente_role.id;
+    const roleId = this.normalizarRoleId(roleTopLevel != null ? roleTopLevel : roleEmployee);
+
+    // Regra de visibilidade do menu lateral:
+    // 1 e 2 = somente Cadastro | 3 ou null = menu completo.
+    this.exibeSomenteCadastro = roleId === 1 || roleId === 2;
+  }
+
+  private normalizarRoleId(value: any): number | null {
+    if (value === null || value === undefined || value === '') {
+      return null;
+    }
+
+    const roleId = Number(value);
+    return Number.isNaN(roleId) ? null : roleId;
   }
 
   toggleMenu() {

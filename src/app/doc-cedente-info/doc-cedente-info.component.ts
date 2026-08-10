@@ -1,4 +1,10 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../environments/environment';
+import { AuthService } from '../login/auth.service';
+import { FundStateService } from '../cadastro-cedentes/fund-state.service';
 
 type StatusDocumento = 'validar' | 'pendente' | 'aprovado';
 
@@ -22,6 +28,10 @@ export class DocCedenteInfoComponent implements OnInit {
   @Input() cedente: any;
 
   documentosCedente: DocumentoCedenteView[] = [];
+  visualizacaoUrl: string | null = null;
+  visualizacaoUrlSegura: SafeResourceUrl | null = null;
+  visualizacaoMimeType = 'application/octet-stream';
+  podeGerenciarAprovacao = false;
 
   private readonly titulosPorTipo: { [key: string]: string } = {
     '1': 'Contrato/Estatuto Social',
@@ -39,9 +49,16 @@ export class DocCedenteInfoComponent implements OnInit {
     '13': 'Comprovante de Vínculo'
   };
 
-  constructor() { }
+  constructor(
+    private http: HttpClient,
+    private sanitizer: DomSanitizer,
+    private auth: AuthService,
+    private route: ActivatedRoute,
+    private fundState: FundStateService
+  ) { }
 
   ngOnInit() {
+    this.definirPermissaoAprovacao();
     this.carregarDocumentosDoCedente();
   }
 
@@ -59,18 +76,43 @@ export class DocCedenteInfoComponent implements OnInit {
     return this.documentosCedente.find((item: DocumentoCedenteView) => item.aberto) || null;
   }
 
-  toggleVisualizacao(documento: DocumentoCedenteView): void {
-    this.documentosCedente = this.documentosCedente.map((item: DocumentoCedenteView) => ({
-      ...item,
-      aberto: item.id === documento.id ? !item.aberto : false
-    }));
+  async visualizarDocumento(documento: DocumentoCedenteView): Promise<void> {
+    const arquivoId = documento && documento.original && documento.original.id;
+    const mimeType = this.resolverMimeType(documento);
+
+    if (arquivoId !== null && arquivoId !== undefined && arquivoId !== '') {
+      const visualizacaoUrl = `${environment.api}/cedente-files/view/${arquivoId}`;
+      this.abrirModalDocumento(documento, visualizacaoUrl, mimeType);
+      return;
+    }
+
+    const arquivoUrl = await this.obterUrlDocumento(documento);
+
+    if (!arquivoUrl) {
+      console.warn('Não foi possível visualizar documento anexado.', documento && documento.original);
+      return;
+    }
+
+    this.abrirModalDocumento(documento, arquivoUrl, mimeType);
   }
 
   fecharVisualizacao(): void {
+    if (this.visualizacaoUrl && this.visualizacaoUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(this.visualizacaoUrl);
+    }
+
+    this.visualizacaoUrl = null;
+    this.visualizacaoUrlSegura = null;
+    this.visualizacaoMimeType = 'application/octet-stream';
+
     this.documentosCedente = this.documentosCedente.map((item: DocumentoCedenteView) => ({
       ...item,
       aberto: false
     }));
+  }
+
+  isPreviewImagem(): boolean {
+    return this.visualizacaoMimeType.startsWith('image/');
   }
 
   getStatusLabel(status: StatusDocumento): string {
@@ -183,19 +225,97 @@ export class DocCedenteInfoComponent implements OnInit {
     this.alterarStatusLocal(documento.id, 'pendente');
   }
 
-  baixarDocumento(documento: DocumentoCedenteView): void {
-    const url = documento.original && (documento.original.url || documento.original.download_url || documento.original.file_url);
+  async baixarDocumento(documento: DocumentoCedenteView): Promise<void> {
+    const arquivoId = documento && documento.original && documento.original.id;
 
-    if (url) {
-      window.open(url, '_blank');
+    if (arquivoId !== null && arquivoId !== undefined && arquivoId !== '') {
+      const fundId = this.obterFundId(documento);
+
+      if (!fundId) {
+        console.warn('fund_id não encontrado para download do documento.', documento && documento.original);
+        return;
+      }
+
+      const queryAccess = this.auth.queryAccess();
+      const downloadUrl = `${environment.api}/cedentes/arquivos/download/${arquivoId}?${queryAccess}&fund_id=${encodeURIComponent(fundId)}`;
+      window.open(downloadUrl, '_blank');
       return;
     }
 
-    console.warn('URL de download não disponível para o documento:', documento.original);
+    const arquivoUrl = await this.obterUrlDocumento(documento);
+
+    if (!arquivoUrl) {
+      console.warn('Não foi possível baixar documento anexado.', documento.original);
+      return;
+    }
+
+    const anchor = document.createElement('a');
+    anchor.href = arquivoUrl;
+    anchor.download = documento.nomeArquivo || 'documento';
+    anchor.target = '_blank';
+    anchor.rel = 'noopener';
+    anchor.click();
   }
 
   uploadDocumento(documento: DocumentoCedenteView): void {
     console.info('Upload pendente de implementação para o documento:', documento);
+  }
+
+  private definirPermissaoAprovacao(): void {
+    const roleId = this.obterCedenteRoleId();
+    this.podeGerenciarAprovacao = roleId === null || roleId === 2 || roleId === 3;
+  }
+
+  private obterCedenteRoleId(): number | null {
+    const usuario = this.auth.currentUser() as any;
+
+    const roleTopLevel = usuario && usuario.cedente_role && usuario.cedente_role.id;
+    const roleEmployee = usuario && usuario.employee && usuario.employee.cedente_role && usuario.employee.cedente_role.id;
+    const roleRaw = roleTopLevel != null ? roleTopLevel : roleEmployee;
+
+    if (roleRaw === null || roleRaw === undefined || roleRaw === '') {
+      return null;
+    }
+
+    const roleId = Number(roleRaw);
+    return Number.isNaN(roleId) ? null : roleId;
+  }
+
+  private abrirModalDocumento(documento: DocumentoCedenteView, url: string, mimeType: string): void {
+    this.visualizacaoUrl = url;
+    this.visualizacaoUrlSegura = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    this.visualizacaoMimeType = mimeType;
+
+    this.documentosCedente = this.documentosCedente.map((item: DocumentoCedenteView) => ({
+      ...item,
+      aberto: item.id === documento.id
+    }));
+  }
+
+  private obterFundId(documento?: DocumentoCedenteView): string | null {
+    const doDocumento = documento && documento.original && (
+      documento.original.fund_id ||
+      documento.original.fundo_id ||
+      documento.original.fundId
+    );
+
+    const doCedente = this.cedente && (
+      this.cedente.fund_id ||
+      this.cedente.fundo_id ||
+      this.cedente.fundId ||
+      (this.cedente.fund && this.cedente.fund.id)
+    );
+
+    const daRota = this.route.snapshot.queryParamMap.get('fund_id');
+    const doEstadoGlobal = this.fundState.currentFundId;
+
+    const valor = doDocumento || doCedente || daRota || doEstadoGlobal;
+
+    if (valor === null || valor === undefined || valor === '') {
+      return null;
+    }
+
+    return String(valor);
   }
 
   private carregarDocumentosDoCedente(): void {
@@ -234,6 +354,130 @@ export class DocCedenteInfoComponent implements OnInit {
     }
 
     return [];
+  }
+
+  private async obterUrlDocumento(documento: DocumentoCedenteView): Promise<string | null> {
+    const original = documento && documento.original ? documento.original : {};
+
+    const urlDireta = this.obterUrlDireta(original);
+    if (urlDireta) {
+      return urlDireta;
+    }
+
+    const base64 = this.obterBase64(original);
+    if (base64) {
+      return `data:${this.resolverMimeType(documento)};base64,${base64}`;
+    }
+
+    const blob = await this.obterBlobPorEndpoint(original);
+    if (!blob) {
+      return null;
+    }
+
+    return URL.createObjectURL(blob);
+  }
+
+  private obterUrlDireta(original: any): string | null {
+    const candidatos = [
+      original && original.url,
+      original && original.download_url,
+      original && original.file_url,
+      original && original.public_url,
+      original && original.path,
+      original && original.name
+    ].filter((item: any) => !!item);
+
+    for (const candidato of candidatos) {
+      const texto = String(candidato).trim();
+      if (!texto) {
+        continue;
+      }
+
+      if (/^https?:\/\//i.test(texto) || texto.startsWith('data:') || texto.startsWith('blob:')) {
+        return texto;
+      }
+
+      if (texto.startsWith('/')) {
+        return `${environment.api}${texto}`;
+      }
+
+      // Fallback comum para arquivos retornados só com hash/nome.
+      return `${environment.api}/storage/${texto}`;
+    }
+
+    return null;
+  }
+
+  private obterBase64(original: any): string {
+    return (
+      original && (
+        original.content_base64 ||
+        original.base64 ||
+        original.arquivo_base64 ||
+        original.file_base64 ||
+        original.conteudo_base64 ||
+        original.binary_base64 ||
+        ''
+      )
+    ) || '';
+  }
+
+  private async obterBlobPorEndpoint(original: any): Promise<Blob | null> {
+    const id = original && original.id != null ? String(original.id) : '';
+    const name = original && original.name ? String(original.name) : '';
+    const encodedName = name ? encodeURIComponent(name) : '';
+
+    const endpoints = [
+      id ? `${environment.api}/cedente-files/download/${id}` : '',
+      id ? `${environment.api}/cedente-file/download/${id}` : '',
+      id ? `${environment.api}/cedente_files/download/${id}` : '',
+      id ? `${environment.api}/cedente/arquivo/download/${id}` : '',
+      encodedName ? `${environment.api}/cedente-files/download-by-name/${encodedName}` : ''
+    ].filter((item: string) => !!item);
+
+    for (const endpoint of endpoints) {
+      try {
+        const blob = await this.http.get(endpoint, { responseType: 'blob' }).toPromise();
+        if (blob && blob.size > 0) {
+          return blob;
+        }
+      } catch (_) {
+        // tenta o próximo endpoint
+      }
+    }
+
+    return null;
+  }
+
+  private resolverMimeType(documento: DocumentoCedenteView): string {
+    const tipo = String((documento && documento.original && (documento.original.mime_type || documento.original.type || documento.original.file_type)) || '').toLowerCase();
+    const nome = String((documento && documento.nomeArquivo) || '').toLowerCase();
+
+    if (tipo === 'pdf' || tipo.includes('pdf') || nome.endsWith('.pdf')) {
+      return 'application/pdf';
+    }
+
+    if (tipo === 'imagepng') {
+      return 'image/png';
+    }
+
+    if (tipo === 'imagejpeg' || tipo === 'imagejpg') {
+      return 'image/jpeg';
+    }
+
+    if (tipo.startsWith('image/')) {
+      return tipo;
+    }
+
+    if (nome.endsWith('.png')) {
+      return 'image/png';
+    }
+
+    if (nome.endsWith('.jpg') || nome.endsWith('.jpeg')) {
+      return 'image/jpeg';
+    }
+
+    return 'application/octet-stream';
   }
 
   private obterTituloDocumento(documentType: string, arquivo: any): string {

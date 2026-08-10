@@ -26,8 +26,11 @@
                 <span class="status" [ngClass]="documento.status">
                     {{ getStatusLabel(documento.status) }}
                 </span>
-                <button type="button" class="btnVisualizar" (click)="toggleVisualizacao(documento)">
-                    {{ documento.aberto ? 'Fechar' : 'Visualizar' }}
+                <button type="button" class="btnVisualizar" (click)="visualizarDocumento(documento)">
+                    Visualizar
+                </button>
+                <button type="button" class="btnVisualizar" (click)="baixarDocumento(documento)">
+                    Baixar
                 </button>
             </div>
         </div>
@@ -57,17 +60,7 @@
                 <div class="actionsRight">
                     <button
                         type="button"
-                        class="btnAction btnUpload"
-                        *ngIf="documento.status === 'pendente'"
-                        (click)="uploadDocumento(documento)">
-                        <mat-icon>upload_file</mat-icon>
-                        Upload
-                    </button>
-
-                    <button
-                        type="button"
                         class="btnAction btnDownload"
-                        *ngIf="documento.status === 'validar' || documento.status === 'aprovado'"
                         (click)="baixarDocumento(documento)">
                         <mat-icon>description</mat-icon>
                         Baixar
@@ -76,7 +69,7 @@
                     <button
                         type="button"
                         class="btnAction btnReject"
-                        *ngIf="documento.status === 'validar'"
+                        *ngIf="documento.status === 'validar' && podeGerenciarAprovacao"
                         (click)="recusarDocumento(documento)">
                         <mat-icon>cancel</mat-icon>
                         Recusar
@@ -85,7 +78,7 @@
                     <button
                         type="button"
                         class="btnAction btnApprove"
-                        *ngIf="documento.status === 'validar'"
+                        *ngIf="documento.status === 'validar' && podeGerenciarAprovacao"
                         (click)="aprovarDocumento(documento)">
                         <mat-icon>check_circle</mat-icon>
                         Aprovar
@@ -94,40 +87,27 @@
             </div>
 
             <div class="documentPreviewWrap">
-                <div class="documentPreview">
-                    <h3>{{ documento.titulo }}</h3>
-                    <p>Documento enviado em {{ documento.dataEnvioLabel }}</p>
+                <div class="documentPreview filePreviewContent">
+                    <img
+                        *ngIf="isPreviewImagem() && visualizacaoUrl"
+                        [src]="visualizacaoUrl"
+                        alt="Pré-visualização do documento"
+                        class="previewImage"
+                    />
 
-                    <div class="linha"></div>
-
-                    <h4>Informações do Documento</h4>
-                    <div class="infoGrid">
-                        <p><strong>Razão Social:</strong> {{ extrairRazaoSocial(documento) }}</p>
-                        <p><strong>CNPJ:</strong> {{ extrairCnpj(documento) }}</p>
-                        <p><strong>Data de Emissão:</strong> {{ extrairDataEmissao(documento) }}</p>
-                        <p><strong>Validade:</strong> {{ extrairValidade(documento) }}</p>
-                    </div>
-
-                    <div class="linha"></div>
-
-                    <h4>Descrição</h4>
-                    <p>{{ extrairDescricao(documento) }}</p>
-
-                    <div class="linha"></div>
-
-                    <h4>Dados Complementares</h4>
-                    <div class="extraInfoBox">
-                        <p><strong>Categoria:</strong> {{ extrairCategoria(documento) }}</p>
-                        <p><strong>Responsável:</strong> {{ extrairNomeResponsavel(documento) }}</p>
-                        <p><strong>Contato:</strong> {{ extrairContato(documento) }}</p>
-                    </div>
+                    <iframe
+                        *ngIf="!isPreviewImagem() && visualizacaoUrlSegura"
+                        [src]="visualizacaoUrlSegura"
+                        title="Pré-visualização do documento"
+                        class="previewFrame">
+                    </iframe>
                 </div>
+            </div>
 
-                <div class="dropdownFooter">
-                    <button type="button" class="btnCloseBottom" (click)="fecharVisualizacao()">
-                        Fechar
-                    </button>
-                </div>
+            <div class="dropdownFooter">
+                <button type="button" class="btnCloseBottom" (click)="fecharVisualizacao()">
+                    Fechar
+                </button>
             </div>
         </div>
     </div>

@@ -330,6 +330,31 @@
   padding: 20px 22px;
 }
 
+.filePreviewContent {
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.previewImage {
+  max-width: 100%;
+  max-height: calc(100vh - 320px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.previewFrame {
+  width: 100%;
+  height: calc(100vh - 320px);
+  border: none;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
 .documentPreview h3 {
   margin: 0;
   color: #2f6b54;
@@ -421,6 +446,16 @@
 
   .documentPreview {
     padding: 16px;
+  }
+
+  .filePreviewContent {
+    min-height: 360px;
+  }
+
+  .previewImage,
+  .previewFrame {
+    max-height: calc(100vh - 280px);
+    height: calc(100vh - 280px);
   }
 
   .documentPreview h3 {

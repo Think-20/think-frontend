@@ -81,6 +81,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    overflow: visible;
 }
 
 .sectionHint {
@@ -154,6 +155,13 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     gap: 12px;
+    z-index: 1;
+    overflow: visible;
+}
+
+.areaUpLoad.comErro {
+    z-index: 20;
+    margin-bottom: 44px;
 }
 
 .areaUpLoad:hover {
@@ -362,6 +370,7 @@
     align-items: center;
     gap: 6px;
     animation: slideDown 0.3s ease-out;
+    z-index: 30;
 }
 
 @keyframes slideDown {

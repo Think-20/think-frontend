@@ -243,6 +243,11 @@
         "Pendente" e você receberá atualizações por email.
       </p>
 
+      <div class="alertaErroSubmissao" *ngIf="mensagemAlertaSubmissao">
+        <mat-icon>warning</mat-icon>
+        <span>{{ mensagemAlertaSubmissao }}</span>
+      </div>
+
       <button
         id="enviar"
         [disabled]="submitting"

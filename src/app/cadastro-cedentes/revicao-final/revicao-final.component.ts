@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, OnDestroy, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CedenteDataService } from '../novo-cedente/cedente-data.service';
 import { environment } from '../../../environments/environment';
 import { Subject } from 'rxjs';
@@ -18,6 +19,9 @@ interface EditarDestino {
   styleUrls: ['./revicao-final.component.css']
 })
 export class RevicaoFinalComponent implements OnInit, OnDestroy {
+  private readonly tamanhoMaximoArquivoBytes = 700 * 1024;
+  private readonly tamanhoMaximoArquivoLabel = '700 KB';
+  mensagemAlertaSubmissao: string = '';
 
   dados: any = {
     nome: '',
@@ -42,6 +46,7 @@ export class RevicaoFinalComponent implements OnInit, OnDestroy {
 
   constructor(
     private http: HttpClient,
+    private snackBar: MatSnackBar,
     private cedenteDataService: CedenteDataService,
     private route: ActivatedRoute,
     private fundState: FundStateService
@@ -76,6 +81,8 @@ export class RevicaoFinalComponent implements OnInit, OnDestroy {
    */
   async submeterCadastro() {
     if (this.submitting) return;
+
+    this.mensagemAlertaSubmissao = '';
     
     this.submitting = true;
     this.dispatchLoading(true);
@@ -93,6 +100,12 @@ export class RevicaoFinalComponent implements OnInit, OnDestroy {
       this.cedenteDataService.setFundId(idAtual);
       const payload = this.cedenteDataService.consolidarPayloadFinal('pendente');
       const cedenteId = this.cedenteDataService.getCedenteId();
+
+      const validacaoArquivos = this.validarLimiteArquivos(payload);
+      if (!validacaoArquivos.valido) {
+        this.exibirAlertaSubmissao(validacaoArquivos.mensagem);
+        return;
+      }
 
       console.log('Payload final:', payload);
 
@@ -121,12 +134,87 @@ export class RevicaoFinalComponent implements OnInit, OnDestroy {
       this.submitConcluido.emit();
     } catch (err) {
       console.error('Erro ao submeter cadastro:', err);
-      // TODO: Mostrar mensagem de erro (modal/toast)
-      alert('Erro ao enviar cadastro. Tente novamente.');
+      const statusCode = err && err.status;
+
+      if (statusCode === 413) {
+        this.exibirAlertaSubmissao(`Não foi possível concluir o cadastro porque os anexos excedem o limite permitido pelo servidor.\n\nLimite máximo por arquivo: ${this.tamanhoMaximoArquivoLabel}.\n\nRevise os documentos anexados e tente novamente.`);
+      } else {
+        this.exibirAlertaSubmissao('Erro ao enviar cadastro. Tente novamente.');
+      }
     } finally {
       this.submitting = false;
       this.dispatchLoading(false);
     }
+  }
+
+  private validarLimiteArquivos(payload: any): { valido: boolean; mensagem: string } {
+    const arquivos = (payload && payload.arquivos) || [];
+
+    if (!Array.isArray(arquivos) || !arquivos.length) {
+      return { valido: true, mensagem: '' };
+    }
+
+    const arquivosInvalidos = arquivos
+      .map((arquivo: any) => {
+        const nome = (arquivo && (arquivo.original_name || arquivo.name)) || 'Arquivo sem nome';
+        const tamanhoInformado = Number(arquivo && arquivo.tamanho);
+        const tamanho = Number.isNaN(tamanhoInformado)
+          ? this.estimarTamanhoArquivoBase64(arquivo && (arquivo.content_base64 || arquivo.base64))
+          : tamanhoInformado;
+
+        return {
+          nome,
+          tamanho
+        };
+      })
+      .filter((item: { nome: string; tamanho: number }) => item.tamanho > this.tamanhoMaximoArquivoBytes);
+
+    if (!arquivosInvalidos.length) {
+      return { valido: true, mensagem: '' };
+    }
+
+    const listaArquivos = arquivosInvalidos
+      .map((item: { nome: string; tamanho: number }) => `- ${item.nome} (${this.formatarTamanho(item.tamanho)})`)
+      .join('\n');
+
+    const mensagem = `Não foi possível concluir o cadastro.\n\nCada anexo pode ter no máximo ${this.tamanhoMaximoArquivoLabel}.\n\nArquivos acima do limite:\n${listaArquivos}`;
+
+    return {
+      valido: false,
+      mensagem
+    };
+  }
+
+  private estimarTamanhoArquivoBase64(base64: any): number {
+    const conteudo = String(base64 || '').replace(/\s/g, '');
+
+    if (!conteudo) {
+      return 0;
+    }
+
+    const padding = conteudo.endsWith('==') ? 2 : conteudo.endsWith('=') ? 1 : 0;
+    return Math.floor((conteudo.length * 3) / 4) - padding;
+  }
+
+  private formatarTamanho(bytes: number): string {
+    if (!bytes || bytes <= 0) {
+      return '0 KB';
+    }
+
+    const kb = bytes / 1024;
+
+    if (kb < 1024) {
+      return `${Math.round(kb * 100) / 100} KB`;
+    }
+
+    return `${Math.round((kb / 1024) * 100) / 100} MB`;
+  }
+
+  private exibirAlertaSubmissao(mensagem: string): void {
+    this.mensagemAlertaSubmissao = mensagem;
+    this.snackBar.open(mensagem, '', {
+      duration: 2500
+    });
   }
 
   private dispatchLoading(isLoading: boolean) {

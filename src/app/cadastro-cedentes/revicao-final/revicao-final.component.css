@@ -196,6 +196,32 @@ body {
   max-width: 600px;
 }
 
+.alertaErroSubmissao {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  white-space: pre-line;
+}
+
+.alertaErroSubmissao mat-icon {
+  color: #dc2626;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+}
+
+.alertaErroSubmissao span {
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 /* BOTÃO */
 #enviar {
   background: linear-gradient(135deg, #16a34a, #15803d);

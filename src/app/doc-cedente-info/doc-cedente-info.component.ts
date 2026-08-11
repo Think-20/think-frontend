@@ -218,11 +218,11 @@ export class DocCedenteInfoComponent implements OnInit {
   }
 
   aprovarDocumento(documento: DocumentoCedenteView): void {
-    this.alterarStatusLocal(documento.id, 'aprovado');
+    this.validarDocumento(documento, true);
   }
 
   recusarDocumento(documento: DocumentoCedenteView): void {
-    this.alterarStatusLocal(documento.id, 'pendente');
+    this.validarDocumento(documento, false);
   }
 
   async baixarDocumento(documento: DocumentoCedenteView): Promise<void> {
@@ -592,6 +592,42 @@ export class DocCedenteInfoComponent implements OnInit {
         status
       };
     });
+  }
+
+  private validarDocumento(documento: DocumentoCedenteView, valido: boolean): void {
+    const endpoint = `${environment.api}/cedente/arquivo/validacao`;
+    const arquivoId = documento && documento.original && documento.original.id;
+    const fundId = this.obterFundId(documento);
+
+    if (arquivoId === null || arquivoId === undefined || arquivoId === '') {
+      console.warn('ID do arquivo não encontrado para validar documento.', documento && documento.original);
+      return;
+    }
+
+    if (!fundId) {
+      console.warn('fund_id não encontrado para validar documento.', documento && documento.original);
+      return;
+    }
+
+    const payload = {
+      fund_id: this.toNumericOrOriginal(fundId),
+      id: this.toNumericOrOriginal(arquivoId),
+      valido
+    };
+
+    this.http.patch(endpoint, payload).subscribe({
+      next: () => {
+        this.alterarStatusLocal(documento.id, valido ? 'aprovado' : 'pendente');
+      },
+      error: (err: any) => {
+        console.error('Erro ao validar documento do cedente:', err);
+      }
+    });
+  }
+
+  private toNumericOrOriginal(value: any): number | string {
+    const numericValue = Number(value);
+    return Number.isNaN(numericValue) ? String(value) : numericValue;
   }
 
 }

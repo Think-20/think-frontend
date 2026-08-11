@@ -1,8 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CedenteDataService } from './cedente-data.service';
 import { DocumentacaoCedenteComponent } from '../documentacao-cedente/documentacao-cedente.component';
+import { PartesRelacionadasComponent } from '../partes-relacionadas/partes-relacionadas.component';
 import { environment } from '../../../environments/environment';
 import { ActivatedRoute } from '@angular/router';
 import {
@@ -54,6 +56,7 @@ export class NovoCedenteComponent implements OnInit {
   contasDesembolsoForms: any[] = [];
   arquivos: any[] = [];
   salvandoCadastro: boolean = false;
+  mensagemAlertaCadastro: string = '';
 
   // Dados preenchidos
   partesRelacionadas: any[] = [];
@@ -75,6 +78,9 @@ export class NovoCedenteComponent implements OnInit {
   @ViewChild(DocumentacaoCedenteComponent, { static: false })
   documentacaoCedenteComponent?: DocumentacaoCedenteComponent;
 
+  @ViewChildren(PartesRelacionadasComponent)
+  partesRelacionadasComponentes?: QueryList<PartesRelacionadasComponent>;
+
   @ViewChild('dadosCadastraisSection', { static: false })
   dadosCadastraisSection?: ElementRef<HTMLElement>;
 
@@ -90,6 +96,7 @@ export class NovoCedenteComponent implements OnInit {
   constructor( 
     private fb: FormBuilder, 
     private http: HttpClient,
+    private snackBar: MatSnackBar,
     private cedenteDataService: CedenteDataService,
     private  route: ActivatedRoute
   ) { }
@@ -104,7 +111,7 @@ export class NovoCedenteComponent implements OnInit {
       nome: ['', [Validators.required]],
       documento: ['', [Validators.required, CpfCnpjValidator]],
       email: ['', [Validators.required, EmailValidator]],
-      faturamento_anual: [''],
+      faturamento_anual: ['', [Validators.required]],
       minimo_assinantes: [''],
       cep: ['', [Validators.required, CepValidator]],
       logradouro: ['', [Validators.required]],
@@ -293,7 +300,9 @@ export class NovoCedenteComponent implements OnInit {
 
   proximoStep() {
     if (this.stepAtual === 1) {
-      if (this.formDadosCadastrais.invalid || this.formInfoGeral.invalid) {
+      this.marcarPartesRelacionadasComoTouched();
+
+      if (this.formDadosCadastrais.invalid || this.formInfoGeral.invalid || this.existemPartesRelacionadasInvalidas()) {
         this.formDadosCadastrais.markAllAsTouched();
         this.formInfoGeral.markAllAsTouched();
         return;
@@ -478,6 +487,7 @@ export class NovoCedenteComponent implements OnInit {
     }
 
     const status = this.isCadastroCompletoParaPendente() ? 'pendente' : 'rascunho';
+    this.mensagemAlertaCadastro = '';
     this.salvandoCadastro = true;
     this.dispatchLoading(true);
 
@@ -514,6 +524,13 @@ export class NovoCedenteComponent implements OnInit {
       },
       error: (err: any) => {
         console.error('Erro ao salvar cadastro de cedente:', err);
+
+        if (err && err.status === 413) {
+          this.exibirAlertaCadastro('Não foi possível salvar o cadastro porque o tamanho dos anexos excede o limite permitido.\n\nLimite máximo por arquivo: 700 KB.');
+          return;
+        }
+
+        this.exibirAlertaCadastro('Erro ao salvar cadastro de cedente. Tente novamente.');
       },
       complete: () => {
         this.salvandoCadastro = false;
@@ -608,6 +625,31 @@ export class NovoCedenteComponent implements OnInit {
     if (root && (root as any).componentInstance) {
       (root as any).componentInstance.isLoading = isLoading;
     }
+  }
+
+  private exibirAlertaCadastro(mensagem: string): void {
+    this.mensagemAlertaCadastro = mensagem;
+    this.snackBar.open(mensagem, '', {
+      duration: 2500
+    });
+  }
+
+  private marcarPartesRelacionadasComoTouched(): void {
+    if (!this.partesRelacionadasComponentes) {
+      return;
+    }
+
+    this.partesRelacionadasComponentes.forEach((componente: PartesRelacionadasComponent) => {
+      componente.markAllAsTouched();
+    });
+  }
+
+  private existemPartesRelacionadasInvalidas(): boolean {
+    if (!this.partesRelacionadasComponentes || !this.partesRelacionadasComponentes.length) {
+      return false;
+    }
+
+    return this.partesRelacionadasComponentes.some((componente: PartesRelacionadasComponent) => !componente.isValido());
   }
 
   finalizarCadastro() {

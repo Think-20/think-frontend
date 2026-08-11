@@ -73,9 +73,12 @@
                 <h5>Dados Cadastrais</h5>
             </div>
             <form [formGroup]="formDadosCadastrais">
-                <div class="form-group">
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'nome')">
                     <label for="nome">Nome/Razão Social*</label>
                     <input type="text" formControlName="nome">
+                    <div class="error-message" *ngIf="isControlInvalid(formDadosCadastrais, 'nome')">
+                        {{ getControlErrorMessage(formDadosCadastrais, 'nome') }}
+                    </div>
                 </div>
 
                 <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'documento')">
@@ -94,9 +97,12 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'faturamento_anual')">
                     <label for="faturamento_anual">Faturamento Anual*</label>
                     <input type="text" formControlName="faturamento_anual" currencyMask>
+                    <div class="error-message" *ngIf="isControlInvalid(formDadosCadastrais, 'faturamento_anual')">
+                        {{ getControlErrorMessage(formDadosCadastrais, 'faturamento_anual') }}
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -261,6 +267,11 @@
     <cb-documentacao-cedente *ngIf="stepAtual === 2"></cb-documentacao-cedente>
     <cb-contratos *ngIf="stepAtual === 3"></cb-contratos>
     <cb-revicao-final *ngIf="stepAtual === 4" (submitConcluido)="finalizarFluxoCadastro()" (editarEtapaSelecionada)="irParaEtapa($event)"></cb-revicao-final> 
+
+    <div class="alertaCadastro" *ngIf="mensagemAlertaCadastro">
+        <mat-icon>warning</mat-icon>
+        <span>{{ mensagemAlertaCadastro }}</span>
+    </div>
 
     <div class="containerBTN">
         <button class="btnVoltar" *ngIf="stepAtual > 1" (click)="voltarStep()">

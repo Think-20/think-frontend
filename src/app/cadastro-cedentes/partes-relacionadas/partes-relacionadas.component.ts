@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { CedenteDataService } from '../novo-cedente/cedente-data.service';
-import { CpfCnpjValidator, OptionalEmailValidator, OptionalPhoneValidator, OptionalCepValidator } from '../../shared/custom-validators';
+import { CpfCnpjValidator, OptionalEmailValidator, PhoneValidator, OptionalCepValidator } from '../../shared/custom-validators';
 
 @Component({
   selector: 'cb-partes-relacionadas',
@@ -47,7 +47,7 @@ export class PartesRelacionadasComponent implements OnInit, OnChanges {
       nacionalidade:['Brasileira'],
       email:['', [OptionalEmailValidator]],
       cpf:['', [Validators.required, CpfCnpjValidator]],
-      telefone:['', [OptionalPhoneValidator]],
+      telefone:['', [Validators.required, PhoneValidator]],
     });
 
     // Dados Complementares
@@ -203,6 +203,17 @@ export class PartesRelacionadasComponent implements OnInit, OnChanges {
       endereco
     };
     this.onDuplicate.emit(data);
+  }
+
+  markAllAsTouched(): void {
+    this.formParteRelacionadas.markAllAsTouched();
+    this.formDadosComplementares.markAllAsTouched();
+    this.formEndereco.markAllAsTouched();
+    this.formCheck.markAllAsTouched();
+  }
+
+  isValido(): boolean {
+    return this.formParteRelacionadas.valid && this.formDadosComplementares.valid && this.formEndereco.valid && this.formCheck.valid;
   }
 
 }

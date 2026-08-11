@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CedenteDataService } from '../novo-cedente/cedente-data.service';
 
 interface Documento {
@@ -27,7 +28,7 @@ interface GrupoDocumentoPessoa {
   templateUrl: './documentacao-cedente.component.html',
   styleUrls: ['./documentacao-cedente.component.css']
 })
-export class DocumentacaoCedenteComponent implements OnInit {
+export class DocumentacaoCedenteComponent implements OnInit, OnDestroy {
   documentacao: boolean = true;
   contrato: boolean = false;
   mensagemPendencia: string = '';
@@ -54,13 +55,24 @@ export class DocumentacaoCedenteComponent implements OnInit {
 
   // Tipos de arquivo aceitos
   tiposPermitidos = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.jpg', '.jpeg', '.png', '.zip', '.rar'];
-  tamanhoMaximo = 700 * 1024 * 1024; // 700MB
+  tamanhoMaximo = 700 * 1024; // 700KB
+  private readonly duracaoErroVisualMs = 2500;
+  private errosTemporariosTimers: { [key: string]: any } = {};
 
-  constructor(private cedenteDataService: CedenteDataService) { }
+  constructor(
+    private cedenteDataService: CedenteDataService,
+    private snackBar: MatSnackBar
+  ) { }
 
   ngOnInit() {
     const dados = this.cedenteDataService.obterDados();
     this.hidratarDocumentosPersistidos(dados.arquivos || []);
+  }
+
+  ngOnDestroy(): void {
+    Object.keys(this.errosTemporariosTimers).forEach((key: string) => {
+      clearTimeout(this.errosTemporariosTimers[key]);
+    });
   }
 
   /*
@@ -284,16 +296,17 @@ export class DocumentacaoCedenteComponent implements OnInit {
     // Validar extensão
     const extensao = '.' + (arquivo.name.split('.').pop() || '').toLowerCase();
     if (!this.tiposPermitidos.includes(extensao)) {
-      documento.erro = `Tipo de arquivo inválido. Aceitos: ${this.tiposPermitidos.join(', ')}`;
+      this.definirErroTemporario(documento, `Tipo de arquivo inválido. Aceitos: ${this.tiposPermitidos.join(', ')}`);
       return false;
     }
 
     // Validar tamanho
     if (arquivo.size > this.tamanhoMaximo) {
-      documento.erro = `Arquivo muito grande. Tamanho máximo: ${this.formatarTamanho(this.tamanhoMaximo)}`;
+      this.definirErroTemporario(documento, `Arquivo muito grande. Tamanho máximo: ${this.formatarTamanho(this.tamanhoMaximo)}`);
       return false;
     }
 
+    this.limparErroTemporario(documento);
     documento.erro = undefined;
     return true;
   }
@@ -318,6 +331,7 @@ export class DocumentacaoCedenteComponent implements OnInit {
     documento.tipoArquivo = tipoArquivo;
     documento.tamanhoArquivo = this.formatarTamanho(arquivo.size);
     documento.dataUpload = new Date();
+    this.limparErroTemporario(documento);
     documento.erro = undefined;
 
     try {
@@ -336,11 +350,42 @@ export class DocumentacaoCedenteComponent implements OnInit {
       this.cedenteDataService.adicionarOuAtualizarArquivo(arquivoPayload);
       this.mensagemPendencia = '';
     } catch (err) {
-      documento.erro = 'Falha ao ler arquivo. Tente novamente.';
+      this.definirErroTemporario(documento, 'Falha ao ler arquivo. Tente novamente.');
       console.error('Erro conversão Base64:', err);
     } finally {
       input.value = '';
     }
+  }
+
+  private definirErroTemporario(documento: Documento, mensagem: string): void {
+    const chave = String(documento.id);
+
+    if (this.errosTemporariosTimers[chave]) {
+      clearTimeout(this.errosTemporariosTimers[chave]);
+    }
+
+    documento.erro = mensagem;
+    this.exibirNotificacao(mensagem);
+
+    this.errosTemporariosTimers[chave] = setTimeout(() => {
+      documento.erro = undefined;
+      delete this.errosTemporariosTimers[chave];
+    }, this.duracaoErroVisualMs);
+  }
+
+  private limparErroTemporario(documento: Documento): void {
+    const chave = String(documento.id);
+
+    if (this.errosTemporariosTimers[chave]) {
+      clearTimeout(this.errosTemporariosTimers[chave]);
+      delete this.errosTemporariosTimers[chave];
+    }
+  }
+
+  private exibirNotificacao(mensagem: string): void {
+    this.snackBar.open(mensagem, '', {
+      duration: 2500
+    });
   }
 
   /**
@@ -348,6 +393,7 @@ export class DocumentacaoCedenteComponent implements OnInit {
    */
   removerArquivo(documento: Documento): void {
     this.cedenteDataService.removerArquivoPorTipoDocumento(documento.id as any);
+    this.limparErroTemporario(documento);
 
     documento.arquivo = undefined;
     documento.nomeArquivo = undefined;

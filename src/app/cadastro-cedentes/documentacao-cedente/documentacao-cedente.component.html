@@ -6,7 +6,7 @@
             <p class="destaque">{{ documentos.length }} documentos obrigatórios</p>
         </div>
         <div class="documentosList">
-            <div *ngFor="let doc of documentos" class="areaUpLoad" [class.comArquivo]="doc.arquivo">
+            <div *ngFor="let doc of documentos" class="areaUpLoad" [class.comArquivo]="doc.arquivo" [class.comErro]="doc.erro">
                 <ng-container *ngIf="!doc.arquivo">
                     <mat-icon class="iconeDocumento">description</mat-icon>
                     <div class="typeDoc">
@@ -89,7 +89,7 @@
                 <strong>Orientações para upload:</strong>
                 <ul>
                     <li>Formatos aceitos: PDF, DOC, DOCX, XLS, XLSX, JPG, JPEG, PNG, ZIP, RAR</li>
-                    <li>Tamanho máximo por arquivo: 700 MB</li>
+                    <li>Tamanho máximo por arquivo: 700 KB</li>
                     <li>Todos os documentos listados são obrigatórios</li>
                     <li>Certifique-se de que os arquivos estão legíveis e bem organizados</li>
                 </ul>

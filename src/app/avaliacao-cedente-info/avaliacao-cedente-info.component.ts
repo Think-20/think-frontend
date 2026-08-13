@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '../../environments/environment';
 import { FundStateService } from '../cadastro-cedentes/fund-state.service';
 import { AuthService } from '../login/auth.service';
@@ -15,6 +16,7 @@ type AvaliacaoAcao = 'aprovar' | 'corrigir' | 'rejeitar' | null;
 })
 export class AvaliacaoCedenteInfoComponent implements OnInit {
   @Input() cedente: any;
+  @Output() avaliacaoConcluida = new EventEmitter<string>();
 
   selectedAcao: AvaliacaoAcao = null;
   submitting = false;
@@ -25,7 +27,8 @@ export class AvaliacaoCedenteInfoComponent implements OnInit {
     private http: HttpClient,
     private route: ActivatedRoute,
     private fundState: FundStateService,
-    private auth: AuthService
+    private auth: AuthService,
+    private snackBar: MatSnackBar
   ) { }
 
   // Formularios
@@ -71,6 +74,10 @@ export class AvaliacaoCedenteInfoComponent implements OnInit {
   }
 
   selecionarAcao(acao: AvaliacaoAcao) {
+    if (this.submitting) {
+      return;
+    }
+
     this.selectedAcao = this.selectedAcao === acao ? null : acao;
   }
 
@@ -79,6 +86,10 @@ export class AvaliacaoCedenteInfoComponent implements OnInit {
   }
 
   enviarAprovacao(): void {
+    if (this.submitting) {
+      return;
+    }
+
     if (this.formAprovacao.invalid) {
       this.formAprovacao.markAllAsTouched();
       return;
@@ -90,33 +101,42 @@ export class AvaliacaoCedenteInfoComponent implements OnInit {
       prazo_atualizacao_cadastral: Number(this.formAprovacao.value.prazoAtualizacao)
     });
 
-    this.enviarPatch(payload, this.formAprovacao);
+    this.enviarPatch(payload, this.formAprovacao, 'Cadastro aprovado com sucesso! Você poderá localizá-lo na coluna Aprovados do Kanban.');
   }
 
   enviarCorrecao(): void {
+    if (this.submitting) {
+      return;
+    }
+
     if (this.formCorrecao.invalid) {
       this.formCorrecao.markAllAsTouched();
       return;
     }
 
     const payload = this.montarPayload('solicitar_correcoes', String(this.formCorrecao.value.observacao || '').trim());
-    this.enviarPatch(payload, this.formCorrecao);
+    this.enviarPatch(payload, this.formCorrecao, 'Solicitação de correção realizada com sucesso! Você poderá localizá-lo na coluna Inconsistências do Kanban.');
   }
 
   enviarRejeicao(): void {
+    if (this.submitting) {
+      return;
+    }
+
     if (this.formRejeicao.invalid) {
       this.formRejeicao.markAllAsTouched();
       return;
     }
 
     const payload = this.montarPayloadRejeicao(String(this.formRejeicao.value.observacao || '').trim());
-    this.enviarPatch(payload, this.formRejeicao);
+    this.enviarPatch(payload, this.formRejeicao, 'Cadastro rejeitado com sucesso! Você poderá localizá-lo na coluna Cancelados do Kanban.');
   }
 
-  private enviarPatch(payload: any, form: FormGroup): void {
+  private enviarPatch(payload: any, form: FormGroup, mensagemSucesso: string): void {
     const url = `${environment.api}/cedente/avaliacao`;
 
     this.submitting = true;
+    this.dispatchLoading(true);
 
     this.http.patch(url, payload).subscribe({
       next: (res: any) => {
@@ -124,12 +144,25 @@ export class AvaliacaoCedenteInfoComponent implements OnInit {
         this.selectedAcao = null;
         form.reset();
         this.submitting = false;
+        this.avaliacaoConcluida.emit(mensagemSucesso);
       },
       error: (err) => {
         console.error('Erro ao enviar avaliação:', err);
         this.submitting = false;
+        this.dispatchLoading(false);
+        this.snackBar.open('Não foi possível concluir a operação. Tente novamente.', '', {
+          duration: 3000
+        });
       }
     });
+  }
+
+  private dispatchLoading(isLoading: boolean): void {
+    const root = document.querySelector('cb-cadastro-cedentes');
+
+    if (root && (root as any).componentInstance) {
+      (root as any).componentInstance.isLoading = isLoading;
+    }
   }
 
   private montarPayload(resultado: string, observacao: string, extras?: { [key: string]: any }): any {

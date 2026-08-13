@@ -253,5 +253,6 @@
     *ngIf="mostrarInfoCedente"
     [cedente]="cedenteSelecionado"
     (onVoltar)="voltarKanban()"
-    (onEditar)="editarCedenteSelecionado()">
+    (onEditar)="editarCedenteSelecionado()"
+    (onAvaliacaoConcluida)="voltarKanban($event)">
 </cb-infocedente>

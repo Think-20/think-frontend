@@ -14,6 +14,7 @@ export class InfocedenteComponent {
 
   @Output() onVoltar = new EventEmitter<void>();
   @Output() onEditar = new EventEmitter<void>();
+  @Output() onAvaliacaoConcluida = new EventEmitter<string>();
 
   selectedTab: InfoCedenteTab = 'informacoes';
 
@@ -30,6 +31,10 @@ export class InfocedenteComponent {
 
   editar() {
     this.onEditar.emit();
+  }
+
+  finalizarAvaliacao(mensagem: string) {
+    this.onAvaliacaoConcluida.emit(mensagem);
   }
 
   private obterCedenteRoleIdUsuarioLogado(): number | null {

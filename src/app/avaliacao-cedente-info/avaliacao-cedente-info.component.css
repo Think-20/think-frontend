@@ -951,6 +951,11 @@ label{
   box-shadow:0 8px 18px rgba(0,0,0,.12);
 }
 
+.btnAction.disabled{
+  pointer-events:none;
+  opacity:.6;
+}
+
 .btnAction p{
   margin:0;
   font-size:14px;

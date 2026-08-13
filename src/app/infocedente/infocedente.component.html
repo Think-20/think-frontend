@@ -500,7 +500,7 @@
 
     <cb-doc-cedente-info *ngSwitchCase="'documentacao'" [cedente]="cedente"></cb-doc-cedente-info>
     <cb-historico-cedente-info *ngSwitchCase="'historico'" [cedente]="cedente"></cb-historico-cedente-info>
-        <cb-avaliacao-cedente-info *ngSwitchCase="'avaliacao'" [cedente]="cedente"></cb-avaliacao-cedente-info>
+        <cb-avaliacao-cedente-info *ngSwitchCase="'avaliacao'" [cedente]="cedente" (avaliacaoConcluida)="finalizarAvaliacao($event)"></cb-avaliacao-cedente-info>
   </ng-container>
 
 </div>

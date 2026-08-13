@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { environment } from '../../environments/environment.prod';
 import { ActivatedRoute, Router} from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { FundStateService } from './fund-state.service';
 import { CedenteDataService } from './novo-cedente/cedente-data.service';
 import { Observable, of } from 'rxjs';
@@ -76,6 +77,7 @@ export class CadastroCedentesComponent implements OnInit {
     private http: HttpClient, 
     private route: ActivatedRoute,
     private router: Router,
+    private snackBar: MatSnackBar,
     private fundState: FundStateService,
     private cedenteDataService: CedenteDataService
   ) { }
@@ -247,7 +249,7 @@ export class CadastroCedentesComponent implements OnInit {
     return res;
   }
 
-  voltarKanban(){
+  voltarKanban(mensagemSucesso?: string){
     this.isLoading = true;
     this.mostrarKanban = false;
     this.mostrarNovoCedente = false;
@@ -255,6 +257,11 @@ export class CadastroCedentesComponent implements OnInit {
 
     this.buscarCedentes(undefined, () => {
       this.mostrarKanban = true;
+      if (mensagemSucesso) {
+        this.snackBar.open(mensagemSucesso, '', {
+          duration: 5000
+        });
+      }
       this.finalizarCarregamento();
     });
   }

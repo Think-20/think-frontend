@@ -6,15 +6,15 @@
             <p>Ações de Avaliação</p>
         </div>
         <div class="botoesAcaoGrid" *ngIf="podeVerAcoesAvaliacao; else semPermissaoAvaliacao">
-            <div class="btnAction aprovarCadastro" [class.active]="isAcaoSelecionada('aprovar')" (click)="selecionarAcao('aprovar')">
+            <div class="btnAction aprovarCadastro" [class.active]="isAcaoSelecionada('aprovar')" [class.disabled]="submitting" (click)="selecionarAcao('aprovar')">
                 <mat-icon>check_circle</mat-icon>
                 <p>Aprovar Cadastro</p>
             </div>
-            <div class="btnAction solicitarCorrecao" [class.active]="isAcaoSelecionada('corrigir')" (click)="selecionarAcao('corrigir')">
+            <div class="btnAction solicitarCorrecao" [class.active]="isAcaoSelecionada('corrigir')" [class.disabled]="submitting" (click)="selecionarAcao('corrigir')">
                 <mat-icon>error_outline</mat-icon>
                 <p>Solicitar Correções</p>
             </div>
-            <div class="btnAction rejeitarCadastro" [class.active]="isAcaoSelecionada('rejeitar')" (click)="selecionarAcao('rejeitar')">
+            <div class="btnAction rejeitarCadastro" [class.active]="isAcaoSelecionada('rejeitar')" [class.disabled]="submitting" (click)="selecionarAcao('rejeitar')">
                 <mat-icon>cancel</mat-icon>
                 <p>Rejeitar Cadastro</p>
             </div>
@@ -58,7 +58,7 @@
                             </div>
                             <div id="btnCancelar">
 
-                                <button class="btn" type="button" (click)="selecionarAcao(null)">Cancelar</button>
+                                <button class="btn" type="button" [disabled]="submitting" (click)="selecionarAcao(null)">Cancelar</button>
                             </div>
                         </div>
                     </form>
@@ -81,7 +81,7 @@
                                 <button class="btn" type="submit" [disabled]="submitting">Enviar</button>
                             </div>
                             <div id="btnCancelar">
-                                <button class="btn" type="button" (click)="selecionarAcao(null)">Cancelar</button>
+                                <button class="btn" type="button" [disabled]="submitting" (click)="selecionarAcao(null)">Cancelar</button>
                             </div>
                         </div>
                     </form>
@@ -98,12 +98,12 @@
                         <textarea formControlName="observacao" name="observacao" id="observacao" placeholder="Digite aqui os motivos que levaram à reprovação do cadastro..."></textarea>
                     </div>
                     <div class="containerBtns">
-                        <div id="btnEnviar" (click)="enviarRejeicao()">
+                        <div id="btnEnviar">
                             <mat-icon>check</mat-icon>
-                            <button class="btn" type="button" [disabled]="submitting">Enviar</button>
+                            <button class="btn" type="submit" [disabled]="submitting">Enviar</button>
                         </div>
                         <div id="btnCancelar">
-                            <button class="btn" type="button" (click)="selecionarAcao(null)">Cancelar</button>
+                            <button class="btn" type="button" [disabled]="submitting" (click)="selecionarAcao(null)">Cancelar</button>
                         </div>
                     </div>
                 </form>

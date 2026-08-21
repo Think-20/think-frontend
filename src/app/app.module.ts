@@ -240,6 +240,7 @@ import { InfocedenteComponent } from './infocedente/infocedente.component';
 import { DocCedenteInfoComponent } from './doc-cedente-info/doc-cedente-info.component';
 import { HistoricoCedenteInfoComponent } from './historico-cedente-info/historico-cedente-info.component';
 import { AvaliacaoCedenteInfoComponent } from './avaliacao-cedente-info/avaliacao-cedente-info.component';
+import { ModalWorkflowComponent } from './modal-cedentes/modal-workflow/modal-workflow.component';
 
 
 registerLocaleData(localePt);
@@ -384,6 +385,7 @@ registerLocaleData(localePt);
     DocCedenteInfoComponent,
     HistoricoCedenteInfoComponent,
     AvaliacaoCedenteInfoComponent,
+    ModalWorkflowComponent,
 
 
   ],

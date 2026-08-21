@@ -1,4 +1,4 @@
-<div class="modal" *ngIf="!mostrarQuestionario">
+<div class="modal" *ngIf="!mostrarQuestionario && !mostrarWorkflow">
   <div class="modal-content">
         <div class="headModal">
             <div class="groupTitles">
@@ -63,6 +63,14 @@
 <cb-modal-questionario
     *ngIf="mostrarQuestionario"
     [fundoSelecionado]="fundoSelecionado"
+    [questionarioSelecionadoId]="questionarioSelecionado?.id || null"
     (voltarEtapa)="voltarParaPasso1()"
+    (avancarEtapa)="abrirWorkflow($event)"
     (fecharModal)="toggle()">
 </cb-modal-questionario>
+
+<cb-modal-workflow
+    *ngIf="mostrarWorkflow"
+    (voltarEtapa)="voltarParaQuestionario()"
+    (fecharModal)="toggle()">
+</cb-modal-workflow>

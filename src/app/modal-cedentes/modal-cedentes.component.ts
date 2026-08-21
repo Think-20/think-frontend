@@ -1,11 +1,19 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { EventEmitter } from '@angular/core';
+import { ModalCedentesStateService } from './modal-cedentes-state.service';
 
 interface FundoOpcao {
   id: number;
   nome: string;
   codigo: string;
   categoria: string;
+}
+
+interface QuestionarioOpcao {
+  id: number;
+  nome: string;
+  descricao: string;
+  perguntas: number;
 }
 
 @Component({
@@ -17,7 +25,9 @@ export class ModalCedentesComponent implements OnInit {
   @Output() toggleModal = new EventEmitter<void>();
 
   mostrarQuestionario: boolean = false;
+  mostrarWorkflow: boolean = false;
   selecionado: number | null = null;
+  questionarioSelecionado: QuestionarioOpcao | null = null;
 
   fundos: FundoOpcao[] = [
     { id: 1, nome: 'Fundo de Renda Fixa Epsilon', codigo: 'FRF-005', categoria: 'Renda Fixa' },
@@ -26,13 +36,14 @@ export class ModalCedentesComponent implements OnInit {
     { id: 4, nome: 'Fundo de Investimento Kappa', codigo: 'FIV-008', categoria: 'Investimento' }
   ];
 
-  constructor() { }
+  constructor(private modalCedentesStateService: ModalCedentesStateService) { }
 
 
   ngOnInit() {
   }
 
   toggle(): void {
+    this.modalCedentesStateService.reset();
     this.toggleModal.emit();
   }
 
@@ -42,10 +53,14 @@ export class ModalCedentesComponent implements OnInit {
 
   choiceBackground(id: number): void {
     this.selecionado = id;
+
+    const fundo = this.fundos.find((item) => item.id === id) || null;
+    this.modalCedentesStateService.fundoSelecionado = fundo;
   }
 
   nextStep(): void {
     if (this.selecionado != null) {
+      this.mostrarWorkflow = false;
       this.mostrarQuestionario = true;
     } else {
       console.log('Selecione um fundo primeiro');
@@ -54,6 +69,19 @@ export class ModalCedentesComponent implements OnInit {
 
   voltarParaPasso1(): void {
     this.mostrarQuestionario = false;
+    this.mostrarWorkflow = false;
+  }
+
+  abrirWorkflow(questionario: QuestionarioOpcao): void {
+    this.questionarioSelecionado = questionario;
+    this.modalCedentesStateService.questionarioSelecionado = questionario;
+    this.mostrarQuestionario = false;
+    this.mostrarWorkflow = true;
+  }
+
+  voltarParaQuestionario(): void {
+    this.mostrarWorkflow = false;
+    this.mostrarQuestionario = true;
   }
 
 }

@@ -22,9 +22,11 @@ interface FundoSelecionado {
 })
 export class ModalQuestionarioComponent implements OnInit {
   @Input() fundoSelecionado: FundoSelecionado | null = null;
+  @Input() questionarioSelecionadoId: number | null = null;
 
   @Output() voltarEtapa = new EventEmitter<void>();
   @Output() fecharModal = new EventEmitter<void>();
+  @Output() avancarEtapa = new EventEmitter<Questionario>();
 
   selecionado: number | null = null;
   etapaAtual: number = 2;
@@ -40,7 +42,7 @@ export class ModalQuestionarioComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.resetarModal();
+    this.selecionado = this.questionarioSelecionadoId;
   }
 
   private resetarModal(): void {
@@ -60,9 +62,13 @@ export class ModalQuestionarioComponent implements OnInit {
       console.warn('Selecione um questionário antes de prosseguir');
       return;
     }
-    this.etapaAtual++;
-    this.mostrarWorkflow = true;
-    console.log('Questionário selecionado:', this.selecionado);
+
+    const questionario = this.questionarios.find((item) => item.id === this.selecionado);
+    if (!questionario) {
+      return;
+    }
+
+    this.avancarEtapa.emit(questionario);
   }
 
   voltar(): void {

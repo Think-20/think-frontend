@@ -1,0 +1,88 @@
+<div class="modal">
+	<div class="modal-content">
+		<div class="headModal">
+			<div class="groupTitles">
+				<h2 class="titleMain">Ativar Novo Fundo para Cadastro</h2>
+				<p class="subtitle">Configure o fundo para gerenciar cedentes</p>
+			</div>
+			<button type="button" class="btnClose" (click)="fechar()" aria-label="Fechar">
+				<mat-icon class="btnIconClose">close</mat-icon>
+			</button>
+		</div>
+
+		<div class="statusProcess">
+			<div class="step">
+				<div class="icon iconDone">
+					<mat-icon>check</mat-icon>
+				</div>
+				<p class="label labelDone">Vincular Fundo</p>
+			</div>
+			<div class="line lineDone"></div>
+
+			<div class="step">
+				<div class="icon iconDone">
+					<mat-icon>check</mat-icon>
+				</div>
+				<p class="label labelDone">Vincular Questionário</p>
+			</div>
+			<div class="line lineDone"></div>
+
+			<div class="step">
+				<div class="icon iconActive">3</div>
+				<p class="label labelActive">Vincular Workflow</p>
+			</div>
+		</div>
+
+		<div class="headSecao">
+			<div class="groupTitles">
+				<h3 class="sectionTitle">Selecione o Workflow</h3>
+				<p class="subtitle">Escolha o fluxo de aprovação que será utilizado para os cadastros</p>
+			</div>
+
+			<div class="contextCards">
+				<div class="contextCard contextFundo">
+					<p class="contextLabel">Fundo Selecionado:</p>
+					<p class="contextValue" *ngIf="fundoSelecionado">{{ fundoSelecionado.nome }} - {{ fundoSelecionado.codigo }}</p>
+					<p class="contextValue" *ngIf="!fundoSelecionado">Nenhum fundo selecionado</p>
+				</div>
+
+				<div class="contextCard contextQuestionario">
+					<p class="contextLabel">Questionário Selecionado:</p>
+					<p class="contextValue" *ngIf="questionarioSelecionado">{{ questionarioSelecionado.nome }}</p>
+					<p class="contextValue" *ngIf="!questionarioSelecionado">Nenhum questionário selecionado</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="typesWorkflow">
+			<div
+				class="workflowCard"
+				*ngFor="let workflow of workflows"
+				(click)="selecionarWorkflow(workflow.id)"
+				[class.active]="isWorkflowSelecionado(workflow.id)">
+				<div class="headCardWorkflow">
+					<div class="iconWorkflow">
+						<mat-icon>device_hub</mat-icon>
+					</div>
+					<div class="workflowInfo">
+						<h3 class="titleWorkflow">{{ workflow.nome }}</h3>
+						<p class="descriptionWorkflow">{{ workflow.etapasDescricao }}</p>
+						<span class="stepsBadge">{{ workflow.quantidadeEtapas }} etapas</span>
+					</div>
+				</div>
+
+				<div class="statusSelected" *ngIf="isWorkflowSelecionado(workflow.id)">
+					<mat-icon>check</mat-icon>
+				</div>
+			</div>
+		</div>
+
+		<div class="btnAction">
+			<button class="cancel" (click)="voltar()">Voltar</button>
+			<button class="next" [disabled]="!workflowSelecionadoId" (click)="confirmarAtivacao()">
+				<mat-icon>check</mat-icon>
+				Confirmar Ativação
+			</button>
+		</div>
+	</div>
+</div>

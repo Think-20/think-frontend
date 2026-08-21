@@ -1,0 +1,377 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+.modal {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.45);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+	padding: 20px;
+}
+
+.modal-content {
+	background: #fff;
+	border-radius: 8px;
+	width: 100%;
+	max-width: 740px;
+	animation: scaleIn .25s ease;
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.22);
+	overflow: hidden;
+}
+
+@keyframes scaleIn {
+	from {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+.headModal {
+	padding: 18px 24px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #e9eef4;
+}
+
+.groupTitles {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.titleMain {
+	font-size: 33px;
+	line-height: 1.2;
+	font-weight: 600;
+	color: #25354a;
+}
+
+.subtitle {
+	font-size: 12px;
+	color: #687788;
+}
+
+.btnClose {
+	width: 28px;
+	height: 28px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	background: transparent;
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+.btnIconClose {
+	font-size: 20px;
+	color: #687788;
+	transition: color 0.2s ease;
+}
+
+.btnClose:hover .btnIconClose {
+	color: #25354a;
+}
+
+.statusProcess {
+	display: flex;
+	align-items: center;
+	padding: 18px 24px;
+	border-bottom: 1px solid #f2f5f8;
+}
+
+.step {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.icon {
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px;
+	font-weight: 700;
+}
+
+.icon mat-icon {
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+}
+
+.iconDone,
+.iconActive {
+	background: #13b79f;
+	color: #fff;
+}
+
+.label {
+	font-size: 13px;
+	white-space: nowrap;
+	font-weight: 600;
+}
+
+.labelDone,
+.labelActive {
+	color: #25354a;
+}
+
+.line {
+	flex: 1;
+	height: 2px;
+	margin: 0 10px;
+	background: #e8edf3;
+}
+
+.lineDone {
+	background: #13b79f;
+}
+
+.headSecao {
+	padding: 14px 24px 10px;
+}
+
+.sectionTitle {
+	font-size: 29px;
+	line-height: 1.25;
+	color: #25354a;
+	font-weight: 600;
+}
+
+.contextCards {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-top: 12px;
+}
+
+.contextCard {
+	border-radius: 8px;
+	border: 1px solid;
+	padding: 10px 12px;
+}
+
+.contextFundo {
+	background: #f4fbfa;
+	border-color: #9fe6d8;
+}
+
+.contextQuestionario {
+	background: #f3f7ff;
+	border-color: #b8d0ff;
+}
+
+.contextLabel {
+	font-size: 12px;
+	color: #5f6b7a;
+	margin-bottom: 2px;
+}
+
+.contextValue {
+	font-size: 14px;
+	color: #1f2937;
+	font-weight: 600;
+}
+
+.typesWorkflow {
+	border-bottom: 1px solid #edf2f7;
+	padding: 8px 18px 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	max-height: 220px;
+	overflow-y: auto;
+}
+
+.workflowCard {
+	width: 100%;
+	padding: 12px;
+	background: #ffffff;
+	border: 1px solid #d8e1ea;
+	border-radius: 9px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	cursor: pointer;
+	position: relative;
+	transition: border-color .2s ease, background-color .2s ease;
+}
+
+.workflowCard:hover {
+	border-color: #13b79f;
+}
+
+.workflowCard.active {
+	border-color: #13b79f;
+	background-color: #eefcf9;
+}
+
+.headCardWorkflow {
+	display: flex;
+	gap: 10px;
+	align-items: flex-start;
+}
+
+.iconWorkflow {
+	width: 30px;
+	height: 30px;
+	border-radius: 8px;
+	background: #eef2f7;
+	color: #7f8ea3;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.iconWorkflow mat-icon {
+	font-size: 17px;
+	width: 17px;
+	height: 17px;
+}
+
+.workflowCard.active .iconWorkflow {
+	background: #c8f4ec;
+	color: #13b79f;
+}
+
+.workflowInfo {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.titleWorkflow {
+	font-size: 14px;
+	color: #2f3f55;
+	font-weight: 600;
+}
+
+.descriptionWorkflow {
+	font-size: 12px;
+	color: #4f6077;
+}
+
+.stepsBadge {
+	width: fit-content;
+	font-size: 11px;
+	color: #93a1b3;
+	background: #f2f4f7;
+	border-radius: 999px;
+	padding: 2px 8px;
+}
+
+.statusSelected {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #13b79f;
+	color: #fff;
+}
+
+.statusSelected mat-icon {
+	font-size: 12px;
+	width: 12px;
+	height: 12px;
+}
+
+.typesWorkflow::-webkit-scrollbar {
+	width: 8px;
+}
+
+.typesWorkflow::-webkit-scrollbar-track {
+	background: #f3f4f6;
+	border-radius: 8px;
+}
+
+.typesWorkflow::-webkit-scrollbar-thumb {
+	background: #cbd5e1;
+	border-radius: 8px;
+}
+
+.typesWorkflow::-webkit-scrollbar-thumb:hover {
+	background: #94a3b8;
+}
+
+.btnAction {
+	width: 100%;
+	padding: 14px 18px;
+	display: flex;
+	justify-content: space-between;
+	border-top: 1px solid #edf2f7;
+}
+
+.cancel {
+	padding: 8px 16px;
+	border-radius: 10px;
+	background-color: #ffffff;
+	font-size: 14px;
+	font-weight: 500;
+	color: #3b4d65;
+	cursor: pointer;
+	border: 1px solid #c7d2df;
+}
+
+.next {
+	padding: 8px 16px;
+	border-radius: 10px;
+	background: #13b79f;
+	font-size: 14px;
+	font-weight: 600;
+	color: #fff;
+	cursor: pointer;
+	border: none;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.next mat-icon {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+.next:disabled {
+	opacity: .6;
+	cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+	.modal {
+		padding: 10px;
+	}
+
+	.titleMain {
+		font-size: 24px;
+	}
+
+	.sectionTitle {
+		font-size: 21px;
+	}
+
+	.statusProcess {
+		overflow-x: auto;
+	}
+}

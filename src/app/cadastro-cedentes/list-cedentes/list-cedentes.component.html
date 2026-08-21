@@ -4,7 +4,7 @@
     <div class="tableWrapper">
         <!-- Pesquisa -->
         <div class="searchButton">
-            <form [formGroup]="formBusca" id="formSeach">
+            <form [formGroup]="formBusca" id="formSeach" (ngSubmit)="aplicarFiltro()">
                 <div class="inputDiv">
                     <input
                         type="text"
@@ -33,7 +33,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let cedente of cedentes.data">
+                    <tr *ngFor="let cedente of cedentesFiltrados">
 
                     <!-- Cedente -->
                     <td>
@@ -118,7 +118,7 @@
                     </td>
                 </tr>
                 <!-- Estado vazio -->
-                <tr *ngIf="!cedentes.data.length">
+                <tr *ngIf="!cedentesFiltrados.length">
                     <td colspan="7">
                         <div class="empty">
                             <mat-icon>inventory_2</mat-icon>

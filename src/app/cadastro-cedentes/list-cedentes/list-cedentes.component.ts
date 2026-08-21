@@ -13,7 +13,8 @@ export class ListCedentesComponent implements OnInit {
   fundId: string | null = null;
 
   formBusca!: FormGroup;
-  cedentes: any;
+  cedentes: any = { data: [] };
+  cedentesFiltrados: any[] = [];
 
   constructor(private fb: FormBuilder, private http: HttpClient, private fundState: FundStateService) { }
 
@@ -21,6 +22,13 @@ export class ListCedentesComponent implements OnInit {
     this.formBusca = this.fb.group({
       pesquisa: ['']
     });
+
+    const pesquisaControl = this.formBusca.get('pesquisa');
+    if (pesquisaControl) {
+      pesquisaControl.valueChanges.subscribe(() => {
+        this.aplicarFiltro();
+      });
+    }
 
     this.fundId = this.fundState.currentFundId;
     this.fundState.fundId$.subscribe((id) => {
@@ -41,12 +49,42 @@ export class ListCedentesComponent implements OnInit {
       next: (res: any) => {
         this.cedentes = res;
         this.organizarCedentes();
+        this.aplicarFiltro();
       },
       error: (err) => {
         console.error(err);
+        this.cedentes = { data: [] };
         this.organizarCedentes();
+        this.aplicarFiltro();
       }
     });
+  }
+
+  aplicarFiltro(): void {
+    const pesquisaControl = this.formBusca ? this.formBusca.get('pesquisa') : null;
+    const termoBusca = this.normalizarTexto(pesquisaControl ? pesquisaControl.value : '');
+    const listaCedentes = this.cedentes && Array.isArray(this.cedentes.data) ? this.cedentes.data : [];
+
+    if (!termoBusca) {
+      this.cedentesFiltrados = [...listaCedentes];
+      return;
+    }
+
+    this.cedentesFiltrados = listaCedentes.filter((cedente: any) => {
+      const nome = this.normalizarTexto(cedente ? cedente.nome : '');
+      const documento = this.normalizarTexto(cedente ? cedente.documento : '');
+      const id = this.normalizarTexto(cedente ? cedente.id : '');
+
+      return nome.includes(termoBusca) || documento.includes(termoBusca) || id.includes(termoBusca);
+    });
+  }
+
+  private normalizarTexto(valor: any): string {
+    return String(valor || '')
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
   }
 
   formatarStatus(status: string): string {
@@ -64,7 +102,8 @@ export class ListCedentesComponent implements OnInit {
   }
 
   organizarCedentes() {
-    // No list view, a organização pode ser feita aqui se for necessário.
-    // Por enquanto, apenas mantém a estrutura solicitada.
+    if (!this.cedentes || !Array.isArray(this.cedentes.data)) {
+      this.cedentes.data = [];
+    }
   }
 }

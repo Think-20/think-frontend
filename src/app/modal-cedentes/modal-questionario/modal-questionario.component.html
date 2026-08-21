@@ -1,29 +1,26 @@
-<p>modal-questionario works!</p>
 <div class="modal">
   <div class="modal-content">
         <div class="headModal">
             <div class="groupTitles">
                 <h2 class="titles">Ativar Novo Fundo para Cadastro</h2>
-                <p class="titles" id="subtitle">Configure o fundo para gerenciar cedentes</p>
+                <p class="subtitle">Configure o fundo para gerenciar cedentes</p>
             </div>
-            <div class="btnClose">
-                <mat-icon class="btnIconClose" (click)="toggle()">close</mat-icon>
-            </div>
+            <button type="button" class="btnClose" (click)="fechar()" aria-label="Fechar">
+                <mat-icon class="btnIconClose">close</mat-icon>
+            </button>
         </div>
         <div class="statusProcess">
-            <div class="step">
-                <div class="icon">1</div>
-                <p class="label ">Vincular Fundo</p>
+            <div class="step done">
+                <div class="icon active">1</div>
+                <p class="label active">Vincular Fundo</p>
             </div>
-            <!-- check Step -->
             <div class="line"></div>
     
             
-            <div class="step">
-              <div class="icon">2</div>
-              <p class="label">Vincular Questionário</p>
+            <div class="step active">
+              <div class="icon active">2</div>
+              <p class="label active">Vincular Questionário</p>
             </div>
-            <!-- check Step -->
             <div class="line"></div>
 
 
@@ -31,78 +28,44 @@
               <div class="icon">3</div>
               <p class="label">Vincular Workflow</p>
             </div>
-            
-            <!-- check Step -->
         </div>
         <div class="headSecao">
             <div class="groupTitles">
                 <h3 class="titles">Selecione o Template de Questionário</h3>
-                <p class="titles" id="subtitle">Escolha o questionário que será utilizado para coleta de informações</p>
+                <p class="subtitle">Escolha o questionário que será utilizado para coleta de informações</p>
             </div>
             <div class="fundoSelecionado">
-                <p>fundo Escolhido vai vir aqui</p>
+                <p class="fundoLabel">Fundo Selecionado:</p>
+                <p class="fundoNome" *ngIf="fundoSelecionado">
+                    {{ fundoSelecionado.nome }} - {{ fundoSelecionado.codigo }}
+                </p>
+                <p class="fundoNome" *ngIf="!fundoSelecionado">Nenhum fundo selecionado</p>
             </div>
         </div>
 
         <div class="typesQuestionario">
 
-            <div class="questionario" (click)=choiceBackground(1) [class.active]="selecionado === 1">
-                
-                <div class="headCardQuestionario">
-                    <div class="iconQuestionario">
-                        <mat-icon>fact_check</mat-icon>
-                    </div>
-                    <h3 class="titlesQuestionario">Questionário Padrão - Pesso Jurídica</h3>
-                </div>
-                <div class="infoQuestionario">
-                    <p>Template padrão para cadastro de empresa</p>
-                    <span>45 perguntas</span>
-                </div>
-            </div>
+            <div class="questionario" *ngFor="let questionario of questionarios"
+                (click)="choiceBackground(questionario.id)"
+                [class.active]="isQuestionarioSelecionado(questionario.id)">
 
-            <div class="questionario" (click)=choiceBackground(2) [class.active]="selecionado === 2">
                 <div class="headCardQuestionario">
                     <div class="iconQuestionario">
                         <mat-icon>fact_check</mat-icon>
                     </div>
-                    <h3 class="titlesQuestionario">Questionário Simplificado</h3>
+                    <h3 class="titlesQuestionario">{{ questionario.nome }}</h3>
                 </div>
                 <div class="infoQuestionario">
-                    <p>Template com perguntas essenciais</p>
-                    <span>25 perguntas</span>
+                    <p>{{ questionario.descricao }}</p>
+                    <span>{{ questionario.perguntas }} perguntas</span>
                 </div>
-            </div>
-
-            <div class="questionario" (click)=choiceBackground(3) [class.active]="selecionado === 3">
-                <div class="headCardQuestionario">
-                    <div class="iconQuestionario">
-                        <mat-icon>fact_check</mat-icon>
-                    </div>
-                    <h3 class="titlesQuestionario">Questionário Completo - Due Diligence</h3>
-                </div>
-                <div class="infoQuestionario">
-                    <p>Template detalhado para análise aprofundada</p>
-                    <span>78 perguntas</span>
-                </div>
-            </div>
-
-            <div class="questionario" (click)=choiceBackground(4) [class.active]="selecionado === 4">
-                <div class="headCardQuestionario">
-                    <div class="iconQuestionario">
-                        <mat-icon>fact_check</mat-icon>
-                    </div>
-                <h3 class="titlesQuestionario">Questionário KYC Básico</h3>
-                </div>
-                <div class="infoQuestionario">
-                    <p>Template focado em KYC e compliance</p>
-                    <span>32 perguntas</span>
-                </div>
+                <span class="badgeSelected" *ngIf="isQuestionarioSelecionado(questionario.id)">Selecionado</span>
             </div>
 
         </div>
         <div class="btnAction">
-            <button class="cancel" (click)="toggle()">Cancelar</button>
-            <button class="next" (click)=nextStep()>Próximo ></button>
+            <button class="cancel" (click)="voltar()">Voltar</button>
+            <button class="next" [disabled]="!selecionado" (click)="nextStep()">Próximo ></button>
         </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 
 interface Questionario {
@@ -8,13 +8,23 @@ interface Questionario {
   perguntas: number;
 }
 
+interface FundoSelecionado {
+  id: number;
+  nome: string;
+  codigo: string;
+  categoria: string;
+}
+
 @Component({
   selector: 'cb-modal-questionario',
   templateUrl: './modal-questionario.component.html',
   styleUrls: ['./modal-questionario.component.css']
 })
 export class ModalQuestionarioComponent implements OnInit {
-  @Output() toggleModal = new EventEmitter<void>();
+  @Input() fundoSelecionado: FundoSelecionado | null = null;
+
+  @Output() voltarEtapa = new EventEmitter<void>();
+  @Output() fecharModal = new EventEmitter<void>();
 
   selecionado: number | null = null;
   etapaAtual: number = 2;
@@ -55,8 +65,12 @@ export class ModalQuestionarioComponent implements OnInit {
     console.log('Questionário selecionado:', this.selecionado);
   }
 
-  toggle(): void {
+  voltar(): void {
+    this.voltarEtapa.emit();
+  }
+
+  fechar(): void {
     this.resetarModal();
-    this.toggleModal.emit();
+    this.fecharModal.emit();
   }
 }

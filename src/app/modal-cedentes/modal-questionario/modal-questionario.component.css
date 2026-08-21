@@ -18,7 +18,7 @@
     background: #fff;
     border-radius: 12px;
     width: 100%;
-    max-width: 700px;
+    max-width: 800px;
     animation: scaleIn .25s ease;
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     overflow: hidden;
@@ -60,24 +60,32 @@
     color: #6b7280;
 }
 
+.subtitle {
+    font-size: 12px;
+    color: #6b7280;
+}
+
 .btnClose {
     width: 36px;
     height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+}
+
+.btnClose:hover .btnIconClose {
+    color: #ef4444;
+    transform: scale(1.1);
+    cursor: pointer;
 }
 
 .btnIconClose {
     font-size: 22px;
     color: #9ca3af;
     transition: 0.2s;
-}
-
-.btnIconClose:hover {
-    color: #ef4444;
-    transform: scale(1.1);
-    cursor: pointer;
 }
 
 .statusProcess {
@@ -129,52 +137,45 @@
     margin: 0 12px;
 }
 
-.content {
-    padding: 20px;
-}
-
-.actions {
-    display: flex;
-    justify-content: space-between;
-    padding: 16px 20px;
-    border-top: 1px solid #eee;
-}
-
-.btn {
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 14px;
-    cursor: pointer;
-    border: none;
-}
-
-.btn.cancel {
-    background: #f3f4f6;
-    color: #374151;
-}
-
-.btn.primary {
-    background: rgb(16, 185, 129);
-    color: #fff;
-}
-
 .headSecao {
     padding: 16px 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 30px;
+    gap: 14px;
+}
+
+.fundoSelecionado {
+    width: 100%;
+    background: #f4fbfa;
+    color: #374151;
+    border: 1px solid #9fe6d8;
+    border-radius: 8px;
+    padding: 10px 12px;
+}
+
+.fundoLabel {
+    font-size: 12px;
+    color: #5f6b7a;
+    margin-bottom: 2px;
+}
+
+.fundoNome {
+    font-size: 14px;
+    color: #1f2937;
+    font-weight: 600;
 }
 
 .typesQuestionario{
     border-bottom: 1px solid #eee;
     padding: 16px 20px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap:wrap;
-    gap: 10px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    max-height: 320px;
+    overflow-y: auto;
 }
 
 .questionario{
@@ -185,18 +186,41 @@
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     gap: 10px;
+    cursor: pointer;
+    transition: .2s ease;
+    position: relative;
+}
+
+.typesQuestionario::-webkit-scrollbar {
+    width: 8px;
+}
+
+.typesQuestionario::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 8px;
+}
+
+.typesQuestionario::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 8px;
+}
+
+.typesQuestionario::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
 }
 
 .questionario:hover{
     border: 1px solid rgb(16, 185, 129);
     background-color: #e7f0ed;
+    transform: translateY(-1px);
 }
 
 .questionario.active{
     border: 1px solid rgb( 16,185, 129);
     background-color: #e7f0ed;
+    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.2);
 }
 
 .headCardQuestionario{
@@ -211,9 +235,20 @@
 
 .infoQuestionario{
     display: flex;
-    flex-direction:column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
+}
+
+.infoQuestionario p {
+    color: #374151;
+    font-size: 13px;
+}
+
+.infoQuestionario span {
+    color: #4b5563;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 .iconQuestionario{
@@ -227,6 +262,18 @@
     justify-content: center;
     font-size: 13px;
     font-weight: 600;
+}
+
+.badgeSelected {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #10b981;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 3px 8px;
 }
 
 .btnAction{
@@ -248,6 +295,11 @@
     border: none;
 }
 
+.next:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
 .cancel{
     padding: 8px 16px;
     border-radius: 6px;
@@ -257,5 +309,20 @@
     color: #000000;
     cursor: pointer;
     border: none;
+}
+
+@media (max-width: 768px) {
+    .headSecao {
+        align-items: flex-start;
+    }
+
+    .questionario {
+        width: 100%;
+    }
+
+    .statusProcess {
+        overflow-x: auto;
+        padding: 14px 20px;
+    }
 }
 

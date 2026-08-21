@@ -1,100 +1,68 @@
-<div class="modal">
+<div class="modal" *ngIf="!mostrarQuestionario">
   <div class="modal-content">
         <div class="headModal">
             <div class="groupTitles">
-                <h2 class="titles">Ativar Novo Fundo para Cadastro</h2>
-                <p class="titles" id="subtitle">Configure o fundo para gerenciar cedentes</p>
+                <h2 class="titleMain">Ativar Novo Fundo para Cadastro</h2>
+                <p class="subtitle">Configure o fundo para gerenciar cedentes</p>
             </div>
-            <div class="btnClose">
-                <mat-icon class="btnIconClose" (click)="toggle()">close</mat-icon>
-            </div>
+            <button type="button" class="btnClose" (click)="toggle()" aria-label="Fechar">
+                <mat-icon class="btnIconClose">close</mat-icon>
+            </button>
         </div>
         <div class="statusProcess">
-            <div class="step">
-                <div class="icon">1</div>
-                <p class="label ">Vincular Fundo</p>
+            <div class="step stepActive">
+                <div class="icon iconActive">
+                    <mat-icon>check</mat-icon>
+                </div>
+                <p class="label labelActive">Vincular Fundo</p>
             </div>
-            <!-- check Step -->
-            <div class="line"></div>
+            <div class="line lineDone"></div>
     
-            
             <div class="step">
-              <div class="icon">2</div>
+              <div class="icon iconPending">
+                <mat-icon>check</mat-icon>
+              </div>
               <p class="label">Vincular Questionário</p>
             </div>
-            <!-- check Step -->
             <div class="line"></div>
 
             <div class="step">
-              <div class="icon">3</div>
+              <div class="icon iconNumber">3</div>
               <p class="label">Vincular Workflow</p>
             </div>
-
-            <!-- check Step -->
         </div>
         <div class="headSecao">
             <div class="groupTitles">
-                <h3 class="titles">Selecione o Fundo</h3>
-                <p class="titles" id="subtitle">Escolha o fundo que será ativado para cadastro de cedentes</p>
+                <h3 class="sectionTitle">Selecione o Fundo</h3>
+                <p class="subtitle">Escolha o fundo que será ativado para cadastro de cedentes</p>
             </div>
         </div>
         <div class="typesFundos">
-            <div class="fundo" (click)="choiceBackground(1)" [class.active]="selecionado === 1">
+            <div class="fundo" *ngFor="let fundo of fundos" (click)="choiceBackground(fundo.id)" [class.active]="selecionado === fundo.id">
                 <div class="headCardFundo">
                     <div class="iconFundo">
-                        <mat-icon>wallet</mat-icon>
+                        <mat-icon>folder_open</mat-icon>
                     </div>
-                    <h3 class="titlesFundo">Fundo de Reda Fixa Epsilion</h3>
+                    <h3 class="titlesFundo">{{ fundo.nome }}</h3>
                 </div>
                 <div class="infoFundo">
-                    <p>Codigo: FRF-005</p>
-                    <span>Renda Fixa</span>
+                    <p>Código: {{ fundo.codigo }}</p>
+                    <span>{{ fundo.categoria }}</span>
                 </div>
-            </div>
-
-            <div class="fundo" (click)="choiceBackground(2)" [class.active]="selecionado === 2">
-                <div class="headCardFundo">
-                    <div class="iconFundo">
-                        <mat-icon>wallet</mat-icon>
-                    </div>
-                    <h3 class="titlesFundo">Fundo de Ingraestrutura Zeta</h3>
-                </div>
-                <div class="infoFundo">
-                    <p>Codigo: FIN-0046</p>
-                    <span>Infraestrutura</span>
-                </div>
-            </div>
-
-            <div class="fundo" (click)="choiceBackground(3)" [class.active]="selecionado === 3">
-                <div class="headCardFundo">
-                    <div class="iconFundo">
-                        <mat-icon>wallet</mat-icon>
-                    </div>
-                    <h3 class="titlesFundo">Fundo FIDC Theta</h3>
-                </div>
-                <div class="infoFundo">
-                    <p>Codigo: FIDC-007</p>
-                    <span>FIDC</span>
-                </div>
-            </div>
-
-            <div class="fundo" (click)="choiceBackground(4)" [class.active]="selecionado === 4">
-                <div class="headCardFundo">
-                    <div class="iconFundo">
-                        <mat-icon>wallet</mat-icon>
-                    </div>
-                <h3 class="titlesFundo">Fundo de Investimento Kappa</h3>
-                </div>
-                <div class="infoFundo">
-                    <p>Codigo: FIV-008</p>
-                    <span>Investimento</span>
+                <div class="statusSelected" *ngIf="selecionado === fundo.id">
+                    <mat-icon>check</mat-icon>
                 </div>
             </div>
         </div>
         <div class="btnAction">
             <button class="cancel" (click)="toggle()">Cancelar</button>
-            <button class="next" (click)="nextStep()">Próximo ></button>
+            <button class="next" [disabled]="!selecionado" (click)="nextStep()">Próximo <mat-icon>chevron_right</mat-icon></button>
         </div>
   </div>
 </div>
-<cb-modal-questionario (toggleModal)="closeModal()" *ngIf="mostrarQuestionario"></cb-modal-questionario>
+<cb-modal-questionario
+    *ngIf="mostrarQuestionario"
+    [fundoSelecionado]="fundoSelecionado"
+    (voltarEtapa)="voltarParaPasso1()"
+    (fecharModal)="toggle()">
+</cb-modal-questionario>

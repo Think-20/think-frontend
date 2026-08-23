@@ -34,6 +34,8 @@ export class AlertService {
     },
   ]
 
+  // Estado reativo usado para avisar a aplicação quando a lista de alertas está vazia.
+  // Qualquer componente que assinar esse observable consegue reagir à condição.
   private _listEmptySubject = new BehaviorSubject<boolean>(false);
 
   get listEmpty$() {
@@ -45,6 +47,8 @@ export class AlertService {
     private snackBar: MatSnackBar,
   ) { }
 
+  // Busca os alertas/pendências vindos da API.
+  // Esse método é usado para saber se há itens pendentes de atualização ou aprovação.
   getAlerts(): Observable<ProjectsPendency> {
     const url = `notifywindow`
 
@@ -58,6 +62,8 @@ export class AlertService {
       })
   }
 
+  // Atualiza o status de um projeto.
+  // É o ponto de integração com o backend para mudar a situação do registro.
   updateStatusProject(project: EditStatus): Observable<EditStatus> {
     const url = 'job/edit'
 
@@ -80,18 +86,20 @@ export class AlertService {
     return this.status;
   }
 
-  hasAlerts(): Observable<boolean> {
-    return this.getAlerts().pipe(
-      map(alerts => alerts.update_pendency.count > 0),
-      catchError(err => {
-        console.error('Error checking for alerts:', err);
-        return of(false);
-      })
-    );
-  }
+  // Temporariamente desativado: verificação de existência de alertas.
+  // hasAlerts(): Observable<boolean> {
+  //   return this.getAlerts().pipe(
+  //     map(alerts => alerts.update_pendency.count > 0),
+  //     catchError(err => {
+  //       console.error('Error checking for alerts:', err);
+  //       return of(false);
+  //     })
+  //   );
+  // }
 
-  setListEmpty(value: boolean) {
-    this._listEmptySubject.next(value);
-  }
+  // Temporariamente desativado: emissão do estado de lista vazia.
+  // setListEmpty(value: boolean) {
+  //   this._listEmptySubject.next(value);
+  // }
 
 }

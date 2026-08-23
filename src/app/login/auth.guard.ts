@@ -10,6 +10,8 @@ import { AlertService } from 'app/alerts/alerts.service';
 export class AuthGuard implements CanActivate {
 
 
+    // Dia da semana em JavaScript: 0 = Domingo, 1 = Segunda, ..., 5 = Sexta-feira.
+    // Essa regra foi usada para bloquear/ou sinalizar navegação quando há alertas pendentes em sexta.
     readonly FRIDAY_DAY = 5;
     hasAlertAndIsFriday: boolean;
 
@@ -54,22 +56,22 @@ export class AuthGuard implements CanActivate {
             return false;
         }
 
-        const today = new Date();
+        // Temporariamente desativado: rotina de sexta-feira + validação de alertas pendentes.
+        // const today = new Date();
+        // this.alertService.hasAlerts().subscribe(hasAlerts => {
+        //     const isFriday = today.getDay() === this.FRIDAY_DAY;
+        //     if (hasAlerts && isFriday) {
+        //       this.hasAlertAndIsFriday = true;
+        //     }
+        // });
 
-        this.alertService.hasAlerts().subscribe(hasAlerts => {
-            const isFriday = today.getDay() === this.FRIDAY_DAY;
-          
-            if (hasAlerts && isFriday) {
-              this.hasAlertAndIsFriday = true;
-            }
-        });
-
-        this.alertService.listEmpty$.subscribe(isListEmpty => {
-            if (isListEmpty && iterativeRoute.routeConfig.path !== 'alerts') {
-              this.snackBar.open('Por favor, atualize os status de todos os projetos antes de navegar pelo sistema.', '', { duration: 3000 });
-              return false;
-            }
-        });
+        // Temporariamente desativado: bloqueio de navegação quando a lista de alertas está vazia.
+        // this.alertService.listEmpty$.subscribe(isListEmpty => {
+        //     if (isListEmpty && iterativeRoute.routeConfig.path !== 'alerts') {
+        //       this.snackBar.open('Por favor, atualize os status de todos os projetos antes de navegar pelo sistema.', '', { duration: 3000 });
+        //       return false;
+        //     }
+        // });
 
         return true;
     }

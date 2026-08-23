@@ -25,29 +25,32 @@ export class AlertsContainerComponent implements OnInit {
     this.load();
   }
 
-  load(): void {
-    const snackBar = this.snackBar.open('Carregando tarefas...')
-
-    this.alertService.getAlerts().subscribe(dataInfo => {
-      dataInfo ? this.projects = dataInfo.update_pendency : this.projects = { count: 0, data: []};
-      
-      if (dataInfo.update_pendency.count === 0) {
-        this.snackBar.open('Nenhum alerta encontrado! Obrigado.', '', { duration: 3000 })
-
-        this.alertService.setListEmpty(true);
-        return setTimeout(() => {
-          this.router.navigate(['/home'])
-        }, 2000);
-      }
-
-      snackBar.dismiss();
-    })
-  }
+  // Temporariamente desativado: rotina de busca de alertas e redirecionamento automático.
+  // load(): void {
+  //   const snackBar = this.snackBar.open('Carregando tarefas...')
+  //
+  //   this.alertService.getAlerts().subscribe(dataInfo => {
+  //     dataInfo ? this.projects = dataInfo.update_pendency : this.projects = { count: 0, data: []};
+  //
+  //     if (dataInfo.update_pendency.count === 0) {
+  //       this.snackBar.open('Nenhum alerta encontrado! Obrigado.', '', { duration: 3000 })
+  //
+  //       this.alertService.setListEmpty(true);
+  //       return setTimeout(() => {
+  //         this.router.navigate(['/home'])
+  //       }, 2000);
+  //     }
+  //
+  //     snackBar.dismiss();
+  //   })
+  // }
 
   loadStatus(): void {
     this.statusProjects = this.alertService.getStatus();
   }
 
+  // Atualiza o status de um projeto selecionado.
+  // Depois da mudança, recarrega a lista para refletir o novo estado imediatamente.
   updateStatusProject(selectedStatus: ProjectStatus, selectedProject: ProjectData): void {
     const payload: EditStatus = {
       id: selectedProject.id,

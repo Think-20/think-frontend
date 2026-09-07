@@ -191,6 +191,55 @@ export class InfocedenteComponent {
     return this.obterLista((this.cedente && this.cedente.contas_desembolso) || (this.cedente && this.cedente.contas));
   }
 
+  get validacaoVaduChanges(): any {
+    const historico = this.obterLista(this.cedente && this.cedente.historico);
+    const item = historico.find((registro: any) => registro && registro.event === 'validacao_vadu');
+    return (item && item.changes) || null;
+  }
+
+  get temRestricaoValidacaoVadu(): boolean {
+    const changes = this.validacaoVaduChanges;
+    return !!changes && changes.resultado === 'restricao';
+  }
+
+  get descricaoRestricaoVadu(): string {
+    const changes = this.validacaoVaduChanges;
+    return (changes && changes.descricao) || '';
+  }
+
+  private get sociosRestricaoVadu(): string[] {
+    const changes = this.validacaoVaduChanges;
+    const socios = changes && changes.socios;
+    return Array.isArray(socios) ? socios.map((nome: any) => String(nome || '').trim().toLowerCase()) : [];
+  }
+
+  isAvalistaComRestricao(pessoa: any): boolean {
+    return this.isPessoaComRestricao(pessoa, this.avalistas);
+  }
+
+  isParteRelacionadaComRestricao(pessoa: any): boolean {
+    return this.isPessoaComRestricao(pessoa, this.partesRelacionadas);
+  }
+
+  private isPessoaComRestricao(pessoa: any, lista: any[]): boolean {
+    if (!this.temRestricaoValidacaoVadu) {
+      return false;
+    }
+
+    const nome = String((pessoa && pessoa.nome) || '').trim().toLowerCase();
+    const socios = this.sociosRestricaoVadu;
+
+    if (!nome || !socios.length) {
+      return true;
+    }
+
+    const algumCorresponde = (lista || []).some((item: any) =>
+      socios.includes(String((item && item.nome) || '').trim().toLowerCase())
+    );
+
+    return algumCorresponde ? socios.includes(nome) : true;
+  }
+
   get inconsistencias(): any[] {
     return this.obterLista(this.cedente && this.cedente.inconsistencias);
   }

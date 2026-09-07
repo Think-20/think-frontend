@@ -96,18 +96,20 @@ export class EmployeeListComponent implements OnInit {
               return employee.name
             }
           },
+
+          {
+            label: 'E-mail',
+            style: { width: '30%' },
+            showData: (employee: Employee) => {
+              return employee.department.description
+            }
+          },
+
           {
             label: 'Função',
             style: { width: '30%' },
             showData: (employee: Employee) => {
               return employee.position.name
-            }
-          },
-          {
-            label: 'Departamento',
-            style: { width: '30%' },
-            showData: (employee: Employee) => {
-              return employee.department.description
             }
           },
         ],

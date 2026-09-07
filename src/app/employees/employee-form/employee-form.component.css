@@ -5,9 +5,11 @@
 .photo-container img {
   max-width: 250px;
   border: 1px solid #ddd;
+  border-radius: 6px;
   padding: 2px;
   margin: 10px 0;
   background-color: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
 .photo-container .progress {
@@ -17,5 +19,50 @@
 }
 
 .btn-upload {
-  margin-bottom: 10px;
+  margin-bottom: 32px;
+}
+
+.employee-form-card {
+  border-radius: 8px;
+  padding: 24px 16px;
+}
+
+.form-field-modern {
+  padding: 0 8px;
+  margin-bottom: 8px;
+}
+
+.form-field-modern .mat-form-field-wrapper {
+  padding-bottom: 0.5em;
+}
+
+/* focus/active effects in green, scoped to this form's fields only */
+:host ::ng-deep .form-field-modern.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: #2e7d32 !important;
+}
+
+:host ::ng-deep .form-field-modern.mat-focused .mat-form-field-label {
+  color: #2e7d32 !important;
+}
+
+:host ::ng-deep .form-field-modern .mat-form-field-ripple {
+  background-color: #2e7d32 !important;
+}
+
+:host ::ng-deep .form-field-modern.mat-focused .mat-select-arrow {
+  color: #2e7d32 !important;
+}
+
+:host ::ng-deep .form-field-modern input,
+:host ::ng-deep .form-field-modern .mat-select {
+  caret-color: #2e7d32 !important;
+}
+
+/* global .mat-select padding-bottom (legacy field style) pushes text below the outline border, hiding it */
+:host ::ng-deep .form-field-modern .mat-select {
+  padding-bottom: 0 !important;
+}
+
+:host ::ng-deep .form-field-modern .mat-form-field-infix {
+  overflow: visible;
 }

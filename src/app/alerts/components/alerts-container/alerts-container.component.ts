@@ -22,7 +22,8 @@ export class AlertsContainerComponent implements OnInit {
 
   ngOnInit() {
     this.loadStatus();
-    this.load();
+    // Rotina de carregamento de alertas temporariamente desativada.
+    // this.load();
   }
 
   // Temporariamente desativado: rotina de busca de alertas e redirecionamento automático.
@@ -61,7 +62,8 @@ export class AlertsContainerComponent implements OnInit {
 
     this.alertService.updateStatusProject(payload).subscribe(data => {
       this.snackBar.open(data.message, '', { duration: 4000 })
-      this.load();
+      // Recarregamento da lista temporariamente desativado junto com a rotina de alertas.
+      // this.load();
     });
   }
 }

@@ -1016,6 +1016,10 @@ hr {
     padding: 20px 18px;
 }
 
+.parteRelacionada + .parteRelacionada{
+    margin-top: 20px;
+}
+
 .sectionSubtitle{
     margin: 18px 0 12px;
     font-size: 12px;
@@ -1257,6 +1261,11 @@ hr {
     margin:14px 0;
     border:none;
     border-top:1px solid #E5E7EB;
+}
+
+.parteRelacionada.cardAvalista{
+    background:#FEF3F2;
+    border:1px solid #FDA29B;
 }
 
 .topAvalista{

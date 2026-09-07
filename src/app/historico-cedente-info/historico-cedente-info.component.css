@@ -901,6 +901,8 @@ label{
     font-size:14px;
     color:#6B7280;
     line-height:1.5;
+    text-decoration: underline;
+    text-decoration-color: #EF4444;
 }
 
 /* Cores */

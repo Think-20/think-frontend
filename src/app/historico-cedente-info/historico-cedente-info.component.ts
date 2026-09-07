@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../environments/environment.prod';
 import { FundStateService } from '../cadastro-cedentes/fund-state.service';
 import { CedenteDataService } from '../cadastro-cedentes/novo-cedente/cedente-data.service';
+import { UserService } from '../user/user.service';
 
 @Component({
   selector: 'cb-historico-cedente-info',
@@ -17,11 +18,15 @@ export class HistoricoCedenteInfoComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
+  private userNames: { [id: string]: string } = {};
+  private requestedUserIds: { [id: string]: boolean } = {};
+
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
     private fundState: FundStateService,
-    private cedenteDataService: CedenteDataService
+    private cedenteDataService: CedenteDataService,
+    private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -95,8 +100,64 @@ export class HistoricoCedenteInfoComponent implements OnInit {
   }
 
   getAuthor(item: any): string {
-    const userId = item && item.user_id;
-    return userId ? `por usuário ${userId}` : 'por Sistema';
+    if (!item) {
+      return 'por Sistema';
+    }
+
+    const embeddedName = this.extractEmbeddedUserName(item);
+    if (embeddedName) {
+      return `por ${embeddedName}`;
+    }
+
+    const userId = item.user_id;
+    if (!userId) {
+      return 'por Sistema';
+    }
+
+    const cachedName = this.userNames[userId];
+    return cachedName ? `por ${cachedName}` : `por usuário ${userId}`;
+  }
+
+  private extractEmbeddedUserName(item: any): string | null {
+    const user = item.user || item.usuario;
+
+    if (user && user.employee && user.employee.name) {
+      return user.employee.name;
+    }
+
+    if (user && user.name) {
+      return user.name;
+    }
+
+    return item.user_name || item.usuario_nome || item.author_name || null;
+  }
+
+  private carregarNomesUsuarios() {
+    this.historicoItems.forEach((item) => {
+      const userId = item && item.user_id;
+
+      if (!userId || this.userNames[userId] || this.requestedUserIds[userId] || this.extractEmbeddedUserName(item)) {
+        return;
+      }
+
+      this.requestedUserIds[userId] = true;
+
+      this.userService.user(userId).subscribe(
+        (user: any) => {
+          const name = (user && user.employee && user.employee.name)
+            || (user && user.name)
+            || (user && user.email)
+            || null;
+
+          if (name) {
+            this.userNames[userId] = name;
+          }
+        },
+        () => {
+          // Mantém o id como fallback caso não seja possível obter o nome.
+        }
+      );
+    });
   }
 
   formatDate(value: any): string {
@@ -190,6 +251,7 @@ export class HistoricoCedenteInfoComponent implements OnInit {
       next: (res: any) => {
         this.historico = res;
         this.loading = false;
+        this.carregarNomesUsuarios();
       },
       error: (err) => {
         console.error('Erro ao carregar histórico do cedente:', err);

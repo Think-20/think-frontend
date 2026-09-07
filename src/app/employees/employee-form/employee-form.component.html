@@ -1,5 +1,5 @@
 <form [formGroup]="employeeForm" novalidate autocomplete="off">
-  <mat-card>
+  <mat-card class="employee-form-card">
     <div class="row">
       <div class="col-md-12 photo-container">
         <img src="{{ imagePath }}" alt="Foto do funcionário">
@@ -12,41 +12,67 @@
           <mat-icon>cloud_upload</mat-icon> &nbsp; Editar imagem
         </button>
       </div>
-      <mat-form-field class="col-md-3">
-        <input ucWords formControlName="name" matInput placeholder="Nome*">
+      <mat-form-field appearance="outline" class="col-md-3 form-field-modern">
+        <mat-label>Nome do colaborador*</mat-label>
+        <input ucWords formControlName="name" matInput placeholder="Nome do colaborador*">
         <mat-error>
           Obrigatório, entre 3 e 50 caract.
         </mat-error>
       </mat-form-field>
-      <mat-form-field class="col-md-3">
-        <input currencyMask formControlName="payment" matInput placeholder="Salário*">
+      <mat-form-field appearance="outline" class="col-md-3 form-field-modern">
+        <mat-label>E-mail*</mat-label>
+        <input formControlName="email" matInput type="email" placeholder="E-mail*">
+        <mat-error>
+          Informe um e-mail válido.
+        </mat-error>
       </mat-form-field>
-      <mat-form-field class="col-md-3">
-        <mat-select placeholder="Função" formControlName="position" [compareWith]="comparePosition">
+      <mat-form-field appearance="outline" class="col-md-3 form-field-modern">
+        <mat-label>Senha*</mat-label>
+        <input formControlName="password" matInput type="password" placeholder="Senha*">
+        <mat-error>
+          Obrigatório, mínimo 6 caract.
+        </mat-error>
+      </mat-form-field>
+      <!-- <mat-form-field class="col-md-3">
+        <input currencyMask formControlName="payment" matInput placeholder="Salário*">
+      </mat-form-field> -->
+      <mat-form-field appearance="outline" class="col-md-3 form-field-modern">
+        <mat-label>Função</mat-label>
+        <mat-select placeholder="Função" formControlName="role" [compareWith]="compareRole" [disableOptionCentering]="true" panelClass="cb-select-panel-below">
           <mat-option></mat-option>
-          <mat-option *ngFor="let position of positions" [value]="position">
-            {{ position.name }}
+          <mat-option *ngFor="let role of ROLES" [value]="role">
+            {{ role.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field class="col-md-3">
-        <mat-select placeholder="Departamento" formControlName="department" [compareWith]="compareDepartment">
+      <!-- <mat-form-field appearance="outline" class="col-md-3 form-field-modern">
+        <mat-label>Departamento</mat-label>
+        <mat-select placeholder="Departamento" formControlName="department" [compareWith]="compareDepartment" [disableOptionCentering]="true" panelClass="cb-select-panel-below">
           <mat-option></mat-option>
           <mat-option *ngFor="let department of departments" [value]="department">
             {{ department.description }}
           </mat-option>
         </mat-select>
+      </mat-form-field> -->
+      <mat-form-field appearance="outline" class="col-md-3 form-field-modern">
+        <mat-label>Fundos</mat-label>
+        <mat-select placeholder="Fundos" formControlName="funds" [compareWith]="compareFund" [disableOptionCentering]="true" panelClass="cb-select-panel-below" multiple>
+          <mat-option [value]="ALL_FUNDS_OPTION">
+            {{ ALL_FUNDS_OPTION.name }}
+          </mat-option>
+          <mat-option *ngFor="let fund of funds" [value]="fund">
+            {{ fund.name }}
+          </mat-option>
+        </mat-select>
+    
       </mat-form-field>
-      <div class="col-md-3">
+      <!-- <div class="col-md-3">
         <mat-checkbox class="cb-normal-checkbox" value="1" formControlName="schedule_active">Ativo no calendário</mat-checkbox>
-      </div>
+      </div> -->
     </div>
     <mat-card-actions class="col-md-12 text-right">
-      <button class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save(employeeForm.value)" mat-raised-button>
-        SALVAR
-      </button>
-      <button class="cb-button" *ngIf="typeForm === 'edit' || typeForm === 'profile'" color="primary" (click)="edit(employeeForm.value, employee.id)" mat-raised-button>
-        EDITAR
+      <button class="cb-button" *ngIf="typeForm === 'edit' || typeForm === 'profile'" color="primary" (click)="edit(employee.id)" mat-raised-button>
+        Cadastrar
       </button>
     </mat-card-actions>
   </mat-card>

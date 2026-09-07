@@ -4,9 +4,15 @@
             <h3>Novo Cadastro de Cedente</h3>
             <p>Fundo: Fundo de Crédito Privado Gamma</p>
         </div>
-        <div class="buttoCancel" (click)="cancelarCadastro()">
-            <mat-icon>close</mat-icon>
-            <button>Cancelar</button>
+        <div class="headActions">
+            <div class="buttoCancel" (click)="abrirModalXml()">
+                <mat-icon>upload_file</mat-icon>
+                <button type="button">Cadastrar via XML</button>
+            </div>
+            <div class="buttoCancel" (click)="cancelarCadastro()">
+                <mat-icon>close</mat-icon>
+                <button>Cancelar</button>
+            </div>
         </div>
     </div>
     <div class="containerProcess">
@@ -285,6 +291,38 @@
         <button class="btnProximo" *ngIf="stepAtual !== totalSteps" (click)="proximoStep()">
             Próximo
         </button>
+    </div>
+</div>
+
+<!-- Modal Cadastrar via XML -->
+<div class="modalXmlOverlay" *ngIf="mostrarModalXml">
+    <div class="modalXmlContent">
+        <div class="modalXmlHeader">
+            <h4>Cadastrar via XML</h4>
+            <button type="button" class="modalXmlClose" (click)="fecharModalXml()" aria-label="Fechar">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+
+        <p class="modalXmlDescricao">Selecione um arquivo XML para preencher o cadastro automaticamente.</p>
+
+        <label class="modalXmlDropzone" for="inputArquivoXml">
+            <mat-icon>upload_file</mat-icon>
+            <span>{{ arquivoXmlSelecionado?.name || 'Clique para selecionar um arquivo .xml' }}</span>
+        </label>
+        <input type="file" id="inputArquivoXml" accept=".xml,text/xml" hidden (change)="onArquivoXmlSelecionado($event)">
+
+        <div class="modalXmlErro" *ngIf="erroArquivoXml">
+            <mat-icon>error_outline</mat-icon>
+            <span>{{ erroArquivoXml }}</span>
+        </div>
+
+        <div class="modalXmlActions">
+            <button type="button" class="btnVoltar" (click)="fecharModalXml()">Cancelar</button>
+            <button type="button" class="btnProximo" [disabled]="!arquivoXmlSelecionado" (click)="confirmarCadastroViaXml()">
+                Enviar
+            </button>
+        </div>
     </div>
 </div>
 

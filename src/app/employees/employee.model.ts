@@ -12,6 +12,12 @@ export class Employee implements Notifiable {
     department_id?: number
     position?: Position
     position_id?: number
+    funds?: any[]
+    email?: string
+    password?: string
+    cedente_role_id?: number
+    all_funds?: boolean
+    fund_ids?: number[]
     user?: User
     user_id?: number
     updatedBy?: Employee

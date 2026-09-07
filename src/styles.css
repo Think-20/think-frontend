@@ -5,6 +5,11 @@
   outline: none !important;
 }
 
+/* forces mat-select panels (with disableOptionCentering) to drop just below the trigger */
+.cb-select-panel-below {
+  margin-top: 8px;
+}
+
 body {
     background-color: rgba(231,230,239,0.25);
     line-height: unset;

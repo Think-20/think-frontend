@@ -58,6 +58,10 @@ export class NovoCedenteComponent implements OnInit {
   salvandoCadastro: boolean = false;
   mensagemAlertaCadastro: string = '';
 
+  mostrarModalXml: boolean = false;
+  arquivoXmlSelecionado: File | null = null;
+  erroArquivoXml: string | null = null;
+
   // Dados preenchidos
   partesRelacionadas: any[] = [];
   avalistas: any[] = [];
@@ -404,6 +408,52 @@ export class NovoCedenteComponent implements OnInit {
     }
 
     this.onCancel.emit();
+  }
+
+  abrirModalXml() {
+    this.arquivoXmlSelecionado = null;
+    this.erroArquivoXml = null;
+    this.mostrarModalXml = true;
+  }
+
+  fecharModalXml() {
+    this.mostrarModalXml = false;
+    this.arquivoXmlSelecionado = null;
+    this.erroArquivoXml = null;
+  }
+
+  onArquivoXmlSelecionado(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const arquivo = input.files && input.files[0];
+
+    if (!arquivo) {
+      return;
+    }
+
+    const nomeArquivo = arquivo.name || '';
+    const isXml = arquivo.type === 'text/xml'
+      || arquivo.type === 'application/xml'
+      || nomeArquivo.toLowerCase().endsWith('.xml');
+
+    if (!isXml) {
+      this.arquivoXmlSelecionado = null;
+      this.erroArquivoXml = 'Apenas arquivos com extensão .xml são aceitos.';
+      input.value = '';
+      return;
+    }
+
+    this.arquivoXmlSelecionado = arquivo;
+    this.erroArquivoXml = null;
+  }
+
+  confirmarCadastroViaXml() {
+    if (!this.arquivoXmlSelecionado) {
+      return;
+    }
+
+    // TODO: enviar o arquivo XML selecionado para o endpoint de cadastro assim que disponível.
+    this.snackBar.open('Arquivo XML recebido com sucesso.', 'Fechar', { duration: 3000 });
+    this.fecharModalXml();
   }
 
   // aqui busco o CEP

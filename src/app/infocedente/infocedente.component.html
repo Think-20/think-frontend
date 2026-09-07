@@ -238,7 +238,11 @@
                 <mat-icon>groups</mat-icon>
                 <h3>Partes Relacionadas</h3>
             </div>
-            <div class="validado">
+            <div class="restricao" *ngIf="temRestricaoValidacaoVadu">
+                <mat-icon>cancel</mat-icon>
+                Restrição Detectada
+            </div>
+            <div class="validado" *ngIf="!temRestricaoValidacaoVadu">
                 <mat-icon class="valido">check_circle</mat-icon>
                 Validado
             </div>
@@ -247,14 +251,24 @@
             </div>
         </div>
 
-        <div class="parteRelacionada" *ngFor="let pessoa of partesRelacionadas; let i = index">
-            <h4 [class.textoInconsistente]="isCampoInconsistente('partes_relacionadas[' + i + '].nome')">{{ pessoa?.nome || '-' }}</h4>
+        <div class="parteRelacionada" [class.cardAvalista]="isParteRelacionadaComRestricao(pessoa)" *ngFor="let pessoa of partesRelacionadas; let i = index">
+            <div class="topAvalista">
+                <h4 [class.textoInconsistente]="isCampoInconsistente('partes_relacionadas[' + i + '].nome')">{{ pessoa?.nome || '-' }}</h4>
+                <div class="badgeRestricao" *ngIf="isParteRelacionadaComRestricao(pessoa)">
+                    RESTRIÇÃO
+                </div>
+            </div>
             <div class="inconsistenciaLegenda" *ngIf="isCampoInconsistente('partes_relacionadas[' + i + '].nome')">
                 <mat-icon class="iconInterrogacaoFora">help_outline</mat-icon>
                 <span class="msgErro">{{ getMensagemDivergencia('Nome da Parte Relacionada') }}</span>
             </div>
             <span>CPF/CNPJ: {{ pessoa?.cpf || pessoa?.documento || '-' }}</span>
+            <div class="msgRestricao" *ngIf="isParteRelacionadaComRestricao(pessoa)">
+                <mat-icon id="atencao">warning</mat-icon>
+                {{ descricaoRestricaoVadu }}
+            </div>
             <hr>
+
 
             <h5 class="sectionSubtitle">Dados Gerais</h5>
             <div class="gridInfo">
@@ -339,7 +353,11 @@
             <mat-icon>person</mat-icon>
             <h3>Avalistas</h3>
         </div>
-        <div class="validado">
+        <div class="restricao" *ngIf="temRestricaoValidacaoVadu">
+            <mat-icon>cancel</mat-icon>
+            Restrição Detectada
+        </div>
+        <div class="validado" *ngIf="!temRestricaoValidacaoVadu">
             <mat-icon class="valido">check_circle</mat-icon>
             <span>Validado</span>
         </div>
@@ -348,9 +366,18 @@
         </div>
     </div>
 
-    <div class="parteRelacionada" *ngFor="let pessoa of avalistas; let i = index">
-        <h4>{{ pessoa?.nome || '-' }}</h4>
+    <div class="parteRelacionada" [class.cardAvalista]="isAvalistaComRestricao(pessoa)" *ngFor="let pessoa of avalistas; let i = index">
+        <div class="topAvalista">
+            <h4>{{ pessoa?.nome || '-' }}</h4>
+            <div class="badgeRestricao" *ngIf="isAvalistaComRestricao(pessoa)">
+                RESTRIÇÃO
+            </div>
+        </div>
         <span>CPF/CNPJ: {{ pessoa?.cpf || pessoa?.documento || '-' }}</span>
+        <div class="msgRestricao" *ngIf="isAvalistaComRestricao(pessoa)">
+            <mat-icon id="atencao">warning</mat-icon>
+            {{ descricaoRestricaoVadu }}
+        </div>
         <hr>
 
         <h5 class="sectionSubtitle">Dados Gerais</h5>
@@ -381,6 +408,7 @@
         <hr *ngIf="i < avalistas.length - 1">
     </div>
 </div>
+
 
 <!-- <div class="cardInfo"> -->
     <!-- <div class="titleCard">

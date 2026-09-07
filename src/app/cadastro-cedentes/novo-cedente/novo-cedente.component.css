@@ -33,6 +33,12 @@
     margin-top: 4px;
 }
 
+.headActions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .buttoCancel {
     display: flex;
     align-items: center;
@@ -437,7 +443,138 @@ form {
 }
 
 /* Clique efeito */
-.containerBTN button:active {
+.containerBTN button:active,
+.modalXmlActions button:active {
     transform: scale(0.97);
 }
+
+.modalXmlActions .btnVoltar {
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+
+    background-color: #ffffff;
+    color: #374151;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modalXmlActions .btnVoltar:hover {
+    background-color: #f9fafb;
+}
+
+.modalXmlActions .btnProximo {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    background-color: rgb(25, 90, 50);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modalXmlActions .btnProximo:hover {
+    background-color: rgba(44, 146, 83, 0.623);
+}
+
+.modalXmlActions .btnProximo:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* ================= MODAL CADASTRAR VIA XML ================= */
+
+.modalXmlOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modalXmlContent {
+    background: #fff;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 460px;
+    padding: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.22);
+}
+
+.modalXmlHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.modalXmlHeader h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.modalXmlClose {
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+}
+
+.modalXmlDescricao {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 16px;
+}
+
+.modalXmlDropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 28px 16px;
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    color: #374151;
+    font-size: 13px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modalXmlDropzone:hover {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+.modalXmlErro {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    color: #dc2626;
+    font-size: 12px;
+}
+
+.modalXmlActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+
 

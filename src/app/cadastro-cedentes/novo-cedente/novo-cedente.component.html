@@ -5,7 +5,7 @@
             <p>Fundo: Fundo de Crédito Privado Gamma</p>
         </div>
         <div class="headActions">
-            <div class="buttoCancel" (click)="abrirModalXml()">
+            <div class="buttoCancel btnCadastrarXml" (click)="abrirModalXml()">
                 <mat-icon>upload_file</mat-icon>
                 <button type="button">Cadastrar via XML</button>
             </div>
@@ -304,13 +304,22 @@
             </button>
         </div>
 
-        <p class="modalXmlDescricao">Selecione um arquivo XML para preencher o cadastro automaticamente.</p>
+        <p class="modalXmlDescricao">Selecione até 10 arquivos XML para preencher os cadastros automaticamente.</p>
 
         <label class="modalXmlDropzone" for="inputArquivoXml">
             <mat-icon>upload_file</mat-icon>
-            <span>{{ arquivoXmlSelecionado?.name || 'Clique para selecionar um arquivo .xml' }}</span>
+            <span>{{ arquivosXmlSelecionados.length ? arquivosXmlSelecionados.length + ' arquivo(s) selecionado(s)' : 'Clique para selecionar arquivos .xml' }}</span>
         </label>
-        <input type="file" id="inputArquivoXml" accept=".xml,text/xml" hidden (change)="onArquivoXmlSelecionado($event)">
+        <input type="file" id="inputArquivoXml" accept=".xml,text/xml" multiple hidden (change)="onArquivoXmlSelecionado($event)">
+
+        <div class="modalXmlArquivos" *ngIf="arquivosXmlSelecionados.length">
+            <div class="modalXmlArquivo" *ngFor="let arquivo of arquivosXmlSelecionados; let i = index">
+                <span>{{ arquivo.name }}</span>
+                <button type="button" (click)="removerArquivoXml(i)" aria-label="Remover arquivo">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        </div>
 
         <div class="modalXmlErro" *ngIf="erroArquivoXml">
             <mat-icon>error_outline</mat-icon>
@@ -319,7 +328,7 @@
 
         <div class="modalXmlActions">
             <button type="button" class="btnVoltar" (click)="fecharModalXml()">Cancelar</button>
-            <button type="button" class="btnProximo" [disabled]="!arquivoXmlSelecionado" (click)="confirmarCadastroViaXml()">
+            <button type="button" class="btnProximo" [disabled]="!arquivosXmlSelecionados.length" (click)="confirmarCadastroViaXml()">
                 Enviar
             </button>
         </div>

@@ -14,27 +14,20 @@ export class AddHeaderInterceptor implements HttpInterceptor {
     let user = JSON.parse(localStorage.getItem('currentUser')) || new User();
     let token = localStorage.getItem('token') || '';
 
-    let clonedRequest;
+    let headers = req.headers
+      .set('Authorization', `${token}`)
+      .set('User', `${user.id}`);
 
     if (req.url.indexOf('upload-file') === -1) {
 
-      clonedRequest = req.clone({
-        headers: req.headers
-          .set('Authorization', `${token}`)
-          .set('User', `${user.id}`)
-          .set('Content-Type', 'application/json')
-      });
+      if (!(req.body instanceof FormData)) {
+        headers = headers.set('Content-Type', 'application/json');
+      }
 
     } else {
 
-      clonedRequest = req.clone({
-        headers: req.headers
-          .set('Authorization', `${token}`)
-          .set('User', `${user.id}`)
-      });
-
     }
 
-    return next.handle(clonedRequest);
+    return next.handle(req.clone({ headers }));
   }
 }

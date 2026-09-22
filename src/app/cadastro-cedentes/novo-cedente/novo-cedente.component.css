@@ -96,6 +96,22 @@
     border-color: #9ca3af;
 }
 
+.btnCadastrarXml {
+    background-color: rgb(25, 90, 50);
+    border-color: rgb(25, 90, 50);
+    color: #ffffff;
+}
+
+.btnCadastrarXml mat-icon,
+.btnCadastrarXml button {
+    color: #ffffff;
+}
+
+.btnCadastrarXml:hover {
+    background-color: rgba(44, 146, 83, 0.623);
+    border-color: rgb(25, 90, 50);
+}
+
 /* ================= PROCESSO ================= */
 
 .containerProcess {
@@ -558,6 +574,48 @@ form {
 .modalXmlDropzone:hover {
     background-color: #f3f4f6;
     border-color: #9ca3af;
+}
+
+.modalXmlArquivos {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 12px;
+}
+
+.modalXmlArquivo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background-color: #f0fdf4;
+    color: #195a32;
+    font-size: 12px;
+}
+
+.modalXmlArquivo span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.modalXmlArquivo button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    background: none;
+    color: #195a32;
+    cursor: pointer;
+}
+
+.modalXmlArquivo mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
 }
 
 .modalXmlErro {

@@ -18,6 +18,7 @@ import {
 
 import * as countries from 'i18n-iso-countries';
 import ptBR from 'i18n-iso-countries/langs/pt.json';
+import { forkJoin } from 'rxjs';
 
 countries.registerLocale(ptBR);
 
@@ -59,8 +60,9 @@ export class NovoCedenteComponent implements OnInit {
   mensagemAlertaCadastro: string = '';
 
   mostrarModalXml: boolean = false;
-  arquivoXmlSelecionado: File | null = null;
+  arquivosXmlSelecionados: File[] = [];
   erroArquivoXml: string | null = null;
+  readonly limiteArquivosXml = 10;
 
   // Dados preenchidos
   partesRelacionadas: any[] = [];
@@ -411,49 +413,90 @@ export class NovoCedenteComponent implements OnInit {
   }
 
   abrirModalXml() {
-    this.arquivoXmlSelecionado = null;
+    this.arquivosXmlSelecionados = [];
     this.erroArquivoXml = null;
     this.mostrarModalXml = true;
   }
 
   fecharModalXml() {
     this.mostrarModalXml = false;
-    this.arquivoXmlSelecionado = null;
+    this.arquivosXmlSelecionados = [];
     this.erroArquivoXml = null;
   }
 
   onArquivoXmlSelecionado(event: Event) {
     const input = event.target as HTMLInputElement;
-    const arquivo = input.files && input.files[0];
+    const arquivos = input.files ? Array.from(input.files) : [];
 
-    if (!arquivo) {
+    if (!arquivos.length) {
       return;
     }
 
-    const nomeArquivo = arquivo.name || '';
-    const isXml = arquivo.type === 'text/xml'
-      || arquivo.type === 'application/xml'
-      || nomeArquivo.toLowerCase().endsWith('.xml');
-
-    if (!isXml) {
-      this.arquivoXmlSelecionado = null;
+    const arquivosInvalidos = arquivos.filter((arquivo) => !this.isArquivoXml(arquivo));
+    if (arquivosInvalidos.length) {
       this.erroArquivoXml = 'Apenas arquivos com extensão .xml são aceitos.';
       input.value = '';
       return;
     }
 
-    this.arquivoXmlSelecionado = arquivo;
-    this.erroArquivoXml = null;
-  }
-
-  confirmarCadastroViaXml() {
-    if (!this.arquivoXmlSelecionado) {
+    const quantidadeDisponivel = this.limiteArquivosXml - this.arquivosXmlSelecionados.length;
+    if (arquivos.length > quantidadeDisponivel) {
+      this.erroArquivoXml = `É possível selecionar no máximo ${this.limiteArquivosXml} arquivos XML.`;
+      input.value = '';
       return;
     }
 
-    // TODO: enviar o arquivo XML selecionado para o endpoint de cadastro assim que disponível.
-    this.snackBar.open('Arquivo XML recebido com sucesso.', 'Fechar', { duration: 3000 });
-    this.fecharModalXml();
+    this.arquivosXmlSelecionados = [...this.arquivosXmlSelecionados, ...arquivos];
+    this.erroArquivoXml = null;
+    input.value = '';
+  }
+
+  removerArquivoXml(index: number) {
+    this.arquivosXmlSelecionados = this.arquivosXmlSelecionados.filter((_, arquivoIndex) => arquivoIndex !== index);
+    this.erroArquivoXml = null;
+  }
+
+  private isArquivoXml(arquivo: File): boolean {
+    const nomeArquivo = arquivo.name || '';
+    return arquivo.type === 'text/xml'
+      || arquivo.type === 'application/xml'
+      || nomeArquivo.toLowerCase().endsWith('.xml');
+  }
+
+  confirmarCadastroViaXml() {
+    if (!this.arquivosXmlSelecionados.length) {
+      return;
+    }
+
+    const fundId = Number(this.fundoId);
+    if (!Number.isInteger(fundId) || fundId < 1) {
+      this.erroArquivoXml = 'Não foi possível identificar um fundo válido para o cadastro.';
+      return;
+    }
+
+    const arquivosXml = [...this.arquivosXmlSelecionados];
+    const url = `${environment.api}/cedente/import/xml?fund_id=${fundId}`;
+    const requisicoes = arquivosXml.map((arquivo) => {
+      const dados = new FormData();
+      dados.append('xml', arquivo, arquivo.name);
+      return this.http.post(url, dados);
+    });
+
+    forkJoin(requisicoes).subscribe({
+      next: () => {
+        const quantidade = arquivosXml.length;
+        const mensagem = quantidade === 1
+          ? 'Arquivo XML enviado com sucesso.'
+          : `${quantidade} arquivos XML enviados com sucesso.`;
+        this.snackBar.open(mensagem, 'Fechar', { duration: 3000 });
+        this.fecharModalXml();
+        this.onCancel.emit();
+      },
+      error: (erro) => {
+        console.error('Erro ao enviar arquivos XML', erro);
+        this.erroArquivoXml = 'Não foi possível enviar os arquivos XML. Tente novamente.';
+      }
+    });
   }
 
   // aqui busco o CEP

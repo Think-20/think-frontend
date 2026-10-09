@@ -38,6 +38,10 @@ export class MaskDirective implements ControlValueAccessor {
       return value.length > 11 ? '99.999.999/9999-99' : '999.999.999-99'
     }
 
+    if (this.mask === '(99) 99999-9999') {
+      return value.length > 10 ? '(99) 99999-9999' : '(99) 9999-9999'
+    }
+
     return this.mask
   }
     

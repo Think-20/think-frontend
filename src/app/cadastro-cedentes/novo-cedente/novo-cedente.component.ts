@@ -109,6 +109,111 @@ export class NovoCedenteComponent implements OnInit {
 
 
   private fundoId: string | null = null;
+
+  get isModoEdicao(): boolean {
+    return !!this.cedenteDataService.getCedenteId();
+  }
+
+  get inconsistenciasCedente(): any[] {
+    return this.cedenteDataService.obterInconsistencias();
+  }
+
+  get quantidadePartesRelacionadasFaltantes(): number {
+    if (!this.isModoEdicao) {
+      return 0;
+    }
+
+    const indicesSocios = this.inconsistenciasCedente
+      .map((item: any) => {
+        const campo = String(item && item.campo_inconsistente || '').trim().toLowerCase();
+        const correspondencia = campo.match(/^(?:socios|partes_relacionadas)\[(\d+)\](?:\.|$)/);
+        return correspondencia ? Number(correspondencia[1]) : -1;
+      })
+      .filter((indice: number) => indice >= 0);
+
+    if (!indicesSocios.length) {
+      return 0;
+    }
+
+    const quantidadeNecessaria = Math.max(...indicesSocios) + 1;
+    return Math.max(0, quantidadeNecessaria - this.partesRelacionadas.length);
+  }
+
+  isCampoInconsistente(campo: string, form?: FormGroup, controlName?: string): boolean {
+    return this.temCorrecaoPendente(campo, form, controlName);
+  }
+
+  getValorCorreto(campo: string): any {
+    const inconsistencia = this.encontrarInconsistencia(campo);
+    return inconsistencia ? inconsistencia.valor_serpro : null;
+  }
+
+  temValorCorreto(campo: string): boolean {
+    const inconsistencia = this.encontrarInconsistencia(campo);
+    return !!inconsistencia && Object.prototype.hasOwnProperty.call(inconsistencia, 'valor_serpro');
+  }
+
+  temCorrecaoPendente(campo: string, form?: FormGroup, controlName?: string): boolean {
+    const inconsistencia = this.encontrarInconsistencia(campo);
+    if (!inconsistencia || !Object.prototype.hasOwnProperty.call(inconsistencia, 'valor_serpro')) {
+      return false;
+    }
+
+    const control = form && controlName ? form.get(controlName) : null;
+    if (!control) {
+      return true;
+    }
+
+    let valorOficial = inconsistencia.valor_serpro;
+    if (controlName === 'estado' && valorOficial != null) {
+      valorOficial = this.normalizarEstado(String(valorOficial));
+    }
+
+    if (control.value === null || valorOficial === null) {
+      return control.value !== valorOficial;
+    }
+
+    return String(control.value).trim().toLowerCase() !== String(valorOficial).trim().toLowerCase();
+  }
+
+  getTituloValorCorreto(campo: string): string {
+    const valor = this.getValorCorreto(campo);
+    return valor === null ? 'Aplicar valor oficial nulo' : `Aplicar valor oficial: ${valor}`;
+  }
+
+  aplicarValorCorreto(campo: string, form: FormGroup, controlName: string): void {
+    const inconsistencia = this.encontrarInconsistencia(campo);
+    const control = form.get(controlName);
+    if (!control || !inconsistencia || !Object.prototype.hasOwnProperty.call(inconsistencia, 'valor_serpro')) {
+      return;
+    }
+
+    const valor = inconsistencia.valor_serpro;
+    control.setValue(controlName === 'estado' && valor != null ? this.normalizarEstado(valor) : valor);
+  }
+
+  private encontrarInconsistencia(campo: string): any {
+    const campoNormalizado = String(campo || '').trim().toLowerCase();
+    return this.inconsistenciasCedente.find((item: any) => {
+      const campoInconsistente = String(item && item.campo_inconsistente || '').trim().toLowerCase();
+      if (campoNormalizado === campoInconsistente) {
+        return true;
+      }
+
+      const parteRelacionada = campoNormalizado.match(/^partes_relacionadas\[(\d+)\]\.nome$/);
+      const socio = campoInconsistente.match(/^socios\[(\d+)\]\.nome$/);
+      return !!parteRelacionada && !!socio && parteRelacionada[1] === socio[1];
+    });
+  }
+
+  private normalizarEstado(valor: string): string {
+    const valorNormalizado = valor.trim().toLowerCase();
+    const estadoEncontrado = this.estados.find((estado: any) =>
+      String(estado.sigla || '').toLowerCase() === valorNormalizado ||
+      String(estado.nome || '').toLowerCase() === valorNormalizado
+    );
+    return estadoEncontrado ? estadoEncontrado.sigla : valor;
+  }
   
   ngOnInit() {
     this.fundoId = this.route.snapshot.paramMap.get('id');
@@ -404,6 +509,11 @@ export class NovoCedenteComponent implements OnInit {
       return;
     }
 
+    if (this.cedenteDataService.getCedenteId()) {
+      this.onCancel.emit();
+      return;
+    }
+
     if (this.hasDadosParaSalvar() && !this.isCadastroCompletoParaPendente()) {
       this.salvarCadastro(true);
       return;
@@ -579,7 +689,9 @@ export class NovoCedenteComponent implements OnInit {
       return;
     }
 
-    const status = this.isCadastroCompletoParaPendente() ? 'pendente' : 'rascunho';
+    const status = this.isModoEdicao
+      ? this.cedenteDataService.getCedenteStatus()
+      : this.isCadastroCompletoParaPendente() ? 'pendente' : 'rascunho';
     this.mensagemAlertaCadastro = '';
     this.salvandoCadastro = true;
     this.dispatchLoading(true);

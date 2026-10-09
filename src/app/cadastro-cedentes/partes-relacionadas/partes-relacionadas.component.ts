@@ -13,6 +13,7 @@ export class PartesRelacionadasComponent implements OnInit, OnChanges {
   @Input() index: number = 0;
   @Input() itemId: number = 0;
   @Input() data: any;
+  @Input() inconsistencias: any[] = [];
   @Output() onAdd = new EventEmitter<any>();
   @Output() onRemove = new EventEmitter<number>();
   @Output() onDuplicate = new EventEmitter<number>();
@@ -131,6 +132,47 @@ export class PartesRelacionadasComponent implements OnInit, OnChanges {
     }
 
     return 'Valor inválido.';
+  }
+
+  private get inconsistenciaNome(): any {
+    const campoParte = `partes_relacionadas[${this.index}].nome`;
+    const campoSocio = `socios[${this.index}].nome`;
+    const inconsistencias = this.inconsistencias || [];
+    return inconsistencias.find((item: any) =>
+      String(item && item.campo_inconsistente || '').trim().toLowerCase() === campoSocio
+    ) || inconsistencias.find((item: any) =>
+      String(item && item.campo_inconsistente || '').trim().toLowerCase() === campoParte
+    );
+  }
+
+  get temInconsistenciaNome(): boolean {
+    return !!this.inconsistenciaNome && Object.prototype.hasOwnProperty.call(this.inconsistenciaNome, 'valor_serpro');
+  }
+
+  get valorOficialNome(): any {
+    return this.temInconsistenciaNome ? this.inconsistenciaNome.valor_serpro : null;
+  }
+
+  get correcaoNomePendente(): boolean {
+    if (!this.temInconsistenciaNome) {
+      return false;
+    }
+
+    const valorAtual = this.formParteRelacionadas.get('nome') && this.formParteRelacionadas.get('nome')!.value;
+    const valorOficial = this.valorOficialNome;
+    if (valorAtual === null || valorOficial === null) {
+      return valorAtual !== valorOficial;
+    }
+
+    return String(valorAtual || '').trim().toLowerCase() !== String(valorOficial || '').trim().toLowerCase();
+  }
+
+  aplicarValorOficialNome(): void {
+    const control = this.formParteRelacionadas.get('nome');
+    if (control && this.temInconsistenciaNome) {
+      control.setValue(this.valorOficialNome, { emitEvent: false });
+      this.salvarAutomatico();
+    }
   }
 
   salvarAutomatico() {

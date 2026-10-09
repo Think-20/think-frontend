@@ -30,6 +30,7 @@ export class CadastroCedentesComponent implements OnInit {
   rascunho: any[] = [];
   pendentes: any[] = [];
   emAvaliacao: any[] = [];
+  inconsistenciaC: any[] = [];
   inconsistente: any[] = [];
   aprovados: any[] = [];
   vencidos: any[] = [];
@@ -44,7 +45,7 @@ export class CadastroCedentesComponent implements OnInit {
   formBusca!: FormGroup;
   formFiltroSla!: FormGroup;
 
-  kanbanStatuses = ['rascunho','pendente', 'em_avaliacao', 'inconsistente', 'aprovado', 'vencido', 'cancelado'];
+  kanbanStatuses = ['rascunho','pendente', 'em_avaliacao', 'inconsistencia_c', 'inconsistente', 'aprovado', 'vencido', 'cancelado'];
 
   kanbanColumns: Array<{ status: string; label: string; items: any[]; colorId: string }> = [];
   kanbanConnectedIds = this.kanbanStatuses;
@@ -65,7 +66,8 @@ export class CadastroCedentesComponent implements OnInit {
       {status: 'rascunho', label: 'Rascunho', items: this.rascunho, colorId:'spanRascunho'},
       { status: 'pendente', label: 'Pendente', items: this.pendentes, colorId: 'spanPedente' },
       { status: 'em_avaliacao', label: 'Em Avaliação', items: this.emAvaliacao, colorId: 'spanAvaliacao' },
-      { status: 'inconsistente', label: 'Inconsistencia', items: this.inconsistente, colorId: 'spanInconsistencia' },
+      { status: 'inconsistencia_c', label: 'Inconsistencia C', items: this.inconsistenciaC, colorId: 'spanInconsistenciaC' },
+      { status: 'inconsistente', label: 'Inconsistencia R', items: this.inconsistente, colorId: 'spanInconsistencia' },
       { status: 'aprovado', label: 'Aprovados', items: this.aprovados, colorId: 'spanAprovado' },
       { status: 'vencido', label: 'Vencidos', items: this.vencidos, colorId: 'spanVencidos' },
       { status: 'cancelado', label: 'Cancelados', items: this.cancelados, colorId: 'spanCancelado' }
@@ -409,6 +411,7 @@ export class CadastroCedentesComponent implements OnInit {
     this.rascunho = [];
     this.pendentes = [];
     this.emAvaliacao = [];
+    this.inconsistenciaC = [];
     this.inconsistente = [];
     this.aprovados = [];
     this.vencidos = [];
@@ -435,6 +438,9 @@ export class CadastroCedentesComponent implements OnInit {
           break;
         case 'em_avaliacao':
           this.emAvaliacao.push(cedente);
+          break;
+        case 'inconsistencia_c':
+          this.inconsistenciaC.push(cedente);
           break;
         case 'inconsistente':
           this.inconsistente.push(cedente);
@@ -704,6 +710,7 @@ export class CadastroCedentesComponent implements OnInit {
       case 'rascunho': return 'rascunho';
       case 'pendente': return 'pendente';
       case 'em_avaliacao': return 'em_avaliacao';
+      case 'inconsistencia_c': return 'inconsistencia_c';
       case 'inconsistente': return 'inconsistente';
       case 'aprovado': return 'aprovado';
       case 'vencido': return 'vencido';

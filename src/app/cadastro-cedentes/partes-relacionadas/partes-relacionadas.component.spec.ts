@@ -27,6 +27,7 @@ class CedenteDataServiceMock {
 describe('PartesRelacionadasComponent', () => {
   let component: PartesRelacionadasComponent;
   let fixture: ComponentFixture<PartesRelacionadasComponent>;
+  let cedenteDataService: CedenteDataServiceMock;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -43,6 +44,7 @@ describe('PartesRelacionadasComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PartesRelacionadasComponent);
     component = fixture.componentInstance;
+    cedenteDataService = TestBed.get(CedenteDataService);
     fixture.detectChanges();
   });
 
@@ -84,5 +86,39 @@ describe('PartesRelacionadasComponent', () => {
     expect(component.formParteRelacionadas.get('nome')!.value).toBe('Carlos');
     expect(component.formEndereco.get('logradouro')!.value).toBe('Rua B');
     expect(component.formCheck.get('beneficiario_final')!.value).toBe(true);
+  });
+
+  it('deve aplicar e salvar o nome oficial ao clicar no icone', () => {
+    component.inconsistencias = [{
+      campo_inconsistente: 'partes_relacionadas[0].nome',
+      valor_serpro: 'GOOGLE LLC, GOOGLE INTERNATIONAL LLC, FABIO JOSE SILVA COELHO'
+    }, {
+      campo_inconsistente: 'socios[0].nome',
+      valor_serpro: 'GOOGLE LLC'
+    }];
+    component.formParteRelacionadas.patchValue({ nome: 'Nome divergente' });
+    fixture.detectChanges();
+
+    fixture.nativeElement.querySelector('.btnValorCorreto').click();
+    fixture.detectChanges();
+
+    expect(component.formParteRelacionadas.get('nome')!.value).toBe('GOOGLE LLC');
+    expect(cedenteDataService.partes[0].nome).toBe('GOOGLE LLC');
+    expect(component.correcaoNomePendente).toBeFalse();
+  });
+
+  it('deve aplicar null quando o valor oficial for null', () => {
+    component.inconsistencias = [{
+      campo_inconsistente: 'partes_relacionadas[0].nome',
+      valor_serpro: null
+    }];
+    component.formParteRelacionadas.patchValue({ nome: 'Nome atual' });
+
+    expect(component.temInconsistenciaNome).toBeTrue();
+    component.aplicarValorOficialNome();
+
+    expect(component.formParteRelacionadas.get('nome')!.value).toBeNull();
+    expect(cedenteDataService.partes[0].nome).toBeNull();
+    expect(component.correcaoNomePendente).toBeFalse();
   });
 });

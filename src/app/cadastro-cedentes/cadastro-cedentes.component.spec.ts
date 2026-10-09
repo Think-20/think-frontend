@@ -46,4 +46,22 @@ describe('CadastroCedentesComponent', () => {
     expect(component.totalCadastrosFiltrados).toBe(1);
     expect(component.kanbanColumns.some(column => column.status === 'pendente' && column.items.length === 1)).toBeTrue();
   });
+
+  it('should separate C and R inconsistency statuses in the kanban', () => {
+    component.cedentes = {
+      data: [
+        { id: 1, nome: 'Empresa C', status: 'inconsistencia_c' },
+        { id: 2, nome: 'Empresa R', status: 'inconsistente' }
+      ]
+    };
+
+    component.organizarCedentes();
+
+    const statusColumns = component.kanbanColumns.map(column => column.status);
+    expect(statusColumns.indexOf('inconsistencia_c')).toBe(statusColumns.indexOf('em_avaliacao') + 1);
+    expect(component.kanbanColumns.find(column => column.status === 'inconsistencia_c').label).toBe('Inconsistencia C');
+    expect(component.kanbanColumns.find(column => column.status === 'inconsistente').label).toBe('Inconsistencia R');
+    expect(component.inconsistenciaC.length).toBe(1);
+    expect(component.inconsistente.length).toBe(1);
+  });
 });

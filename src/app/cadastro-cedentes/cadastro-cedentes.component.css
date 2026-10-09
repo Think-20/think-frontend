@@ -497,6 +497,7 @@ label{
 /* Cores */
 #spanPedente{ background-color: #868688; }
 #spanAvaliacao{ background-color: #1e4fd3; }
+#spanInconsistenciaC{ background-color: #138a8a; }
 #spanInconsistencia{ background-color: #eba21c; }
 #spanAprovado{ background-color: #12ac12; }
 #spanVencidos{ background-color: #ff0000; }

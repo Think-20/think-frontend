@@ -10,9 +10,12 @@
         <div class="containerForm">
             <h3>Dados Gerais</h3>
             <form [formGroup]="formParteRelacionadas">
-                <div class="form-group" [class.invalid]="isControlInvalid(formParteRelacionadas, 'nome')">
+                <div class="form-group" [class.invalid]="isControlInvalid(formParteRelacionadas, 'nome')" [class.inconsistente]="correcaoNomePendente">
                     <label for="nome">Nome Completo*</label>
-                    <input type="text" formControlName="nome" id="">
+                    <div class="campoCorrecao">
+                        <input type="text" formControlName="nome" id="">
+                        <button type="button" class="btnValorCorreto" *ngIf="correcaoNomePendente" [title]="valorOficialNome === null ? 'Aplicar valor oficial nulo' : 'Aplicar valor oficial: ' + valorOficialNome" [attr.aria-label]="valorOficialNome === null ? 'Aplicar valor oficial nulo' : 'Aplicar valor oficial: ' + valorOficialNome" (click)="aplicarValorOficialNome()"><mat-icon>priority_high</mat-icon></button>
+                    </div>
                     <div class="error-message" *ngIf="isControlInvalid(formParteRelacionadas, 'nome')">
                         {{ getControlErrorMessage(formParteRelacionadas, 'nome') }}
                     </div>

@@ -24,6 +24,8 @@ export class AvalistaComponent implements OnInit, OnChanges {
   @Output() onRemove = new EventEmitter<number>();
   @Output() onDuplicate = new EventEmitter<number>();
   @Input() data: any;
+  @Input() inconsistencias: any[] = [];
+  @Input() partesRelacionadas: any[] = [];
 
   formDadosCadastraisAvalista!: FormGroup;
   formDadosComplementaresAvalista!: FormGroup;
@@ -102,6 +104,81 @@ export class AvalistaComponent implements OnInit, OnChanges {
     this.formDadosComplementaresAvalista.patchValue(this.data, { emitEvent: false });
     this.formEnderecoAvalista.patchValue(this.data.endereco || {}, { emitEvent: false });
     this.formCheck.patchValue(this.data, { emitEvent: false });
+  }
+
+  private get inconsistenciaNome(): any {
+    const inconsistencias = this.inconsistencias || [];
+    const inconsistenciaAvalista = inconsistencias.find((item: any) => {
+      const campo = String(item && item.campo_inconsistente || '').trim().toLowerCase();
+      const campoAvalista = campo.match(/^(?:avalistas|guarantores|guarantistas)\[(\d+)\]\.nome$/);
+      return !!campoAvalista && Number(campoAvalista[1]) === this.index;
+    });
+    const indiceParte = this.partesRelacionadas.findIndex((parte: any) => this.ehMesmaPessoa(this.data, parte));
+    const inconsistenciaSocio = indiceParte < 0 ? null : inconsistencias.find((item: any) =>
+      String(item && item.campo_inconsistente || '').trim().toLowerCase() === `socios[${indiceParte}].nome`
+    );
+    const inconsistenciaParte = indiceParte < 0 ? null : inconsistencias.find((item: any) =>
+      String(item && item.campo_inconsistente || '').trim().toLowerCase() === `partes_relacionadas[${indiceParte}].nome`
+    );
+    return inconsistenciaAvalista || inconsistenciaSocio || inconsistenciaParte;
+  }
+
+  get temInconsistenciaNome(): boolean {
+    return !!this.inconsistenciaNome && Object.prototype.hasOwnProperty.call(this.inconsistenciaNome, 'valor_serpro');
+  }
+
+  get valorOficialNome(): any {
+    return this.temInconsistenciaNome ? this.inconsistenciaNome.valor_serpro : null;
+  }
+
+  get correcaoNomePendente(): boolean {
+    if (!this.temInconsistenciaNome) {
+      return false;
+    }
+
+    const valorAtual = this.formDadosCadastraisAvalista.get('nome') && this.formDadosCadastraisAvalista.get('nome')!.value;
+    const valorOficial = this.valorOficialNome;
+    if (valorAtual === null || valorOficial === null) {
+      return valorAtual !== valorOficial;
+    }
+
+    return String(valorAtual || '').trim().toLowerCase() !== String(valorOficial || '').trim().toLowerCase();
+  }
+
+  aplicarValorOficialNome(): void {
+    const control = this.formDadosCadastraisAvalista.get('nome');
+    if (control && this.temInconsistenciaNome) {
+      control.setValue(this.valorOficialNome, { emitEvent: false });
+      this.salvarAutomatico();
+    }
+  }
+
+  private ehMesmaPessoa(avalista: any, parteRelacionada: any): boolean {
+    if (!avalista || !parteRelacionada) {
+      return false;
+    }
+
+    const documentoAvalista = this.normalizarDocumento(avalista.cpf || avalista.documento || avalista.cnpj);
+    const documentoParte = this.normalizarDocumento(parteRelacionada.cpf || parteRelacionada.documento || parteRelacionada.cnpj);
+    if (documentoAvalista && documentoParte) {
+      return documentoAvalista === documentoParte;
+    }
+
+    const nomeAvalista = this.normalizarNome(avalista.nome);
+    const nomeParte = this.normalizarNome(parteRelacionada.nome);
+    return !!nomeAvalista && nomeAvalista === nomeParte;
+  }
+
+  private normalizarDocumento(documento: any): string {
+    return String(documento || '').replace(/\D/g, '');
+  }
+
+  private normalizarNome(nome: any): string {
+    return String(nome || '')
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
   }
 
   buscarCep() {

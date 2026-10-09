@@ -82,6 +82,8 @@ export class CedenteDataService {
   private cedenteData: CedenteData = this.obterDadosInicial();
   private fundId: string | null = null;
   private cedenteId: string | null = null;
+  private cedenteStatus: string | null = null;
+  private inconsistenciasCedente: any[] = [];
 
   private cedenteDataSubject = new BehaviorSubject<CedenteData>(JSON.parse(JSON.stringify(this.cedenteData)));
   cedenteData$: Observable<CedenteData> = this.cedenteDataSubject.asObservable();
@@ -193,6 +195,14 @@ export class CedenteDataService {
 
   getCedenteId(): string | null {
     return this.cedenteId;
+  }
+
+  getCedenteStatus(): string | null {
+    return this.cedenteStatus;
+  }
+
+  obterInconsistencias(): any[] {
+    return [...this.inconsistenciasCedente];
   }
   
   constructor() { }
@@ -308,6 +318,10 @@ export class CedenteDataService {
     }
 
     this.cedenteId = cedente && cedente.id != null ? String(cedente.id) : null;
+    this.cedenteStatus = cedente && cedente.status ? String(cedente.status) : null;
+    this.inconsistenciasCedente = Array.isArray(cedente && cedente.inconsistencias)
+      ? [...cedente.inconsistencias]
+      : [];
 
     const endereco = cedente && cedente.endereco
       ? cedente.endereco
@@ -347,8 +361,14 @@ export class CedenteDataService {
         cidade: endereco.cidade || '',
         pais: endereco.pais || 'Brasil'
       },
-      partes_relacionadas: this.normalizarColecaoPessoas(cedente && cedente.partes_relacionadas, 'parte_relacionada'),
-      avalistas: this.normalizarColecaoPessoas(cedente && cedente.avalistas, 'avalista'),
+      partes_relacionadas: this.normalizarColecaoPessoas(
+        cedente && (cedente.partes_relacionadas || cedente.pessoas_vinculadas),
+        'parte_relacionada'
+      ),
+      avalistas: this.normalizarColecaoPessoas(
+        cedente && (cedente.avalistas || cedente.guarantores || cedente.guarantistas),
+        'avalista'
+      ),
       contas_desembolso: Array.isArray(cedente && cedente.contas_desembolso) ? [...cedente.contas_desembolso] : [],
       arquivos: arquivosOriginais.map((arquivo: any) => ({
         document_type: this.normalizarTipoDocumento(arquivo.document_type || arquivo.tipo_documento || arquivo.id, arquivo),
@@ -804,6 +824,8 @@ consolidarPayloadFinal(status?: string): any {
     this.cedenteData = this.obterEstruturaPadrao();
     this.fundId = null;
     this.cedenteId = null;
+    this.cedenteStatus = null;
+    this.inconsistenciasCedente = [];
     this.notificarMudancas();
     this.limparStorage();
   }

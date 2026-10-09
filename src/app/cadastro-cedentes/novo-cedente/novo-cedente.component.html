@@ -5,9 +5,15 @@
             <p>Fundo: Fundo de Crédito Privado Gamma</p>
         </div>
         <div class="headActions">
-            <div class="buttoCancel btnCadastrarXml" (click)="abrirModalXml()">
+            <div class="buttoCancel btnCadastrarXml" *ngIf="!isModoEdicao" (click)="abrirModalXml()">
                 <mat-icon>upload_file</mat-icon>
                 <button type="button">Cadastrar via XML</button>
+            </div>
+            <div class="buttoCancel btnCadastrarXml btnSubmeterCadastro" *ngIf="isModoEdicao">
+                <mat-icon>send</mat-icon>
+                <button type="button" [disabled]="salvandoCadastro" (click)="salvarCadastro()">
+                    {{ salvandoCadastro ? 'Enviando...' : 'Submeter cadastro' }}
+                </button>
             </div>
             <div class="buttoCancel" (click)="cancelarCadastro()">
                 <mat-icon>close</mat-icon>
@@ -79,9 +85,12 @@
                 <h5>Dados Cadastrais</h5>
             </div>
             <form [formGroup]="formDadosCadastrais">
-                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'nome')">
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'nome')" [class.inconsistente]="isCampoInconsistente('nome', formDadosCadastrais, 'nome')">
                     <label for="nome">Nome/Razão Social*</label>
-                    <input type="text" formControlName="nome">
+                    <div class="campoCorrecao">
+                        <input type="text" formControlName="nome">
+                        <button type="button" class="btnValorCorreto" *ngIf="temCorrecaoPendente('nome', formDadosCadastrais, 'nome')" [title]="getTituloValorCorreto('nome')" [attr.aria-label]="getTituloValorCorreto('nome')" (click)="aplicarValorCorreto('nome', formDadosCadastrais, 'nome')"><mat-icon>priority_high</mat-icon></button>
+                    </div>
                     <div class="error-message" *ngIf="isControlInvalid(formDadosCadastrais, 'nome')">
                         {{ getControlErrorMessage(formDadosCadastrais, 'nome') }}
                     </div>
@@ -95,9 +104,12 @@
                     </div>
                 </div>
 
-                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'email')">
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'email')" [class.inconsistente]="isCampoInconsistente('email', formDadosCadastrais, 'email')">
                     <label for="email">Email*</label>
-                    <input type="text" formControlName="email">
+                    <div class="campoCorrecao">
+                        <input type="text" formControlName="email">
+                        <button type="button" class="btnValorCorreto" *ngIf="temCorrecaoPendente('email', formDadosCadastrais, 'email')" [title]="getTituloValorCorreto('email')" [attr.aria-label]="getTituloValorCorreto('email')" (click)="aplicarValorCorreto('email', formDadosCadastrais, 'email')"><mat-icon>priority_high</mat-icon></button>
+                    </div>
                     <div class="error-message" *ngIf="isControlInvalid(formDadosCadastrais, 'email')">
                         {{ getControlErrorMessage(formDadosCadastrais, 'email') }}
                     </div>
@@ -116,38 +128,53 @@
                     <input type="number" formControlName="minimo_assinantes">
                 </div>
 
-                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'cep')">
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'cep')" [class.inconsistente]="isCampoInconsistente('endereco.cep', formDadosCadastrais, 'cep')">
                     <label for="cep">CEP*</label>
-                    <input type="text" formControlName="cep" [mask]="cepMask" (blur)="buscarCep()">
+                    <div class="campoCorrecao">
+                        <input type="text" formControlName="cep" [mask]="cepMask" (blur)="buscarCep()">
+                        <button type="button" class="btnValorCorreto" *ngIf="temCorrecaoPendente('endereco.cep', formDadosCadastrais, 'cep')" [title]="getTituloValorCorreto('endereco.cep')" [attr.aria-label]="getTituloValorCorreto('endereco.cep')" (click)="aplicarValorCorreto('endereco.cep', formDadosCadastrais, 'cep')"><mat-icon>priority_high</mat-icon></button>
+                    </div>
                     <div class="error-message" *ngIf="isControlInvalid(formDadosCadastrais, 'cep')">
                         {{ getControlErrorMessage(formDadosCadastrais, 'cep') }}
                     </div>
                 </div>
 
-                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'logradouro')">
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'logradouro')" [class.inconsistente]="isCampoInconsistente('endereco.logradouro', formDadosCadastrais, 'logradouro')">
                     <label for="logradouro">Rua*</label>
-                    <input type="text" formControlName="logradouro">
+                    <div class="campoCorrecao">
+                        <input type="text" formControlName="logradouro">
+                        <button type="button" class="btnValorCorreto" *ngIf="temCorrecaoPendente('endereco.logradouro', formDadosCadastrais, 'logradouro')" [title]="getTituloValorCorreto('endereco.logradouro')" [attr.aria-label]="getTituloValorCorreto('endereco.logradouro')" (click)="aplicarValorCorreto('endereco.logradouro', formDadosCadastrais, 'logradouro')"><mat-icon>priority_high</mat-icon></button>
+                    </div>
                     <div class="error-message" *ngIf="isControlInvalid(formDadosCadastrais, 'logradouro')">
                         {{ getControlErrorMessage(formDadosCadastrais, 'logradouro') }}
                     </div>
                 </div>
 
-                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'numero')">
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'numero')" [class.inconsistente]="isCampoInconsistente('endereco.numero', formDadosCadastrais, 'numero')">
                     <label for="numero">Número*</label>
-                    <input type="text" formControlName="numero">
+                    <div class="campoCorrecao">
+                        <input type="text" formControlName="numero">
+                        <button type="button" class="btnValorCorreto" *ngIf="temCorrecaoPendente('endereco.numero', formDadosCadastrais, 'numero')" [title]="getTituloValorCorreto('endereco.numero')" [attr.aria-label]="getTituloValorCorreto('endereco.numero')" (click)="aplicarValorCorreto('endereco.numero', formDadosCadastrais, 'numero')"><mat-icon>priority_high</mat-icon></button>
+                    </div>
                     <div class="error-message" *ngIf="isControlInvalid(formDadosCadastrais, 'numero')">
                         {{ getControlErrorMessage(formDadosCadastrais, 'numero') }}
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" [class.inconsistente]="isCampoInconsistente('endereco.complemento', formDadosCadastrais, 'complemento')">
                     <label for="complemento">Complemento</label>
-                    <input type="text" formControlName="complemento">
+                    <div class="campoCorrecao">
+                        <input type="text" formControlName="complemento">
+                        <button type="button" class="btnValorCorreto" *ngIf="temCorrecaoPendente('endereco.complemento', formDadosCadastrais, 'complemento')" [title]="getTituloValorCorreto('endereco.complemento')" [attr.aria-label]="getTituloValorCorreto('endereco.complemento')" (click)="aplicarValorCorreto('endereco.complemento', formDadosCadastrais, 'complemento')"><mat-icon>priority_high</mat-icon></button>
+                    </div>
                 </div>
 
-                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'bairro')">
+                <div class="form-group" [class.invalid]="isControlInvalid(formDadosCadastrais, 'bairro')" [class.inconsistente]="isCampoInconsistente('endereco.bairro', formDadosCadastrais, 'bairro')">
                     <label for="bairro">Bairro*</label>
-                    <input type="text" formControlName="bairro">
+                    <div class="campoCorrecao">
+                        <input type="text" formControlName="bairro">
+                        <button type="button" class="btnValorCorreto" *ngIf="temCorrecaoPendente('endereco.bairro', formDadosCadastrais, 'bairro')" [title]="getTituloValorCorreto('endereco.bairro')" [attr.aria-label]="getTituloValorCorreto('endereco.bairro')" (click)="aplicarValorCorreto('endereco.bairro', formDadosCadastrais, 'bairro')"><mat-icon>priority_high</mat-icon></button>
+                    </div>
                     <div class="error-message" *ngIf="isControlInvalid(formDadosCadastrais, 'bairro')">
                         {{ getControlErrorMessage(formDadosCadastrais, 'bairro') }}
                     </div>
@@ -167,28 +194,37 @@
                 <h5>Informações Gerais</h5>
             </div>
             <form [formGroup]="formInfoGeral">
-                <div class="form-group" [class.invalid]="isControlInvalid(formInfoGeral, 'estado')">
+                <div class="form-group" [class.invalid]="isControlInvalid(formInfoGeral, 'estado')" [class.inconsistente]="isCampoInconsistente('endereco.estado', formInfoGeral, 'estado')">
                     <label for="estado">Estado (UF)*</label>
-                    <select formControlName="estado">
-                        <option value="">Selecione um Estado</option> 
-                        <option *ngFor="let estado of estados" [value]="estado.sigla">
-                            {{ estado.nome }}
-                        </option>
-                    </select>
+                    <div class="campoCorrecao">
+                        <select formControlName="estado">
+                            <option value="">Selecione um Estado</option>
+                            <option *ngFor="let estado of estados" [value]="estado.sigla">
+                                {{ estado.nome }}
+                            </option>
+                        </select>
+                        <button type="button" class="btnValorCorreto" *ngIf="temCorrecaoPendente('endereco.estado', formInfoGeral, 'estado')" [title]="getTituloValorCorreto('endereco.estado')" [attr.aria-label]="getTituloValorCorreto('endereco.estado')" (click)="aplicarValorCorreto('endereco.estado', formInfoGeral, 'estado')"><mat-icon>priority_high</mat-icon></button>
+                    </div>
                     <div class="error-message" *ngIf="isControlInvalid(formInfoGeral, 'estado')">
                         {{ getControlErrorMessage(formInfoGeral, 'estado') }}
                     </div>
                 </div>
-                <div class="form-group" [class.invalid]="isControlInvalid(formInfoGeral, 'telefone')">
+                <div class="form-group" [class.invalid]="isControlInvalid(formInfoGeral, 'telefone')" [class.inconsistente]="isCampoInconsistente('telefone', formInfoGeral, 'telefone')">
                     <label for="telefone">Telefone*</label>
-                    <input type="tel" formControlName="telefone" [mask]="telefoneMask" id="">
+                    <div class="campoCorrecao">
+                        <input type="tel" formControlName="telefone" [mask]="telefoneMask" id="">
+                        <button type="button" class="btnValorCorreto" *ngIf="temCorrecaoPendente('telefone', formInfoGeral, 'telefone')" [title]="getTituloValorCorreto('telefone')" [attr.aria-label]="getTituloValorCorreto('telefone')" (click)="aplicarValorCorreto('telefone', formInfoGeral, 'telefone')"><mat-icon>priority_high</mat-icon></button>
+                    </div>
                     <div class="error-message" *ngIf="isControlInvalid(formInfoGeral, 'telefone')">
                         {{ getControlErrorMessage(formInfoGeral, 'telefone') }}
                     </div>
                 </div>
-                <div class="form-group" [class.invalid]="isControlInvalid(formInfoGeral, 'cidade')">
+                <div class="form-group" [class.invalid]="isControlInvalid(formInfoGeral, 'cidade')" [class.inconsistente]="isCampoInconsistente('endereco.cidade', formInfoGeral, 'cidade')">
                     <label for="cidade">Cidade*</label>
-                    <input type="text" formControlName="cidade">
+                    <div class="campoCorrecao">
+                        <input type="text" formControlName="cidade">
+                        <button type="button" class="btnValorCorreto" *ngIf="temCorrecaoPendente('endereco.cidade', formInfoGeral, 'cidade')" [title]="getTituloValorCorreto('endereco.cidade')" [attr.aria-label]="getTituloValorCorreto('endereco.cidade')" (click)="aplicarValorCorreto('endereco.cidade', formInfoGeral, 'cidade')"><mat-icon>priority_high</mat-icon></button>
+                    </div>
                     <div class="error-message" *ngIf="isControlInvalid(formInfoGeral, 'cidade')">
                         {{ getControlErrorMessage(formInfoGeral, 'cidade') }}
                     </div>
@@ -214,6 +250,13 @@
                 <mat-icon>groups</mat-icon>
                 <h5>Partes Relacionadas</h5>
             </div>
+            <div class="avisoPartesFaltantes" *ngIf="quantidadePartesRelacionadasFaltantes > 0" role="alert" aria-live="polite">
+                <mat-icon>warning_amber</mat-icon>
+                <span>
+                    As inconsistências indicam {{ quantidadePartesRelacionadasFaltantes }} parte(s) relacionada(s) não cadastrada(s).
+                    Clique em <strong>Adicionar</strong> para incluir as partes faltantes antes de corrigir os nomes.
+                </span>
+            </div>
             <div class="btnAdd" (click)="abrirPartesRelacionadas()">
                 <mat-icon>add</mat-icon>
                 <p>ADICIONAR</p>
@@ -222,6 +265,7 @@
                 [index]="i"
                 [itemId]="form.id"
                 [data]="form.data"
+                [inconsistencias]="inconsistenciasCedente"
                 (onAdd)="adicionarParteRelacionada($event, i)"
                 (onRemove)="removerParteRelacionada(i)"
                 (onDuplicate)="duplicarAvalista($event)">
@@ -262,6 +306,8 @@
                 [index]="i"
                 [itemId]="form.id"
                 [data]="form.data"
+                [inconsistencias]="inconsistenciasCedente"
+                [partesRelacionadas]="partesRelacionadas"
                 (onAdd)="adicionarAvalista($event, i)"
                 (onRemove)="removerAvalista(i)"
                 (onDuplicate)="duplicarAvalista(i)">

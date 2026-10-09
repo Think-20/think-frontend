@@ -72,7 +72,14 @@
         <div class="boxStatus">
             <mat-icon class="iconStatus" id="iconBusinessIconsiste">business</mat-icon>
             <div class="infoStatus">
-                <p class="titleStatus">Inconsistência</p>
+                <p class="titleStatus">Inconsistencia C</p>
+                <h4 class="numberStatus">{{ inconsistenciaC.length }}</h4>
+            </div>
+        </div>
+        <div class="boxStatus">
+            <mat-icon class="iconStatus" id="iconBusinessIconsiste">business</mat-icon>
+            <div class="infoStatus">
+                <p class="titleStatus">Inconsistencia R</p>
                 <h4 class="numberStatus">{{ inconsistente.length }}</h4>
             </div>
         </div>
@@ -170,8 +177,12 @@
                 <p>Em Avaliação: {{ emAvaliacao.length }}</p>
             </div>
             <div class="statusFilter">
+                <span class="spanStatus" id="spanInconsistenciaC"></span>
+                <p>Inconsistencia C: {{ inconsistenciaC.length }}</p>
+            </div>
+            <div class="statusFilter">
                 <span class="spanStatus" id="spanInconsistencia"></span>
-                <p>Inconsistências: {{ inconsistente.length }}</p>
+                <p>Inconsistencia R: {{ inconsistente.length }}</p>
             </div>
             <div class="statusFilter">
                 <span class="spanStatus" id="spanAprovado"></span>

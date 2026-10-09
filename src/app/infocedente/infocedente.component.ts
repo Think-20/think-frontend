@@ -21,6 +21,17 @@ export class InfocedenteComponent {
   constructor(private auth: AuthService) {}
 
   get podeEditarCedente(): boolean {
+    const status = String(this.cedente && this.cedente.status || '')
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '_');
+
+    if (status === 'cancelado' || status === 'cancelados') {
+      return false;
+    }
+
     const roleId = this.obterCedenteRoleIdUsuarioLogado();
     return roleId === null || roleId === 2 || roleId === 3;
   }
@@ -285,24 +296,9 @@ export class InfocedenteComponent {
       return false;
     }
 
-    return this.inconsistencias.some((item: any) => {
-      const campoInconsistente = String((item && item.campo_inconsistente) || '').toLowerCase();
-
-      if (!campoInconsistente) {
-        return false;
-      }
-
-      if (campoInconsistente === campoNormalizado) {
-        return true;
-      }
-
-      // Compatibilidade: backend pode enviar socios[x].nome para o nome de parte relacionada.
-      if (campoNormalizado.includes('partes_relacionadas[') && campoNormalizado.endsWith('].nome') && campoInconsistente.includes('socios[') && campoInconsistente.endsWith('].nome')) {
-        return true;
-      }
-
-      return false;
-    });
+    return this.inconsistencias.some((item: any) =>
+      this.campoInconsistenteCorresponde(campoNormalizado, item && item.campo_inconsistente)
+    );
   }
 
   getValorSerproCampo(campo: string): string {
@@ -311,21 +307,23 @@ export class InfocedenteComponent {
       return '';
     }
 
-    const inconsistencia = this.inconsistencias.find((item: any) => {
-      const campoInconsistente = String((item && item.campo_inconsistente) || '').toLowerCase();
-
-      if (campoInconsistente === campoNormalizado) {
-        return true;
-      }
-
-      if (campoNormalizado.includes('partes_relacionadas[') && campoNormalizado.endsWith('].nome') && campoInconsistente.includes('socios[') && campoInconsistente.endsWith('].nome')) {
-        return true;
-      }
-
-      return false;
-    });
+    const inconsistencia = this.inconsistencias.find((item: any) =>
+      this.campoInconsistenteCorresponde(campoNormalizado, item && item.campo_inconsistente)
+    );
 
     return this.formatarValor(inconsistencia && inconsistencia.valor_serpro);
+  }
+
+  private campoInconsistenteCorresponde(campo: string, campoInconsistente: any): boolean {
+    const campoNormalizado = String(campo || '').toLowerCase();
+    const inconsistenciaNormalizada = String(campoInconsistente || '').toLowerCase();
+    if (campoNormalizado === inconsistenciaNormalizada) {
+      return true;
+    }
+
+    const parteRelacionada = campoNormalizado.match(/^partes_relacionadas\[(\d+)\]\.nome$/);
+    const socio = inconsistenciaNormalizada.match(/^socios\[(\d+)\]\.nome$/);
+    return !!parteRelacionada && !!socio && parteRelacionada[1] === socio[1];
   }
 
   getMensagemDivergencia(rotuloCampo: string, usarEmpresarial: boolean = false): string {

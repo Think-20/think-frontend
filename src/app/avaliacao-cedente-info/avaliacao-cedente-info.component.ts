@@ -21,6 +21,8 @@ export class AvaliacaoCedenteInfoComponent implements OnInit {
   selectedAcao: AvaliacaoAcao = null;
   submitting = false;
   podeVerAcoesAvaliacao = false;
+  readonly observacaoAprovacaoJuridica = 'Restrição Vadu analisada e liberada pelo avalista';
+  readonly observacaoRejeicaoJuridica = 'Restrição Vadu incompatível com a política do fundo';
 
   constructor(
     private fb: FormBuilder,
@@ -85,8 +87,21 @@ export class AvaliacaoCedenteInfoComponent implements OnInit {
     return this.selectedAcao === acao;
   }
 
+  isInconsistenciaJuridica(): boolean {
+    return !!(this.cedente && this.cedente.inconsistencia_juridica);
+  }
+
   enviarAprovacao(): void {
     if (this.submitting) {
+      return;
+    }
+
+    if (this.isInconsistenciaJuridica()) {
+      const payloadJuridico = this.montarPayload(
+        'permitir_inconsistencia_juridica',
+        this.observacaoAprovacaoJuridica
+      );
+      this.enviarPatch(payloadJuridico, this.formAprovacao, 'Restrição jurídica aprovada com sucesso.');
       return;
     }
 
@@ -120,6 +135,15 @@ export class AvaliacaoCedenteInfoComponent implements OnInit {
 
   enviarRejeicao(): void {
     if (this.submitting) {
+      return;
+    }
+
+    if (this.isInconsistenciaJuridica()) {
+      const payloadJuridico = this.montarPayload(
+        'rejeitar_inconsistencia_juridica',
+        this.observacaoRejeicaoJuridica
+      );
+      this.enviarPatch(payloadJuridico, this.formRejeicao, 'Restrição jurídica rejeitada com sucesso.');
       return;
     }
 

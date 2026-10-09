@@ -7,6 +7,7 @@ import { ActivatedRoute, Router} from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FundStateService } from './fund-state.service';
 import { CedenteDataService } from './novo-cedente/cedente-data.service';
+import { AuthService } from '../login/auth.service';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ListCedentesComponent } from './list-cedentes/list-cedentes.component';
@@ -66,8 +67,8 @@ export class CadastroCedentesComponent implements OnInit {
       {status: 'rascunho', label: 'Rascunho', items: this.rascunho, colorId:'spanRascunho'},
       { status: 'pendente', label: 'Pendente', items: this.pendentes, colorId: 'spanPedente' },
       { status: 'em_avaliacao', label: 'Em Avaliação', items: this.emAvaliacao, colorId: 'spanAvaliacao' },
-      { status: 'inconsistencia_c', label: 'Inconsistencia C', items: this.inconsistenciaC, colorId: 'spanInconsistenciaC' },
-      { status: 'inconsistente', label: 'Inconsistencia R', items: this.inconsistente, colorId: 'spanInconsistencia' },
+      { status: 'inconsistente', label: 'Inconsistência Cadastral', items: this.inconsistenciaC, colorId: 'spanInconsistenciaC' },
+      { status: 'inconsistencia_c', label: 'Inconsistência Jurídica', items: this.inconsistente, colorId: 'spanInconsistencia' },
       { status: 'aprovado', label: 'Aprovados', items: this.aprovados, colorId: 'spanAprovado' },
       { status: 'vencido', label: 'Vencidos', items: this.vencidos, colorId: 'spanVencidos' },
       { status: 'cancelado', label: 'Cancelados', items: this.cancelados, colorId: 'spanCancelado' }
@@ -81,7 +82,8 @@ export class CadastroCedentesComponent implements OnInit {
     private router: Router,
     private snackBar: MatSnackBar,
     private fundState: FundStateService,
-    private cedenteDataService: CedenteDataService
+    private cedenteDataService: CedenteDataService,
+    private authService: AuthService
   ) { }
   
   ngOnInit() {
@@ -407,6 +409,25 @@ export class CadastroCedentesComponent implements OnInit {
     }, 0);
   }
 
+  private temRestricaoValidacaoVadu(cedente: any): boolean {
+    if (cedente && cedente.inconsistencia_juridica) {
+      return true;
+    }
+
+    const historico = Array.isArray(cedente && cedente.historico) ? cedente.historico : [];
+    return historico.some((item: any) =>
+      item && item.event === 'validacao_vadu' && item.changes && item.changes.resultado === 'restricao'
+    );
+  }
+
+  private temInconsistenciaSerpro(cedente: any): boolean {
+    const inconsistencias = Array.isArray(cedente && cedente.inconsistencias) ? cedente.inconsistencias : [];
+    return inconsistencias.some((item: any) => {
+      const valor = item && item.valor_serpro;
+      return valor !== null && valor !== undefined && String(valor).trim() !== '';
+    });
+  }
+
   organizarCedentes() {
     this.rascunho = [];
     this.pendentes = [];
@@ -439,11 +460,15 @@ export class CadastroCedentesComponent implements OnInit {
         case 'em_avaliacao':
           this.emAvaliacao.push(cedente);
           break;
-        case 'inconsistencia_c':
-          this.inconsistenciaC.push(cedente);
-          break;
         case 'inconsistente':
-          this.inconsistente.push(cedente);
+        case 'inconsistencia_c':
+          if (this.temRestricaoValidacaoVadu(cedente)) {
+            this.inconsistente.push(cedente);
+          } else if (this.temInconsistenciaSerpro(cedente) || normalizedStatus === 'inconsistente') {
+            this.inconsistenciaC.push(cedente);
+          } else {
+            this.inconsistente.push(cedente);
+          }
           break;
         case 'aprovado':
           this.aprovados.push(cedente);
@@ -684,6 +709,24 @@ export class CadastroCedentesComponent implements OnInit {
       const containerDestino = event.container;
       const indexOrigem = event.previousIndex;
       const indexDestino = event.currentIndex;
+      let novoStatus = this.getStatusFromId(containerDestino.id);
+
+      if (this.isInconsistenciaJuridica(cedente)) {
+        if (!this.podeDecidirInconsistenciaJuridica()) {
+          this.snackBar.open('Somente Aprovador ou Administrador pode decidir esta inconsistência jurídica.', '', {
+            duration: 4000
+          });
+          return;
+        }
+
+        novoStatus = this.obterStatusInconsistenciaJuridica(containerDestino.id);
+        if (!novoStatus) {
+          this.snackBar.open('Esta inconsistência jurídica só pode ser permitida ou rejeitada.', '', {
+            duration: 4000
+          });
+          return;
+        }
+      }
 
       // Fazer a movimentação no frontend (temporária)
       transferArrayItem(
@@ -694,7 +737,6 @@ export class CadastroCedentesComponent implements OnInit {
       );
 
       // Obter o novo status e fazer a requisição
-      const novoStatus = this.getStatusFromId(containerDestino.id);
       this.atualizarStatusCedente(cedente.id, novoStatus, {
         containerOrigem,
         containerDestino,
@@ -719,7 +761,56 @@ export class CadastroCedentesComponent implements OnInit {
     }
   }
 
+  isInconsistenciaJuridica(cedente: any): boolean {
+    return !!(cedente && cedente.inconsistencia_juridica);
+  }
+
+  isCedenteDragDisabled(cedente: any): boolean {
+    return this.isRascunhoStatus(cedente && cedente.status) ||
+      (this.isInconsistenciaJuridica(cedente) && !this.podeDecidirInconsistenciaJuridica());
+  }
+
+  private obterCedenteRoleIdUsuarioLogado(): number | null {
+    const usuario: any = this.authService.currentUser();
+    const roleTopLevel = usuario && usuario.cedente_role && usuario.cedente_role.id;
+    const roleEmployee = usuario && usuario.employee && usuario.employee.cedente_role && usuario.employee.cedente_role.id;
+    const roleRaw = roleTopLevel != null ? roleTopLevel : roleEmployee;
+
+    if (roleRaw === null || roleRaw === undefined || roleRaw === '') {
+      return null;
+    }
+
+    const roleId = Number(roleRaw);
+    return Number.isNaN(roleId) ? null : roleId;
+  }
+
+  private podeDecidirInconsistenciaJuridica(): boolean {
+    const roleId = this.obterCedenteRoleIdUsuarioLogado();
+    return roleId === 2 || roleId === 3;
+  }
+
+  private obterStatusInconsistenciaJuridica(statusDestino: string): string | null {
+    if (statusDestino === 'aprovado') {
+      return 'permitir_inconsistencia_juridica';
+    }
+    if (statusDestino === 'cancelado') {
+      return 'rejeitar_inconsistencia_juridica';
+    }
+    return null;
+  }
+
   atualizarStatusCedente(id: number, status: string, rollbackData?: any) {
+    const cedente = rollbackData && rollbackData.cedente;
+    if (this.isInconsistenciaJuridica(cedente) &&
+        (!this.podeDecidirInconsistenciaJuridica() ||
+          ['permitir_inconsistencia_juridica', 'rejeitar_inconsistencia_juridica'].indexOf(status) === -1)) {
+      this.snackBar.open('Somente Aprovador ou Administrador pode decidir esta inconsistência jurídica.', '', {
+        duration: 4000
+      });
+      this.reverterMovimentacao(rollbackData);
+      return;
+    }
+
     const url = `${environment.api}/cedente/patch`;
     const backendStatus = this.normalizeBackendStatus(status);
     const payload = {
@@ -737,21 +828,23 @@ export class CadastroCedentesComponent implements OnInit {
         console.error('Erro ao atualizar status:', err);
 
         // Fazer rollback se houver dados de reversão
-        if (rollbackData) {
-          const { containerOrigem, containerDestino, indexOrigem, indexDestino, cedente } = rollbackData;
-          
-          // Reverter a movimentação no frontend
-          transferArrayItem(
-            containerDestino.data,
-            containerOrigem.data,
-            containerDestino.data.indexOf(cedente),
-            indexOrigem
-          );
-
-          console.log('Card revertido para posição original');
-        }
+        this.reverterMovimentacao(rollbackData);
       }
     });
+  }
+
+  private reverterMovimentacao(rollbackData?: any): void {
+    if (!rollbackData) {
+      return;
+    }
+
+    const { containerOrigem, containerDestino, indexOrigem, cedente } = rollbackData;
+    const indexAtual = containerDestino.data.indexOf(cedente);
+    if (indexAtual === -1) {
+      return;
+    }
+
+    transferArrayItem(containerDestino.data, containerOrigem.data, indexAtual, indexOrigem);
   }
 
   normalizeBackendStatus(status: string): string {

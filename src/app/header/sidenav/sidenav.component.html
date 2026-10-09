@@ -26,9 +26,10 @@
         <ng-container *ngIf="exibeSomenteCadastro; else menuCompleto">
           <!-- Cadastro (somente para perfis 1 e 2) -->
           <div class="nav-item">
-            <a (click)="criacao = criacao === true ? false : true" mat-raised-button class="department-container">
-              <span class="department department-5"></span>
+            <a (click)="criacao = criacao === true ? false : true" mat-raised-button class="department-container nav-toggle">
+              <span class="department department-5" style="display: inline-block; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; min-width: 12px; border-radius: 50%; flex-shrink: 0;"></span>
               <span class="nav-label">Cadastro</span>
+              <mat-icon class="submenu-arrow">{{ criacao ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon>
             </a>
             <div [@rowAppeared]="state" *ngIf="criacao">
               <div class="sub-navbar">
@@ -45,15 +46,40 @@
         <ng-template #menuCompleto>
           <div class="nav-item" *ngIf="user.employee.department_id == 2">
             <a (click)="administradores = administradores === true ? false : true" mat-raised-button class="department-container">
-              <span class="department department-2"></span>
+              <span class="department department-2" style="display: inline-block; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; min-width: 12px; border-radius: 50%; flex-shrink: 0;"></span>
               <span class="nav-label">Administradores</span>
             </a>
           </div>
 
           <div class="nav-item">
-            <a (click)="adiministrativo = adiministrativo === true ? false : true" mat-raised-button class="department-container">
-              <span class="department department-7"></span>
+            <a *ngIf="!hasNoPermission(user, '/employees')" (click)="diretoria = !diretoria" mat-raised-button class="department-container nav-toggle">
+              <span class="department department-1" style="display: inline-block; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; min-width: 12px; border-radius: 50%; flex-shrink: 0;"></span>
+              <span class="nav-label">Diretoria</span>
+              <mat-icon class="submenu-arrow">{{ diretoria ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon>
+            </a>
+            <div [@rowAppeared]="state" *ngIf="diretoria">
+              <div class="sub-navbar">
+                <a mat-raised-button [routerLink]="['/cedente']">Colaboradores</a>
+              </div>
+              <div class="sub-navbar">
+                <a (click)="reports = !reports" mat-raised-button class="submenu-toggle">Eventos<mat-icon class="submenu-arrow">{{ reports ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon></a>
+                <div [@rowAppeared]="state" *ngIf="reports">
+                  <div class="sub-navbar">
+                    <a mat-raised-button [routerLink]="['/cedente']">Metas</a>
+                  </div>
+                </div>
+              </div>
+              <div class="sub-navbar">
+                <a mat-raised-button [routerLink]="['/cedente']">Metas</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-item">
+            <a (click)="adiministrativo = adiministrativo === true ? false : true" mat-raised-button class="department-container nav-toggle">
+              <span class="department department-7" style="display: inline-block; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; min-width: 12px; border-radius: 50%; flex-shrink: 0;"></span>
               <span class="nav-label">Administrativo</span>
+              <mat-icon class="submenu-arrow">{{ adiministrativo ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon>
             </a>
             <div [@rowAppeared]="state" *ngIf="adiministrativo">
               <div class="sub-nav-bar">
@@ -66,15 +92,16 @@
           </div>
 
           <div class="nav-item">
-            <a (click)="atendimento = atendimento === true ? false : true" mat-raised-button class="department-container">
-              <span class="department department-4"></span>
+            <a (click)="atendimento = atendimento === true ? false : true" mat-raised-button class="department-container nav-toggle">
+              <span class="department department-4" style="display: inline-block; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; min-width: 12px; border-radius: 50%; flex-shrink: 0;"></span>
               <span class="nav-label">Atendimento</span>
+              <mat-icon class="submenu-arrow">{{ atendimento ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon>
             </a>
             <div [@rowAppeared]="state" *ngIf="atendimento">
               <div class="sub-navbar">
                 <a mat-raised-button [routerLink]="['/cedente']">Agenda</a>
                 <a [routerLink]="['/cedente']" mat-raised-button>Clientes</a>
-                <a (click)="events = !events" mat-raised-button>Eventos</a>
+                <a (click)="events = !events" mat-raised-button class="submenu-toggle">Eventos<mat-icon class="submenu-arrow">{{ events ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon></a>
                 <div [@rowAppeared]="state" *ngIf="events">
                   <div class="sub-navbar">
                     <a mat-raised-button [routerLink]="['/cedente']">Eventos</a>
@@ -89,9 +116,10 @@
           </div>
 
           <div class="nav-item">
-            <a (click)="criacao = criacao === true ? false : true" mat-raised-button class="department-container">
-              <span class="department department-5"></span>
+            <a (click)="criacao = criacao === true ? false : true" mat-raised-button class="department-container nav-toggle">
+              <span class="department department-5" style="display: inline-block; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; min-width: 12px; border-radius: 50%; flex-shrink: 0;"></span>
               <span class="nav-label">Cadastro</span>
+              <mat-icon class="submenu-arrow">{{ criacao ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon>
             </a>
             <div [@rowAppeared]="state" *ngIf="criacao">
               <div class="sub-navbar">
@@ -105,40 +133,18 @@
           </div>
 
           <div class="nav-item">
-            <a *ngIf="!hasNoPermission(user, '/employees')" (click)="diretoria = !diretoria" mat-raised-button class="department-container">
-              <span class="department department-1"></span>
-              <span class="nav-label">Diretoria</span>
-            </a>
-            <div [@rowAppeared]="state" *ngIf="diretoria">
-              <div class="sub-navbar">
-                <a mat-raised-button [routerLink]="['/cedente']">Colaboradores</a>
-              </div>
-              <div class="sub-navbar">
-                <a (click)="reports = !reports" mat-raised-button>Eventos</a>
-                <div [@rowAppeared]="state" *ngIf="reports">
-                  <div class="sub-navbar">
-                    <a mat-raised-button [routerLink]="['/cedente']">Metas</a>
-                  </div>
-                </div>
-              </div>
-              <div class="sub-navbar">
-                <a mat-raised-button [routerLink]="['/cedente']">Metas</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="nav-item">
-            <a (click)="planejamento = planejamento === true ? false : true" mat-raised-button class="department-container">
-              <span class="department department-6"></span>
+            <a (click)="planejamento = planejamento === true ? false : true" mat-raised-button class="department-container nav-toggle">
+              <span class="department department-6" style="display: inline-block; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; min-width: 12px; border-radius: 50%; flex-shrink: 0;"></span>
               <span class="nav-label">Planejamento</span>
+              <mat-icon class="submenu-arrow">{{ planejamento ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon>
             </a>
             <div [@rowAppeared]="state" *ngIf="planejamento">
               <div class="sub-navbar">
                 <a mat-raised-button [routerLink]="['/cedente']">Agenda</a>
-                <a (click)="centroCusto = centroCusto === true ? false : true" mat-raised-button>Centro de custos</a>
+                <a (click)="centroCusto = centroCusto === true ? false : true" mat-raised-button class="submenu-toggle">Centro de custos<mat-icon class="submenu-arrow">{{ centroCusto ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon></a>
               </div>
               <div class="sub-navbar">
-                <a (click)="events = !events" mat-raised-button>Eventos</a>
+                <a (click)="events = !events" mat-raised-button class="submenu-toggle">Eventos<mat-icon class="submenu-arrow">{{ events ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon></a>
                 <div [@rowAppeared]="state" *ngIf="events">
                   <div class="sub-navbar">
                     <a mat-raised-button [routerLink]="['/cedente']">Eventos</a>
@@ -149,7 +155,7 @@
                 <a mat-raised-button [routerLink]="['/cedente']">Jobs</a>
               </div>
               <div class="sub-navbar">
-                <a (click)="orcamento = orcamento === true ? false : true" mat-raised-button>Orçamento</a>
+                <a (click)="orcamento = orcamento === true ? false : true" mat-raised-button class="submenu-toggle">Orçamento<mat-icon class="submenu-arrow">{{ orcamento ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon></a>
                 <div [@rowAppeared]="state" *ngIf="orcamento" class="sub-navbar">
                   <a disabled mat-raised-button [routerLink]="['/cedente']">Planilha de custos</a>
                   <a disabled mat-raised-button [routerLink]="['/cedente']">Memorial descritivo</a>
@@ -162,13 +168,14 @@
           </div>
 
           <div class="nav-item">
-            <a (click)="producao = producao === true ? false : true" mat-raised-button class="department-container">
-              <span class="department department-3"></span>
+            <a (click)="producao = producao === true ? false : true" mat-raised-button class="department-container nav-toggle">
+              <span class="department department-3" style="display: inline-block; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; min-width: 12px; border-radius: 50%; flex-shrink: 0;"></span>
               <span class="nav-label">Produção</span>
+              <mat-icon class="submenu-arrow">{{ producao ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon>
             </a>
             <div [@rowAppeared]="state" *ngIf="producao">
               <div class="sub-navbar">
-                <a (click)="events = !events" mat-raised-button>Eventos</a>
+                <a (click)="events = !events" mat-raised-button class="submenu-toggle">Eventos<mat-icon class="submenu-arrow">{{ events ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon></a>
                 <div [@rowAppeared]="state" *ngIf="events">
                   <div class="sub-navbar">
                     <a mat-raised-button [routerLink]="['/cedente']">Eventos</a>
@@ -182,9 +189,10 @@
           </div>
 
           <div class="nav-item">
-            <a (click)="configuracao = configuracao === true ? false : true" mat-raised-button class="department-container">
-              <span class="department department-3"></span>
+            <a (click)="configuracao = configuracao === true ? false : true" mat-raised-button class="department-container nav-toggle">
+              <span class="department department-3" style="display: inline-block; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; min-width: 12px; border-radius: 50%; flex-shrink: 0;"></span>
               <span class="nav-label">Configurações</span>
+              <mat-icon class="submenu-arrow">{{ configuracao ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon>
             </a>
             <div [@rowAppeared]="state" *ngIf="configuracao">
               <div class="sub-navbar">

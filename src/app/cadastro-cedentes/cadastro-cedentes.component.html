@@ -72,14 +72,14 @@
         <div class="boxStatus">
             <mat-icon class="iconStatus" id="iconBusinessIconsiste">business</mat-icon>
             <div class="infoStatus">
-                <p class="titleStatus">Inconsistencia C</p>
+                <p class="titleStatus">Inconsistência Cadastral</p>
                 <h4 class="numberStatus">{{ inconsistenciaC.length }}</h4>
             </div>
         </div>
         <div class="boxStatus">
             <mat-icon class="iconStatus" id="iconBusinessIconsiste">business</mat-icon>
             <div class="infoStatus">
-                <p class="titleStatus">Inconsistencia R</p>
+                <p class="titleStatus">Inconsistência Jurídica</p>
                 <h4 class="numberStatus">{{ inconsistente.length }}</h4>
             </div>
         </div>
@@ -178,11 +178,11 @@
             </div>
             <div class="statusFilter">
                 <span class="spanStatus" id="spanInconsistenciaC"></span>
-                <p>Inconsistencia C: {{ inconsistenciaC.length }}</p>
+                <p>Inconsistência Cadastral: {{ inconsistenciaC.length }}</p>
             </div>
             <div class="statusFilter">
                 <span class="spanStatus" id="spanInconsistencia"></span>
-                <p>Inconsistencia R: {{ inconsistente.length }}</p>
+                <p>Inconsistência Jurídica: {{ inconsistente.length }}</p>
             </div>
             <div class="statusFilter">
                 <span class="spanStatus" id="spanAprovado"></span>
@@ -218,7 +218,7 @@
                 <div *ngIf="column.items.length === 0" class="noCards">
                     Nenhum cedente nesta fase
                 </div>
-                <div class="cardKanban" *ngFor="let cedente of column.items" cdkDrag [cdkDragData]="cedente" [cdkDragDisabled]="isRascunhoStatus(cedente?.status)" (click)="abrirInfoCedente(cedente)">
+                <div class="cardKanban" *ngFor="let cedente of column.items" cdkDrag [cdkDragData]="cedente" [cdkDragDisabled]="isCedenteDragDisabled(cedente)" (click)="abrirInfoCedente(cedente)">
                     <div class="titleCards">
                         <div class="areaIconKanban">
                             <mat-icon class="kanbanCardIcon" id="carteira">business</mat-icon>

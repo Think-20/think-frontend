@@ -44,11 +44,25 @@
 }
 
 .sub-navbar {
+  padding-left: 30px;
   padding-right: 33px;
 }
 
 .sub-navbar .sub-navbar {
+  padding-left: 20px;
   padding-right: 25px;
+}
+
+.sub-nav-bar {
+  padding-left: 30px;
+  padding-right: 33px;
+}
+
+.nav-navbar .sub-navbar a,
+.nav-navbar .sub-nav-bar a {
+  text-align: left !important;
+  text-indent: 0;
+  padding-left: 10px !important;
 }
 
 #logo-container {
@@ -133,38 +147,77 @@
 
 /* bolinhas do menu */
 .department {
+  display: inline-block !important;
   width: 12px;
   height: 12px;
   border-radius: 50%;
   flex-shrink: 0;
+  vertical-align: middle;
 }
 
 .department-container {
+  position: relative !important;
   display: flex !important;
   align-items: center;
   justify-content: flex-start !important;
-  gap: 10px;
+  gap: 0;
   text-align: left !important;
+  text-indent: 0 !important;
   width: 100%;
 }
 
-.department-container .mat-button-wrapper,
-.department-container .mat-button-wrapper > .department,
-.department-container .mat-button-wrapper > .nav-label {
-  display: inline-flex !important;
+.nav-navbar .nav-item > .department-container {
+  padding-left: 10px !important;
+}
+
+:host ::ng-deep .department-container .mat-button-wrapper {
+  display: flex !important;
   align-items: center !important;
   justify-content: flex-start !important;
-  gap: 10px !important;
+  gap: 0 !important;
   width: 100%;
   text-align: left !important;
+  padding-left: 0 !important;
 }
 
-.department-container .mat-button-wrapper {
-  padding-left: 0 !important;
+:host ::ng-deep .department-container .mat-button-wrapper > .department,
+:host ::ng-deep .department-container .mat-button-wrapper > .nav-label {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+:host ::ng-deep .department-container .mat-button-wrapper > .department {
+  display: inline-block !important;
 }
 
 .department-container .nav-label {
   display: inline-block;
+  margin-left: 30px !important;
+}
+
+.department-container.nav-toggle,
+.nav-navbar .submenu-toggle {
+  position: relative !important;
+}
+
+.department-container .submenu-arrow,
+.submenu-toggle .submenu-arrow {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  transform: translateY(-50%);
+  font-size: 18px;
+  line-height: 18px;
+  color: #7b7b7b;
+}
+
+.nav-navbar .submenu-toggle {
+  width: 100%;
+  padding-right: 30px !important;
+  text-align: left;
 }
 
 #menu-sidenav {

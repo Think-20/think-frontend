@@ -10,7 +10,7 @@
                 <mat-icon>check_circle</mat-icon>
                 <p>Aprovar Cadastro</p>
             </div>
-            <div class="btnAction solicitarCorrecao" [class.active]="isAcaoSelecionada('corrigir')" [class.disabled]="submitting" (click)="selecionarAcao('corrigir')">
+            <div class="btnAction solicitarCorrecao" *ngIf="!isInconsistenciaJuridica()" [class.active]="isAcaoSelecionada('corrigir')" [class.disabled]="submitting" (click)="selecionarAcao('corrigir')">
                 <mat-icon>error_outline</mat-icon>
                 <p>Solicitar Correções</p>
             </div>
@@ -35,10 +35,12 @@
                 <div class="containerForumlarioAprovado">
                     <form [formGroup]="formAprovacao" (ngSubmit)="enviarAprovacao()">
                         <div class="formGroup">
-                            <label for="limiteAprovado">Limite Aprovado*</label>
-                            <input type="text" formControlName="limiteAprovado" name="limiteAprovado" id="limiteAprovado" placeholder="R$0,00" currencyMask>
+                            <div *ngIf="!isInconsistenciaJuridica()">
+                                <label for="limiteAprovado">Limite Aprovado*</label>
+                                <input type="text" formControlName="limiteAprovado" name="limiteAprovado" id="limiteAprovado" placeholder="R$0,00" currencyMask>
+                            </div>
                         </div>
-                        <div class="formGroup">
+                        <div class="formGroup" *ngIf="!isInconsistenciaJuridica()">
                             <label for="prazoAtualizacao">Prazo de Atualização Cadastral *</label>
                             <select formControlName="prazoAtualizacao" name="prazoAtualizacao" id="prazoAtualizacao">
                                 <option value="" selected disabled>Selecione...</option>
@@ -47,10 +49,11 @@
                                 <option value="24">24 meses</option>
                             </select>
                         </div>
-                        <div class="formGroup">
+                        <div class="formGroup" *ngIf="!isInconsistenciaJuridica()">
                             <label for="observacao">observações (opcional)</label>
                             <textarea formControlName="observacao" name="observacao" id="observacao" placeholder="Digite aqui as observações sobre a aprovação do cadastro..."></textarea>
                         </div>
+                        <p class="formGroup" *ngIf="isInconsistenciaJuridica()">{{ observacaoAprovacaoJuridica }}</p>
                         <div class="containerBtns">
                             <div id="btnEnviar">
                                 <mat-icon>check</mat-icon>
@@ -94,9 +97,10 @@
                     <p>Descreva os motivos da reprovação</p>
                 </div>
                 <form [formGroup]="formRejeicao" (ngSubmit)="enviarRejeicao()">
-                    <div class="formGroup">
+                    <div class="formGroup" *ngIf="!isInconsistenciaJuridica()">
                         <textarea formControlName="observacao" name="observacao" id="observacao" placeholder="Digite aqui os motivos que levaram à reprovação do cadastro..."></textarea>
                     </div>
+                    <p class="formGroup" *ngIf="isInconsistenciaJuridica()">{{ observacaoRejeicaoJuridica }}</p>
                     <div class="containerBtns">
                         <div id="btnEnviar">
                             <mat-icon>check</mat-icon>

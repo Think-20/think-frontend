@@ -156,13 +156,12 @@
     </div>
 
     <!-- 3. Resumo da Avaliação Automática -->
-    <div class="card-section resumoAutomatica">
+    <!-- <div class="card-section resumoAutomatica">
         <div class="headContainer">
             <mat-icon class="info-icon">info_outline</mat-icon>
             <p>Resumo da Avaliação Automática</p>
         </div>
 
-        <!-- Indicadores Superiores -->
         <div class="cardsResumoGrid">
             <div class="cardMetrica totalValidacoes">
                 <div class="metricaHeader">
@@ -190,14 +189,13 @@
             </div>
         </div>
 
-        <!-- Seção interna de Inconsistências Detectadas -->
         <div class="inconsistenciasHeader">
             <h4>Inconsistências Detectadas</h4>
             <span class="badgeProblemas">2 Problemas</span>
         </div>
 
-        <!-- Card Inconsistência 1: Média Criticidade -->
-        <!-- <div class="cardAlerta mediaCriticidade">
+        <ng-template>
+        <div class="cardAlerta mediaCriticidade">
             <div class="alertaHeader">
                 <div class="tituloAlerta">
                     <mat-icon class="icon-alert">error</mat-icon>
@@ -223,10 +221,11 @@
             </div>
 
             <button class="btnAutorizar"><mat-icon>check</mat-icon> Autorizar</button>
-        </div> -->
+        </div>
+        </ng-template>
 
-        <!-- Card Inconsistência 2: Alta Criticidade -->
-        <!-- <div class="cardAlerta altaCriticidade">
+        <ng-template>
+        <div class="cardAlerta altaCriticidade">
             <div class="alertaHeader">
                 <div class="tituloAlerta">
                     <mat-icon class="icon-alert">cancel</mat-icon>
@@ -260,9 +259,9 @@
             </div>
 
             <button class="btnAutorizar"><mat-icon>check</mat-icon> Autorizar</button>
-        </div> -->
+        </div>
+        </ng-template>
 
-        <!-- Lista de Validações Sucesso no rodapé do bloco -->
         <div class="containerSucessos">
             <div class="sucessoHeader">
                 <mat-icon>check_circle_outline</mat-icon>
@@ -275,7 +274,7 @@
                 <div class="itemSucesso"><mat-icon>check</mat-icon> Contas Bancárias (Banco Central - SPI)</div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- 4. Seção Comentário -->
     <div class="card-section containerComentario">

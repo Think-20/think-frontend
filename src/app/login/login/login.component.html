@@ -3,6 +3,24 @@
     <h3>Workflow <span>&</span> Projetos</h3>
 
     <div class="container">
+        <div class="cadastro-switch" role="group" aria-label="Tipo de cadastro">
+            <button
+                type="button"
+                class="cadastro-option"
+                [class.active]="cadastroSelecionado === 'cedente'"
+                [attr.aria-pressed]="cadastroSelecionado === 'cedente'"
+                (click)="selecionarCadastro('cedente')">
+                Cadastro cedente
+            </button>
+            <button
+                type="button"
+                class="cadastro-option"
+                [class.active]="cadastroSelecionado === 'cotista'"
+                [attr.aria-pressed]="cadastroSelecionado === 'cotista'"
+                (click)="selecionarCadastro('cotista')">
+                Cadastro cotista
+            </button>
+        </div>
         <div class="titulo">
             <h4>Bem-Vindo</h4>
             <p id="subtitulo">Faça login para acessar o sistema</p>

@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   API = API;
   readonly FRIDAY_DAY = 5;
+  cadastroSelecionado: 'cedente' | 'cotista' = 'cedente';
 
   showPassword: boolean = false;
   redirectUrl: string = '/cedente'; // ajuste esta rota conforme necessário
@@ -65,6 +66,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
+    this.cadastroSelecionado = this.route.snapshot.queryParams['cadastro'] === 'cotista'
+      ? 'cotista'
+      : 'cedente';
     
     this.auth.logout();
 
@@ -135,5 +139,12 @@ export class LoginComponent implements OnInit {
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
+  }
+
+  selecionarCadastro(cadastro: 'cedente' | 'cotista') {
+    this.cadastroSelecionado = cadastro;
+    if (cadastro === 'cotista') {
+      this.router.navigateByUrl('/cadastro-cotista');
+    }
   }
 }

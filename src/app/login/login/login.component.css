@@ -57,6 +57,45 @@ h3{
     gap:18px;
 }
 
+.cadastro-switch{
+    width:100%;
+    min-height:36px;
+    padding:3px;
+    background:rgb(242,242,242);
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+}
+
+.cadastro-option{
+    flex:1;
+    min-width:0;
+    min-height:30px;
+    padding:5px 8px;
+    border:0;
+    border-radius:18px;
+    background:transparent;
+    color:rgb(105,105,105);
+    font-size:12px;
+    white-space:nowrap;
+    cursor:pointer;
+}
+
+.cadastro-option.active{
+    background:white;
+    color:rgb(40,40,40);
+    box-shadow:0 1px 4px rgba(0,0,0,0.18);
+}
+
+.cadastro-option:focus{
+    outline:none;
+}
+
+.cadastro-option:focus-visible{
+    outline:2px solid rgb(52,133,90);
+    outline-offset:1px;
+}
+
 .titulo h4{
     font-size:22px;
     font-weight:600;

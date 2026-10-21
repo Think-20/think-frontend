@@ -241,6 +241,8 @@ import { DocCedenteInfoComponent } from './doc-cedente-info/doc-cedente-info.com
 import { HistoricoCedenteInfoComponent } from './historico-cedente-info/historico-cedente-info.component';
 import { AvaliacaoCedenteInfoComponent } from './avaliacao-cedente-info/avaliacao-cedente-info.component';
 import { ModalWorkflowComponent } from './modal-cedentes/modal-workflow/modal-workflow.component';
+import { CadastroCotistaComponent } from './cadastro-cotista/cadastro-cotista.component';
+import { IdentificacaoInicialComponent } from './cadastro-cotista/identificacao-inicial/identificacao-inicial.component';
 
 
 registerLocaleData(localePt);
@@ -386,6 +388,8 @@ registerLocaleData(localePt);
     HistoricoCedenteInfoComponent,
     AvaliacaoCedenteInfoComponent,
     ModalWorkflowComponent,
+    CadastroCotistaComponent,
+    IdentificacaoInicialComponent,
 
 
   ],

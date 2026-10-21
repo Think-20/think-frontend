@@ -1,0 +1,54 @@
+<div class="identificacao-page">
+  <header class="topbar">
+    <div class="topbar-content">
+      <a class="brand" href="/cadastro-cotista" aria-label="Carmel Capital - início">
+        <span class="brand-mark">C</span>
+        <span>Carmel Capital</span>
+      </a>
+      <span class="topbar-link">Minha ficha</span>
+    </div>
+  </header>
+
+  <main class="identificacao-main">
+    <section class="identificacao-card" aria-labelledby="titulo-identificacao">
+      <h1 id="titulo-identificacao">Identificação inicial</h1>
+      <p class="description">
+        Informe o CPF para abrir um cadastro existente ou iniciar um novo.
+        Cada documento gera um cadastro independente.
+      </p>
+
+      <form [formGroup]="formulario" (ngSubmit)="continuar()" novalidate>
+        <fieldset class="investor-type">
+          <legend>Tipo de investidor</legend>
+          <label>
+            <input type="radio" formControlName="tipoInvestidor" value="PESSOA_FISICA">
+            <span>Pessoa Física</span>
+          </label>
+          <label>
+            <input type="radio" formControlName="tipoInvestidor" value="PESSOA_JURIDICA">
+            <span>Pessoa Jurídica</span>
+          </label>
+        </fieldset>
+
+        <label class="document-label" for="documento">{{ tipoDocumento }}</label>
+        <input
+          id="documento"
+          class="document-input"
+          type="text"
+          inputmode="numeric"
+          autocomplete="off"
+          [mask]="mascaraDocumento"
+          [placeholder]="placeholderDocumento"
+          formControlName="documento"
+          [attr.aria-invalid]="documentoInvalido">
+        <span class="validation-message" *ngIf="documentoInvalido">
+          Informe um {{ tipoDocumento }} válido.
+        </span>
+
+        <button class="continue-button" type="submit" [disabled]="formulario.invalid">
+          Continuar
+        </button>
+      </form>
+    </section>
+  </main>
+</div>

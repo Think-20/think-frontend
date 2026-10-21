@@ -1,0 +1,35 @@
+<cb-identificacao-inicial
+  *ngIf="mostrarIdentificacao"
+  (continuarCadastro)="receberIdentificacao($event)">
+</cb-identificacao-inicial>
+
+<main class="cotista-page" *ngIf="!mostrarIdentificacao">
+  <section class="cotista-content" aria-labelledby="titulo-cadastro">
+    <div class="intro">
+      <h1 id="titulo-cadastro">Cadastro de cotistas</h1>
+      <p>
+        Plataforma oficial para cadastro de novos investidores. Crie sua conta,
+        preencha sua ficha cadastral e acompanhe a aprovação do seu perfil de investimentos.
+      </p>
+      <div class="actions">
+        <button type="button" class="action-button primary" (click)="iniciarCadastro()">Começar cadastro</button>
+        <a class="action-button secondary" [routerLink]="['/login']" [queryParams]="{ cadastro: 'cotista' }">Entra na conta</a>
+      </div>
+    </div>
+
+    <ol class="steps" aria-label="Etapas do cadastro">
+      <li class="step-card">
+        <h2>1. Crie sua conta</h2>
+        <p>Cadastre-se com e-mail e senha em segundos.</p>
+      </li>
+      <li class="step-card">
+        <h2>2. Preencha sua ficha</h2>
+        <p>Informe seus dados como Pessoa Física ou Jurídica.</p>
+      </li>
+      <li class="step-card">
+        <h2>3. Aguarde aprovação</h2>
+        <p>Nossa equipe operacional revisa e aprova seu cadastro.</p>
+      </li>
+    </ol>
+  </section>
+</main>

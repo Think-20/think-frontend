@@ -77,10 +77,14 @@ import { InfocedenteComponent } from './infocedente/infocedente.component';
 import { DocCedenteInfoComponent } from './doc-cedente-info/doc-cedente-info.component';
 import { HistoricoCedenteInfoComponent } from './historico-cedente-info/historico-cedente-info.component';
 import { AvaliacaoCedenteInfoComponent } from './avaliacao-cedente-info/avaliacao-cedente-info.component';
+import { CadastroCotistaComponent } from './cadastro-cotista/cadastro-cotista.component';
 
 export const ROUTES: Routes = [
   {
     path: 'login', component: LoginComponent
+  },
+  {
+    path: 'cadastro-cotista', component: CadastroCotistaComponent
   },
   {
     path:'forget-password', component: ForgetPasswordComponent

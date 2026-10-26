@@ -1,7 +1,20 @@
 <cb-identificacao-inicial
-  *ngIf="mostrarIdentificacao"
+  *ngIf="mostrarIdentificacao && !mostrarFichaCadastral"
   (continuarCadastro)="receberIdentificacao($event)">
 </cb-identificacao-inicial>
+
+<div [hidden]="!mostrarFichaCadastral || mostrarQuestionarioSuitability">
+  <cb-ficha-cadastral
+    *ngIf="mostrarFichaCadastral"
+    [identificacao]="identificacaoCotista"
+    (continuarSuitability)="continuarParaSuitability()">
+  </cb-ficha-cadastral>
+</div>
+
+<cb-questionario-suitability
+  *ngIf="mostrarQuestionarioSuitability"
+  (voltarFicha)="voltarParaFichaCadastral()">
+</cb-questionario-suitability>
 
 <main class="cotista-page" *ngIf="!mostrarIdentificacao">
   <section class="cotista-content" aria-labelledby="titulo-cadastro">

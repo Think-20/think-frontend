@@ -243,6 +243,8 @@ import { AvaliacaoCedenteInfoComponent } from './avaliacao-cedente-info/avaliaca
 import { ModalWorkflowComponent } from './modal-cedentes/modal-workflow/modal-workflow.component';
 import { CadastroCotistaComponent } from './cadastro-cotista/cadastro-cotista.component';
 import { IdentificacaoInicialComponent } from './cadastro-cotista/identificacao-inicial/identificacao-inicial.component';
+import { FichaCadastralComponent } from './cadastro-cotista/ficha-cadastral/ficha-cadastral.component';
+import { QuestionarioSuitabilityComponent } from './cadastro-cotista/questionario-suitability/questionario-suitability.component';
 
 
 registerLocaleData(localePt);
@@ -390,6 +392,8 @@ registerLocaleData(localePt);
     ModalWorkflowComponent,
     CadastroCotistaComponent,
     IdentificacaoInicialComponent,
+    FichaCadastralComponent,
+    QuestionarioSuitabilityComponent,
 
 
   ],

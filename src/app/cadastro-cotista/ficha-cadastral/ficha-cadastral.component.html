@@ -1,0 +1,767 @@
+<div class="ficha-page">
+  <header class="topbar">
+    <div class="topbar-content">
+      <a class="brand" href="/cadastro-cotista" aria-label="Carmel Capital - início">
+        <span class="brand-mark">C</span>
+        <span>Carmel Capital</span>
+      </a>
+      <span class="topbar-link">Minha ficha</span>
+    </div>
+  </header>
+
+  <main class="ficha-main">
+    <div class="ficha-heading">
+      <div>
+        <h1>Ficha cadastral</h1>
+        <p>Modelo Banco Genial · Carmel Capital</p>
+      </div>
+      <span class="status">Rascunho</span>
+    </div>
+
+    <section class="investor-type" aria-label="Tipo de investidor">
+      <h2>Tipo de investidor</h2>
+      <div class="investor-options">
+        <label>
+          <input type="radio" name="tipoInvestidor" [checked]="identificacao && identificacao.tipoInvestidor === 'PESSOA_FISICA'" disabled>
+          <span>Pessoa Física</span>
+        </label>
+        <label>
+          <input type="radio" name="tipoInvestidor" [checked]="identificacao && identificacao.tipoInvestidor === 'PESSOA_JURIDICA'" disabled>
+          <span>Pessoa Jurídica</span>
+        </label>
+      </div>
+    </section>
+
+    <section class="fichas" aria-label="Etapas da ficha cadastral">
+      <article class="ficha" *ngFor="let ficha of fichas; let fichaIndex = index">
+        <h2 class="ficha-heading-row">
+          <button
+            class="ficha-toggle"
+            type="button"
+            [attr.aria-expanded]="ficha.aberta"
+            [attr.aria-controls]="'questionario-' + fichaIndex"
+            (click)="alternarFicha(ficha)">
+            <span>{{ ficha.titulo }}</span>
+            <span class="toggle-icon" aria-hidden="true">{{ ficha.aberta ? '−' : '+' }}</span>
+          </button>
+        </h2>
+
+        <div
+          class="questionario"
+          [id]="'questionario-' + fichaIndex"
+          [hidden]="!ficha.aberta">
+          <div class="questionario-group" *ngFor="let grupo of ficha.grupos; let grupoIndex = index">
+            <h3 *ngIf="fichaIndex !== 0 && fichaIndex !== 3 && fichaIndex !== 4 && fichaIndex !== 5 && fichaIndex !== 7 && fichaIndex !== 8">
+              {{ grupo.titulo }}
+            </h3>
+            <ng-container *ngIf="fichaIndex === 3; else naoReferencias">
+              <div class="references-list">
+                <section class="reference-card" *ngFor="let referencia of referencias; let referenciaIndex = index">
+                  <div class="repeatable-item-heading">
+                    <h3>Referência #{{ referenciaIndex + 1 }}</h3>
+                    <button
+                      class="remove-item-button"
+                      type="button"
+                      [attr.aria-label]="'Remover referência ' + (referenciaIndex + 1)"
+                      (click)="removerReferencia(referenciaIndex)">
+                      <svg aria-hidden="true" viewBox="0 0 16 16">
+                        <path d="M5 2h6l.5 1.5H14v1H2v-1h2.5L5 2zm-1.5 4h9l-.6 8H4.1l-.6-8zM6 7v5m4-5v5" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="reference-grid">
+                    <div class="field reference-name">
+                      <label [attr.for]="'referencia-nome-' + referenciaIndex">Nome completo</label>
+                      <input
+                        [id]="'referencia-nome-' + referenciaIndex"
+                        type="text"
+                        [value]="referencia.nomeCompleto"
+                        (input)="atualizarReferencia(referencia, 'nomeCompleto', $event)">
+                    </div>
+                    <div class="field">
+                      <label [attr.for]="'referencia-nacionalidade-' + referenciaIndex">Nacionalidade</label>
+                      <input
+                        [id]="'referencia-nacionalidade-' + referenciaIndex"
+                        type="text"
+                        [value]="referencia.nacionalidade"
+                        (input)="atualizarReferencia(referencia, 'nacionalidade', $event)">
+                    </div>
+                    <div class="field">
+                      <label [attr.for]="'referencia-telefone-' + referenciaIndex">Telefone</label>
+                      <input
+                        [id]="'referencia-telefone-' + referenciaIndex"
+                        type="tel"
+                        placeholder="(11) 91234-5678"
+                        [mask]="telefoneMask"
+                        [(ngModel)]="referencia.telefone"
+                        [ngModelOptions]="{ standalone: true }">
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <button class="add-reference-button" type="button" (click)="adicionarReferencia()">
+                <span aria-hidden="true">+</span>
+                Adicionar referência
+              </button>
+            </ng-container>
+            <ng-template #naoReferencias>
+              <ng-container *ngIf="fichaIndex === 4; else naoDadosBancarios">
+                <div class="bank-accounts-list">
+                  <section class="bank-account-card" *ngFor="let conta of contasBancarias; let contaIndex = index">
+                    <div class="repeatable-item-heading">
+                      <h3>Conta bancária #{{ contaIndex + 1 }}</h3>
+                      <button
+                        class="remove-item-button"
+                        type="button"
+                        [attr.aria-label]="'Remover conta bancária ' + (contaIndex + 1)"
+                        (click)="removerContaBancaria(contaIndex)">
+                        <svg aria-hidden="true" viewBox="0 0 16 16">
+                          <path d="M5 2h6l.5 1.5H14v1H2v-1h2.5L5 2zm-1.5 4h9l-.6 8H4.1l-.6-8zM6 7v5m4-5v5" />
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="bank-account-grid">
+                      <div class="field">
+                        <label [attr.for]="'conta-banco-' + contaIndex">Banco</label>
+                        <input
+                          [id]="'conta-banco-' + contaIndex"
+                          type="text"
+                          [value]="conta.banco"
+                          (input)="atualizarContaBancaria(conta, 'banco', $event)">
+                      </div>
+                      <div class="field">
+                        <label [attr.for]="'conta-agencia-' + contaIndex">Agência</label>
+                        <input
+                          [id]="'conta-agencia-' + contaIndex"
+                          type="text"
+                          [value]="conta.agencia"
+                          (input)="atualizarContaBancaria(conta, 'agencia', $event)">
+                      </div>
+                      <div class="field">
+                        <label [attr.for]="'conta-numero-' + contaIndex">Nº da conta corrente</label>
+                        <input
+                          [id]="'conta-numero-' + contaIndex"
+                          type="text"
+                          [value]="conta.numeroConta"
+                          (input)="atualizarContaBancaria(conta, 'numeroConta', $event)">
+                      </div>
+                      <div class="field">
+                        <label [attr.for]="'conta-tipo-' + contaIndex">Tipo de conta</label>
+                        <select
+                          [id]="'conta-tipo-' + contaIndex"
+                          [value]="conta.tipoConta"
+                          (change)="atualizarContaBancaria(conta, 'tipoConta', $event)">
+                          <option value="">Selecionar</option>
+                          <option value="Corrente">Corrente</option>
+                          <option value="Poupança">Poupança</option>
+                          <option value="Salário">Salário</option>
+                          <option value="Pagamento">Pagamento</option>
+                        </select>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+                <button class="add-reference-button add-bank-account-button" type="button" (click)="adicionarContaBancaria()">
+                  <span aria-hidden="true">+</span>
+                  Adicionar conta bancária
+                </button>
+              </ng-container>
+            </ng-template>
+            <ng-template #naoDadosBancarios>
+              <ng-container *ngIf="fichaIndex === 5; else naoSituacaoPatrimonial">
+                <div class="patrimonial-list">
+                  <section class="patrimonial-card" *ngFor="let item of itensPatrimoniais; let itemIndex = index">
+                    <div class="repeatable-item-heading">
+                      <h3>Item patrimonial #{{ itemIndex + 1 }}</h3>
+                      <button
+                        class="remove-item-button"
+                        type="button"
+                        [attr.aria-label]="'Remover item patrimonial ' + (itemIndex + 1)"
+                        (click)="removerItemPatrimonial(itemIndex)">
+                        <svg aria-hidden="true" viewBox="0 0 16 16">
+                          <path d="M5 2h6l.5 1.5H14v1H2v-1h2.5L5 2zm-1.5 4h9l-.6 8H4.1l-.6-8zM6 7v5m4-5v5" />
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="patrimonial-grid">
+                      <div class="field">
+                        <label [attr.for]="'patrimonio-categoria-' + itemIndex">Categoria</label>
+                        <select
+                          [id]="'patrimonio-categoria-' + itemIndex"
+                          [value]="item.categoria"
+                          (change)="atualizarItemPatrimonial(item, 'categoria', $event)">
+                          <option value="">Selecionar</option>
+                          <option value="Imóveis">Imóveis</option>
+                          <option value="Veículos">Veículos</option>
+                          <option value="Investimentos">Investimentos</option>
+                          <option value="Aplicações financeiras">Aplicações financeiras</option>
+                          <option value="Participações societárias">Participações societárias</option>
+                          <option value="Outros">Outros</option>
+                        </select>
+                      </div>
+                      <div class="field patrimonial-description">
+                        <label [attr.for]="'patrimonio-descricao-' + itemIndex">Descrição</label>
+                        <input
+                          [id]="'patrimonio-descricao-' + itemIndex"
+                          type="text"
+                          [value]="item.descricao"
+                          (input)="atualizarItemPatrimonial(item, 'descricao', $event)">
+                      </div>
+                      <div class="field">
+                        <label [attr.for]="'patrimonio-valor-' + itemIndex">Valor atual (R$)</label>
+                        <input
+                          [id]="'patrimonio-valor-' + itemIndex"
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          [value]="item.valorAtual"
+                          (input)="atualizarItemPatrimonial(item, 'valorAtual', $event)">
+                      </div>
+                    </div>
+                  </section>
+                </div>
+                <button class="add-reference-button add-patrimonial-button" type="button" (click)="adicionarItemPatrimonial()">
+                  <span aria-hidden="true">+</span>
+                  Adicionar item patrimonial
+                </button>
+              </ng-container>
+            </ng-template>
+            <ng-template #naoSituacaoPatrimonial>
+              <ng-container *ngIf="fichaIndex === 7; else naoParticipacoes">
+                <div class="participations-list">
+                  <section
+                    class="participation-card"
+                    *ngFor="let participacao of participacoesSocietarias; let participacaoIndex = index">
+                    <div class="participation-heading">
+                      <h3>Participação #{{ participacaoIndex + 1 }}</h3>
+                      <button
+                        class="remove-item-button remove-participation-button"
+                        type="button"
+                        [attr.aria-label]="'Remover participação ' + (participacaoIndex + 1)"
+                        (click)="removerParticipacaoSocietaria(participacaoIndex)">
+                        <svg aria-hidden="true" viewBox="0 0 16 16">
+                          <path d="M5 2h6l.5 1.5H14v1H2v-1h2.5L5 2zm-1.5 4h9l-.6 8H4.1l-.6-8zM6 7v5m4-5v5" />
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="participation-grid">
+                      <div class="field participation-company">
+                        <label [attr.for]="'participacao-razao-social-' + participacaoIndex">Razão social</label>
+                        <input
+                          [id]="'participacao-razao-social-' + participacaoIndex"
+                          type="text"
+                          [value]="participacao.razaoSocial"
+                          (input)="atualizarParticipacaoSocietaria(participacao, 'razaoSocial', $event)">
+                      </div>
+                      <div class="field">
+                        <label [attr.for]="'participacao-cnpj-' + participacaoIndex">CNPJ</label>
+                        <input
+                          [id]="'participacao-cnpj-' + participacaoIndex"
+                          type="text"
+                          placeholder="00.000.000/0000-00"
+                          [mask]="cnpjMask"
+                          [(ngModel)]="participacao.cnpj"
+                          [ngModelOptions]="{ standalone: true }">
+                      </div>
+                      <div class="field">
+                        <label [attr.for]="'participacao-nacionalidade-' + participacaoIndex">Nacionalidade</label>
+                        <input
+                          [id]="'participacao-nacionalidade-' + participacaoIndex"
+                          type="text"
+                          [value]="participacao.nacionalidade"
+                          (input)="atualizarParticipacaoSocietaria(participacao, 'nacionalidade', $event)">
+                      </div>
+                      <div class="field">
+                        <label [attr.for]="'participacao-percentual-' + participacaoIndex">% capital</label>
+                        <input
+                          [id]="'participacao-percentual-' + participacaoIndex"
+                          type="number"
+                          min="0"
+                          max="100"
+                          step="0.01"
+                          [value]="participacao.percentualCapital"
+                          (input)="atualizarParticipacaoSocietaria(participacao, 'percentualCapital', $event)">
+                      </div>
+                      <fieldset class="radio-field participation-financial">
+                        <legend>Instituição financeira?</legend>
+                        <div class="radio-options">
+                          <label>
+                            <input
+                              type="radio"
+                              [name]="'participacao-instituicao-' + participacaoIndex"
+                              [id]="'participacao-instituicao-sim-' + participacaoIndex"
+                              value="Sim"
+                              [checked]="participacao.instituicaoFinanceira === 'Sim'"
+                              (change)="atualizarParticipacaoSocietaria(participacao, 'instituicaoFinanceira', $event)">
+                            <span>Sim</span>
+                          </label>
+                          <label>
+                            <input
+                              type="radio"
+                              [name]="'participacao-instituicao-' + participacaoIndex"
+                              [id]="'participacao-instituicao-nao-' + participacaoIndex"
+                              value="Não"
+                              [checked]="participacao.instituicaoFinanceira === 'Não'"
+                              (change)="atualizarParticipacaoSocietaria(participacao, 'instituicaoFinanceira', $event)">
+                            <span>Não</span>
+                          </label>
+                        </div>
+                      </fieldset>
+                      <div class="field participation-giin">
+                        <label [attr.for]="'participacao-giin-' + participacaoIndex">GIIN Number (se sim)</label>
+                        <input
+                          [id]="'participacao-giin-' + participacaoIndex"
+                          type="text"
+                          [value]="participacao.giinNumber"
+                          (input)="atualizarParticipacaoSocietaria(participacao, 'giinNumber', $event)">
+                      </div>
+                    </div>
+                  </section>
+                </div>
+                <button
+                  class="add-reference-button add-participation-button"
+                  type="button"
+                  (click)="adicionarParticipacaoSocietaria()">
+                  <span aria-hidden="true">+</span>
+                  Adicionar participação
+                </button>
+              </ng-container>
+            </ng-template>
+            <ng-template #naoParticipacoes>
+              <ng-container *ngIf="fichaIndex === 8; else naoPpe">
+                <section class="purpose-section" aria-labelledby="purpose-instructions">
+                  <p id="purpose-instructions">
+                    Selecione os propósitos da relação de negócios pretendida com o Banco Genial (Circular 3.461/09 BACEN).
+                  </p>
+                  <div class="purpose-layout">
+                    <fieldset class="purpose-options">
+                      <legend>Propósitos</legend>
+                      <label *ngFor="let proposito of propositosDisponiveis; let propositoIndex = index">
+                        <input
+                          type="checkbox"
+                          [id]="'proposito-' + propositoIndex"
+                          [checked]="propositosSelecionados.indexOf(proposito.valor) !== -1"
+                          (change)="alternarProposito(proposito.valor, $event)">
+                        <span>{{ proposito.rotulo }}</span>
+                      </label>
+                    </fieldset>
+                    <div class="field other-purpose">
+                      <label for="outro-proposito">Se 'Outros', especificar</label>
+                      <input
+                        id="outro-proposito"
+                        type="text"
+                        [disabled]="propositosSelecionados.indexOf('OUTROS') === -1"
+                        [value]="outroProposito"
+                        (input)="atualizarOutroProposito($event)">
+                    </div>
+                  </div>
+                </section>
+              </ng-container>
+            </ng-template>
+            <ng-template #naoPpe>
+              <ng-container *ngIf="fichaIndex === 10; else fichaPpeOrRegular">
+                <div class="proxy-grid">
+                  <fieldset class="radio-field">
+                    <legend>Opera por conta própria?</legend>
+                    <div class="radio-options">
+                      <label>
+                        <input type="radio" name="procurador-conta-propria" value="Sim"
+                          [checked]="procuradorOperaPorContaPropria === 'Sim'"
+                          (change)="atualizarRespostaProcurador('contaPropria', $event)">
+                        <span>Sim</span>
+                      </label>
+                      <label>
+                        <input type="radio" name="procurador-conta-propria" value="Não"
+                          [checked]="procuradorOperaPorContaPropria === 'Não'"
+                          (change)="atualizarRespostaProcurador('contaPropria', $event)">
+                        <span>Não</span>
+                      </label>
+                    </div>
+                  </fieldset>
+
+                  <fieldset class="radio-field">
+                    <legend>Autoriza emissão de ordens por procurador?</legend>
+                    <div class="radio-options">
+                      <label>
+                        <input type="radio" name="procurador-autoriza-ordens" value="Sim"
+                          [checked]="procuradorAutorizaOrdens === 'Sim'"
+                          (change)="atualizarRespostaProcurador('ordens', $event)">
+                        <span>Sim</span>
+                      </label>
+                      <label>
+                        <input type="radio" name="procurador-autoriza-ordens" value="Não"
+                          [checked]="procuradorAutorizaOrdens === 'Não'"
+                          (change)="atualizarRespostaProcurador('ordens', $event)">
+                        <span>Não</span>
+                      </label>
+                    </div>
+                  </fieldset>
+
+                  <div class="field proxy-full-name">
+                    <label for="procurador-nome">Nome completo do procurador</label>
+                    <input id="procurador-nome" type="text">
+                  </div>
+
+                  <div class="field">
+                    <label for="procurador-cpf">CPF</label>
+                    <input
+                      id="procurador-cpf"
+                      type="text"
+                      placeholder="000.000.000-00"
+                      [mask]="cpfMask"
+                      [(ngModel)]="cpfProcurador"
+                      [ngModelOptions]="{ standalone: true }">
+                  </div>
+                  <div class="field">
+                    <label for="procurador-data-nascimento">Data de nascimento</label>
+                    <input id="procurador-data-nascimento" type="date">
+                  </div>
+                  <div class="field">
+                    <label for="procurador-cep">CEP</label>
+                    <input
+                      id="procurador-cep"
+                      type="text"
+                      placeholder="00000-000"
+                      [mask]="cepMask"
+                      [(ngModel)]="cepProcurador"
+                      [ngModelOptions]="{ standalone: true }">
+                  </div>
+
+                  <div class="field proxy-address">
+                    <label for="procurador-endereco">Endereço residencial</label>
+                    <input id="procurador-endereco" type="text">
+                  </div>
+                  <div class="field">
+                    <label for="procurador-numero">Nº</label>
+                    <input id="procurador-numero" type="text">
+                  </div>
+                  <div class="field">
+                    <label for="procurador-complemento">Complemento</label>
+                    <input id="procurador-complemento" type="text">
+                  </div>
+
+                  <div class="field">
+                    <label for="procurador-bairro">Bairro</label>
+                    <input id="procurador-bairro" type="text">
+                  </div>
+                  <div class="field">
+                    <label for="procurador-cidade">Cidade</label>
+                    <input id="procurador-cidade" type="text">
+                  </div>
+                  <div class="field">
+                    <label for="procurador-uf">UF</label>
+                    <input id="procurador-uf" type="text">
+                  </div>
+
+                  <div class="field proxy-powers">
+                    <label for="procurador-poderes">Descrição dos poderes conferidos</label>
+                    <textarea id="procurador-poderes" rows="3"></textarea>
+                  </div>
+                  <fieldset class="radio-field">
+                    <legend>Procurador é PPE?</legend>
+                    <div class="radio-options">
+                      <label>
+                        <input type="radio" name="procurador-ppe" value="Sim"
+                          [checked]="procuradorPpe === 'Sim'"
+                          (change)="atualizarRespostaProcurador('ppe', $event)">
+                        <span>Sim</span>
+                      </label>
+                      <label>
+                        <input type="radio" name="procurador-ppe" value="Não"
+                          [checked]="procuradorPpe === 'Não'"
+                          (change)="atualizarRespostaProcurador('ppe', $event)">
+                        <span>Não</span>
+                      </label>
+                    </div>
+                  </fieldset>
+
+                  <div class="field proxy-long">
+                    <label for="procurador-cargo-ppe">Se sim, cargo ocupado</label>
+                    <input
+                      id="procurador-cargo-ppe"
+                      type="text"
+                      [disabled]="procuradorPpe !== 'Sim'"
+                      [value]="cargoProcuradorPpe"
+                      (input)="atualizarCampoProcurador('cargoPpe', $event)">
+                  </div>
+                  <fieldset class="radio-field">
+                    <legend>Procurador tem relação com PPE?</legend>
+                    <div class="radio-options">
+                      <label>
+                        <input type="radio" name="procurador-relacionamento-ppe" value="Sim"
+                          [checked]="procuradorRelacionamentoPpe === 'Sim'"
+                          (change)="atualizarRespostaProcurador('relacionamentoPpe', $event)">
+                        <span>Sim</span>
+                      </label>
+                      <label>
+                        <input type="radio" name="procurador-relacionamento-ppe" value="Não"
+                          [checked]="procuradorRelacionamentoPpe === 'Não'"
+                          (change)="atualizarRespostaProcurador('relacionamentoPpe', $event)">
+                        <span>Não</span>
+                      </label>
+                    </div>
+                  </fieldset>
+
+                  <div class="field proxy-long">
+                    <label for="procurador-relacao-detalhes">Se sim, cargo, nome, CPF, nacionalidade</label>
+                    <textarea
+                      id="procurador-relacao-detalhes"
+                      rows="3"
+                      [disabled]="procuradorRelacionamentoPpe !== 'Sim'"
+                      [value]="dadosProcuradorRelacionado"
+                      (input)="atualizarCampoProcurador('relacionadoPpe', $event)"></textarea>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-template>
+            <ng-template #fichaPpeOrRegular>
+              <ng-container *ngIf="fichaIndex === 9; else camposRegulares">
+                <div class="ppe-grid">
+                  <fieldset class="radio-field ppe-question">
+                    <legend>Sou uma Pessoa Politicamente Exposta (PPE)?</legend>
+                    <div class="radio-options">
+                      <label>
+                        <input
+                          type="radio"
+                          name="pessoa-politicamente-exposta"
+                          value="Sim"
+                          [checked]="pessoaPoliticamenteExposta === 'Sim'"
+                          (change)="atualizarRespostaPpe('exposta', $event)">
+                        <span>Sim</span>
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          name="pessoa-politicamente-exposta"
+                          value="Não"
+                          [checked]="pessoaPoliticamenteExposta === 'Não'"
+                          (change)="atualizarRespostaPpe('exposta', $event)">
+                        <span>Não</span>
+                      </label>
+                    </div>
+                  </fieldset>
+                  <div class="field ppe-detail">
+                    <label for="ppe-cargo">Se sim, informar cargo ocupado</label>
+                    <input
+                      id="ppe-cargo"
+                      type="text"
+                      [disabled]="pessoaPoliticamenteExposta !== 'Sim'"
+                      [value]="cargoPpe"
+                      (input)="atualizarCampoPpe('cargo', $event)">
+                  </div>
+                  <fieldset class="radio-field ppe-question">
+                    <legend>Tenho relacionamento com uma PPE?</legend>
+                    <div class="radio-options">
+                      <label>
+                        <input
+                          type="radio"
+                          name="relacionamento-ppe"
+                          value="Sim"
+                          [checked]="relacionamentoComPpe === 'Sim'"
+                          (change)="atualizarRespostaPpe('relacionamento', $event)">
+                        <span>Sim</span>
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          name="relacionamento-ppe"
+                          value="Não"
+                          [checked]="relacionamentoComPpe === 'Não'"
+                          (change)="atualizarRespostaPpe('relacionamento', $event)">
+                        <span>Não</span>
+                      </label>
+                    </div>
+                  </fieldset>
+                  <div class="field ppe-detail">
+                    <label for="ppe-relacionado">Se sim, informar cargo, nome, CPF e nacionalidade da PPE</label>
+                    <textarea
+                      id="ppe-relacionado"
+                      rows="3"
+                      [disabled]="relacionamentoComPpe !== 'Sim'"
+                      [value]="dadosPpeRelacionado"
+                      (input)="atualizarCampoPpe('relacionado', $event)"></textarea>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-template>
+            <ng-template #camposRegulares>
+              <div
+                class="field-grid"
+                [class.identification-grid]="fichaIndex === 0"
+                [class.address-grid]="fichaIndex === 1"
+                [class.occupation-grid]="fichaIndex === 2"
+                [class.foreign-investor-grid]="fichaIndex === 6">
+                <div
+                  class="field"
+                  *ngFor="let campo of grupo.campos; let campoIndex = index"
+                  [style.grid-column]="'span ' + (campo.colunas || 1)">
+                  <ng-container [ngSwitch]="campo.tipo">
+                    <ng-container *ngSwitchCase="'select'">
+                      <label [attr.for]="identificadorCampo(fichaIndex, grupoIndex, campoIndex)">
+                        {{ rotuloCampo(campo, fichaIndex, campoIndex) }}
+                      </label>
+                      <select [id]="identificadorCampo(fichaIndex, grupoIndex, campoIndex)">
+                        <option value="">Selecionar</option>
+                        <option *ngFor="let opcao of campo.opcoes" [value]="opcao">{{ opcao }}</option>
+                      </select>
+                    </ng-container>
+
+                    <fieldset class="radio-field" *ngSwitchCase="'radio'">
+                      <legend>{{ rotuloCampo(campo, fichaIndex, campoIndex) }}</legend>
+                      <div class="radio-options">
+                        <label *ngFor="let opcao of campo.opcoes; let opcaoIndex = index">
+                          <input
+                            type="radio"
+                            [name]="identificadorCampo(fichaIndex, grupoIndex, campoIndex)"
+                            [id]="identificadorCampo(fichaIndex, grupoIndex, campoIndex) + '-' + opcaoIndex"
+                            [value]="opcao">
+                          <span>{{ opcao }}</span>
+                        </label>
+                      </div>
+                    </fieldset>
+
+                    <ng-container *ngSwitchDefault>
+                      <label [attr.for]="identificadorCampo(fichaIndex, grupoIndex, campoIndex)">
+                        {{ rotuloCampo(campo, fichaIndex, campoIndex) }}
+                      </label>
+                      <textarea
+                        *ngIf="campo.tipo === 'textarea'; else campoInput"
+                        [id]="identificadorCampo(fichaIndex, grupoIndex, campoIndex)"
+                        [placeholder]="campo.placeholder || ''"
+                        rows="3"></textarea>
+                      <ng-template #campoInput>
+                        <ng-container *ngIf="campo.mascara; else campoSemMascara">
+                          <input
+                            [id]="identificadorCampo(fichaIndex, grupoIndex, campoIndex)"
+                            [type]="campo.tipo || 'text'"
+                            [placeholder]="campo.placeholder || ''"
+                            [mask]="campo.mascara"
+                            [ngModel]="campo.valor || ''"
+                            (ngModelChange)="campo.valor = $event"
+                            [ngModelOptions]="{ standalone: true }"
+                            [readonly]="campo.somenteLeitura || null">
+                        </ng-container>
+                        <ng-template #campoSemMascara>
+                          <input
+                            [id]="identificadorCampo(fichaIndex, grupoIndex, campoIndex)"
+                            [type]="campo.tipo || 'text'"
+                            [placeholder]="campo.placeholder || ''"
+                            [value]="campo.valorInicial ? documentoFormatado : null"
+                            [readonly]="campo.somenteLeitura || null">
+                        </ng-template>
+                      </ng-template>
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="documents" aria-labelledby="documents-title">
+      <h2 id="documents-title">Documentos anexos</h2>
+      <p class="documents-help">Anexe os dois documentos abaixo para que possamos validar seu cadastro (PDF, JPG ou PNG - até 20MB).</p>
+
+      <div class="document-upload">
+        <div class="document-upload-header">
+          <span class="document-alert" aria-hidden="true">!</span>
+          <div class="document-description">
+            <label for="documento-identificacao">Documento de identificação</label>
+            <span>RG ou CNH (frente e verso)</span>
+          </div>
+          <input
+            #arquivoIdentificacao
+            id="documento-identificacao"
+            class="file-input"
+            type="file"
+            accept=".pdf,.jpg,.jpeg,.png"
+            (change)="selecionarArquivo('identificacao', $event)">
+          <button class="attach-button" type="button" (click)="abrirSeletorArquivo(arquivoIdentificacao)">
+            {{ arquivos.identificacao ? 'Substituir' : 'Anexar' }}
+          </button>
+        </div>
+        <div class="selected-file" *ngIf="arquivos.identificacao">
+          <span class="file-icon" aria-hidden="true">
+            <svg viewBox="0 0 16 16">
+              <path d="M4 1.75h5l3 3V14H4zM9 1.75v3h3M5.5 8h5M5.5 10h5" />
+            </svg>
+          </span>
+          <span class="file-name">{{ arquivos.identificacao.name }}</span>
+          <span class="file-size">{{ tamanhoArquivo(arquivos.identificacao) }}</span>
+          <button
+            class="file-action"
+            type="button"
+            aria-label="Baixar documento de identificação"
+            (click)="baixarArquivo('identificacao')">
+            <svg aria-hidden="true" viewBox="0 0 16 16">
+              <path d="M8 2v8m-3-3 3 3 3-3M3 11v2h10v-2" />
+            </svg>
+          </button>
+          <button
+            class="file-action"
+            type="button"
+            aria-label="Excluir documento de identificação"
+            (click)="removerArquivo('identificacao', arquivoIdentificacao)">
+            <svg aria-hidden="true" viewBox="0 0 16 16">
+              <path d="M5 2h6l.5 1.5H14v1H2v-1h2.5L5 2zm-1.5 4h9l-.6 8H4.1l-.6-8zM6 7v5m4-5v5" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="document-upload">
+        <div class="document-upload-header">
+          <span class="document-alert" aria-hidden="true">!</span>
+          <div class="document-description">
+            <label for="comprovante-endereco">Comprovante de endereço</label>
+            <span>Emitido nos últimos 90 dias</span>
+          </div>
+          <input
+            #arquivoEndereco
+            id="comprovante-endereco"
+            class="file-input"
+            type="file"
+            accept=".pdf,.jpg,.jpeg,.png"
+            (change)="selecionarArquivo('endereco', $event)">
+          <button class="attach-button" type="button" (click)="abrirSeletorArquivo(arquivoEndereco)">
+            {{ arquivos.endereco ? 'Substituir' : 'Anexar' }}
+          </button>
+        </div>
+        <div class="selected-file" *ngIf="arquivos.endereco">
+          <span class="file-icon" aria-hidden="true">
+            <svg viewBox="0 0 16 16">
+              <path d="M4 1.75h5l3 3V14H4zM9 1.75v3h3M5.5 8h5M5.5 10h5" />
+            </svg>
+          </span>
+          <span class="file-name">{{ arquivos.endereco.name }}</span>
+          <span class="file-size">{{ tamanhoArquivo(arquivos.endereco) }}</span>
+          <button
+            class="file-action"
+            type="button"
+            aria-label="Baixar comprovante de endereço"
+            (click)="baixarArquivo('endereco')">
+            <svg aria-hidden="true" viewBox="0 0 16 16">
+              <path d="M8 2v8m-3-3 3 3 3-3M3 11v2h10v-2" />
+            </svg>
+          </button>
+          <button
+            class="file-action"
+            type="button"
+            aria-label="Excluir comprovante de endereço"
+            (click)="removerArquivo('endereco', arquivoEndereco)">
+            <svg aria-hidden="true" viewBox="0 0 16 16">
+              <path d="M5 2h6l.5 1.5H14v1H2v-1h2.5L5 2zm-1.5 4h9l-.6 8H4.1l-.6-8zM6 7v5m4-5v5" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="form-actions">
+      <button class="draft-button" type="button">Salvar rascunho</button>
+      <button class="continue-button" type="button" (click)="irParaSuitability()">Continuar para Suitability</button>
+    </footer>
+  </main>
+</div>

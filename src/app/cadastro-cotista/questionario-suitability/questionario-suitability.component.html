@@ -1,0 +1,57 @@
+<div class="suitability-page">
+  <header class="topbar">
+    <div class="topbar-content">
+      <a class="brand" href="/cadastro-cotista" aria-label="Carmel Capital - início">
+        <span class="brand-mark">C</span>
+        <span>Carmel Capital</span>
+      </a>
+      <button class="topbar-link" type="button" (click)="retornarParaFicha()">Minha ficha</button>
+    </div>
+  </header>
+
+  <main class="suitability-main">
+    <div class="page-heading">
+      <div>
+        <h1>Questionário de Suitability</h1>
+        <p>Mapeamento de perfil de investidor · Carmel Capital</p>
+      </div>
+      <button class="back-link" type="button" (click)="retornarParaFicha()">← Voltar ao cadastro</button>
+    </div>
+
+    <section
+      class="question-card"
+      *ngFor="let pergunta of perguntas">
+      <h2>{{ pergunta.id }}. {{ pergunta.enunciado }}</h2>
+      <fieldset class="answer-list">
+        <legend class="visually-hidden">Selecione uma resposta</legend>
+        <label
+          class="answer-option"
+          *ngFor="let alternativa of pergunta.alternativas"
+          [attr.for]="'suitability-' + pergunta.id + '-' + alternativa.codigo">
+          <input
+            type="radio"
+            [id]="'suitability-' + pergunta.id + '-' + alternativa.codigo"
+            [name]="'suitability-' + pergunta.id"
+            [value]="alternativa.codigo"
+            [checked]="respostas[pergunta.id] === alternativa.codigo"
+            (change)="selecionarResposta(pergunta.id, $event)">
+          <span class="answer-code">{{ alternativa.codigo }})</span>
+          <span class="answer-description">{{ alternativa.descricao }}</span>
+        </label>
+      </fieldset>
+    </section>
+  </main>
+
+  <footer class="sticky-actions">
+    <div class="action-content">
+      <button class="secondary-button" type="button" (click)="retornarParaFicha()">Voltar</button>
+      <button
+        class="primary-button"
+        [class.all-answered]="todasRespondidas"
+        type="button"
+        (click)="enviarRespostas()">
+        Calcular e salvar perfil
+      </button>
+    </div>
+  </footer>
+</div>

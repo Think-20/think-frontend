@@ -8,6 +8,8 @@ import { IdentificacaoCotista } from './identificacao-inicial/identificacao-inic
 })
 export class CadastroCotistaComponent {
   mostrarIdentificacao = false;
+  mostrarFichaCadastral = false;
+  mostrarQuestionarioSuitability = false;
   identificacaoCotista: IdentificacaoCotista | null = null;
 
   iniciarCadastro(): void {
@@ -16,5 +18,14 @@ export class CadastroCotistaComponent {
 
   receberIdentificacao(identificacao: IdentificacaoCotista): void {
     this.identificacaoCotista = identificacao;
+    this.mostrarFichaCadastral = true;
+  }
+
+  continuarParaSuitability(): void {
+    this.mostrarQuestionarioSuitability = true;
+  }
+
+  voltarParaFichaCadastral(): void {
+    this.mostrarQuestionarioSuitability = false;
   }
 }

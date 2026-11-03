@@ -424,20 +424,33 @@
                       placeholder="00000-000"
                       [mask]="cepMask"
                       [(ngModel)]="cepProcurador"
+                      (ngModelChange)="atualizarCepProcurador($event)"
                       [ngModelOptions]="{ standalone: true }">
                   </div>
 
                   <div class="field proxy-address">
                     <label for="procurador-endereco">Endereço residencial</label>
-                    <input id="procurador-endereco" type="text">
+                    <input
+                      id="procurador-endereco"
+                      type="text"
+                      [(ngModel)]="enderecoProcurador"
+                      [ngModelOptions]="{ standalone: true }">
                   </div>
                   <div class="field">
                     <label for="procurador-numero">Nº</label>
-                    <input id="procurador-numero" type="text">
+                    <input
+                      id="procurador-numero"
+                      type="text"
+                      [(ngModel)]="numeroProcurador"
+                      [ngModelOptions]="{ standalone: true }">
                   </div>
                   <div class="field">
                     <label for="procurador-complemento">Complemento</label>
-                    <input id="procurador-complemento" type="text">
+                    <input
+                      id="procurador-complemento"
+                      type="text"
+                      [(ngModel)]="complementoProcurador"
+                      [ngModelOptions]="{ standalone: true }">
                   </div>
 
                   <div class="field">
@@ -600,7 +613,11 @@
                       <label [attr.for]="identificadorCampo(fichaIndex, grupoIndex, campoIndex)">
                         {{ rotuloCampo(campo, fichaIndex, campoIndex) }}
                       </label>
-                      <select [id]="identificadorCampo(fichaIndex, grupoIndex, campoIndex)">
+                      <select
+                        [id]="identificadorCampo(fichaIndex, grupoIndex, campoIndex)"
+                        [ngModel]="campo.valor || ''"
+                        (ngModelChange)="campo.valor = $event"
+                        [ngModelOptions]="{ standalone: true }">
                         <option value="">Selecionar</option>
                         <option *ngFor="let opcao of campo.opcoes" [value]="opcao">{{ opcao }}</option>
                       </select>
@@ -614,7 +631,9 @@
                             type="radio"
                             [name]="identificadorCampo(fichaIndex, grupoIndex, campoIndex)"
                             [id]="identificadorCampo(fichaIndex, grupoIndex, campoIndex) + '-' + opcaoIndex"
-                            [value]="opcao">
+                            [value]="opcao"
+                            [checked]="campo.valor === opcao"
+                            (change)="campo.valor = opcao">
                           <span>{{ opcao }}</span>
                         </label>
                       </div>
@@ -628,6 +647,9 @@
                         *ngIf="campo.tipo === 'textarea'; else campoInput"
                         [id]="identificadorCampo(fichaIndex, grupoIndex, campoIndex)"
                         [placeholder]="campo.placeholder || ''"
+                        [ngModel]="campo.valor || ''"
+                        (ngModelChange)="campo.valor = $event"
+                        [ngModelOptions]="{ standalone: true }"
                         rows="3"></textarea>
                       <ng-template #campoInput>
                         <ng-container *ngIf="campo.mascara; else campoSemMascara">
@@ -637,7 +659,7 @@
                             [placeholder]="campo.placeholder || ''"
                             [mask]="campo.mascara"
                             [ngModel]="campo.valor || ''"
-                            (ngModelChange)="campo.valor = $event"
+                            (ngModelChange)="campo.valor = $event; atualizarCepCampo(fichaIndex, campoIndex, $event)"
                             [ngModelOptions]="{ standalone: true }"
                             [readonly]="campo.somenteLeitura || null">
                         </ng-container>
@@ -646,7 +668,9 @@
                             [id]="identificadorCampo(fichaIndex, grupoIndex, campoIndex)"
                             [type]="campo.tipo || 'text'"
                             [placeholder]="campo.placeholder || ''"
-                            [value]="campo.valorInicial ? documentoFormatado : null"
+                            [ngModel]="campo.valorInicial ? documentoFormatado : (campo.valor || '')"
+                            (ngModelChange)="campo.valor = $event"
+                            [ngModelOptions]="{ standalone: true }"
                             [readonly]="campo.somenteLeitura || null">
                         </ng-template>
                       </ng-template>

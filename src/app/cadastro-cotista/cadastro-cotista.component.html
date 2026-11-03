@@ -7,13 +7,14 @@
   <cb-ficha-cadastral
     *ngIf="mostrarFichaCadastral"
     [identificacao]="identificacaoCotista"
-    (continuarSuitability)="continuarParaSuitability()">
+    (continuarSuitability)="continuarParaSuitability($event)">
   </cb-ficha-cadastral>
 </div>
 
 <cb-questionario-suitability
   *ngIf="mostrarQuestionarioSuitability"
-  (voltarFicha)="voltarParaFichaCadastral()">
+  (voltarFicha)="voltarParaFichaCadastral()"
+  (concluir)="receberSuitability($event)">
 </cb-questionario-suitability>
 
 <main class="cotista-page" *ngIf="!mostrarIdentificacao">

@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login/login.component';
+import { LoginCotistaComponent } from './login/login-cotista/login-cotista.component';
+import { KanbanCotistaComponent } from './cadastro-cotista/kanban-cotista/kanban-cotista.component';
 import { AuthCodComponent } from './auth-cod/auth-cod.component';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { LayoutComponent } from './layout/layout.component';
@@ -84,6 +86,9 @@ export const ROUTES: Routes = [
     path: 'login', component: LoginComponent
   },
   {
+    path: 'login-cotista', component: LoginCotistaComponent
+  },
+  {
     path: 'cadastro-cotista', component: CadastroCotistaComponent
   },
   {
@@ -99,6 +104,9 @@ export const ROUTES: Routes = [
       },
       {
         path: 'cadastroCedentes/:id', component: CadastroCedentesComponent, pathMatch: 'full'
+      },
+      {
+        path: 'kanban-cotista', component: KanbanCotistaComponent
       },
       {
         path:'infoCedente', component: InfocedenteComponent

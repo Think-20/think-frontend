@@ -25,10 +25,12 @@ import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 
 import { RequestOptionsApiService } from './request-options-api.service';
+import { LoginCotistaComponent } from './login-cotista/login-cotista.component';
 
 @NgModule({
   declarations: [
-    LoginComponent
+    LoginComponent,
+    LoginCotistaComponent
   ],
   imports: [
     CommonModule,

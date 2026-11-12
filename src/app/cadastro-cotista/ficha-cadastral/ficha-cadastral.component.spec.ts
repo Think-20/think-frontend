@@ -36,6 +36,20 @@ describe('FichaCadastralComponent', () => {
     expect(continueSpy).toHaveBeenCalled();
   });
 
+  it('should map the initial CPF or CNPJ to documento and tipo_pessoa', async(() => {
+    component.identificacao = {
+      tipoInvestidor: 'PESSOA_JURIDICA',
+      documento: '12345678000199'
+    };
+
+    component.montarObjetoJson().then(payload => {
+      expect(payload.documento).toBe('12345678000199');
+      expect(payload.tipo_pessoa).toBe('juridica');
+      expect(payload.cpf).toBeUndefined();
+      expect(payload.cnpj).toBeUndefined();
+    });
+  }));
+
   it('should render eleven collapsed questionnaires', () => {
     const toggles = fixture.nativeElement.querySelectorAll('.ficha-toggle');
 

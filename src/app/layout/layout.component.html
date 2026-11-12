@@ -7,7 +7,7 @@
                 <div id="all-container" class="col-md-8 {{currentRoute}}">
                   <router-outlet></router-outlet>
                 </div>
-                <div *ngIf="sidenav.opened" id="timeline-container" class="col-md-4">
+                <div *ngIf="sidenav.opened && sidenav.user" id="timeline-container" class="col-md-4">
                     <cb-notification-bar (notificationLoadEmitter)="navbar.notificationsLoaded($event)"></cb-notification-bar>
                 </div>
             </div>

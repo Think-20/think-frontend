@@ -702,11 +702,9 @@ export class FichaCadastralComponent {
     return {
       enviar: true,
       nome_completo: this.valorOpcional(this.valorCampo(0, 0)),
-      cpf: i && i.tipoInvestidor === 'PESSOA_FISICA'
-        ? this.apenasDigitos(i.documento)
-        : this.valorOpcional(this.valorCampo(0, 1)),
-      cnpj: i && i.tipoInvestidor === 'PESSOA_JURIDICA'
-        ? this.apenasDigitos(i.documento)
+      documento: i ? this.apenasDigitos(i.documento) : null,
+      tipo_pessoa: i
+        ? (i.tipoInvestidor === 'PESSOA_JURIDICA' ? 'juridica' : 'fisica')
         : null,
       tin: this.valorOpcional(this.valorCampo(0, 2)),
       nome_mae: this.valorOpcional(this.valorCampo(0, 3)),

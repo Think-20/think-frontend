@@ -1,0 +1,79 @@
+<div class="fundo">
+    <img class="logo" src="../../../assets/images/login/carmel_logo.png" alt="Carmel Capital"/>
+    <h3>Workflow <span>&amp;</span> Projetos</h3>
+
+    <main class="container">
+        <header class="titulo">
+            <h1>Criar conta</h1>
+            <p id="subtitulo">Cadastre-se para acessar o cadastro de cotistas</p>
+        </header>
+
+        <form [formGroup]="cadastroForm" (ngSubmit)="cadastrar()" novalidate>
+            <label for="nomeCompleto">Nome completo</label>
+            <div class="spaceInput" [class.invalid]="cadastroForm.get('nomeCompleto').invalid && cadastroForm.get('nomeCompleto').touched">
+                <mat-icon aria-hidden="true">person</mat-icon>
+                <input
+                    id="nomeCompleto"
+                    formControlName="nomeCompleto"
+                    type="text"
+                    autocomplete="name"
+                    placeholder="Digite seu nome completo">
+            </div>
+            <span class="field-error" *ngIf="cadastroForm.get('nomeCompleto').hasError('required') && cadastroForm.get('nomeCompleto').touched">
+                Informe seu nome completo.
+            </span>
+
+            <label for="email">E-mail</label>
+            <div class="spaceInput" [class.invalid]="cadastroForm.get('email').invalid && cadastroForm.get('email').touched">
+                <mat-icon aria-hidden="true">email</mat-icon>
+                <input
+                    id="email"
+                    formControlName="email"
+                    type="email"
+                    autocomplete="email"
+                    placeholder="Digite seu e-mail">
+            </div>
+            <span class="field-error" *ngIf="cadastroForm.get('email').hasError('required') && cadastroForm.get('email').touched">
+                Informe seu e-mail.
+            </span>
+            <span class="field-error" *ngIf="cadastroForm.get('email').hasError('email') && cadastroForm.get('email').touched">
+                Informe um e-mail válido.
+            </span>
+
+            <label for="senha">Senha</label>
+            <div class="spaceInput" [class.invalid]="cadastroForm.get('senha').invalid && cadastroForm.get('senha').touched">
+                <mat-icon aria-hidden="true">lock</mat-icon>
+                <input
+                    id="senha"
+                    formControlName="senha"
+                    type="password"
+                    autocomplete="new-password"
+                    placeholder="Digite sua senha">
+            </div>
+            <span class="field-error" *ngIf="cadastroForm.get('senha').hasError('required') && cadastroForm.get('senha').touched">
+                Informe sua senha.
+            </span>
+
+            <label for="confirmarSenha">Confirme sua senha</label>
+            <div class="spaceInput" [class.invalid]="(cadastroForm.get('confirmarSenha').invalid || cadastroForm.hasError('senhasDiferentes')) && cadastroForm.get('confirmarSenha').touched">
+                <mat-icon aria-hidden="true">lock</mat-icon>
+                <input
+                    id="confirmarSenha"
+                    formControlName="confirmarSenha"
+                    type="password"
+                    autocomplete="new-password"
+                    placeholder="Digite novamente sua senha">
+            </div>
+            <span class="field-error" *ngIf="cadastroForm.get('confirmarSenha').hasError('required') && cadastroForm.get('confirmarSenha').touched">
+                Confirme sua senha.
+            </span>
+            <span class="field-error" *ngIf="cadastroForm.hasError('senhasDiferentes') && cadastroForm.get('confirmarSenha').touched">
+                As senhas não conferem.
+            </span>
+
+            <button type="submit" class="btn cb-button">Cadastrar-se</button>
+        </form>
+
+        <a class="back-link" [routerLink]="['/login']" [queryParams]="{ cadastro: 'cotista' }">Já tem uma conta? Entrar</a>
+    </main>
+</div>

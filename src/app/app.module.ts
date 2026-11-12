@@ -245,6 +245,7 @@ import { CadastroCotistaComponent } from './cadastro-cotista/cadastro-cotista.co
 import { IdentificacaoInicialComponent } from './cadastro-cotista/identificacao-inicial/identificacao-inicial.component';
 import { FichaCadastralComponent } from './cadastro-cotista/ficha-cadastral/ficha-cadastral.component';
 import { QuestionarioSuitabilityComponent } from './cadastro-cotista/questionario-suitability/questionario-suitability.component';
+import { KanbanCotistaComponent } from './cadastro-cotista/kanban-cotista/kanban-cotista.component';
 
 
 registerLocaleData(localePt);
@@ -394,6 +395,7 @@ registerLocaleData(localePt);
     IdentificacaoInicialComponent,
     FichaCadastralComponent,
     QuestionarioSuitabilityComponent,
+    KanbanCotistaComponent,
 
 
   ],

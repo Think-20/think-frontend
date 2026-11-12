@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { IdentificacaoCotista } from './identificacao-inicial/identificacao-inicial.component';
+import { CotistaKanban } from './kanban-cotista/kanban-cotista.component';
 
 @Component({
   selector: 'cb-cadastro-cotista',
@@ -7,6 +9,8 @@ import { IdentificacaoCotista } from './identificacao-inicial/identificacao-inic
   styleUrls: ['./cadastro-cotista.component.css']
 })
 export class CadastroCotistaComponent {
+  constructor(private router: Router) {}
+
   mostrarIdentificacao = false;
   mostrarFichaCadastral = false;
   mostrarQuestionarioSuitability = false;
@@ -42,6 +46,14 @@ export class CadastroCotistaComponent {
       this.cadastroPayload['suitability']['respostas'].sort((a: any, b: any) => a.pergunta - b.pergunta);
       console.log('Objeto cadastral enviado ao backend:', this.cadastroPayload);
     }
+
+    const novoCotista: CotistaKanban = {
+      ...(this.cadastroPayload || {}),
+      status: 'pendente'
+    };
+    this.router.navigateByUrl('/kanban-cotista', {
+      state: { cotistas: [novoCotista] }
+    });
   }
 
   voltarParaFichaCadastral(): void {

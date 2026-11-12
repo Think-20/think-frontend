@@ -1,0 +1,138 @@
+<div class="containerPrincipal">
+    <div class="containerHead">
+        <div class="headTitle">
+            <h1 class="Title">Cadastro de Cotistas</h1>
+            <p class="SubTitle">Gerencie os cotistas cadastrados no sistema</p>
+        </div>
+        <div class="headButtons">
+            <div class="choiceLayout">
+                <div id="kanban" class="active" aria-current="page">
+                    <mat-icon>view_kanban</mat-icon>
+                    <p>Kanban</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="containerStatus">
+        <div class="boxStatus">
+            <mat-icon class="iconStatus" id="iconBusinessRascunho">description</mat-icon>
+            <div class="infoStatus">
+                <p class="titleStatus">Rascunhos</p>
+                <h4 class="numberStatus">{{ rascunhos.length }}</h4>
+            </div>
+        </div>
+        <div class="boxStatus">
+            <mat-icon class="iconStatus" id="iconBusinessPedenete">hourglass_empty</mat-icon>
+            <div class="infoStatus">
+                <p class="titleStatus">Pendentes</p>
+                <h4 class="numberStatus">{{ pendentes.length }}</h4>
+            </div>
+        </div>
+        <div class="boxStatus">
+            <mat-icon class="iconStatus" id="iconBusinessAprovado">check_circle</mat-icon>
+            <div class="infoStatus">
+                <p class="titleStatus">Aprovados</p>
+                <h4 class="numberStatus">{{ aprovados.length }}</h4>
+            </div>
+        </div>
+        <div class="boxStatus">
+            <mat-icon class="iconStatus" id="iconBusinessCancelado">cancel</mat-icon>
+            <div class="infoStatus">
+                <p class="titleStatus">Cancelados</p>
+                <h4 class="numberStatus">{{ cancelados.length }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="containerFiltro">
+        <div class="searchButton">
+            <div class="inputDiv">
+                <input
+                    type="search"
+                    id="inputSearch"
+                    placeholder="Buscar por nome, e-mail ou documento"
+                    [value]="pesquisa"
+                    (input)="atualizarPesquisa($event)">
+                <span id="btnSearch" aria-hidden="true">
+                    <mat-icon>search</mat-icon>
+                </span>
+            </div>
+        </div>
+        <div class="filtroEspecific">
+            <div id="iconFiltro">
+                <mat-icon id="filter">filter_alt</mat-icon>
+                <p>Status:</p>
+            </div>
+            <div class="statusFilter">
+                <span class="spanStatus" id="spanRascunho"></span>
+                <p>Rascunhos: {{ rascunhos.length }}</p>
+            </div>
+            <div class="statusFilter">
+                <span class="spanStatus" id="spanPedente"></span>
+                <p>Pendentes: {{ pendentes.length }}</p>
+            </div>
+            <div class="statusFilter">
+                <span class="spanStatus" id="spanAprovado"></span>
+                <p>Aprovados: {{ aprovados.length }}</p>
+            </div>
+            <div class="statusFilter">
+                <span class="spanStatus" id="spanCancelado"></span>
+                <p>Cancelados: {{ cancelados.length }}</p>
+            </div>
+            <div id="qtdCadastro">
+                <p>{{ totalCotistasFiltrados }} Cadastro(s)</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="containerKanban" cdkDropListGroup>
+        <div class="containerCards" *ngFor="let column of kanbanColumns">
+            <div class="titleKanban">
+                <span class="kanbanStatus" [id]="column.colorId"></span>
+                <p>{{ column.label }}</p>
+                <span style="margin-left: auto; font-size: 12px; color: #999; font-weight: normal;">
+                    {{ column.items.length }}
+                </span>
+            </div>
+            <div
+                class="cardsKanban"
+                cdkDropList
+                [id]="column.status"
+                [cdkDropListData]="column.items"
+                [cdkDropListConnectedTo]="kanbanConnectedIds"
+                cdkDropListOrientation="vertical"
+                (cdkDropListDropped)="drop($event)">
+                <div *ngIf="column.items.length === 0" class="noCards">
+                    Nenhum cotista nesta fase
+                </div>
+                <div class="cardKanban" *ngFor="let cotista of column.items" cdkDrag [cdkDragData]="cotista">
+                    <div class="titleCards">
+                        <div class="areaIconKanban">
+                            <mat-icon class="kanbanCardIcon">person</mat-icon>
+                        </div>
+                        <div class="titleFundoCard">
+                            <p>{{ cotista?.nome_completo || cotista?.nome || 'Cotista sem nome' }}</p>
+                            <p *ngIf="cotista?.id != null">COT-{{ cotista?.id }}</p>
+                        </div>
+                    </div>
+                    <div class="corpoKanban">
+                        <div class="nomeFundo" *ngIf="cotista?.email">
+                            <mat-icon>email</mat-icon>
+                            <p>{{ cotista.email }}</p>
+                        </div>
+                        <div class="responsavel" *ngIf="cotista?.documento || cotista?.cpf || cotista?.cnpj">
+                            <mat-icon>badge</mat-icon>
+                            <p>{{ cotista?.documento || cotista?.cpf || cotista?.cnpj }}</p>
+                        </div>
+                        <hr>
+                        <div class="sla">
+                            <mat-icon>drag_indicator</mat-icon>
+                            <p>Arraste para alterar a etapa</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -205,13 +205,19 @@ input:focus{
     background:rgb(40,110,72);
 }
 
-a{
+.auth-links{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.auth-links a{
     font-size:13px;
     text-align:center;
     color:rgb(52,133,90);
     text-decoration:none;
 }
 
-a:hover{
+.auth-links a:hover{
     text-decoration:underline;
 }

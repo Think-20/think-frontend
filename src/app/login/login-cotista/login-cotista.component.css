@@ -1,0 +1,164 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.fundo {
+    width: 100%;
+    min-height: 100vh;
+    background-image:
+        linear-gradient(rgba(40, 70, 5, 0.9), rgba(30, 55, 3, 0.9)),
+        url('../../../assets/images/login/planoFundo.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 20px;
+}
+
+.logo {
+    width: 220px;
+    max-width: 70%;
+    margin-bottom: 10px;
+}
+
+h3 {
+    margin: 0 0 16px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 300;
+    text-align: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 26px 30px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.titulo h1 {
+    margin: 0 0 4px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+#subtitulo {
+    margin: 0;
+    color: rgb(158, 150, 150);
+    font-size: 13px;
+}
+
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+label {
+    margin-bottom: 0;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+.spaceInput {
+    width: 100%;
+    height: 38px;
+    margin-bottom: 7px;
+    padding: 0 10px;
+    border: 1px solid rgb(218, 204, 204);
+    border-radius: 7px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+}
+
+.spaceInput.invalid {
+    border-color: #de2c2c;
+}
+
+.spaceInput mat-icon {
+    margin-right: 8px;
+    color: rgb(170, 170, 170);
+    font-family: 'Material Icons' !important;
+    font-size: 18px;
+}
+
+.spaceInput input {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    outline: none;
+    font-size: 14px;
+}
+
+.field-error {
+    margin-top: -6px;
+    color: #de2c2c;
+    font-size: 12px;
+}
+
+.btn {
+    width: 100%;
+    height: 40px;
+    margin-top: 6px;
+    border: 0;
+    border-radius: 6px;
+    background: rgb(52, 133, 90);
+    color: #fff;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    background: rgb(40, 110, 72);
+}
+
+.back-link {
+    color: rgb(52, 133, 90);
+    font-size: 13px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 22px;
+    }
+}
+
+@media (max-height: 700px) {
+    .fundo {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    .logo {
+        width: 190px;
+        margin-bottom: 6px;
+    }
+
+    h3 {
+        margin-bottom: 10px;
+    }
+
+    .container {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        gap: 10px;
+    }
+}

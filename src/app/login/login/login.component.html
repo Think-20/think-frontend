@@ -54,6 +54,9 @@
             </div>
             <button type="submit" class="btn cb-button">Entrar</button>
         </form>
-        <a [routerLink]="['/forget-password']">Esqueceu a senha?</a>
+        <div class="auth-links">
+            <a [routerLink]="['/forget-password']">Esqueceu a senha?</a>
+            <a *ngIf="cadastroSelecionado === 'cotista'" [routerLink]="['/login-cotista']">Criar conta</a>
+        </div>
     </div>
 </div>

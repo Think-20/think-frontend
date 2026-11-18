@@ -22,11 +22,21 @@
       <h2>Tipo de investidor</h2>
       <div class="investor-options">
         <label>
-          <input type="radio" name="tipoInvestidor" [checked]="identificacao && identificacao.tipoInvestidor === 'PESSOA_FISICA'" disabled>
+          <input
+            type="radio"
+            name="tipoInvestidor"
+            [checked]="identificacao ? identificacao.tipoInvestidor === 'PESSOA_FISICA' : tipoInvestidorSelecionado === 'PESSOA_FISICA'"
+            [disabled]="!!identificacao"
+            (change)="selecionarTipoInvestidor('PESSOA_FISICA')">
           <span>Pessoa Física</span>
         </label>
         <label>
-          <input type="radio" name="tipoInvestidor" [checked]="identificacao && identificacao.tipoInvestidor === 'PESSOA_JURIDICA'" disabled>
+          <input
+            type="radio"
+            name="tipoInvestidor"
+            [checked]="identificacao ? identificacao.tipoInvestidor === 'PESSOA_JURIDICA' : tipoInvestidorSelecionado === 'PESSOA_JURIDICA'"
+            [disabled]="!!identificacao"
+            (change)="selecionarTipoInvestidor('PESSOA_JURIDICA')">
           <span>Pessoa Jurídica</span>
         </label>
       </div>
@@ -668,10 +678,10 @@
                             [id]="identificadorCampo(fichaIndex, grupoIndex, campoIndex)"
                             [type]="campo.tipo || 'text'"
                             [placeholder]="campo.placeholder || ''"
-                            [ngModel]="campo.valorInicial ? documentoFormatado : (campo.valor || '')"
+                            [ngModel]="campo.valorInicial && identificacao ? documentoFormatado : (campo.valor || '')"
                             (ngModelChange)="campo.valor = $event"
                             [ngModelOptions]="{ standalone: true }"
-                            [readonly]="campo.somenteLeitura || null">
+                            [readonly]="identificacao && campo.somenteLeitura || null">
                         </ng-template>
                       </ng-template>
                     </ng-container>

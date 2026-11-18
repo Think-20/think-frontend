@@ -89,6 +89,11 @@ export const ROUTES: Routes = [
     path: 'login-cotista', component: LoginCotistaComponent
   },
   {
+    path: 'cadastro-cotista/nova',
+    component: CadastroCotistaComponent,
+    data: { novoCadastro: true }
+  },
+  {
     path: 'cadastro-cotista', component: CadastroCotistaComponent
   },
   {

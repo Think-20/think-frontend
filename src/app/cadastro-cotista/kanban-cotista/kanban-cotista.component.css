@@ -1,7 +1,44 @@
 #spanRascunho {
-    background-color: #7c83a1;
+    background-color: #2196f3;
 }
 
 #iconBusinessRascunho {
-    color: #7c83a1;
+    color: #2196f3;
+}
+
+#spanAprovado {
+    background-color: #12ac12;
+}
+
+#iconBusinessAprovado {
+    color: #12ac12;
+}
+
+#spanCancelado {
+    background-color: #f44336;
+}
+
+#iconBusinessCancelado {
+    color: #f44336;
+}
+
+.novo-cotista-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    background-color: #48855e;
+    color: #fff;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.novo-cotista-button:hover {
+    background-color: #3a6d4d;
+    color: #fff;
+}
+
+.novo-cotista-button mat-icon {
+    color: inherit;
 }

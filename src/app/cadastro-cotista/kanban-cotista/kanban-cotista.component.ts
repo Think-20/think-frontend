@@ -12,6 +12,11 @@ export interface CotistaKanban {
   documento?: string;
   cpf?: string;
   cnpj?: string;
+  sexo?: string;
+  suitability?: {
+    perfil?: string | null;
+    [key: string]: any;
+  };
   status?: string;
   [key: string]: any;
 }
@@ -50,9 +55,14 @@ export class KanbanCotistaComponent implements OnChanges, OnInit {
 
   ngOnInit(): void {
     const navigation = this.router.getCurrentNavigation();
-    const state = navigation && navigation.extras && navigation.extras.state;
-    if (state && Array.isArray(state['cotistas'])) {
-      this.cotistas = state['cotistas'];
+    const navigationState = navigation && navigation.extras && navigation.extras.state;
+    const navigationCotistas = navigationState && navigationState['cotistas'];
+    const historyState = window.history && window.history.state;
+    const historyCotistas = historyState && historyState['cotistas'];
+    const cotistas = Array.isArray(navigationCotistas) ? navigationCotistas : historyCotistas;
+
+    if (Array.isArray(cotistas)) {
+      this.cotistas = cotistas;
     }
     this.organizarCotistas();
   }

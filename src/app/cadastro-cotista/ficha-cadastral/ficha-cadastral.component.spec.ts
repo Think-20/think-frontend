@@ -50,6 +50,28 @@ describe('FichaCadastralComponent', () => {
     });
   }));
 
+  it('should allow starting the cadastral form directly with a selectable investor type and document', async(() => {
+    component.selecionarTipoInvestidor('PESSOA_JURIDICA');
+    component.fichas[0].grupos[0].campos[1].valor = '12.345.678/0001-99';
+    component.alternarFicha(component.fichas[0]);
+    fixture.detectChanges();
+
+    const investorTypeRadios = fixture.nativeElement.querySelectorAll(
+      'input[name="tipoInvestidor"]'
+    ) as NodeListOf<HTMLInputElement>;
+    const documentInput = fixture.nativeElement.querySelector('#campo-0-0-1') as HTMLInputElement;
+
+    expect(investorTypeRadios[1].checked).toBe(true);
+    expect(investorTypeRadios[1].disabled).toBe(false);
+    expect(documentInput.readOnly).toBe(false);
+    expect(component.rotuloCampo(component.fichas[0].grupos[0].campos[1], 0, 1)).toBe('CNPJ');
+
+    component.montarObjetoJson().then(payload => {
+      expect(payload.documento).toBe('12345678000199');
+      expect(payload.tipo_pessoa).toBe('juridica');
+    });
+  }));
+
   it('should render eleven collapsed questionnaires', () => {
     const toggles = fixture.nativeElement.querySelectorAll('.ficha-toggle');
 

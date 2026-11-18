@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { IdentificacaoCotista } from '../identificacao-inicial/identificacao-inicial.component';
+import { IdentificacaoCotista, TipoInvestidor } from '../identificacao-inicial/identificacao-inicial.component';
 
 interface FichaCampo {
   rotulo: string;
@@ -69,6 +69,7 @@ type ArquivosAnexos = { [tipo in TipoDocumentoAnexo]: File | null };
 export class FichaCadastralComponent {
   @Input() identificacao: IdentificacaoCotista | null = null;
   @Output() continuarSuitability = new EventEmitter<{ [key: string]: any }>();
+  tipoInvestidorSelecionado: TipoInvestidor = 'PESSOA_FISICA';
 
   constructor(private http: HttpClient) {}
 
@@ -129,6 +130,10 @@ export class FichaCadastralComponent {
     }
 
     return documento;
+  }
+
+  selecionarTipoInvestidor(tipo: TipoInvestidor): void {
+    this.tipoInvestidorSelecionado = tipo;
   }
 
   arquivos: ArquivosAnexos = {
@@ -333,8 +338,10 @@ export class FichaCadastralComponent {
   }
 
   rotuloCampo(campo: FichaCampo, fichaIndex: number, campoIndex: number): string {
-    if (fichaIndex === 0 && campoIndex === 1 && this.identificacao
-      && this.identificacao.tipoInvestidor === 'PESSOA_JURIDICA') {
+    const tipoInvestidor = this.identificacao
+      ? this.identificacao.tipoInvestidor
+      : this.tipoInvestidorSelecionado;
+    if (fichaIndex === 0 && campoIndex === 1 && tipoInvestidor === 'PESSOA_JURIDICA') {
       return 'CNPJ';
     }
 
@@ -650,7 +657,9 @@ export class FichaCadastralComponent {
     const ficha = this.fichas[fichaIndex];
     const campo = ficha && ficha.grupos[0] && ficha.grupos[0].campos[campoIndex];
     if (campo && campo.valorInicial) {
-      return this.documentoFormatado;
+      return this.identificacao
+        ? this.documentoFormatado
+        : (campo.valor ? String(campo.valor).trim() : '');
     }
     return campo && campo.valor ? String(campo.valor).trim() : '';
   }
@@ -702,10 +711,12 @@ export class FichaCadastralComponent {
     return {
       enviar: true,
       nome_completo: this.valorOpcional(this.valorCampo(0, 0)),
-      documento: i ? this.apenasDigitos(i.documento) : null,
+      documento: i
+        ? this.apenasDigitos(i.documento)
+        : this.apenasDigitos(this.valorCampo(0, 1)) || null,
       tipo_pessoa: i
         ? (i.tipoInvestidor === 'PESSOA_JURIDICA' ? 'juridica' : 'fisica')
-        : null,
+        : (this.tipoInvestidorSelecionado === 'PESSOA_JURIDICA' ? 'juridica' : 'fisica'),
       tin: this.valorOpcional(this.valorCampo(0, 2)),
       nome_mae: this.valorOpcional(this.valorCampo(0, 3)),
       sexo: this.valorOpcional(this.valorCampo(0, 4)),

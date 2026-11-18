@@ -5,12 +5,10 @@
             <p class="SubTitle">Gerencie os cotistas cadastrados no sistema</p>
         </div>
         <div class="headButtons">
-            <div class="choiceLayout">
-                <div id="kanban" class="active" aria-current="page">
-                    <mat-icon>view_kanban</mat-icon>
-                    <p>Kanban</p>
-                </div>
-            </div>
+            <a class="novo-cotista-button" [routerLink]="['/cadastro-cotista/nova']">
+                <mat-icon>add</mat-icon>
+                <span>Novo cotista</span>
+            </a>
         </div>
     </div>
 
@@ -112,23 +110,21 @@
                             <mat-icon class="kanbanCardIcon">person</mat-icon>
                         </div>
                         <div class="titleFundoCard">
-                            <p>{{ cotista?.nome_completo || cotista?.nome || 'Cotista sem nome' }}</p>
-                            <p *ngIf="cotista?.id != null">COT-{{ cotista?.id }}</p>
+                            <p><strong>Nome:</strong> {{ cotista?.nome_completo || cotista?.nome || 'Cotista sem nome' }}</p>
                         </div>
                     </div>
                     <div class="corpoKanban">
-                        <div class="nomeFundo" *ngIf="cotista?.email">
-                            <mat-icon>email</mat-icon>
-                            <p>{{ cotista.email }}</p>
-                        </div>
-                        <div class="responsavel" *ngIf="cotista?.documento || cotista?.cpf || cotista?.cnpj">
+                        <div class="responsavel">
                             <mat-icon>badge</mat-icon>
-                            <p>{{ cotista?.documento || cotista?.cpf || cotista?.cnpj }}</p>
+                            <p><strong>Sexo:</strong> {{ cotista?.sexo || 'Não informado' }}</p>
                         </div>
-                        <hr>
-                        <div class="sla">
-                            <mat-icon>drag_indicator</mat-icon>
-                            <p>Arraste para alterar a etapa</p>
+                        <div class="responsavel">
+                            <mat-icon>fingerprint</mat-icon>
+                            <p><strong>Documento:</strong> {{ cotista?.documento || cotista?.cpf || cotista?.cnpj || 'Não informado' }}</p>
+                        </div>
+                        <div class="responsavel">
+                            <mat-icon>assessment</mat-icon>
+                            <p><strong>Perfil:</strong> {{ cotista?.suitability?.perfil || cotista?.perfil || 'Não informado' }}</p>
                         </div>
                     </div>
                 </div>

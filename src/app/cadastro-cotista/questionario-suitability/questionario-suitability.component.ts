@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 interface AlternativaSuitability {
   codigo: string;
@@ -17,6 +17,7 @@ interface PerguntaSuitability {
   styleUrls: ['./questionario-suitability.component.css']
 })
 export class QuestionarioSuitabilityComponent {
+  @Input() salvando = false;
   @Output() concluir = new EventEmitter<{ [perguntaId: number]: string }>();
   @Output() voltarFicha = new EventEmitter<void>();
 

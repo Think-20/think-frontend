@@ -13,11 +13,12 @@
 
 <cb-questionario-suitability
   *ngIf="mostrarQuestionarioSuitability"
+  [salvando]="salvandoPerfil"
   (voltarFicha)="voltarParaFichaCadastral()"
   (concluir)="receberSuitability($event)">
 </cb-questionario-suitability>
 
-<main class="cotista-page" *ngIf="!mostrarIdentificacao">
+<main class="cotista-page" *ngIf="!mostrarIdentificacao && !mostrarFichaCadastral">
   <section class="cotista-content" aria-labelledby="titulo-cadastro">
     <div class="intro">
       <h1 id="titulo-cadastro">Cadastro de cotistas</h1>

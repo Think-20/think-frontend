@@ -713,7 +713,7 @@
             accept=".pdf,.jpg,.jpeg,.png"
             (change)="selecionarArquivo('identificacao', $event)">
           <button class="attach-button" type="button" (click)="abrirSeletorArquivo(arquivoIdentificacao)">
-            {{ arquivos.identificacao ? 'Substituir' : 'Anexar' }}
+            {{ arquivos.identificacao || arquivosPersistidos.identificacao ? 'Substituir' : 'Anexar' }}
           </button>
         </div>
         <div class="selected-file" *ngIf="arquivos.identificacao">
@@ -743,6 +743,18 @@
             </svg>
           </button>
         </div>
+        <div class="selected-file persisted-file" *ngIf="!arquivos.identificacao && arquivosPersistidos.identificacao">
+          <span class="file-icon" aria-hidden="true">
+            <svg viewBox="0 0 16 16">
+              <path d="M4 1.75h5l3 3V14H4zM9 1.75v3h3M5.5 8h5M5.5 10h5" />
+            </svg>
+          </span>
+          <span class="file-name">{{ nomeArquivoPersistido(arquivosPersistidos.identificacao) }}</span>
+          <span class="file-size" *ngIf="tamanhoArquivoPersistido(arquivosPersistidos.identificacao)">
+            {{ tamanhoArquivoPersistido(arquivosPersistidos.identificacao) }}
+          </span>
+          <span class="file-size" *ngIf="!tamanhoArquivoPersistido(arquivosPersistidos.identificacao)">Anexado</span>
+        </div>
       </div>
 
       <div class="document-upload">
@@ -760,7 +772,7 @@
             accept=".pdf,.jpg,.jpeg,.png"
             (change)="selecionarArquivo('endereco', $event)">
           <button class="attach-button" type="button" (click)="abrirSeletorArquivo(arquivoEndereco)">
-            {{ arquivos.endereco ? 'Substituir' : 'Anexar' }}
+            {{ arquivos.endereco || arquivosPersistidos.endereco ? 'Substituir' : 'Anexar' }}
           </button>
         </div>
         <div class="selected-file" *ngIf="arquivos.endereco">
@@ -790,11 +802,23 @@
             </svg>
           </button>
         </div>
+        <div class="selected-file persisted-file" *ngIf="!arquivos.endereco && arquivosPersistidos.endereco">
+          <span class="file-icon" aria-hidden="true">
+            <svg viewBox="0 0 16 16">
+              <path d="M4 1.75h5l3 3V14H4zM9 1.75v3h3M5.5 8h5M5.5 10h5" />
+            </svg>
+          </span>
+          <span class="file-name">{{ nomeArquivoPersistido(arquivosPersistidos.endereco) }}</span>
+          <span class="file-size" *ngIf="tamanhoArquivoPersistido(arquivosPersistidos.endereco)">
+            {{ tamanhoArquivoPersistido(arquivosPersistidos.endereco) }}
+          </span>
+          <span class="file-size" *ngIf="!tamanhoArquivoPersistido(arquivosPersistidos.endereco)">Anexado</span>
+        </div>
       </div>
     </section>
 
     <footer class="form-actions">
-      <button class="draft-button" type="button">Salvar rascunho</button>
+      <button class="draft-button" type="button" (click)="salvarComoRascunho()">Salvar rascunho</button>
       <button class="continue-button" type="button" (click)="irParaSuitability()">Continuar para Suitability</button>
     </footer>
   </main>

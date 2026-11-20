@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
+import { SimpleChange } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { MaskDirective } from '../../shared/mask.directive';
 import { FichaCadastralComponent } from './ficha-cadastral.component';
@@ -11,7 +13,7 @@ describe('FichaCadastralComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [CommonModule, FormsModule],
+      imports: [CommonModule, FormsModule, HttpClientTestingModule],
       declarations: [ FichaCadastralComponent, MaskDirective ]
     })
     .compileComponents();
@@ -34,6 +36,78 @@ describe('FichaCadastralComponent', () => {
     continueButton.click();
 
     expect(continueSpy).toHaveBeenCalled();
+  });
+
+  it('should emit the current form data when saving a draft', async(() => {
+    const draftSpy = spyOn(component.salvarRascunho, 'emit');
+
+    (fixture.nativeElement.querySelector('.draft-button') as HTMLButtonElement).click();
+
+    fixture.whenStable().then(() => {
+      expect(draftSpy).toHaveBeenCalledWith(jasmine.objectContaining({
+        enviar: false,
+        status: 'rascunho',
+        nome_completo: null
+      }));
+    });
+  }));
+
+  it('should include base64 content for attachments when saving a draft', async(() => {
+    const file = new File(['document content'], 'identificacao.pdf', { type: 'application/pdf' });
+    component.arquivos.identificacao = file;
+    spyOn<any>(component, 'fileToBase64').and.returnValue(Promise.resolve('encoded-document'));
+    const draftSpy = spyOn(component.salvarRascunho, 'emit');
+
+    component.salvarComoRascunho().then(() => {
+      const payload = draftSpy.calls.mostRecent().args[0];
+      expect(payload.arquivos).toEqual([{
+        document_type: 1,
+        original_name: 'identificacao.pdf',
+        type: 'pdf',
+        content_base64: 'encoded-document',
+        base64: 'encoded-document'
+      }]);
+      expect(payload.status).toBe('rascunho');
+      expect(payload.enviar).toBe(false);
+    });
+  }));
+
+  it('should restore saved cotista fields when reopening a draft', () => {
+    component.identificacao = {
+      tipoInvestidor: 'PESSOA_FISICA',
+      documento: '52998224725'
+    };
+    component.cotista = {
+      nome_completo: 'Cotista em rascunho',
+      tipo_pessoa: 'fisica',
+      documento: '52998224725',
+      nome_mae: 'Maria da Silva',
+      email: 'cotista@example.com',
+      endereco_residencial: {
+        cep: '01001000',
+        logradouro: 'Praça da Sé',
+        numero: '100',
+        bairro: 'Sé',
+        cidade: 'São Paulo',
+        estado: 'SP'
+      },
+      referencias: [{ nome_completo: 'Referência Teste', nacionalidade: 'Brasileira', telefone: '11999999999' }],
+      arquivos: [
+        { document_type: 1, original_name: 'identificacao.pdf', tamanho: 1024 },
+        { document_type: 2, original_name: 'endereco.pdf', tamanho: 2048 }
+      ]
+    };
+    component.ngOnChanges({
+      cotista: new SimpleChange(null, component.cotista, true)
+    });
+    fixture.detectChanges();
+
+    expect(component.fichas[0].grupos[0].campos[0].valor).toBe('Cotista em rascunho');
+    expect(component.fichas[0].grupos[0].campos[3].valor).toBe('Maria da Silva');
+    expect(component.fichas[1].grupos[0].campos[0].valor).toBe('01001000');
+    expect(component.referencias[0].nomeCompleto).toBe('Referência Teste');
+    expect(fixture.nativeElement.querySelectorAll('.persisted-file').length).toBe(2);
+    expect(fixture.nativeElement.querySelector('.persisted-file').textContent).toContain('identificacao.pdf');
   });
 
   it('should map the initial CPF or CNPJ to documento and tipo_pessoa', async(() => {

@@ -95,6 +95,8 @@ describe('CadastroCotistaComponent', () => {
       nome_completo: 'Cotista Teste',
       email: 'cotista@example.com',
       documento: '52998224725',
+      status: 'pendente',
+      enviar: true,
       suitability: {
         perfil: null,
         respostas: [{ pergunta: 1, opcao: 1 }]
@@ -116,8 +118,96 @@ describe('CadastroCotistaComponent', () => {
     request.flush({ error: 'false', message: 'Cadastro salvo', data: cotistaRetornado });
 
     expect(navigateSpy).toHaveBeenCalledWith('/kanban-cotista', {
-      state: { cotistas: [cotistaRetornado] }
+      state: {
+        cotistas: [{
+          ...cotistaRetornado,
+          email: 'cotista@example.com',
+          enviar: true
+        }]
+      }
     });
     expect(component.salvandoPerfil).toBe(false);
+  });
+
+  it('should create a new draft and return it to the kanban', () => {
+    const router = TestBed.get(Router);
+    const navigateSpy = spyOn(router, 'navigateByUrl').and.returnValue(Promise.resolve(true));
+    component.salvarRascunho({
+      nome_completo: 'Cotista em rascunho',
+      documento: '52998224725',
+      arquivos: [{
+        document_type: 1,
+        original_name: 'identificacao.pdf',
+        type: 'pdf',
+        content_base64: 'encoded-document',
+        base64: 'encoded-document'
+      }]
+    });
+
+    const request = httpTestingController.expectOne(`${environment.api}/cotista/save`);
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual({
+      nome_completo: 'Cotista em rascunho',
+      documento: '52998224725',
+      status: 'rascunho',
+      enviar: false,
+      arquivos: [{
+        document_type: 1,
+        original_name: 'identificacao.pdf',
+        type: 'pdf',
+        content_base64: 'encoded-document',
+        base64: 'encoded-document'
+      }]
+    });
+
+    const rascunhoSalvo = {
+      id: 26,
+      nome_completo: 'Cotista em rascunho',
+      documento: '52998224725',
+      status: 'rascunho'
+    };
+    request.flush({ data: rascunhoSalvo });
+
+    expect(navigateSpy).toHaveBeenCalledWith('/kanban-cotista', {
+      state: {
+        cotistas: [{
+          ...rascunhoSalvo,
+          enviar: false,
+          arquivos: [{
+            document_type: 1,
+            original_name: 'identificacao.pdf',
+            type: 'pdf',
+            content_base64: 'encoded-document',
+            base64: 'encoded-document'
+          }]
+        }]
+      }
+    });
+  });
+
+  it('should update an existing draft when its suitability is completed', () => {
+    const router = TestBed.get(Router);
+    spyOn(router, 'navigateByUrl').and.returnValue(Promise.resolve(true));
+    component.cadastroPayload = {
+      id: 26,
+      nome_completo: 'Cotista em rascunho',
+      status: 'rascunho',
+      enviar: false
+    };
+    component.receberSuitability({ 1: 'a' });
+
+    const request = httpTestingController.expectOne(`${environment.api}/cotista/edit`);
+    expect(request.request.method).toBe('PUT');
+    expect(request.request.body).toEqual({
+      id: 26,
+      nome_completo: 'Cotista em rascunho',
+      status: 'pendente',
+      enviar: true,
+      suitability: {
+        perfil: null,
+        respostas: [{ pergunta: 1, opcao: 1 }]
+      }
+    });
+    request.flush({ data: { id: 26, status: 'pendente' } });
   });
 });

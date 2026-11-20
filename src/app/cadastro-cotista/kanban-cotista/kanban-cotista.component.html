@@ -104,14 +104,29 @@
                 <div *ngIf="column.items.length === 0" class="noCards">
                     Nenhum cotista nesta fase
                 </div>
-                <div class="cardKanban" *ngFor="let cotista of column.items" cdkDrag [cdkDragData]="cotista">
+                <div
+                    class="cardKanban"
+                    *ngFor="let cotista of column.items"
+                    cdkDrag
+                    [cdkDragData]="cotista"
+                    (click)="abrirCotista(cotista)"
+                    [title]="cotista?.status === 'rascunho' ? 'Clique para continuar o cadastro' : ''">
                     <div class="titleCards">
                         <div class="areaIconKanban">
                             <mat-icon class="kanbanCardIcon">person</mat-icon>
                         </div>
                         <div class="titleFundoCard">
-                            <p><strong>Nome:</strong> {{ cotista?.nome_completo || cotista?.nome || 'Cotista sem nome' }}</p>
+                            <p>{{ cotista?.nome_completo || cotista?.nome || 'Cotista sem nome' }}</p>
                         </div>
+                        <button
+                            type="button"
+                            class="delete-cotista-button"
+                            aria-label="Excluir cotista"
+                            title="Excluir cotista"
+                            (pointerdown)="$event.stopPropagation()"
+                            (click)="removerCotista(cotista, $event)">
+                            <mat-icon>delete_outline</mat-icon>
+                        </button>
                     </div>
                     <div class="corpoKanban">
                         <div class="responsavel">

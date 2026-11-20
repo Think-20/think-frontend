@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { IdentificacaoCotista, TipoInvestidor } from '../identificacao-inicial/identificacao-inicial.component';
 
@@ -66,12 +66,20 @@ type ArquivosAnexos = { [tipo in TipoDocumentoAnexo]: File | null };
   templateUrl: './ficha-cadastral.component.html',
   styleUrls: ['./ficha-cadastral.component.css']
 })
-export class FichaCadastralComponent {
+export class FichaCadastralComponent implements OnChanges {
   @Input() identificacao: IdentificacaoCotista | null = null;
+  @Input() cotista: { [key: string]: any } | null = null;
   @Output() continuarSuitability = new EventEmitter<{ [key: string]: any }>();
+  @Output() salvarRascunho = new EventEmitter<{ [key: string]: any }>();
   tipoInvestidorSelecionado: TipoInvestidor = 'PESSOA_FISICA';
 
   constructor(private http: HttpClient) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.cotista && this.cotista) {
+      this.preencherCotista(this.cotista);
+    }
+  }
 
   readonly cpfMask = '999.999.999-99';
   readonly cnpjMask = '99.999.999/9999-99';
@@ -136,7 +144,187 @@ export class FichaCadastralComponent {
     this.tipoInvestidorSelecionado = tipo;
   }
 
+  private preencherCotista(cotista: { [key: string]: any }): void {
+    this.tipoInvestidorSelecionado = String(cotista.tipo_pessoa || '').toLowerCase() === 'juridica'
+      ? 'PESSOA_JURIDICA'
+      : 'PESSOA_FISICA';
+    const arquivosSalvos = Array.isArray(cotista.arquivos) && cotista.arquivos.length
+      ? cotista.arquivos
+      : Array.isArray(cotista.cotista_files) ? cotista.cotista_files : [];
+    this.arquivosPersistidos = {
+      identificacao: arquivosSalvos.find((arquivo: any) => Number(arquivo.document_type) === 1) || null,
+      endereco: arquivosSalvos.find((arquivo: any) => Number(arquivo.document_type) === 2) || null
+    };
+
+    this.preencherCampos(0, [
+      cotista.nome_completo,
+      cotista.documento,
+      cotista.tin,
+      cotista.nome_mae,
+      cotista.sexo,
+      cotista.local_nascimento,
+      cotista.data_nascimento,
+      cotista.estado_civil,
+      cotista.regime_casamento,
+      cotista.nome_conjuge,
+      cotista.cpf_conjuge,
+      cotista.numero_dependentes,
+      cotista.nacionalidade,
+      this.valorSimNao(cotista.possui_outra_nacionalidade),
+      cotista.outras_nacionalidades,
+      cotista.tipo_documento,
+      cotista.numero_documento,
+      cotista.data_emissao_documento,
+      cotista.orgao_emissor,
+      cotista.uf_pais_emissor
+    ]);
+
+    const residencial = cotista.endereco_residencial || {};
+    this.preencherCampos(1, [
+      residencial.cep,
+      residencial.logradouro,
+      residencial.numero,
+      residencial.complemento,
+      cotista.tempo_residencia,
+      residencial.bairro,
+      residencial.cidade,
+      residencial.estado,
+      cotista.endereco_correspondencia,
+      this.valorSimNao(cotista.autorizacao_residencia_outros_paises),
+      cotista.paises_residencia,
+      this.valorSimNao(cotista.possui_outro_domicilio_fiscal),
+      cotista.outros_domicilios_fiscais,
+      cotista.telefone,
+      cotista.celular,
+      cotista.email,
+      this.valorSimNao(cotista.us_person)
+    ]);
+
+    const comercial = cotista.endereco_comercial || {};
+    this.preencherCampos(2, [
+      cotista.natureza_ocupacao,
+      cotista.instituicao_trabalho,
+      cotista.cnpj_empregador,
+      comercial.cep,
+      comercial.logradouro,
+      comercial.numero,
+      comercial.complemento,
+      comercial.bairro,
+      comercial.cidade,
+      comercial.estado,
+      cotista.telefone_comercial,
+      cotista.profissao,
+      cotista.cargo,
+      cotista.email_comercial
+    ]);
+
+    if (Array.isArray(cotista.referencias) && cotista.referencias.length) {
+      this.referencias = cotista.referencias.map((referencia: any) => ({
+        nomeCompleto: this.valorFormulario(referencia.nome_completo),
+        nacionalidade: this.valorFormulario(referencia.nacionalidade),
+        telefone: this.valorFormulario(referencia.telefone)
+      }));
+    }
+    if (Array.isArray(cotista.contas) && cotista.contas.length) {
+      this.contasBancarias = cotista.contas.map((conta: any) => ({
+        banco: this.valorFormulario(conta.banco),
+        agencia: this.valorFormulario(conta.agencia),
+        numeroConta: this.valorFormulario(conta.numero_conta),
+        tipoConta: this.valorFormulario(conta.tipo_conta)
+      }));
+    }
+    if (Array.isArray(cotista.itens_patrimoniais) && cotista.itens_patrimoniais.length) {
+      this.itensPatrimoniais = cotista.itens_patrimoniais.map((item: any) => ({
+        categoria: this.valorFormulario(item.categoria),
+        descricao: this.valorFormulario(item.descricao),
+        valorAtual: this.valorFormulario(item.valor_atual)
+      }));
+    }
+
+    this.preencherCampos(6, [
+      cotista.codigo_operacional_cvm,
+      cotista.rde_cademp,
+      cotista.pais_origem,
+      cotista.representante_brasil,
+      cotista.representante_coresponsavel,
+      cotista.custodiante,
+      cotista.administrador_carteira,
+      String(cotista.situacao || '').toLowerCase() === 'isento'
+        ? 'Isento'
+        : cotista.situacao ? 'Não isento' : ''
+    ]);
+
+    if (Array.isArray(cotista.participacoes) && cotista.participacoes.length) {
+      this.participacoesSocietarias = cotista.participacoes.map((participacao: any) => ({
+        razaoSocial: this.valorFormulario(participacao.razao_social),
+        cnpj: this.valorFormulario(participacao.cnpj),
+        nacionalidade: this.valorFormulario(participacao.nacionalidade),
+        percentualCapital: this.valorFormulario(participacao.percentual_capital),
+        instituicaoFinanceira: this.valorSimNao(participacao.instituicao_financeira),
+        giinNumber: this.valorFormulario(participacao.giin)
+      }));
+    }
+
+    this.propositosSelecionados = [
+      cotista.proposito_cambio ? 'CAMBIO' : null,
+      cotista.proposito_aplicacoes ? 'APLICACOES_INVESTIMENTOS' : null,
+      cotista.proposito_intermediacao ? 'INTERMEDIACAO_OPERACOES' : null,
+      cotista.proposito_credito ? 'OPERACOES_CREDITO' : null,
+      cotista.proposito_acessorias ? 'OPERACOES_ACESSORIAS' : null,
+      cotista.proposito_outros ? 'OUTROS' : null
+    ].filter((proposito: string | null) => proposito !== null);
+    this.outroProposito = this.valorFormulario(cotista.proposito_outros);
+
+    this.pessoaPoliticamenteExposta = this.valorSimNao(cotista.e_ppe);
+    this.cargoPpe = this.valorFormulario(cotista.ppe_cargo);
+    this.relacionamentoComPpe = this.valorSimNao(cotista.relacionamento_ppe);
+
+    const operador = cotista.operador || {};
+    this.procuradorOperaPorContaPropria = this.valorSimNao(operador.opera_conta_propria);
+    this.procuradorAutorizaOrdens = this.valorSimNao(operador.autoriza_ordens_procurador);
+    this.procuradorPpe = this.valorSimNao(operador.e_ppe);
+    this.procuradorRelacionamentoPpe = this.valorSimNao(operador.relacionamento_ppe);
+    this.cargoProcuradorPpe = this.valorFormulario(operador.ppe_cargo);
+    this.dadosProcuradorRelacionado = this.valorFormulario(operador.descricao_poderes);
+    this.cpfProcurador = this.valorFormulario(operador.cpf);
+    const enderecoOperador = operador.endereco || {};
+    this.cepProcurador = this.valorFormulario(enderecoOperador.cep);
+    this.enderecoProcurador = this.valorFormulario(enderecoOperador.logradouro);
+    this.numeroProcurador = this.valorFormulario(enderecoOperador.numero);
+    this.complementoProcurador = this.valorFormulario(enderecoOperador.complemento);
+  }
+
+  private preencherCampos(fichaIndex: number, valores: any[]): void {
+    valores.forEach((valor, campoIndex) => {
+      const campo = this.fichas[fichaIndex].grupos[0].campos[campoIndex];
+      if (campo) {
+        campo.valor = this.valorFormulario(valor);
+      }
+    });
+  }
+
+  private valorFormulario(valor: any): string {
+    if (valor == null) {
+      return '';
+    }
+    const texto = String(valor);
+    return /^\d{4}-\d{2}-\d{2}/.test(texto) ? texto.slice(0, 10) : texto;
+  }
+
+  private valorSimNao(valor: any): string {
+    if (valor == null || valor === '') {
+      return '';
+    }
+    return valor === true || String(valor).toLowerCase() === 'sim' || String(valor) === '1'
+      ? 'Sim'
+      : 'Não';
+  }
+
   arquivos: ArquivosAnexos = {
+    identificacao: null,
+    endereco: null
+  };
+  arquivosPersistidos: { [tipo in TipoDocumentoAnexo]: any | null } = {
     identificacao: null,
     endereco: null
   };
@@ -600,20 +788,24 @@ export class FichaCadastralComponent {
     const arquivos: any[] = [];
 
     if (this.arquivos.identificacao) {
+      const contentBase64 = await this.fileToBase64(this.arquivos.identificacao);
       arquivos.push({
         document_type: 1,
         original_name: this.arquivos.identificacao.name,
         type: this.tipoArquivo(this.arquivos.identificacao),
-        content_base64: await this.fileToBase64(this.arquivos.identificacao)
+        content_base64: contentBase64,
+        base64: contentBase64
       });
     }
 
     if (this.arquivos.endereco) {
+      const contentBase64 = await this.fileToBase64(this.arquivos.endereco);
       arquivos.push({
         document_type: 2,
         original_name: this.arquivos.endereco.name,
         type: this.tipoArquivo(this.arquivos.endereco),
-        content_base64: await this.fileToBase64(this.arquivos.endereco)
+        content_base64: contentBase64,
+        base64: contentBase64
       });
     }
 
@@ -621,15 +813,30 @@ export class FichaCadastralComponent {
   }
 
   tamanhoArquivo(arquivo: File): string {
-    if (arquivo.size < 1024) {
-      return arquivo.size + ' B';
+    return this.formatarTamanhoArquivo(arquivo.size);
+  }
+
+  nomeArquivoPersistido(arquivo: any): string {
+    return arquivo && (arquivo.original_name || arquivo.nome_original || arquivo.name)
+      ? arquivo.original_name || arquivo.nome_original || arquivo.name
+      : 'Arquivo anexado';
+  }
+
+  tamanhoArquivoPersistido(arquivo: any): string {
+    const tamanho = Number(arquivo && (arquivo.tamanho || arquivo.size));
+    return tamanho > 0 ? this.formatarTamanhoArquivo(tamanho) : '';
+  }
+
+  private formatarTamanhoArquivo(tamanho: number): string {
+    if (tamanho < 1024) {
+      return tamanho + ' B';
     }
 
-    if (arquivo.size < 1024 * 1024) {
-      return Math.max(1, Math.round(arquivo.size / 1024)) + ' KB';
+    if (tamanho < 1024 * 1024) {
+      return Math.max(1, Math.round(tamanho / 1024)) + ' KB';
     }
 
-    return (arquivo.size / (1024 * 1024)).toFixed(1) + ' MB';
+    return (tamanho / (1024 * 1024)).toFixed(1) + ' MB';
   }
 
   baixarArquivo(tipo: TipoDocumentoAnexo): void {
@@ -836,5 +1043,12 @@ export class FichaCadastralComponent {
   async irParaSuitability(): Promise<void> {
     const payload = await this.montarObjetoJson();
     this.continuarSuitability.emit(payload);
+  }
+
+  async salvarComoRascunho(): Promise<void> {
+    const payload = await this.montarObjetoJson();
+    payload.status = 'rascunho';
+    payload.enviar = false;
+    this.salvarRascunho.emit(payload);
   }
 }

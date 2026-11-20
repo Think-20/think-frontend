@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 export type StatusCotista = 'rascunho' | 'pendente' | 'aprovado' | 'cancelado';
 
@@ -13,6 +15,8 @@ export interface CotistaKanban {
   cpf?: string;
   cnpj?: string;
   sexo?: string;
+  arquivos?: any[];
+  cotista_files?: any[];
   suitability?: {
     perfil?: string | null;
     [key: string]: any;
@@ -51,7 +55,7 @@ export class KanbanCotistaComponent implements OnChanges, OnInit {
 
   kanbanColumns: Array<{ status: StatusCotista; label: string; colorId: string; items: CotistaKanban[] }> = [];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private http: HttpClient) {}
 
   ngOnInit(): void {
     const navigation = this.router.getCurrentNavigation();
@@ -65,6 +69,7 @@ export class KanbanCotistaComponent implements OnChanges, OnInit {
       this.cotistas = cotistas;
     }
     this.organizarCotistas();
+    this.buscarCotistas();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -96,11 +101,94 @@ export class KanbanCotistaComponent implements OnChanges, OnInit {
     cotista.status = statusAtual;
     this.statusAlterado.emit({ cotista, statusAnterior, statusAtual });
     this.organizarCotistas();
+
+    const payload = { ...cotista, enviar: true, status: statusAtual };
+    delete payload.arquivos;
+    delete payload.cotista_files;
+    this.http.patch(
+      `${environment.api}/cotista/patch`,
+      payload
+    ).subscribe({
+      error: (erro) => {
+        console.error('Erro ao atualizar status do cotista:', erro);
+        cotista.status = statusAnterior;
+        this.organizarCotistas();
+      }
+    });
   }
 
   atualizarPesquisa(evento: Event): void {
     this.pesquisa = (evento.target as HTMLInputElement).value;
     this.organizarCotistas();
+  }
+
+  abrirCotista(cotista: CotistaKanban): void {
+    if (this.normalizarStatus(cotista.status) !== 'rascunho') {
+      return;
+    }
+
+    this.router.navigateByUrl('/cadastro-cotista/nova', {
+      state: { cotista }
+    });
+  }
+
+  removerCotista(cotista: CotistaKanban, evento: MouseEvent): void {
+    evento.stopPropagation();
+    if (cotista.id == null) {
+      console.error('Não é possível excluir um cotista sem ID:', cotista);
+      return;
+    }
+
+    this.http.delete(`${environment.api}/cotista/remove/${cotista.id}`).subscribe({
+      next: () => {
+        this.cotistas = this.cotistas.filter(item => item !== cotista);
+        this.organizarCotistas();
+      },
+      error: (erro) => {
+        console.error('Erro ao excluir cotista:', erro);
+      }
+    });
+  }
+
+  private buscarCotistas(): void {
+    this.http.post<{ data?: CotistaKanban[] }>(
+      `${environment.api}/cotistas/all`,
+      { per_page: 100 }
+    ).subscribe({
+      next: (resposta) => {
+        if (!resposta || !Array.isArray(resposta.data)) {
+          console.error('A resposta da busca não contém a lista de cotistas:', resposta);
+          return;
+        }
+
+        const cotistasInicializados = this.cotistas || [];
+        this.cotistas = resposta.data.map(cotista => {
+          const cotistaInicial = cotistasInicializados.find(item =>
+            item.id != null && cotista.id != null && String(item.id) === String(cotista.id)
+          );
+          if (!cotistaInicial) {
+            return cotista;
+          }
+
+          const arquivosResposta = Array.isArray(cotista.arquivos) && cotista.arquivos.length
+            ? cotista.arquivos
+            : cotista.cotista_files;
+          const arquivosIniciais = Array.isArray(cotistaInicial.arquivos) && cotistaInicial.arquivos.length
+            ? cotistaInicial.arquivos
+            : cotistaInicial.cotista_files;
+
+          if ((!Array.isArray(arquivosResposta) || !arquivosResposta.length) &&
+              Array.isArray(arquivosIniciais) && arquivosIniciais.length) {
+            return { ...cotista, arquivos: arquivosIniciais };
+          }
+          return cotista;
+        });
+        this.organizarCotistas();
+      },
+      error: (erro) => {
+        console.error('Erro ao carregar cotistas:', erro);
+      }
+    });
   }
 
   private organizarCotistas(): void {

@@ -68,6 +68,10 @@ export class EmployeeFormComponent implements OnInit {
     { id: 2, name: 'Aprovador' },
     { id: 3, name: 'Administrador' }
   ]
+  readonly MODULES = [
+    { value: 'cedente', label: 'Cedente' },
+    { value: 'cotista', label: 'Cotista' }
+  ]
 
   constructor(
     private employeeService: EmployeeService,
@@ -97,12 +101,8 @@ export class EmployeeFormComponent implements OnInit {
         Validators.maxLength(50)
       ]),
       image: this.formBuilder.control('sem-foto.jpg'),
-      payment: this.formBuilder.control({ value: '0.00', disabled: !this.isAdmin }, [
-        Validators.required
-      ]),
-      department: this.formBuilder.control({ value: '', disabled: !this.isAdmin }, [
-        Validators.required
-      ]),
+      payment: this.formBuilder.control({ value: '0.00', disabled: !this.isAdmin }),
+      department: this.formBuilder.control({ value: '', disabled: !this.isAdmin }),
       role: this.formBuilder.control({ value: '', disabled: !this.isAdmin }, [
         Validators.required
       ]),
@@ -114,6 +114,7 @@ export class EmployeeFormComponent implements OnInit {
         Validators.required,
         Validators.minLength(6)
       ]),
+      module: this.formBuilder.control(''),
       funds: this.formBuilder.control({ value: [], disabled: !this.isAdmin }),
       schedule_active: this.formBuilder.control({ value: '1', disabled: !this.isAdmin }),
     })
@@ -200,6 +201,7 @@ export class EmployeeFormComponent implements OnInit {
       this.employeeForm.controls.email.setValue(this.employee.email)
       this.employeeForm.controls.password.clearValidators()
       this.employeeForm.controls.password.updateValueAndValidity()
+      this.employeeForm.controls.module.setValue(this.employee.module || '')
       this.employeeForm.controls.schedule_active.setValue(this.employee.schedule_active)
       this.employeeForm.controls.image.setValue(this.employee.image)
       this.applyFundsSelection()
@@ -239,17 +241,14 @@ export class EmployeeFormComponent implements OnInit {
     let payload: any = {
       name: formValue.name,
       email: formValue.email,
-      cedente_role_id: formValue.role ? formValue.role.id : null
+      cedente_role_id: formValue.role ? formValue.role.id : null,
+      fund_ids: isAllFunds
+        ? this.funds.map((fund) => fund.id)
+        : selectedFunds.map((fund) => fund.id)
     }
 
     if (formValue.password) {
       payload.password = formValue.password
-    }
-
-    if (isAllFunds) {
-      payload.all_funds = true
-    } else {
-      payload.fund_ids = selectedFunds.map((fund) => fund.id)
     }
 
     return payload
@@ -267,7 +266,7 @@ export class EmployeeFormComponent implements OnInit {
       return;
     }
 
-    let payload = this.buildEmployeePayload(this.employeeForm.value)
+    let payload = this.buildEmployeePayload(this.employeeForm.getRawValue())
 
     this.saveCedenteEmployee(payload).subscribe((data: any) => {
       let snackbar = this.snackBar.open(data.message, '', {
@@ -291,7 +290,7 @@ export class EmployeeFormComponent implements OnInit {
     }
 
     let url = this.typeForm === 'profile' || this.authService.currentUser().employee_id == employeeId ? '/login' : '/employees'
-    let payload = this.buildEmployeePayload(this.employeeForm.value)
+    let payload = this.buildEmployeePayload(this.employeeForm.getRawValue())
     payload.id = employeeId
 
     this.saveCedenteEmployee(payload).subscribe((data: any) => {

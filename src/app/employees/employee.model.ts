@@ -16,6 +16,7 @@ export class Employee implements Notifiable {
     email?: string
     password?: string
     cedente_role_id?: number
+    module?: 'cedente' | 'cotista'
     all_funds?: boolean
     fund_ids?: number[]
     user?: User

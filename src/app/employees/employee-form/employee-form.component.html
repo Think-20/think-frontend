@@ -33,17 +33,27 @@
           Obrigatório, mínimo 6 caract.
         </mat-error>
       </mat-form-field>
+      <!-- <mat-form-field appearance="outline" class="col-md-3 form-field-modern">
+        <mat-label>Módulo*</mat-label>
+        <mat-select placeholder="Módulo" formControlName="module" [disableOptionCentering]="true" panelClass="cb-select-panel-below">
+          <mat-option *ngFor="let module of MODULES" [value]="module.value">
+            {{ module.label }}
+          </mat-option>
+        </mat-select>
+        <mat-error>Selecione um módulo.</mat-error>
+      </mat-form-field> -->
       <!-- <mat-form-field class="col-md-3">
         <input currencyMask formControlName="payment" matInput placeholder="Salário*">
       </mat-form-field> -->
       <mat-form-field appearance="outline" class="col-md-3 form-field-modern">
-        <mat-label>Função</mat-label>
+        <mat-label>Função*</mat-label>
         <mat-select placeholder="Função" formControlName="role" [compareWith]="compareRole" [disableOptionCentering]="true" panelClass="cb-select-panel-below">
           <mat-option></mat-option>
           <mat-option *ngFor="let role of ROLES" [value]="role">
             {{ role.name }}
           </mat-option>
         </mat-select>
+        <mat-error>Selecione uma função.</mat-error>
       </mat-form-field>
       <!-- <mat-form-field appearance="outline" class="col-md-3 form-field-modern">
         <mat-label>Departamento</mat-label>
@@ -71,7 +81,7 @@
       </div> -->
     </div>
     <mat-card-actions class="col-md-12 text-right">
-      <button class="cb-button" *ngIf="typeForm === 'edit' || typeForm === 'profile'" color="primary" (click)="edit(employee.id)" mat-raised-button>
+      <button class="cb-button" *ngIf="typeForm === 'new' || typeForm === 'edit' || typeForm === 'profile'" color="primary" (click)="typeForm === 'new' ? save() : edit(employee.id)" mat-raised-button>
         Cadastrar
       </button>
     </mat-card-actions>

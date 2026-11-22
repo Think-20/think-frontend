@@ -8,6 +8,7 @@ import { Employee } from '../employee.model';
 import { DepartmentService } from 'app/department/department.service';
 import { PositionService } from 'app/position/position.service';
 import { DatePipe } from '@angular/common';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'cb-employee-list',
@@ -101,7 +102,9 @@ export class EmployeeListComponent implements OnInit {
             label: 'E-mail',
             style: { width: '30%' },
             showData: (employee: Employee) => {
-              return employee.department.description
+              return employee.user && employee.user.email
+                ? employee.user.email
+                : employee.email || ''
             }
           },
 
@@ -109,7 +112,7 @@ export class EmployeeListComponent implements OnInit {
             label: 'Função',
             style: { width: '30%' },
             showData: (employee: Employee) => {
-              return employee.position.name
+              return employee.cedente_role ? employee.cedente_role.name : ''
             }
           },
         ],
@@ -168,6 +171,14 @@ export class EmployeeListComponent implements OnInit {
         ],
         loadData: (params, page) => {
           return this.employeeService.employees({ deleted: true, ...params }, page)
+            .map(dataInfo => {
+              if (dataInfo.pagination && dataInfo.pagination.data) {
+                dataInfo.pagination.data = this.employeeService.mergeCreatedEmployeeRoles(
+                  dataInfo.pagination.data
+                )
+              }
+              return dataInfo
+            })
         },
         buttonStyle: { width: '8%' }
       }

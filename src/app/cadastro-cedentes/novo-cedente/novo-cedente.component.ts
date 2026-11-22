@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CedenteDataService } from './cedente-data.service';
+import { combinarDadosCedenteXml, DadosCedenteXml, parseCedenteXml } from './cedente-xml-parser';
 import { DocumentacaoCedenteComponent } from '../documentacao-cedente/documentacao-cedente.component';
 import { PartesRelacionadasComponent } from '../partes-relacionadas/partes-relacionadas.component';
 import { environment } from '../../../environments/environment';
@@ -62,6 +63,7 @@ export class NovoCedenteComponent implements OnInit {
   mostrarModalXml: boolean = false;
   arquivosXmlSelecionados: File[] = [];
   erroArquivoXml: string | null = null;
+  processandoXml: boolean = false;
   readonly limiteArquivosXml = 10;
 
   // Dados preenchidos
@@ -109,6 +111,7 @@ export class NovoCedenteComponent implements OnInit {
 
 
   private fundoId: string | null = null;
+  private importandoXml = false;
 
   get isModoEdicao(): boolean {
     return !!this.cedenteDataService.getCedenteId();
@@ -236,7 +239,7 @@ export class NovoCedenteComponent implements OnInit {
     if (cepControl) {
       cepControl.valueChanges.subscribe((valor: string) => {
         const cep = String(valor).replace(/\D/g, '');
-        if (cep.length === 8) {
+        if (cep.length === 8 && !this.importandoXml) {
           this.buscarCep();
         }
       });
@@ -568,25 +571,70 @@ export class NovoCedenteComponent implements OnInit {
 
   private isArquivoXml(arquivo: File): boolean {
     const nomeArquivo = arquivo.name || '';
-    return arquivo.type === 'text/xml'
-      || arquivo.type === 'application/xml'
+    const tipoArquivo = (arquivo.type || '').toLowerCase();
+    return tipoArquivo === 'text/xml'
+      || tipoArquivo === 'application/xml'
       || nomeArquivo.toLowerCase().endsWith('.xml');
   }
 
-  confirmarCadastroViaXml() {
+  async confirmarCadastroViaXml(): Promise<void> {
     if (!this.arquivosXmlSelecionados.length) {
       return;
     }
 
+    if (this.processandoXml) {
+      return;
+    }
+
+    if (this.arquivosXmlSelecionados.length > 1) {
+      this.enviarArquivosXml([...this.arquivosXmlSelecionados]);
+      return;
+    }
+
+    this.processandoXml = true;
+    this.erroArquivoXml = null;
+
+    try {
+      const dadosPorArquivo = await Promise.all(
+        this.arquivosXmlSelecionados.map((arquivo) => this.lerDadosCedenteXml(arquivo))
+      );
+      const dadosCedente = combinarDadosCedenteXml(dadosPorArquivo);
+
+      const encontrouDados = Object.keys(dadosCedente).some((campo) => {
+        const valor = dadosCedente[campo as keyof DadosCedenteXml];
+        return Array.isArray(valor) ? valor.length > 0 : valor !== undefined;
+      });
+      if (!encontrouDados) {
+        this.erroArquivoXml = 'Não foram encontrados dados cadastrais nos arquivos XML selecionados.';
+        return;
+      }
+
+      this.preencherFormulariosComXml(dadosCedente);
+      this.fecharModalXml();
+      this.snackBar.open('Dados do XML preenchidos. Revise as informações e complete os campos restantes.', 'Fechar', {
+        duration: 5000
+      });
+    } catch (erro) {
+      console.error('Erro ao ler arquivos XML do cedente', erro);
+      this.erroArquivoXml = erro instanceof Error
+        ? erro.message
+        : 'Não foi possível ler os arquivos XML. Verifique os arquivos e tente novamente.';
+    } finally {
+      this.processandoXml = false;
+    }
+  }
+
+  private enviarArquivosXml(arquivos: File[]): void {
     const fundId = Number(this.fundoId);
     if (!Number.isInteger(fundId) || fundId < 1) {
       this.erroArquivoXml = 'Não foi possível identificar um fundo válido para o cadastro.';
       return;
     }
 
-    const arquivosXml = [...this.arquivosXmlSelecionados];
+    this.processandoXml = true;
+    this.erroArquivoXml = null;
     const url = `${environment.api}/cedente/import/xml?fund_id=${fundId}`;
-    const requisicoes = arquivosXml.map((arquivo) => {
+    const requisicoes = arquivos.map((arquivo) => {
       const dados = new FormData();
       dados.append('xml', arquivo, arquivo.name);
       return this.http.post(url, dados);
@@ -594,7 +642,7 @@ export class NovoCedenteComponent implements OnInit {
 
     forkJoin(requisicoes).subscribe({
       next: () => {
-        const quantidade = arquivosXml.length;
+        const quantidade = arquivos.length;
         const mensagem = quantidade === 1
           ? 'Arquivo XML enviado com sucesso.'
           : `${quantidade} arquivos XML enviados com sucesso.`;
@@ -605,8 +653,88 @@ export class NovoCedenteComponent implements OnInit {
       error: (erro) => {
         console.error('Erro ao enviar arquivos XML', erro);
         this.erroArquivoXml = 'Não foi possível enviar os arquivos XML. Tente novamente.';
+        this.processandoXml = false;
+      },
+      complete: () => {
+        this.processandoXml = false;
       }
     });
+  }
+
+  private lerDadosCedenteXml(arquivo: File): Promise<DadosCedenteXml> {
+    return new Promise((resolve, reject) => {
+      const leitor = new FileReader();
+      leitor.onload = () => {
+        try {
+          resolve(parseCedenteXml(String(leitor.result || ''), arquivo.name));
+        } catch (erro) {
+          reject(erro);
+        }
+      };
+      leitor.onerror = () => reject(new Error(`Não foi possível ler o arquivo "${arquivo.name}".`));
+      leitor.readAsText(arquivo);
+    });
+  }
+
+  private preencherFormulariosComXml(dados: DadosCedenteXml): void {
+    this.importandoXml = true;
+    try {
+      if (dados.nome !== undefined) {
+        this.formDadosCadastrais.patchValue({ nome: dados.nome });
+      }
+      if (dados.documento !== undefined) {
+        this.formDadosCadastrais.patchValue({ documento: dados.documento });
+      }
+      if (dados.email !== undefined) {
+        this.formDadosCadastrais.patchValue({ email: dados.email });
+      }
+      if (dados.faturamento_anual !== undefined) {
+        this.formDadosCadastrais.patchValue({ faturamento_anual: dados.faturamento_anual });
+      }
+      if (dados.cep !== undefined) {
+        this.formDadosCadastrais.patchValue({ cep: dados.cep });
+      }
+      if (dados.logradouro !== undefined) {
+        this.formDadosCadastrais.patchValue({ logradouro: dados.logradouro });
+      }
+      if (dados.numero !== undefined) {
+        this.formDadosCadastrais.patchValue({ numero: dados.numero });
+      }
+      if (dados.complemento !== undefined) {
+        this.formDadosCadastrais.patchValue({ complemento: dados.complemento });
+      }
+      if (dados.bairro !== undefined) {
+        this.formDadosCadastrais.patchValue({ bairro: dados.bairro });
+      }
+      if (dados.estado !== undefined) {
+        this.formInfoGeral.patchValue({ estado: dados.estado.toUpperCase() });
+      }
+      if (dados.telefone !== undefined) {
+        this.formInfoGeral.patchValue({ telefone: dados.telefone });
+      }
+      if (dados.cidade !== undefined) {
+        this.formInfoGeral.patchValue({ cidade: dados.cidade });
+      }
+      this.preencherColecoesComXml(dados);
+    } finally {
+      this.importandoXml = false;
+    }
+  }
+
+  private preencherColecoesComXml(dados: DadosCedenteXml): void {
+    (dados.partes_relacionadas || []).forEach((parte) => {
+      this.cedenteDataService.adicionarParteRelacionada(parte);
+    });
+    (dados.avalistas || []).forEach((avalista) => {
+      this.cedenteDataService.adicionarAvalista(avalista);
+    });
+    (dados.contas_desembolso || []).forEach((conta) => {
+      this.cedenteDataService.adicionarContaDesembolso(conta);
+    });
+
+    if (dados.partes_relacionadas || dados.avalistas || dados.contas_desembolso) {
+      this.sincronizarDadosDinamicos(this.cedenteDataService.obterDados());
+    }
   }
 
   // aqui busco o CEP

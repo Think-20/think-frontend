@@ -39,6 +39,8 @@ export class AvalistaComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.data && this.formDadosCadastraisAvalista) {
       this.preencherFormulario();
+    } else if (changes.partesRelacionadas && this.formEnderecoAvalista && this.preencherEnderecoParteRelacionada()) {
+      this.salvarAutomatico();
     }
   }
 
@@ -104,6 +106,43 @@ export class AvalistaComponent implements OnInit, OnChanges {
     this.formDadosComplementaresAvalista.patchValue(this.data, { emitEvent: false });
     this.formEnderecoAvalista.patchValue(this.data.endereco || {}, { emitEvent: false });
     this.formCheck.patchValue(this.data, { emitEvent: false });
+
+    if (this.preencherEnderecoParteRelacionada()) {
+      this.salvarAutomatico();
+    }
+  }
+
+  private preencherEnderecoParteRelacionada(): boolean {
+    if (!this.data || !this.formEnderecoAvalista) {
+      return false;
+    }
+
+    const parteRelacionada = (this.partesRelacionadas || []).find((parte: any) =>
+      this.ehMesmaPessoa(this.data, parte) && parte.endereco
+    );
+    if (!parteRelacionada) {
+      return false;
+    }
+
+    const enderecoAtual = this.formEnderecoAvalista.value;
+    const enderecoRelacionado = parteRelacionada.endereco;
+    const camposEndereco = ['cep', 'logradouro', 'numero', 'bairro', 'estado', 'cidade', 'complemento', 'pais'];
+    const patch: { [key: string]: string } = {};
+
+    camposEndereco.forEach((campo) => {
+      const valorAtual = enderecoAtual[campo];
+      const valorRelacionado = enderecoRelacionado[campo];
+      if ((!valorAtual || !String(valorAtual).trim()) && valorRelacionado && String(valorRelacionado).trim()) {
+        patch[campo] = valorRelacionado;
+      }
+    });
+
+    if (!Object.keys(patch).length) {
+      return false;
+    }
+
+    this.formEnderecoAvalista.patchValue(patch, { emitEvent: false });
+    return true;
   }
 
   private get inconsistenciaNome(): any {

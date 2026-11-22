@@ -1,5 +1,5 @@
 import { Component, OnInit, Injectable, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Employee } from '../employee.model';
 import { Observable } from 'rxjs/Observable';
 import { EmployeeService } from '../employee.service';
@@ -20,6 +20,7 @@ export class EmployeeTabsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private employeeService: EmployeeService,
   ) { }
 
@@ -57,5 +58,11 @@ export class EmployeeTabsComponent implements OnInit {
 
   setEmployee(employee: Employee) {
     this.employee = employee
+  }
+
+  onTabChanged(index: number): Promise<boolean> | void {
+    if (index === 1) {
+      return this.router.navigate(['/employees/list'])
+    }
   }
 }

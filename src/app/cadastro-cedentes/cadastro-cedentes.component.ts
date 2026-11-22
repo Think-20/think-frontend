@@ -770,6 +770,28 @@ export class CadastroCedentesComponent implements OnInit {
       (this.isInconsistenciaJuridica(cedente) && !this.podeDecidirInconsistenciaJuridica());
   }
 
+  getFichaCadastralDownload(cedente: any): { url: string; filename: string } | null {
+    const documento = String(cedente && cedente.documento || '').replace(/\D/g, '');
+
+    if (documento.length === 14) {
+      const filename = 'Ficha_Cadastral_Carmel_PJ_Carmel_Capital.pdf';
+      return {
+        url: `/assets/fichas-cadastrais/${filename}`,
+        filename
+      };
+    }
+
+    if (documento.length === 11) {
+      const filename = 'Ficha_Cadastral_Cedente_PF_Carmel_Capital.pdf';
+      return {
+        url: `/assets/fichas-cadastrais/${filename}`,
+        filename
+      };
+    }
+
+    return null;
+  }
+
   private obterCedenteRoleIdUsuarioLogado(): number | null {
     const usuario: any = this.authService.currentUser();
     const roleTopLevel = usuario && usuario.cedente_role && usuario.cedente_role.id;

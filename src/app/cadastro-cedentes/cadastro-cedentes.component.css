@@ -680,6 +680,36 @@ label{
     font-weight: 500;
 }
 
+.fichaCadastralDownload {
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 6px;
+    color: #48855e;
+    font-size: 12px;
+    text-decoration: none;
+    transition: color 120ms ease, font-size 120ms ease;
+}
+
+.fichaCadastralDownload mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    transition: width 120ms ease, height 120ms ease, font-size 120ms ease;
+}
+
+.fichaCadastralDownload:hover mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+}
+
+.fichaCadastralDownload:hover {
+    color: #306b45;
+    font-size: 13px;
+    text-decoration: none;
+}
+
 /* Linha separadora */
 hr {
     border: none;

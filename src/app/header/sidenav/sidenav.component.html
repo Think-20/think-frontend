@@ -59,7 +59,7 @@
             </a>
             <div [@rowAppeared]="state" *ngIf="diretoria">
               <div class="sub-navbar">
-                <a mat-raised-button [routerLink]="['/cedente']">Colaboradores</a>
+                <a mat-raised-button [routerLink]="['/employees/list']">Colaboradores</a>
               </div>
               <div class="sub-navbar">
                 <a (click)="reports = !reports" mat-raised-button class="submenu-toggle">Eventos<mat-icon class="submenu-arrow">{{ reports ? 'keyboard_arrow_down' : 'chevron_right' }}</mat-icon></a>

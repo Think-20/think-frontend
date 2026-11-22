@@ -350,7 +350,7 @@
             </button>
         </div>
 
-        <p class="modalXmlDescricao">Selecione até 10 arquivos XML para preencher os cadastros automaticamente.</p>
+        <p class="modalXmlDescricao">Anexe um XML para preencher os dados disponíveis no formulário ou vários para enviar ao processamento do cadastro.</p>
 
         <label class="modalXmlDropzone" for="inputArquivoXml">
             <mat-icon>upload_file</mat-icon>
@@ -374,8 +374,8 @@
 
         <div class="modalXmlActions">
             <button type="button" class="btnVoltar" (click)="fecharModalXml()">Cancelar</button>
-            <button type="button" class="btnProximo" [disabled]="!arquivosXmlSelecionados.length" (click)="confirmarCadastroViaXml()">
-                Enviar
+            <button type="button" class="btnProximo" [disabled]="!arquivosXmlSelecionados.length || processandoXml" (click)="confirmarCadastroViaXml()">
+                {{ processandoXml ? (arquivosXmlSelecionados.length > 1 ? 'Enviando...' : 'Lendo XML...') : (arquivosXmlSelecionados.length > 1 ? 'Enviar' : 'Preencher formulário') }}
             </button>
         </div>
     </div>

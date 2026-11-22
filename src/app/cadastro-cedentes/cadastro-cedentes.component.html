@@ -247,6 +247,19 @@
                             <mat-icon>access_time</mat-icon>
                             <p>Sla: {{ cedente?.sla ? (cedente?.sla | date:'dd/MM/yyyy') : '---' }}</p>
                         </div>
+                        <ng-container *ngIf="column.status === 'aprovado'">
+                            <ng-container *ngIf="getFichaCadastralDownload(cedente) as fichaDownload">
+                                <a class="fichaCadastralDownload"
+                                   [href]="fichaDownload.url"
+                                   [attr.download]="fichaDownload.filename"
+                                   draggable="false"
+                                   (mousedown)="$event.stopPropagation()"
+                                   (click)="$event.stopPropagation()">
+                                    <mat-icon>file_download</mat-icon>
+                                    <span>Ficha cadastral</span>
+                                </a>
+                            </ng-container>
+                        </ng-container>
                     </div>
                 </div>
             </div>

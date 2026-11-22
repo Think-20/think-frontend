@@ -51,6 +51,21 @@ describe('CadastroCedentesComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should choose the PJ form for a CNPJ and the PF form for a CPF', () => {
+    expect(component.getFichaCadastralDownload({ documento: '12.345.678/0001-90' })).toEqual({
+      url: '/assets/fichas-cadastrais/Ficha_Cadastral_Carmel_PJ_Carmel_Capital.pdf',
+      filename: 'Ficha_Cadastral_Carmel_PJ_Carmel_Capital.pdf'
+    });
+    expect(component.getFichaCadastralDownload({ documento: '123.456.789-09' })).toEqual({
+      url: '/assets/fichas-cadastrais/Ficha_Cadastral_Cedente_PF_Carmel_Capital.pdf',
+      filename: 'Ficha_Cadastral_Cedente_PF_Carmel_Capital.pdf'
+    });
+  });
+
+  it('should not offer a form for an invalid document length', () => {
+    expect(component.getFichaCadastralDownload({ documento: '12345' })).toBeNull();
+  });
+
   it('should keep only the matching cedente in kanban columns when a filter is active', () => {
     component.cedentes = {
       data: [

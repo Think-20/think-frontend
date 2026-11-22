@@ -87,6 +87,44 @@ describe('AvalistaComponent', () => {
     expect(component.formCheck.get('beneficiario_final')!.value).toBe(true);
   });
 
+  it('deve copiar para o avalista o endereco da parte relacionada com o mesmo documento', () => {
+    component.index = 0;
+    component.data = {
+      nome: 'Maria',
+      cpf: '123.456.789-01',
+      endereco: {
+        logradouro: 'Endereço já informado'
+      }
+    };
+    component.partesRelacionadas = [{
+      nome: 'Maria da Silva',
+      cpf: '12345678901',
+      endereco: {
+        cep: '01001000',
+        logradouro: 'Rua A',
+        numero: '10',
+        bairro: 'Centro',
+        cidade: 'São Paulo',
+        estado: 'SP',
+        pais: 'Brasil'
+      }
+    }];
+
+    component.ngOnChanges({
+      data: {
+        currentValue: component.data,
+        previousValue: null,
+        firstChange: false,
+        isFirstChange: () => false
+      }
+    });
+
+    expect(component.formEnderecoAvalista.get('cep')!.value).toBe('01001000');
+    expect(component.formEnderecoAvalista.get('logradouro')!.value).toBe('Endereço já informado');
+    expect(component.formEnderecoAvalista.get('cidade')!.value).toBe('São Paulo');
+    expect(cedenteDataService.avalistas[0].endereco.cidade).toBe('São Paulo');
+  });
+
   it('deve aplicar e salvar o nome oficial ao clicar no icone do avalista', () => {
     component.index = 0;
     component.data = { nome: 'Nome divergente', cpf: '123.456.789-01' };

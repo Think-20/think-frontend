@@ -18,6 +18,7 @@ import { DataInfo } from '../shared/data-info.model';
 export class EmployeeService {
   searchValue = {}
   pageIndex = 0
+  private createdEmployees: { [id: number]: Employee } = {}
 
   constructor(
     private http: Http,
@@ -25,6 +26,22 @@ export class EmployeeService {
     private auth: AuthService
   ) { }
 
+  rememberCreatedEmployee(employee: Employee): void {
+    if (employee && employee.id != null) {
+      this.createdEmployees[employee.id] = employee
+    }
+  }
+
+  mergeCreatedEmployeeRoles(employees: Employee[]): Employee[] {
+    return employees.map(employee => {
+      const createdEmployee = this.createdEmployees[employee.id]
+      return createdEmployee
+        ? Object.assign({}, employee, {
+            cedente_role: createdEmployee.cedente_role || employee.cedente_role
+          })
+        : employee
+    })
+  }
 
   employees(params?: {}, page: number = 0): Observable<DataInfo> {
     let url = params === {} ? `employees/all?page=${page}` : `employees/filter?page=${page}`

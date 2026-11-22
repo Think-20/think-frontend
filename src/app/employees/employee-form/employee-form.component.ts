@@ -15,7 +15,6 @@ import { Patterns } from '../../shared/patterns.model';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
-import { Location } from '@angular/common';
 import { Department } from '../../department/department.model';
 import { DepartmentService } from '../../department/department.service';
 import { UploadFileService } from '../../shared/upload-file.service';
@@ -79,7 +78,6 @@ export class EmployeeFormComponent implements OnInit {
     private uploadFileService: UploadFileService,
     private authService: AuthService,
     private http: HttpClient,
-    private location: Location,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
@@ -269,14 +267,13 @@ export class EmployeeFormComponent implements OnInit {
     let payload = this.buildEmployeePayload(this.employeeForm.getRawValue())
 
     this.saveCedenteEmployee(payload).subscribe((data: any) => {
-      let snackbar = this.snackBar.open(data.message, '', {
+      this.snackBar.open(data.message, '', {
         duration: 5000
       })
 
-      if (data.status) {
-        snackbar.afterDismissed().subscribe(() => {
-          this.location.back()
-        })
+      if (data.error === 'false' || data.error === false || data.status === true) {
+        this.employeeService.rememberCreatedEmployee(data.data)
+        this.router.navigate(['/employees/list'])
       }
     })
   }
